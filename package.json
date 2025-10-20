@@ -13,13 +13,8 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,astro}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{css,json,md}": [
-      "prettier --write"
-    ]
+    "*.{js,jsx,ts,tsx,astro}": ["eslint --fix", "prettier --write --config .prettier.mjs"],
+    "*.{css,json,md}": ["prettier --write --config .prettier.mjs"]
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.15",
@@ -42,6 +37,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.5",
     "prettier": "3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
     "typescript-eslint": "^8.46.2"
   }
 }
