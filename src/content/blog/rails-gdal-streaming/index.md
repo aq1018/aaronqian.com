@@ -38,8 +38,8 @@ The application spends the majority of its time converting `RGeo::Geometry` obje
 
 As all seasoned software engineers would do, I first analyzed the symptoms at hand and concluded the following root cause:
 
-* GeoJSON rendering is too slow.
-* dataset buffering causes memory bloat.
+- GeoJSON rendering is too slow.
+- dataset buffering causes memory bloat.
 
 ## Research, Research, Research!
 
@@ -55,7 +55,7 @@ After some more research I found out a little commandline tool called `ogr2ogr` 
 
 Here is an example on how to use it:
 
-```
+```bash
 ogr2ogr -f GeoJSON /vsistdout/ \
   "PG:host=<host> dbname=<dbname> user=<user> password=<password>" \
   -sql "SELECT name, geom FROM regions LIMIT 100"
@@ -265,4 +265,3 @@ Under high load, many `ogr2ogr` sub-processes will be created. The behavior unde
 ## Go Try It Out!
 
 Here is a [gist](https://gist.github.com/aq1018/e3512f763d42ad8cf80b) for you to try it out. Let me know your results / opinions / rants! All is welcome!
-

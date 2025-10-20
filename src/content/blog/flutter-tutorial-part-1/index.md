@@ -15,7 +15,7 @@ This tutorial will guide you through setting up your local Flutter development e
 
 ## Why Flutter?
 
-I have dabbled with [Dart](https://dart.dev/) for some toy backend experiment when it first came out years ago, even before ES6 era. I really liked how it was typed and offer very mature IDE integrations. I also loved its Stream API. 
+I have dabbled with [Dart](https://dart.dev/) for some toy backend experiment when it first came out years ago, even before ES6 era. I really liked how it was typed and offer very mature IDE integrations. I also loved its Stream API.
 
 A few years later, [Flutter](https://flutter.dev/) is overtaking [React Native](https://reactnative.dev/) on [Google Trends](https://trends.google.com/trends/explore?date=today%205-y&geo=US&q=%2Fg%2F11h03gfxy9,%2Fg%2F11f03_rzbg), I decided to dive head first and give it a try!
 
@@ -30,10 +30,10 @@ In this article, I will cover setting up the development environment for both iO
 
 This series of articles is broken down as the following:
 
-* **Development Environment Setup**
-* A Brief Overview on Flutter
-* Login Page with Firebase Auth
-* Profile Page
+- **Development Environment Setup**
+- A Brief Overview on Flutter
+- Login Page with Firebase Auth
+- Profile Page
 
 ## Install XCode
 
@@ -73,12 +73,12 @@ Open Android Studio in the Apps folder and you will encounter the initial setup 
 
 Once the initial setup is done. You need to open the `Preferences` menu, and navigate to: `Appearance And Behavior` -> `System Settings` -> `Android SDK`.
 
-* In `SDK Platforms` tab, make sure the latest Android version ( 12 ) is checked.
-* In `SDK Tools` tab, make sure you have the the following checked:
-  * Android SDK Build-Tools 33
-  * Android SDK Command-line Tools (latest)
-  * Android Simulator
-  * Android SDK Platform-Tools
+- In `SDK Platforms` tab, make sure the latest Android version ( 12 ) is checked.
+- In `SDK Tools` tab, make sure you have the the following checked:
+  - Android SDK Build-Tools 33
+  - Android SDK Command-line Tools (latest)
+  - Android Simulator
+  - Android SDK Platform-Tools
 
 Finally, click Ok button and wait for installation to complete.
 
@@ -94,7 +94,7 @@ You should have everything green.
 
 ## Generate A New App
 
-Now we have flutter setup, we can start by generating a skeleton app for our project. 
+Now we have flutter setup, we can start by generating a skeleton app for our project.
 
 ```bash
 flutter create todoapp
@@ -112,7 +112,7 @@ Now, in the project directory, run the command below.
 flutter run # runs the new app
 ```
 
-Wait for it to compile, it might take a while. After compilation is done, your iOS simulator should have the skeleton app running. 
+Wait for it to compile, it might take a while. After compilation is done, your iOS simulator should have the skeleton app running.
 
 ## Run The New App on Android Simulator
 

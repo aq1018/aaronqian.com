@@ -19,30 +19,29 @@ Without further ado, I'm going to open the project in VSCode. If you are using V
 
 Wow, that's a lot of directories - you might say, but actually we can ignore most of them. The only two directories, we care about are only the `lib` and `test` directories, which holds your source code and unit test code respectively. You can see a single `main.dart` file in the `lib` directory, and that is our entire code base, for now...
 
-
 For completeness, here is what each directories do:
 
-* `.dart_tool` - Dart packages and tools. Generated and used by Dart / Flutter.
-* `.idea` - Settings for [IntelliJ IDEA](https://www.jetbrains.com/idea/).
-* `.vscode` - Settings for [VSCode](https://code.visualstudio.com/).
-* `android` - Android project settings. Used by Android Studio for build Android Apps.
-* `build` - Flutter generated build files.
-* `ios` - iOS project settings. Open with XCode to configure and build iOS Apps.
-* `lib` - Contains source code. We will be working in this folder mostly.
-* `linux` - Linux project settings. Contains CMake file to build for Linux.
-* `macos` - MacOS project settings. Open with XCode to configure and build MacOS apps.
-* `test` - This is where you write tests.
-* `web` - Web build.
-* `windows` - Windows project settings. Contains CMake file to build for Windows.
+- `.dart_tool` - Dart packages and tools. Generated and used by Dart / Flutter.
+- `.idea` - Settings for [IntelliJ IDEA](https://www.jetbrains.com/idea/).
+- `.vscode` - Settings for [VSCode](https://code.visualstudio.com/).
+- `android` - Android project settings. Used by Android Studio for build Android Apps.
+- `build` - Flutter generated build files.
+- `ios` - iOS project settings. Open with XCode to configure and build iOS Apps.
+- `lib` - Contains source code. We will be working in this folder mostly.
+- `linux` - Linux project settings. Contains CMake file to build for Linux.
+- `macos` - MacOS project settings. Open with XCode to configure and build MacOS apps.
+- `test` - This is where you write tests.
+- `web` - Web build.
+- `windows` - Windows project settings. Contains CMake file to build for Windows.
 
 **This means Flutter can build for the following platforms**
 
-* Android
-* iOS
-* Web
-* MacOS
-* Linux
-* Windows
+- Android
+- iOS
+- Web
+- MacOS
+- Linux
+- Windows
 
 I don't think we will ever need this much compatibility, but it's good to know you've got pretty much everything covered. Maybe game consoles are the next, Flutter?
 
@@ -67,7 +66,6 @@ dart pub get bloc
 ```
 
 Dart will faithfully retrieve the package, create or update dependency section in `pubspec.yaml` and creates a `pubspec.lock` file. These files are conceptually similar to `package.json` and `package-lock.json` in `Node.js`.
-
 
 ### Entry Point
 
@@ -110,7 +108,6 @@ Next, let's take a look at the `build` method. Just like the `render` method in 
 
 In side the `build` method, we instantiate a [`MaterialApp`](https://api.flutter.dev/flutter/material/MaterialApp-class.html) widget provided by the `material` package imported earlier. In the constructor parameter, we specify its title, theme, and home screen. For a real app, you will need to define routes and screens. You can specify `routes` here as well, but we will skip it for now. [`ThemeData`](https://api.flutter.dev/flutter/material/ThemeData-class.html) is again imported from the `material` package, and it allows you to customize the Material Theme. Lastly, the `MyHomePage` widget is defined in the next section.
 
-
 ### Home Screen
 
 Let's take a look at the definition of `MyHomePage` down below.
@@ -125,7 +122,7 @@ class MyHomePage extends StatefulWidget {
 }
 ```
 
-As you can see, `MyHomePage` is a `StatefulWidget`. This means it contains states. This is where Flutter and React differs when it comes to defining components with states. In Flutter, `StatefulWidget`s need to define a `createState` method. This method is responsible to create a `State` instance for `MyHomePage` class. The return type `State<MyHomePage>` is a generic State that contains the actual logic for state handling. In this code, we define this method using an arrow function `=>` with implicit return. This is identical to ES6 arrow function. 
+As you can see, `MyHomePage` is a `StatefulWidget`. This means it contains states. This is where Flutter and React differs when it comes to defining components with states. In Flutter, `StatefulWidget`s need to define a `createState` method. This method is responsible to create a `State` instance for `MyHomePage` class. The return type `State<MyHomePage>` is a generic State that contains the actual logic for state handling. In this code, we define this method using an arrow function `=>` with implicit return. This is identical to ES6 arrow function.
 
 In most cases, the `StatefulWidget` is actually mostly ceremony. An incantation you must utter to make things happen. (The real reason is more complicated, and is due to `Widgets` have to be immutable, and it's not really important to explain it at this stage.)
 
@@ -173,15 +170,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
 As expected, this class is a lot longer, because it contains all the implementations of the app. The class name is `_MyHomePageState`. The `_` makes this class `private`. This is a Dart feature / rule. Baiscally, when you see `_`, think `private` in Dart. This class also inherits from `State<MyHomePage>`, which is what we need satisfy the return type of `createState`.
 
-The class variable `_counter` is the state that we need to track. Again due to `_`, it is `private`. 
+The class variable `_counter` is the state that we need to track. Again due to `_`, it is `private`.
 
 The `_incrementCounter` method is a private method that handles state change. It serves the same purpose as event handlers in React. The `setState` function must be called to let Flutter know that the state has changed, triggering a redraw. Again, it is similar to `setState` in React.
 
 Lastly, the `build` method creates child widgets used for rendering. In this method, we instantiate various components. The [`Scaffold`](https://api.flutter.dev/flutter/material/Scaffold-class.html) component creates a basic Material Layout where you can specify an [`AppBar`](https://api.flutter.dev/flutter/material/AppBar-class.html), it's body, FAB, etc.
 
-Inside the `body` specification, we used `Center` and `Column` to horizontally and vertically center our [`Text`](https://api.flutter.dev/flutter/widgets/Text-class.html)s. The string `'$_counter'` is a Dart feature that allows string interpolation. In this case, it just prints the value of `_counter`. 
+Inside the `body` specification, we used `Center` and `Column` to horizontally and vertically center our [`Text`](https://api.flutter.dev/flutter/widgets/Text-class.html)s. The string `'$_counter'` is a Dart feature that allows string interpolation. In this case, it just prints the value of `_counter`.
 
-In the `floatingActionButton` specification, we use the [`FloatingActionButton`](https://api.flutter.dev/flutter/material/FloatingActionButton-class.html) widget to render a FAB. We hook the `onPressed` event to the `_incrementCounter` event handler. So every time the FAB is pressed, the 
+In the `floatingActionButton` specification, we use the [`FloatingActionButton`](https://api.flutter.dev/flutter/material/FloatingActionButton-class.html) widget to render a FAB. We hook the `onPressed` event to the `_incrementCounter` event handler. So every time the FAB is pressed, the
 `_incrementCounter` method is called. In there the `setState` is called with `_counter++`, triggering re-render to update the counter.
 
 ## Conclusion

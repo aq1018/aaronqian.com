@@ -36,7 +36,7 @@ Now let's imagine a different conversation:
 >
 > That button is a **Button Component** with **secondary variant** and **small size**.
 
-The conversation is no longer about specific sizes in pixels or color values. The designer and the developer both have a common language, and that language is call the **Design Language**. The specific margins, color shades, and sizes are predefined and agreed upon. 
+The conversation is no longer about specific sizes in pixels or color values. The designer and the developer both have a common language, and that language is call the **Design Language**. The specific margins, color shades, and sizes are predefined and agreed upon.
 
 **Component Libraries** based on the Design Language are available for developers to implement the designs quickly and consistently. The features can be churned out quickly with minimal revisions. The designer trusts the developer's implementations. The UI looks consistent throughout the site, and new features gets pushed to production without much revisions.
 
@@ -45,7 +45,6 @@ This is all thanks to a **Design System** shared between the design and developm
 ## Design System Explained
 
 A Design System is a set of interconnected patterns and shared practices coherently organized. Design Systems aid in digital product design and development of products such as apps or websites. They may contain, but are not limited to, pattern libraries, design languages, style guides, coded components, brand languages, and documentation.
-
 
 To put it in simpler terms, a Design System allows designers and developers communicate efficiently.
 
@@ -83,7 +82,7 @@ It is important to know how many components and variants your product uses. The 
 
 After components are categorized, the designer can now create those components in their design tools. [Figma](https://www.figma.com/) is a popular used by design teams to collaborate on design work. It has [reusable component support](https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-Components-in-Figma), allowing designers to design and reuse components collaboratively.
 
-***Reuse Components***
+**_Reuse Components_**
 
 When all the individual components are created in the design tools, all new designs should reuse existing components. If there is a need, new components or variants of existing components can be added. However, designers should no longer directly use position and color values. They should all be defined inside components.
 

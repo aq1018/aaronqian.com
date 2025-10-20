@@ -134,7 +134,6 @@ export default [
     files: REACT_FILES,
     plugins: {
       react,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- External plugin lacks proper types
       "jsx-a11y": jsxA11y,
     },
     settings: {
@@ -142,10 +141,8 @@ export default [
         version: "detect",
       },
     },
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- External configs lack proper types
     rules: {
       ...react.configs.recommended.rules,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- External config lacks proper types
       ...jsxA11y.configs.recommended.rules,
       // Override specific React rules as needed
       "react/no-unescaped-entities": "off",
@@ -158,7 +155,10 @@ export default [
   // Applies to: .astro files
   // Includes jsx-a11y for accessibility checking in Astro templates
   // ==========================================================================
-  ...scopeConfigs(eslintPluginAstro.configs["jsx-a11y-recommended"], ASTRO_FILES),
+  ...scopeConfigs(
+    eslintPluginAstro.configs["jsx-a11y-recommended"],
+    ASTRO_FILES,
+  ),
 
   // ==========================================================================
   // Test Files

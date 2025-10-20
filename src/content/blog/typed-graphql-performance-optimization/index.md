@@ -19,7 +19,7 @@ This backend is a [Node.js](https://nodejs.org/en/) application with a [PostgreS
 
 ## The N+1 Problem
 
-Those who have worked will GraphQL will likely be familiar with this problem already. When implementing a resolver for an object, if you just hit the database as soon as the resolver is called, you'll end up querying the database more than neccesary - sometimes a *lot* more than necessary.
+Those who have worked will GraphQL will likely be familiar with this problem already. When implementing a resolver for an object, if you just hit the database as soon as the resolver is called, you'll end up querying the database more than neccesary - sometimes a _lot_ more than necessary.
 
 Let's take a look at an example. In our API, we have listings, comments, and users. A listing can have multiple comments, and the comments are authored by users. When looking up a listing, its comments, and the comments' authors, the GraphQL query would look something like this:
 
@@ -45,15 +45,12 @@ Let's take a look at what would happen if your comment's author resolver is writ
 ```typescript
 @Resolver(() => Comment)
 export class CommentResolver {
-
   // ... other resolvers
 
   @FieldResolver(() => User)
-  async author(
-    @Root() { authorId }: Comment,
-  ): Promise<User> {
-    const user = await db('users').where({id: authorId})[0]
-    return toSchema(user, User)
+  async author(@Root() { authorId }: Comment): Promise<User> {
+    const user = await db("users").where({ id: authorId })[0];
+    return toSchema(user, User);
   }
 }
 ```
@@ -97,39 +94,39 @@ We decided to use the excellent and well supported [`dataloader`](https://github
 
 ```typescript
 // utils/SimpleLoader.ts
-import DataLoader from 'dataloader'
+import DataLoader from "dataloader";
 
 export interface Identifiable {
-  id: string
+  id: string;
 }
 
 export interface GetBatch<T extends Identifiable> {
-  getBatch: (ids: readonly string[]) => Promise<T[]>
+  getBatch: (ids: readonly string[]) => Promise<T[]>;
 }
 
 export class SimpleLoader<T extends Identifiable> {
-  private readonly loader: DataLoader<string, T>
+  private readonly loader: DataLoader<string, T>;
 
   constructor(protected readonly repo: GetBatch<T>) {
-    this.loader = new DataLoader<string, T>(this.loadBatch.bind(this))
+    this.loader = new DataLoader<string, T>(this.loadBatch.bind(this));
   }
 
   async load(id: string): Promise<T> {
-    return await this.loader.load(id)
+    return await this.loader.load(id);
   }
 
   private async loadBatch(keys: readonly string[]): Promise<T[]> {
-    const objects = await this.repo.getBatch(keys)
+    const objects = await this.repo.getBatch(keys);
     const lookup = objects.reduce<Record<string, T>>((acc, object) => {
-      acc[object.id] = object
-      return acc
-    }, {})
-    return keys.map((key) => lookup[key])
+      acc[object.id] = object;
+      return acc;
+    }, {});
+    return keys.map((key) => lookup[key]);
   }
 }
 ```
 
-There are two interfaces here. 
+There are two interfaces here.
 
 The `Identifiable` interface is meant to be implemented on the Model. It ensures the `id` method is available for sorting the returned Models based on the order of the `keys` input argument in `loadBatch` method.
 
@@ -138,14 +135,14 @@ The `GetBatch` interface is meant to be implemented on the Repository. We use `g
 For each Model & Repository pair, we will create a new `SimpleLoader`. Using the User example above, we define a `UserLoader` like this:
 
 ```typescript
-import { Service } from 'typedi'
-import { SimpleLoader } from '../utils/SimpleLoader'
-import { UserRepository } from '../repositories'
+import { Service } from "typedi";
+import { SimpleLoader } from "../utils/SimpleLoader";
+import { UserRepository } from "../repositories";
 
 @Service()
 export class UserLoader extends SimpleLoader<Domain.User> {
   constructor(protected readonly repo: UserRepository) {
-    super(repo)
+    super(repo);
   }
 }
 ```
@@ -155,8 +152,8 @@ We are using [`typedi`](https://github.com/typestack/typedi) for [Dependency Inj
 To use the `UserLoader`, all you have to do in your resolver is this:
 
 ```typescript
-import { Service } from 'typedi'
-import { UserLoader } from '../loaders'
+import { Service } from "typedi";
+import { UserLoader } from "../loaders";
 
 @Service()
 export class CommentResolver {
@@ -165,11 +162,9 @@ export class CommentResolver {
     // a bunch of other injected services
   ) {}
 
-  async user(
-    @Root() comment: Comment,
-  ): Promise<Domain.Listing> {
+  async user(@Root() comment: Comment): Promise<Domain.Listing> {
     // using the loader here
-    return await this.loader.load(comment.authorId)
+    return await this.loader.load(comment.authorId);
   }
 }
 ```

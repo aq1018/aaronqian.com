@@ -10,8 +10,8 @@ tags:
 
 This is article is part of a series. They are:
 
-* [Part 1 - Simple GraphQL Server with Juniper And Actix](../part-1)
-* **Part 2 - Persisting Data To Database**
+- [Part 1 - Simple GraphQL Server with Juniper And Actix](../part-1)
+- **Part 2 - Persisting Data To Database**
 
 ---
 

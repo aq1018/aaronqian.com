@@ -11,8 +11,8 @@ tags:
 
 This is article is part of a series. They are:
 
-* **Part 1 - Simple GraphQL Server with Juniper And Actix**
-* [Part 2 - Persisting Data To Database](../part-2)
+- **Part 1 - Simple GraphQL Server with Juniper And Actix**
+- [Part 2 - Persisting Data To Database](../part-2)
 
 ---
 
@@ -26,7 +26,7 @@ If you are looking for complete example code, I recommend looking at the [GraphQ
 
 If you are looking to get something up quick, Rust might not be your best bet. Building a GraphQL backend in Rust will take some extra time, and you will spend some of that time arguing with the language’s borrow checker and the compiler’s insistence on correct, transparent code. Rust is a systems language without a garbage collector, and has a proven model of ownership forcing its users to write memory safe code, preventing notorious bugs such as buffer overflows. It has all the same safety as writing your server in Node.js, but without the need for a garbage collector or interpreter. Ideally, in the long term, you can have more confidence in the correctness of your code when using Rust, and benefit in a speed boost from the reduced overhead.
 
-Not to mention, if your business does end up needing performance critical code elsewhere, you can write everything in one programming language. That includes in the web with Rust’s excellent out-of-the-box WASM support. 
+Not to mention, if your business does end up needing performance critical code elsewhere, you can write everything in one programming language. That includes in the web with Rust’s excellent out-of-the-box WASM support.
 
 ## Initial Setup
 
@@ -206,10 +206,10 @@ async fn main() -> io::Result<()> {
 There is a bit of trickery here in the `graphql` function. It’s able to grab the `Schema` and `GraphQLRequest` automatically by declaring them as parameters. You do also need the `add_data`, which makes the data accessible from within services by TypeId.
 
 <!-- markdown-link-check-disable-next-line -->
+
 You can see the whole thing in action by running the app and navigating to http://localhost:8080/graphiql
 
 ![GraphiQL Interface](graphiql.png "GraphiQL Interface")
-
 
 ## Putting it All Together
 
