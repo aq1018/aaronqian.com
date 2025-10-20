@@ -50,22 +50,27 @@ const {
 
     <!-- Dark mode script - runs before page render to prevent flash -->
     <script is:inline>
-      const theme = (() => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme')
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark'
-        }
-        return 'light'
-      })()
+      function updateTheme() {
+        const theme = localStorage.getItem('theme') || 'system'
+        const isDark =
+          theme === 'dark' ||
+          (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
+        if (isDark) {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
       }
-      window.localStorage.setItem('theme', theme)
+
+      updateTheme()
+
+      // Listen for system theme changes when in system mode
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (localStorage.getItem('theme') === 'system' || !localStorage.getItem('theme')) {
+          updateTheme()
+        }
+      })
     </script>
   </head>
   <body

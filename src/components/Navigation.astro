@@ -68,11 +68,27 @@ const currentPath = Astro.url.pathname
   const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon')
   const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon')
 
+  function updateTheme() {
+    const theme = localStorage.getItem('theme') || 'system'
+    const isDark =
+      theme === 'dark' ||
+      (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
+
   function setThemeIcon() {
-    if (
-      localStorage.getItem('theme') === 'dark' ||
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
+    const theme = localStorage.getItem('theme') || 'system'
+    const isDark =
+      theme === 'dark' ||
+      (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+    // Show light icon when in dark mode, dark icon when in light mode
+    if (isDark) {
       themeToggleLightIcon?.classList.remove('hidden')
       themeToggleDarkIcon?.classList.add('hidden')
     } else {
@@ -84,25 +100,27 @@ const currentPath = Astro.url.pathname
   setThemeIcon()
 
   themeToggleBtn?.addEventListener('click', function () {
-    // Toggle theme
-    if (localStorage.getItem('theme')) {
-      if (localStorage.getItem('theme') === 'light') {
-        document.documentElement.classList.add('dark')
-        localStorage.setItem('theme', 'dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-        localStorage.setItem('theme', 'light')
-      }
+    const currentTheme = localStorage.getItem('theme') || 'system'
+
+    // Cycle: light -> dark -> system
+    let nextTheme
+    if (currentTheme === 'light') {
+      nextTheme = 'dark'
+    } else if (currentTheme === 'dark') {
+      nextTheme = 'system'
     } else {
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark')
-        localStorage.setItem('theme', 'light')
-      } else {
-        document.documentElement.classList.add('dark')
-        localStorage.setItem('theme', 'dark')
-      }
+      nextTheme = 'light'
     }
 
+    localStorage.setItem('theme', nextTheme)
+    updateTheme()
     setThemeIcon()
+  })
+
+  // Update icon when system preference changes and in system mode
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (localStorage.getItem('theme') === 'system' || !localStorage.getItem('theme')) {
+      setThemeIcon()
+    }
   })
 </script>

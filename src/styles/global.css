@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
+  /* Dark mode configuration */
+  --dark-mode: class;
+
   /* Color Palette - Bold & Colorful */
   --color-primary-50: oklch(0.97 0.01 250);
   --color-primary-100: oklch(0.93 0.03 250);
@@ -28,16 +31,4 @@
 
   /* Font Family */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-}
-
-/* Dark mode preference */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-  }
-}
-
-/* Manual dark mode toggle */
-:root.dark {
-  color-scheme: dark;
 }
