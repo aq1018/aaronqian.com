@@ -2,7 +2,7 @@
 title: Messy UI? Think In Components, Not HTML & CSS
 description: Achieve consistent UI with Design Systems and Component Libraries.
 date: 2021-10-04
-hero: featured-image.png
+hero: ./featured-image.png
 tags:
   - best-practice
   - design
