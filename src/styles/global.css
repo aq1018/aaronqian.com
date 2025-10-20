@@ -1,1 +1,43 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+  /* Color Palette - Bold & Colorful */
+  --color-primary-50: oklch(0.97 0.01 250);
+  --color-primary-100: oklch(0.93 0.03 250);
+  --color-primary-200: oklch(0.86 0.06 250);
+  --color-primary-300: oklch(0.77 0.11 250);
+  --color-primary-400: oklch(0.67 0.16 250);
+  --color-primary-500: oklch(0.57 0.2 250);
+  --color-primary-600: oklch(0.47 0.18 250);
+  --color-primary-700: oklch(0.37 0.14 250);
+  --color-primary-800: oklch(0.29 0.1 250);
+  --color-primary-900: oklch(0.22 0.06 250);
+  --color-primary-950: oklch(0.15 0.03 250);
+
+  --color-accent-50: oklch(0.97 0.01 140);
+  --color-accent-100: oklch(0.93 0.04 140);
+  --color-accent-200: oklch(0.86 0.08 140);
+  --color-accent-300: oklch(0.77 0.14 140);
+  --color-accent-400: oklch(0.67 0.18 140);
+  --color-accent-500: oklch(0.57 0.22 140);
+  --color-accent-600: oklch(0.47 0.2 140);
+  --color-accent-700: oklch(0.37 0.16 140);
+  --color-accent-800: oklch(0.29 0.12 140);
+  --color-accent-900: oklch(0.22 0.08 140);
+  --color-accent-950: oklch(0.15 0.04 140);
+
+  /* Font Family */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Dark mode preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* Manual dark mode toggle */
+:root.dark {
+  color-scheme: dark;
+}
