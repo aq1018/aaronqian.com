@@ -2,48 +2,88 @@ import css from "@eslint/css";
 import json from "@eslint/json";
 import markdown from "@eslint/markdown";
 import vitest from "@vitest/eslint-plugin";
+import type { Linter } from "eslint";
 import love from "eslint-config-love";
 import eslintPluginAstro from "eslint-plugin-astro";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import react from "eslint-plugin-react";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
+// ============================================================================
+// File Pattern Constants
+// ============================================================================
+const TS_JS_FILES = ["**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}"];
+const REACT_FILES = ["**/*.{jsx,tsx}"];
+const ASTRO_FILES = ["**/*.astro"];
+const TEST_FILES = ["**/*.spec.{ts,tsx}"];
+const CSS_FILES = ["**/*.css"];
+const JSON_FILES = ["**/*.json"];
+const MARKDOWN_FILES = ["**/*.md"];
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Ensures external configs are scoped to specific file patterns.
+ * Prevents configs without `files` from applying globally.
+ */
+const scopeConfigs = (
+  configs: Linter.Config[],
+  files: string[],
+): Linter.Config[] =>
+  configs.map((config) => ({
+    ...config,
+    files: config.files ?? files,
+  }));
+
+// ============================================================================
+// ESLint Configuration
+// ============================================================================
+
 export default [
-  // Global ignores
+  // ==========================================================================
+  // Global Ignores
+  // ==========================================================================
   {
-    ignores: ["dist/", "node_modules/", ".astro/", "coverage/", ".claude/"],
+    ignores: [
+      "dist/",
+      "node_modules/",
+      ".astro/",
+      "coverage/",
+      ".claude/",
+      ".vscode/",
+      ".prettier.mjs",
+      "package-lock.json",
+    ],
   },
 
-  // globals
+  // ==========================================================================
+  // TypeScript/JavaScript Files
+  // Applies to: .js, .jsx, .ts, .tsx, .mjs, .cjs, .mts, .cts
+  // ==========================================================================
   {
+    files: TS_JS_FILES,
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.node,
       },
     },
-    files: ["**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts,astro}"],
   },
-
-  // TypeScript ESLint plugin
   {
-    files: ["**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts,astro}"],
+    // Base config from eslint-config-love (strict TypeScript standards)
+    ...love,
+    files: TS_JS_FILES,
     plugins: {
+      ...love.plugins,
       "@typescript-eslint": tseslint.plugin,
     },
   },
-
-  // default love config
   {
-    ...love,
-    files: ["**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts,astro}"],
-  },
-
-  // Astro plugin recommended rules for .astro files
-  ...eslintPluginAstro.configs["jsx-a11y-recommended"],
-
-  // import settings
-  {
-    files: ["**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts,astro}"],
+    // Import settings and rules
+    files: TS_JS_FILES,
     settings: {
       "import/resolver": {
         typescript: {
@@ -67,14 +107,13 @@ export default [
       ],
     },
   },
-
-  // rules overrides
   {
+    // Custom rule overrides for all TS/JS files
+    files: TS_JS_FILES,
     rules: {
       "max-lines": ["error", { max: 200 }],
       "no-console": "off",
       complexity: "off",
-      "react/no-unescaped-entities": "off",
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-magic-numbers": "off",
       "@typescript-eslint/no-empty-function": "off",
@@ -87,9 +126,46 @@ export default [
     },
   },
 
-  // spec overrides
+  // ==========================================================================
+  // React Components (JSX/TSX)
+  // Applies to: .jsx, .tsx files
+  // ==========================================================================
   {
-    files: ["**/*.spec.ts", "**/*.spec.tsx"],
+    files: REACT_FILES,
+    plugins: {
+      react,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- External plugin lacks proper types
+      "jsx-a11y": jsxA11y,
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- External configs lack proper types
+    rules: {
+      ...react.configs.recommended.rules,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- External config lacks proper types
+      ...jsxA11y.configs.recommended.rules,
+      // Override specific React rules as needed
+      "react/no-unescaped-entities": "off",
+      "react/react-in-jsx-scope": "off", // Not needed in modern React/Astro
+    },
+  },
+
+  // ==========================================================================
+  // Astro Files
+  // Applies to: .astro files
+  // Includes jsx-a11y for accessibility checking in Astro templates
+  // ==========================================================================
+  ...scopeConfigs(eslintPluginAstro.configs["jsx-a11y-recommended"], ASTRO_FILES),
+
+  // ==========================================================================
+  // Test Files
+  // Applies to: .spec.ts, .spec.tsx files
+  // ==========================================================================
+  {
+    files: TEST_FILES,
     plugins: {
       vitest,
     },
@@ -101,20 +177,41 @@ export default [
     },
   },
 
-  // css
+  // ==========================================================================
+  // CSS Files
+  // Applies to: .css files
+  // ==========================================================================
   {
-    files: ["**/*.css"],
+    files: CSS_FILES,
     language: "css/css",
     ...css.configs.recommended,
   },
 
-  // json
+  // ==========================================================================
+  // JSON Files
+  // Applies to: .json files
+  // ==========================================================================
   {
-    files: ["**/*.json"],
+    files: JSON_FILES,
     language: "json/json",
     ...json.configs.recommended,
   },
 
-  // markdown
-  ...markdown.configs.recommended,
+  // ==========================================================================
+  // Markdown Files
+  // Applies to: .md files
+  // Includes common markdown linting rules
+  // ==========================================================================
+  ...scopeConfigs(markdown.configs.recommended, MARKDOWN_FILES),
+
+  // ==========================================================================
+  // Config File Override
+  // Exempt the config file itself from certain rules
+  // ==========================================================================
+  {
+    files: ["eslint.config.ts"],
+    rules: {
+      "max-lines": "off", // Config files can be longer than 200 lines
+    },
+  },
 ];
