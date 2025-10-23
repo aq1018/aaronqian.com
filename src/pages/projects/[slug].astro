@@ -1,0 +1,156 @@
+---
+// Project Detail Page - Shows project info + log entries in reverse chronological order
+import { getCollection, type CollectionEntry } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Navigation from '../../components/Navigation.astro'
+import ProjectLogEntry from '../../components/ProjectLogEntry.astro'
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects')
+
+  return projects.map((project) => {
+    // Normalize slug: remove '/index.md' or '/index' suffix if present
+    const slug = project.id.replace(/\/index(\.md)?$/, '')
+    return {
+      params: { slug },
+      props: { project },
+    }
+  })
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>
+}
+
+const { project } = Astro.props
+
+// Normalize project slug for log filtering
+const projectSlug = project.id.replace(/\/index(\.md)?$/, '')
+
+// Fetch all logs for this project, sorted by date descending
+const allLogs = await getCollection('projectLogs')
+const projectLogs = allLogs
+  .filter((log) => log.data.project === projectSlug)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+// Status badge styles
+const statusStyles = {
+  active: 'bg-accent/20 text-accent border-accent/40',
+  planning: 'bg-muted/20 text-muted border-border',
+  done: 'bg-fg/20 text-fg/60 border-fg/40',
+}
+
+const statusLabels = {
+  active: 'ACTIVE',
+  planning: 'PLANNING',
+  done: 'DONE',
+}
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <Navigation />
+
+  <!-- Project Header -->
+  <header class="border-b border-border bg-surface py-12">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <!-- Back link -->
+      <a
+        href="/projects"
+        class="group mb-6 inline-flex items-center gap-2 font-mono text-sm text-muted transition-colors hover:text-link"
+      >
+        <svg
+          class="h-4 w-4 transition-transform group-hover:-translate-x-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+        All Projects
+      </a>
+
+      <!-- Title and status -->
+      <div class="mb-4 flex flex-wrap items-baseline gap-4">
+        <h1 class="font-mono text-3xl font-bold text-fg sm:text-4xl">
+          {project.data.title}
+        </h1>
+        <span
+          class={`rounded border px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
+        >
+          {statusLabels[project.data.status]}
+          {
+            project.data.live && (
+              <span class="ml-2 rounded bg-accent px-2 py-0.5 text-xs font-bold text-gray-950">
+                LIVE
+              </span>
+            )
+          }
+        </span>
+      </div>
+
+      <!-- Description -->
+      <p class="mb-4 text-lg leading-relaxed text-muted">
+        {project.data.description}
+      </p>
+
+      <!-- Aside (witty comment) -->
+      <p class="font-mono text-sm italic text-muted/70">
+        {project.data.aside}
+      </p>
+
+      <!-- External link if available -->
+      {
+        project.data.url && (
+          <div class="mt-6">
+            <a
+              href={project.data.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg border-2 border-accent bg-transparent px-6 py-2.5 font-mono text-sm font-bold tracking-wider text-accent transition-all duration-300 hover:bg-accent/10"
+            >
+              <span>Visit Site</span>
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </header>
+
+  <!-- Build Log -->
+  <main class="bg-surface py-12">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <!-- Log header -->
+      <div class="mb-8 border-b border-border/30 pb-4">
+        <h2 class="font-mono text-2xl font-bold text-fg">Build Log</h2>
+        <p class="mt-2 font-mono text-sm text-muted/70">
+          {projectLogs.length}
+          {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
+        </p>
+      </div>
+
+      <!-- Log entries -->
+      {
+        projectLogs.length > 0 ? (
+          <div class="space-y-8">
+            {projectLogs.map((log) => (
+              <ProjectLogEntry log={log} />
+            ))}
+          </div>
+        ) : (
+          <div class="rounded border border-border/30 bg-surface-hover p-8 text-center">
+            <p class="font-mono text-sm text-muted/70">No log entries yet. Check back soon.</p>
+          </div>
+        )
+      }
+    </div>
+  </main>
+</BaseLayout>

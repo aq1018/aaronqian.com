@@ -51,18 +51,12 @@ const statusLabels = {
             sortedProjects.map((project) => (
               <tr class="group border-b border-border/20 transition-colors hover:bg-surface-hover">
                 <td class="py-4 pr-6 align-top">
-                  {project.data.url ? (
-                    <a
-                      href={project.data.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="font-semibold text-link underline decoration-transparent transition-colors hover:decoration-link"
-                    >
-                      {project.data.title}
-                    </a>
-                  ) : (
-                    <span class="font-semibold text-fg">{project.data.title}</span>
-                  )}
+                  <a
+                    href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
+                    class="font-semibold text-link underline decoration-transparent transition-colors hover:decoration-link"
+                  >
+                    {project.data.title}
+                  </a>
                 </td>
                 <td class="py-4 px-6 align-top text-right">
                   <span
@@ -93,18 +87,12 @@ const statusLabels = {
         sortedProjects.map((project) => (
           <div class="border-l-2 border-accent/30 pl-4 transition-colors hover:border-accent">
             <div class="mb-2 flex items-baseline justify-between gap-3">
-              {project.data.url ? (
-                <a
-                  href={project.data.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="font-mono text-base font-semibold text-link underline decoration-transparent transition-colors hover:decoration-link"
-                >
-                  {project.data.title}
-                </a>
-              ) : (
-                <h3 class="font-mono text-base font-semibold text-fg">{project.data.title}</h3>
-              )}
+              <a
+                href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
+                class="font-mono text-base font-semibold text-link underline decoration-transparent transition-colors hover:decoration-link"
+              >
+                {project.data.title}
+              </a>
             </div>
             <div class="mb-3">
               <span

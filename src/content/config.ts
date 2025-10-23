@@ -27,7 +27,18 @@ const projects = defineCollection({
   }),
 })
 
+const projectLogs = defineCollection({
+  type: 'content',
+  schema: z.object({
+    date: z.coerce.date(),
+    title: z.string(),
+    tags: z.array(z.string()),
+    project: z.string(), // slug reference to parent project
+  }),
+})
+
 export const collections = {
   blog,
   projects,
+  projectLogs,
 }

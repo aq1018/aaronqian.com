@@ -1,0 +1,17 @@
+---
+date: 2025-01-14T19:45:00-08:00
+title: 'PID tuning breakthrough — cascaded loop working'
+tags: ['control-systems', 'milestone']
+project: 'smart-servo'
+---
+
+Finally got cascaded PID stable:
+
+- Outer loop (position): Kp=2.5, Ki=0.1, Kd=0.8
+- Inner loop (velocity): Kp=1.2, Ki=0.05, Kd=0.3
+
+Overshoot down from 15% to 2%. Settling time: 120ms.
+
+Current sensing working. Drawing ~800mA at stall. Need heatsink for FET.
+
+Next: Test bus comms (RS-485) with daisy-chained servos.
