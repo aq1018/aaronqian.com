@@ -89,3 +89,19 @@ html:not(.dark) {
   --color-link-hover: var(--color-primary-700);
   --color-highlight: var(--color-primary-100);
 }
+
+/* Smooth color transitions for theme changes */
+html {
+  transition:
+    background-color 300ms ease-in-out,
+    color 300ms ease-in-out;
+}
+
+*,
+*::before,
+*::after {
+  transition:
+    background-color 300ms ease-in-out,
+    color 300ms ease-in-out,
+    border-color 300ms ease-in-out;
+}
