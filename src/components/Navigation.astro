@@ -5,7 +5,7 @@ import { Icon } from 'astro-icon/components'
 const currentPath = Astro.url.pathname
 ---
 
-<nav class="border-b border-border bg-surface">
+<nav class="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-sm">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
       <!-- Home Icon (Left) -->
@@ -24,6 +24,13 @@ const currentPath = Astro.url.pathname
 
       <!-- Nav Links (Right) -->
       <div class="flex items-center gap-6">
+        <a
+          href={currentPath === '/' ? '#projects' : '/#projects'}
+          class="text-muted transition-colors hover:text-link-hover"
+        >
+          Projects
+        </a>
+
         <a
           href="/blog"
           class:list={[

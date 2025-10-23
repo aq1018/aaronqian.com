@@ -98,10 +98,18 @@
    Global transitions (optional)
    ----------------------------- */
 html {
+  scroll-behavior: smooth;
   transition:
     background-color 300ms ease-in-out,
     color 300ms ease-in-out;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 *,
 *::before,
 *::after {
