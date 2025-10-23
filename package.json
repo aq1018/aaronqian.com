@@ -5,7 +5,9 @@
   "scripts": {
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "type-check": "astro check",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -13,8 +15,8 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,astro}": ["eslint --fix", "prettier --write --config .prettier.mjs"],
-    "*.{css,json,md}": ["prettier --write --config .prettier.mjs"]
+    "*.{js,jsx,ts,tsx,astro}": ["prettier --check --config .prettier.mjs", "astro check", "eslint"],
+    "*.{css,json,md}": ["prettier --check --config .prettier.mjs"]
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.3",
@@ -24,6 +26,7 @@
     "tailwindcss": "^4.1.15"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.5",
     "@eslint/css": "^0.13.0",
     "@eslint/json": "^0.13.2",
     "@eslint/markdown": "^7.4.1",
@@ -40,6 +43,7 @@
     "lint-staged": "^16.2.5",
     "prettier": "3.6.2",
     "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2"
   }
 }

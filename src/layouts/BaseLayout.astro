@@ -75,5 +75,11 @@ const {
   </head>
   <body class="flex min-h-full flex-col bg-bg font-sans text-fg">
     <slot />
+
+    <!-- Initialize toggle buttons after DOM is ready -->
+    <script>
+      import { setupToggles } from '../lib/toggles'
+      setupToggles()
+    </script>
   </body>
 </html>

@@ -9,5 +9,5 @@
   },
   "eslint.useFlatConfig": true,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "astro"],
-  "cSpell.words": ["aaronqian"]
+  "cSpell.words": ["aaronqian", "heroicons"]
 }
