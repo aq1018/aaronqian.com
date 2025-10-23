@@ -1,0 +1,153 @@
+---
+// Projects Section - Terminal-style status board
+import { getCollection } from 'astro:content'
+
+const projects = await getCollection('projects')
+const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
+
+// Status indicator styles
+const statusStyles = {
+  active: 'text-accent',
+  planning: 'text-muted',
+  done: 'text-fg/60',
+}
+
+const statusLabels = {
+  active: 'ACTIVE',
+  planning: 'PLANNING',
+  done: 'DONE',
+}
+---
+
+<section id="projects" class="relative bg-surface py-16 sm:py-20">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <!-- Section header -->
+    <div class="mb-12">
+      <h2 class="font-mono text-2xl font-bold text-fg sm:text-3xl">Now / Currently Building</h2>
+      <div
+        class="mt-2 h-0.5 w-16 bg-accent transition-all duration-200 hover:w-24 hover:shadow-[0_0_8px_rgba(var(--color-accent-raw),0.6)]"
+      >
+      </div>
+    </div>
+
+    <!-- Projects table - desktop -->
+    <div class="hidden md:block overflow-x-auto">
+      <table class="w-full border-collapse font-mono text-sm">
+        <thead>
+          <tr class="border-b border-border/30">
+            <th class="pb-3 pr-6 text-left font-semibold uppercase tracking-wide text-muted/70"
+              >Project</th
+            >
+            <th class="pb-3 px-6 text-right font-semibold uppercase tracking-wide text-muted/70"
+              >Status</th
+            >
+            <th class="pb-3 pl-6 text-left font-semibold uppercase tracking-wide text-muted/70"
+              >Notes</th
+            >
+          </tr>
+        </thead>
+        <tbody>
+          {
+            sortedProjects.map((project) => (
+              <tr class="group border-b border-border/20 transition-colors hover:bg-surface-hover">
+                <td class="py-4 pr-6 align-top">
+                  {project.data.url ? (
+                    <a
+                      href={project.data.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-semibold text-link underline decoration-transparent transition-colors hover:decoration-link"
+                    >
+                      {project.data.title}
+                    </a>
+                  ) : (
+                    <span class="font-semibold text-fg">{project.data.title}</span>
+                  )}
+                </td>
+                <td class="py-4 px-6 align-top text-right">
+                  <span
+                    class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
+                  >
+                    {statusLabels[project.data.status]}
+                    {project.data.live && (
+                      <span class="ml-2 rounded bg-accent px-2 py-0.5 text-xs font-bold text-gray-950 animate-pulse-subtle">
+                        LIVE
+                      </span>
+                    )}
+                  </span>
+                </td>
+                <td class="py-4 pl-6 align-top">
+                  <p class="mb-2 text-muted leading-relaxed">{project.data.description}</p>
+                  <p class="text-xs italic text-muted/60">{project.data.aside}</p>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Projects list - mobile -->
+    <div class="space-y-6 md:hidden">
+      {
+        sortedProjects.map((project) => (
+          <div class="border-l-2 border-accent/30 pl-4 transition-colors hover:border-accent">
+            <div class="mb-2 flex items-baseline justify-between gap-3">
+              {project.data.url ? (
+                <a
+                  href={project.data.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-mono text-base font-semibold text-link underline decoration-transparent transition-colors hover:decoration-link"
+                >
+                  {project.data.title}
+                </a>
+              ) : (
+                <h3 class="font-mono text-base font-semibold text-fg">{project.data.title}</h3>
+              )}
+            </div>
+            <div class="mb-3">
+              <span
+                class={`font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
+              >
+                {statusLabels[project.data.status]}
+                {project.data.live && (
+                  <span class="ml-2 rounded bg-accent px-2 py-0.5 text-xs font-bold text-gray-950 animate-pulse-subtle">
+                    LIVE
+                  </span>
+                )}
+              </span>
+            </div>
+            <p class="mb-2 font-sans text-sm leading-relaxed text-muted">
+              {project.data.description}
+            </p>
+            <p class="font-mono text-xs italic text-muted/60">{project.data.aside}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12 border-t border-border/20 pt-6 text-center">
+      <p class="font-mono text-xs text-muted/70">Updates monthly. Expect context switches.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes pulseSubtle {
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(var(--color-accent-raw, 250 200 88), 0);
+    }
+    50% {
+      opacity: 0.85;
+      box-shadow: 0 0 8px 2px rgba(var(--color-accent-raw, 250 200 88), 0.4);
+    }
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSubtle 3s ease-in-out infinite;
+  }
+</style>
