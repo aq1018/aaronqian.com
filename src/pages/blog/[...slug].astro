@@ -1,144 +1,70 @@
 ---
-import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content'
+import { Image } from 'astro:assets'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Navigation from '../../components/Navigation.astro'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog')
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
-  }));
+  }))
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { post } = Astro.props
+const { Content } = await post.render()
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{post.data.title} - Aaron Qian</title>
-    {post.data.description && (
-      <meta name="description" content={post.data.description} />
-    )}
-    <style>
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        line-height: 1.6;
-        color: #333;
-      }
-      article {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
-      }
-      h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        line-height: 1.2;
-      }
-      .meta {
-        color: #666;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid #e5e5e5;
-      }
-      .content {
-        font-size: 1.1rem;
-        line-height: 1.8;
-      }
-      .content h2 {
-        margin-top: 2rem;
-        font-size: 1.8rem;
-      }
-      .content h3 {
-        margin-top: 1.5rem;
-        font-size: 1.4rem;
-      }
-      .content pre {
-        background: #f5f5f5;
-        padding: 1rem;
-        overflow-x: auto;
-        border-radius: 4px;
-      }
-      .content code {
-        background: #f5f5f5;
-        padding: 0.2rem 0.4rem;
-        border-radius: 3px;
-        font-size: 0.9em;
-      }
-      .content pre code {
-        background: none;
-        padding: 0;
-      }
-      .content blockquote {
-        border-left: 4px solid #0066cc;
-        padding-left: 1rem;
-        margin-left: 0;
-        color: #555;
-        font-style: italic;
-      }
-      .content img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 4px;
-      }
-      .tags {
-        margin-top: 1rem;
-      }
-      .tag {
-        display: inline-block;
-        background: #f0f0f0;
-        padding: 0.25rem 0.5rem;
-        margin-right: 0.5rem;
-        border-radius: 3px;
-        font-size: 0.85rem;
-      }
-      .hero-image {
-        width: 100%;
-        max-height: 400px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-      }
-    </style>
-  </head>
-  <body>
-    <article>
-      <p><a href="/blog">← Back to blog</a></p>
+<BaseLayout title={`${post.data.title} - Aaron Qian`} description={post.data.description}>
+  <Navigation />
+  <main class="flex-1">
+    <article class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+      <a
+        href="/blog"
+        class="inline-flex items-center text-link transition-colors hover:text-link-hover"
+      >
+        ← Back to blog
+      </a>
 
-      <h1>{post.data.title}</h1>
+      <h1 class="mt-6 text-4xl font-bold leading-tight text-fg sm:text-5xl">
+        {post.data.title}
+      </h1>
 
-      {post.data.hero && (
-        <Image
-          src={post.data.hero}
-          alt={post.data.title}
-          class="hero-image"
-        />
-      )}
+      {
+        post.data.hero && (
+          <Image
+            src={post.data.hero}
+            alt={post.data.title}
+            class="mt-8 h-auto w-full max-h-96 rounded-lg object-cover"
+          />
+        )
+      }
 
-      <div class="meta">
-        <p>
-          {post.data.date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })}
+      <div class="mb-8 border-b border-border pb-4">
+        <p class="mt-4 text-muted">
+          {
+            post.data.date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }
         </p>
-        {post.data.tags && (
-          <div class="tags">
-            {post.data.tags.map((tag) => (
-              <span class="tag">{tag}</span>
-            ))}
-          </div>
-        )}
+        {
+          post.data.tags && (
+            <div class="mt-4 flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => (
+                <span class="rounded bg-highlight px-2 py-1 text-sm text-muted">{tag}</span>
+              ))}
+            </div>
+          )
+        }
       </div>
 
-      <div class="content">
+      <div class="prose prose-lg dark:prose-invert max-w-none">
         <Content />
       </div>
     </article>
-  </body>
-</html>
+  </main>
+</BaseLayout>

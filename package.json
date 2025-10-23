@@ -33,6 +33,7 @@
     "@eslint/css": "^0.13.0",
     "@eslint/json": "^0.13.2",
     "@eslint/markdown": "^7.4.1",
+    "@tailwindcss/typography": "^0.5.19",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/eslint-plugin-jsx-a11y": "^6.10.1",
