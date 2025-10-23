@@ -33,7 +33,7 @@ import { Icon } from 'astro-icon/components'
     >
       Input coffee <span
         id="lightning-bolt"
-        class="inline-block text-accent opacity-70 transition-all duration-200 ease-out"
+        class="inline-block text-accent opacity-70 transition-all duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none"
         aria-hidden="true"
         data-lightning-bolt
         ><Icon
@@ -44,21 +44,21 @@ import { Icon } from 'astro-icon/components'
     </h1>
 
     <!-- Sub-headline -->
-    <div class="mt-8 space-y-2">
+    <div class="mt-8 mx-auto max-w-3xl space-y-2">
       <p class="font-sans text-lg leading-relaxed text-muted sm:text-xl md:text-2xl">
-        I build systems — digital, mechanical, and human.
+        Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
       </p>
       <p class="font-sans text-lg leading-relaxed text-muted sm:text-xl md:text-2xl">
-        20+ years turning chaos into clarity, one refactor (and espresso) at a time.
+        Safety goggles recommended. Coffee mandatory.
       </p>
     </div>
 
     <!-- CTAs -->
     <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-      <!-- Primary CTA - Filled with glow -->
+      <!-- Primary CTA - Filled -->
       <a
         href="/blog"
-        class="btn-glow-accent group inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3.5 text-mono-upper text-sm font-bold text-gray-950 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
+        class="group inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-gray-950 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
       >
         <span>Read My Notes</span>
         <svg
@@ -76,35 +76,23 @@ import { Icon } from 'astro-icon/components'
         </svg>
       </a>
 
-      <!-- Secondary CTA - Outline with glow on hover -->
+      <!-- Secondary CTA - Outline -->
       <a
         href="https://launchpath.com"
         target="_blank"
         rel="noopener noreferrer"
-        class="btn-glow-accent group inline-flex items-center gap-2 rounded-lg border-2 border-accent bg-transparent px-8 py-3.5 text-mono-upper text-sm font-bold text-accent transition-all duration-300 hover:scale-105 hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
+        aria-label="Open LaunchPath (new tab)"
+        class="group inline-flex items-center gap-2 rounded-lg border-2 border-accent bg-transparent px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-accent transition-all duration-300 hover:scale-105 hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
       >
-        <span>Visit LaunchPath</span>
-        <svg
-          class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-        </svg>
+        <span>LaunchPath →</span>
       </a>
     </div>
 
     <!-- Micro-text below buttons -->
-    <div class="mt-8 text-center font-mono text-xs text-muted/70 sm:text-sm">
+    <div class="mt-8 text-center font-mono text-xs text-muted/70">
       <p class="inline-flex items-center justify-center gap-2">
-        <span class="text-accent">⚡</span>
-        <span>Currently experimenting with servo control loops & AI code audits.</span>
+        <span class="text-accent">⚠️</span>
+        <span>Experiment in progress…</span>
       </p>
     </div>
   </div>
