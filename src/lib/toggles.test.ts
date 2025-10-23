@@ -188,6 +188,102 @@ describe('Toggle Button System', () => {
       cleanup()
     })
 
+    it('should handle clicks on SVG icons within button', () => {
+      document.body.innerHTML = `
+        <div>
+          <button id="test-toggle" data-toggle-button aria-expanded="false">
+            <svg id="icon" width="20" height="20">
+              <path id="icon-path" d="M10 10"></path>
+            </svg>
+          </button>
+          <div id="test-menu" class="hidden">Menu Content</div>
+        </div>
+      `
+
+      const cleanup = initializeToggles()
+
+      const icon = document.getElementById('icon') as unknown as SVGElement
+      const menu = document.getElementById('test-menu') as HTMLElement
+
+      // Initially hidden
+      expect(menu.classList.contains('hidden')).toBe(true)
+
+      // Click on SVG icon using dispatchEvent
+      const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true })
+      icon.dispatchEvent(clickEvent)
+      expect(menu.classList.contains('hidden')).toBe(false)
+
+      cleanup()
+    })
+
+    it('should handle clicks on nested SVG path elements', () => {
+      document.body.innerHTML = `
+        <div>
+          <button id="test-toggle" data-toggle-button aria-expanded="false">
+            <svg id="icon" width="20" height="20">
+              <path id="icon-path" d="M10 10"></path>
+            </svg>
+          </button>
+          <div id="test-menu" class="hidden">Menu Content</div>
+        </div>
+      `
+
+      const cleanup = initializeToggles()
+
+      const iconPath = document.getElementById('icon-path') as unknown as SVGPathElement
+      const menu = document.getElementById('test-menu') as HTMLElement
+
+      // Initially hidden
+      expect(menu.classList.contains('hidden')).toBe(true)
+
+      // Click on deeply nested SVG path element using dispatchEvent
+      const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true })
+      iconPath.dispatchEvent(clickEvent)
+      expect(menu.classList.contains('hidden')).toBe(false)
+
+      cleanup()
+    })
+
+    it('should handle clicks on multiple nested SVG elements like theme toggle', () => {
+      document.body.innerHTML = `
+        <div>
+          <button id="test-toggle" data-toggle-button aria-expanded="false">
+            <svg id="theme-icon" width="20" height="20">
+              <path d="M10 10"></path>
+            </svg>
+            <svg id="chevron" width="16" height="16">
+              <path id="chevron-path" d="M5 8"></path>
+            </svg>
+          </button>
+          <div id="test-menu" class="hidden">Menu Content</div>
+        </div>
+      `
+
+      const cleanup = initializeToggles()
+
+      const themeIcon = document.getElementById('theme-icon') as unknown as SVGElement
+      const chevronPath = document.getElementById('chevron-path') as unknown as SVGPathElement
+      const menu = document.getElementById('test-menu') as HTMLElement
+      const button = document.getElementById('test-toggle') as HTMLButtonElement
+
+      // Initially hidden
+      expect(menu.classList.contains('hidden')).toBe(true)
+
+      // Click on first SVG icon using dispatchEvent
+      const clickEvent1 = new MouseEvent('click', { bubbles: true, cancelable: true })
+      themeIcon.dispatchEvent(clickEvent1)
+      expect(menu.classList.contains('hidden')).toBe(false)
+      expect(button.getAttribute('aria-expanded')).toBe('true')
+
+      // Click on nested path in second SVG to close
+      const clickEvent2 = new MouseEvent('click', { bubbles: true, cancelable: true })
+      chevronPath.dispatchEvent(clickEvent2)
+      expect(menu.classList.contains('hidden')).toBe(true)
+      expect(button.getAttribute('aria-expanded')).toBe('false')
+
+      cleanup()
+    })
+
     it('should return early if no toggle buttons exist', () => {
       document.body.innerHTML = `<div>No toggle buttons here</div>`
 

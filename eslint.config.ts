@@ -51,7 +51,7 @@ export default [
       'coverage/',
       '.claude/',
       '.vscode/',
-      '.prettier.mjs',
+      '.prettierrc.mjs',
       'package-lock.json',
     ],
   },

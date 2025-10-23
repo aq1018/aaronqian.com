@@ -9,7 +9,7 @@ const { value, class: className = '' } = Astro.props
 
 <button
   data-value={value}
-  class={`menu-item flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-fg transition-colors hover:bg-highlight ${className}`}
+  class={`menu-item flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm text-fg transition-colors hover:bg-highlight ${className}`}
   role="menuitem"
 >
   <slot />

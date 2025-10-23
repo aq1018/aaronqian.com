@@ -44,7 +44,8 @@ export function initializeToggles(): CleanupFunction {
   // Event handler for button clicks
   const handleButtonClick = (e: Event): void => {
     const target = e.target
-    if (!(target instanceof HTMLElement)) return
+    // Accept both HTMLElement and SVGElement (Element is the base class)
+    if (!(target instanceof Element)) return
 
     const button = target.closest<HTMLElement>('[data-toggle-button]')
 
@@ -64,7 +65,8 @@ export function initializeToggles(): CleanupFunction {
   // Event handler for closing menus when clicking outside
   const handleDocumentClick = (e: Event): void => {
     const target = e.target
-    if (!(target instanceof HTMLElement)) return
+    // Accept both HTMLElement and SVGElement (Element is the base class)
+    if (!(target instanceof Element)) return
 
     // Don't close if clicking on a toggle button (handled by handleButtonClick)
     const clickedButton = target.closest<HTMLElement>('[data-toggle-button]')
