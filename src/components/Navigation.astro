@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro'
+import { Icon } from 'astro-icon/components'
 
 const currentPath = Astro.url.pathname
 ---
@@ -7,14 +8,21 @@ const currentPath = Astro.url.pathname
 <nav class="border-b border-border bg-surface">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
-      <!-- Logo / Brand -->
+      <!-- Home Icon (Left) -->
       <div class="flex items-center">
-        <a href="/" class="text-xl font-bold text-fg transition-colors hover:text-link">
-          Aaron Qian
+        <a
+          href="/"
+          class:list={[
+            'transition-colors hover:text-link-hover',
+            currentPath === '/' ? 'font-semibold text-link' : 'text-muted',
+          ]}
+          aria-label="Home"
+        >
+          <Icon name="heroicons:home-solid" class="h-5 w-5" />
         </a>
       </div>
 
-      <!-- Nav Links -->
+      <!-- Nav Links (Right) -->
       <div class="flex items-center gap-6">
         <a
           href="/blog"

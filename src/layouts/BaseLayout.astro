@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from 'astro:transitions'
+
 interface Props {
   title?: string
   description?: string
@@ -48,6 +50,9 @@ const {
     />
     <link rel="stylesheet" href="/src/styles/global.css" />
 
+    <!-- Client Router for SPA-like navigation -->
+    <ClientRouter />
+
     <!-- Dark mode script - runs before page render to prevent flash -->
     <script is:inline>
       function updateTheme() {
@@ -71,6 +76,9 @@ const {
           updateTheme()
         }
       })
+
+      // Re-apply theme after View Transitions navigation
+      document.addEventListener('astro:after-swap', updateTheme)
     </script>
   </head>
   <body class="flex min-h-full flex-col bg-bg font-sans text-fg">
