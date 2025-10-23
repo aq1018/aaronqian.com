@@ -107,10 +107,11 @@ import { Icon } from 'astro-icon/components'
   // Create electricity paths that flow left-to-right with resistance-based jumps
   function initPowerLines() {
     const svg = document.getElementById('power-svg')
-    if (!svg) return
+    const hero = document.getElementById('hero')
+    if (!svg || !hero) return
 
-    const width = window.innerWidth
-    const height = window.innerHeight
+    const width = hero.offsetWidth
+    const height = hero.offsetHeight
     const gridSize = 80
 
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
