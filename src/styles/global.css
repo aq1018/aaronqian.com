@@ -46,6 +46,10 @@
   /* Font Family */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
+  /* Z-index layers */
+  --z-dropdown: 50;
+  --z-index-dropdown: 50;
+
   /* Semantic color tokens - Light mode (default) */
   --color-bg: var(--color-gray-50);
   --color-fg: var(--color-gray-900);
