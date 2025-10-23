@@ -2,10 +2,11 @@
 interface Props {
   id: string
   ariaLabel: string
+  target?: string
   class?: string
 }
 
-const { id, ariaLabel, class: className = '' } = Astro.props
+const { id, ariaLabel, target, class: className = '' } = Astro.props
 ---
 
 <div class={`relative ${className}`}>
@@ -17,6 +18,7 @@ const { id, ariaLabel, class: className = '' } = Astro.props
     aria-haspopup="true"
     aria-expanded="false"
     data-toggle-button
+    data-toggle-target={target}
   >
     <slot />
   </button>

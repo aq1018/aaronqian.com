@@ -24,9 +24,20 @@ export function initializeToggles(): CleanupFunction {
   // Find all toggle buttons and their associated menus
   document.querySelectorAll<HTMLElement>('[data-toggle-button]').forEach((button) => {
     toggleButtons.add(button)
-    const nextElement = button.nextElementSibling
-    if (nextElement instanceof HTMLElement) {
-      menuMap.set(button, nextElement)
+
+    // Check for explicit target via data-toggle-target attribute
+    const targetId = button.getAttribute('data-toggle-target')
+    if (targetId !== null && targetId !== '') {
+      const targetMenu = document.getElementById(targetId)
+      if (targetMenu !== null) {
+        menuMap.set(button, targetMenu)
+      }
+    } else {
+      // Fallback to nextElementSibling for backwards compatibility
+      const nextElement = button.nextElementSibling
+      if (nextElement instanceof HTMLElement) {
+        menuMap.set(button, nextElement)
+      }
     }
   })
 
@@ -51,7 +62,15 @@ export function initializeToggles(): CleanupFunction {
   }
 
   // Event handler for closing menus when clicking outside
-  const handleDocumentClick = (): void => {
+  const handleDocumentClick = (e: Event): void => {
+    const target = e.target
+    if (!(target instanceof HTMLElement)) return
+
+    // Don't close if clicking on a toggle button (handled by handleButtonClick)
+    const clickedButton = target.closest<HTMLElement>('[data-toggle-button]')
+    if (clickedButton !== null && toggleButtons.has(clickedButton)) return
+
+    // Close all menus
     toggleButtons.forEach((button) => {
       const menu = menuMap.get(button)
       if (menu !== undefined) {

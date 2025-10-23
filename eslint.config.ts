@@ -16,7 +16,7 @@ import tseslint from 'typescript-eslint'
 const TS_JS_FILES = ['**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}']
 const REACT_FILES = ['**/*.{jsx,tsx}']
 const ASTRO_FILES = ['**/*.astro']
-const TEST_FILES = ['**/*.spec.{ts,tsx}']
+const TEST_FILES = ['**/*.{test,spec}.{ts,tsx}']
 const CSS_FILES = ['**/*.css']
 const JSON_FILES = ['**/*.json']
 const MARKDOWN_FILES = ['**/*.md']
@@ -165,6 +165,9 @@ export default [
       '@typescript-eslint/unbound-method': 'off',
       'max-lines': 'off',
       'max-nested-callbacks': 'off',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-unsafe-type-assertion': 'off',
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
     },
   },
 
