@@ -1,0 +1,23 @@
+---
+interface Props {
+  value: string
+  class?: string
+}
+
+const { value, class: className = '' } = Astro.props
+---
+
+<button
+  data-value={value}
+  class={`menu-item flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-fg transition-colors hover:bg-highlight ${className}`}
+  role="menuitem"
+>
+  <slot />
+</button>
+
+<style>
+  .menu-item.selected {
+    background-color: var(--color-highlight);
+    font-weight: 600;
+  }
+</style>

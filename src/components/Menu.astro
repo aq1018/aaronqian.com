@@ -1,0 +1,18 @@
+---
+interface Props {
+  id: string
+  class?: string
+}
+
+const { id, class: className = '' } = Astro.props
+---
+
+<div
+  {id}
+  class={`absolute right-0 mt-2 hidden rounded-lg border border-border bg-bg shadow-lg ${className}`}
+  role="menu"
+>
+  <div class="py-1">
+    <slot />
+  </div>
+</div>
