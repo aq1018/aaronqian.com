@@ -53,6 +53,7 @@ export default [
       '.vscode/',
       '.prettierrc.mjs',
       'package-lock.json',
+      'src/styles/global.css', // Exception: Contains Tailwind v4 @custom-variant syntax that CSS parser cannot handle
     ],
   },
 
@@ -180,7 +181,8 @@ export default [
     language: 'css/css',
     ...css.configs.recommended,
     rules: {
-      'css/no-invalid-at-rules': 'off', // Disable for Tailwind v4 @theme directive
+      'css/no-invalid-at-rules': 'off', // Disable for Tailwind v4 @theme, @plugin, @custom-variant directives
+      'css/no-unknown-at-rules': 'off', // Disable for Tailwind v4 custom at-rules
     },
   },
 

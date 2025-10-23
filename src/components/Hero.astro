@@ -1,0 +1,312 @@
+---
+// Hero Section - Tech Lab meets Meditation Space
+// Features: Power grid with pulsing electricity lines, energy dots in corners
+import { Icon } from 'astro-icon/components'
+---
+
+<section id="hero" class="power-grid relative flex min-h-[85vh] items-center justify-center">
+  <!-- Pulsing power lines (SVG) -->
+  <div class="power-lines">
+    <svg id="power-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <!-- Lines will be added dynamically -->
+    </svg>
+  </div>
+
+  <!-- Parallax background layer -->
+  <div
+    id="parallax-bg"
+    class="pointer-events-none absolute inset-0 z-[1] transition-transform duration-300 ease-out"
+  >
+  </div>
+
+  <!-- Main content -->
+  <div class="relative z-10 mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8">
+    <!-- Headline with blinking arrow -->
+    <h1
+      class="whitespace-nowrap font-mono text-3xl font-semibold leading-tight text-fg sm:text-4xl md:text-5xl lg:text-6xl"
+    >
+      Input coffee <span
+        id="lightning-bolt"
+        class="inline-block text-accent opacity-70 transition-all duration-200 ease-out"
+        aria-hidden="true"
+        ><Icon
+          name="heroicons:bolt-solid"
+          class="inline-block h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14"
+        /></span
+      > Output code
+    </h1>
+
+    <!-- Sub-headline -->
+    <div class="mt-8 space-y-2">
+      <p class="font-sans text-lg leading-relaxed text-muted sm:text-xl md:text-2xl">
+        I build systems — digital, mechanical, and human.
+      </p>
+      <p class="font-sans text-lg leading-relaxed text-muted sm:text-xl md:text-2xl">
+        20+ years turning chaos into clarity, one refactor (and espresso) at a time.
+      </p>
+    </div>
+
+    <!-- CTAs -->
+    <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <!-- Primary CTA - Filled with glow -->
+      <a
+        href="/blog"
+        class="btn-glow-accent group inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3.5 text-mono-upper text-sm font-bold text-gray-950 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
+      >
+        <span>Read My Notes</span>
+        <svg
+          class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+
+      <!-- Secondary CTA - Outline with glow on hover -->
+      <a
+        href="https://launchpath.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-glow-accent group inline-flex items-center gap-2 rounded-lg border-2 border-accent bg-transparent px-8 py-3.5 text-mono-upper text-sm font-bold text-accent transition-all duration-300 hover:scale-105 hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
+      >
+        <span>Visit LaunchPath</span>
+        <svg
+          class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Micro-text below buttons -->
+    <div class="mt-8 text-center font-mono text-xs text-muted/70 sm:text-sm">
+      <p class="inline-flex items-center justify-center gap-2">
+        <span class="text-accent">⚡</span>
+        <span>Currently experimenting with servo control loops & AI code audits.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Create electricity paths that flow left-to-right with resistance-based jumps
+  function initPowerLines() {
+    const svg = document.getElementById('power-svg')
+    if (!svg) return
+
+    const width = window.innerWidth
+    const height = window.innerHeight
+    const gridSize = 80
+
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
+
+    let activePulses = 0
+    const maxConcurrentPulses = 2
+
+    // Generate horizontal grid line positions
+    const gridLines: number[] = []
+    for (let y = gridSize; y < height - gridSize; y += gridSize) {
+      gridLines.push(y)
+    }
+
+    function generateElectricPath() {
+      const path: string[] = []
+      let currentY = gridLines[Math.floor(Math.random() * gridLines.length)]
+      let currentX = 0
+
+      path.push(`M 0 ${currentY}`) // Start from left edge
+
+      // Move across the screen, occasionally jumping to adjacent lines
+      while (currentX < width) {
+        // Move horizontally 80-240px
+        const horizontalStep = gridSize + Math.random() * gridSize * 2
+        currentX += horizontalStep
+
+        if (currentX >= width) {
+          // End at right edge
+          path.push(`L ${width} ${currentY}`)
+          break
+        }
+
+        // Sometimes jump to adjacent line (30% chance)
+        if (Math.random() < 0.3 && gridLines.length > 1) {
+          // Find current line index
+          const currentIndex = gridLines.indexOf(currentY)
+          const canGoUp = currentIndex > 0
+          const canGoDown = currentIndex < gridLines.length - 1
+
+          let newY = currentY
+
+          if (canGoUp && canGoDown) {
+            // Randomly go up or down
+            newY = Math.random() > 0.5 ? gridLines[currentIndex - 1] : gridLines[currentIndex + 1]
+          } else if (canGoUp) {
+            newY = gridLines[currentIndex - 1]
+          } else if (canGoDown) {
+            newY = gridLines[currentIndex + 1]
+          }
+
+          // Draw horizontal to jump point, then vertical, then continue
+          path.push(`L ${currentX} ${currentY}`) // horizontal
+          path.push(`L ${currentX} ${newY}`) // vertical jump
+          currentY = newY
+        } else {
+          // Just continue horizontally
+          path.push(`L ${currentX} ${currentY}`)
+        }
+      }
+
+      return path.join(' ')
+    }
+
+    function triggerPulse() {
+      if (activePulses >= maxConcurrentPulses) return
+
+      // Supercharge the lightning bolt in sync with the pulse
+      const lightningBolt = document.getElementById('lightning-bolt')
+      if (lightningBolt) {
+        lightningBolt.style.opacity = '1'
+        lightningBolt.style.transform = 'scale(1.1)'
+        // Add dramatic glow - supercharged effect
+        const isDark = document.documentElement.classList.contains('dark')
+        const glowColor = isDark ? 'rgba(0, 224, 255, 1)' : 'rgba(218, 165, 32, 1)'
+        lightningBolt.style.filter = `drop-shadow(0 0 12px ${glowColor}) drop-shadow(0 0 4px ${glowColor})`
+
+        setTimeout(() => {
+          lightningBolt.style.opacity = '0.7'
+          lightningBolt.style.transform = 'scale(1)'
+          lightningBolt.style.filter = 'none'
+        }, 400) // Match the trace duration
+      }
+
+      const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+      const pathData = generateElectricPath()
+
+      pathElement.setAttribute('d', pathData)
+      pathElement.setAttribute('stroke', 'currentColor')
+      pathElement.setAttribute('stroke-width', '2')
+      pathElement.classList.add('text-accent')
+      pathElement.setAttribute('fill', 'none')
+      pathElement.setAttribute('stroke-linecap', 'round')
+      pathElement.setAttribute('stroke-linejoin', 'round')
+
+      // Calculate path length for drawing animation
+      svg!.appendChild(pathElement)
+      const pathLength = pathElement.getTotalLength()
+
+      // Start with path hidden
+      pathElement.style.strokeDasharray = `${pathLength} ${pathLength}`
+      pathElement.style.strokeDashoffset = String(pathLength)
+      // Use CSS variable for glow color
+      const isDark = document.documentElement.classList.contains('dark')
+      const glowColor = isDark ? 'rgba(0, 224, 255, 0.3)' : 'rgba(87, 146, 250, 0.3)'
+      pathElement.style.filter = `drop-shadow(0 0 3px ${glowColor})`
+      pathElement.style.opacity = '0.3'
+
+      activePulses++
+
+      // Draw the path from left to right (reveal it) - FAST!
+      requestAnimationFrame(() => {
+        pathElement.style.transition = `stroke-dashoffset 0.4s linear`
+        pathElement.style.strokeDashoffset = '0'
+      })
+
+      // Keep it visible briefly, then fade entire trace
+      setTimeout(() => {
+        pathElement.style.transition = 'opacity 0.2s ease-out'
+        pathElement.style.opacity = '0'
+      }, 450)
+
+      // Remove after fade
+      setTimeout(() => {
+        pathElement.remove()
+        activePulses--
+      }, 700)
+    }
+
+    // Trigger pulses occasionally
+    function schedulePulse() {
+      triggerPulse()
+      // Wait 3-8 seconds before next pulse
+      setTimeout(schedulePulse, 3000 + Math.random() * 5000)
+    }
+
+    // Start after initial delay
+    setTimeout(schedulePulse, 2000)
+  }
+
+  // Mouse parallax effect
+  function initParallax() {
+    const hero = document.getElementById('hero')
+    const parallaxBg = document.getElementById('parallax-bg')
+    if (!hero || !parallaxBg) return
+
+    let rafId: number | null = null
+
+    hero.addEventListener('mousemove', (e) => {
+      if (rafId) return
+
+      rafId = requestAnimationFrame(() => {
+        const { clientX, clientY } = e
+        const { innerWidth, innerHeight } = window
+
+        const xOffset = ((clientX - innerWidth / 2) / innerWidth) * 15
+        const yOffset = ((clientY - innerHeight / 2) / innerHeight) * 15
+
+        if (parallaxBg) {
+          parallaxBg.style.transform = `translate(${xOffset}px, ${yOffset}px)`
+        }
+        rafId = null
+      })
+    })
+
+    hero.addEventListener('mouseleave', () => {
+      if (parallaxBg) {
+        parallaxBg.style.transform = 'translate(0, 0)'
+      }
+    })
+  }
+
+  // Initialize everything
+  function init() {
+    initPowerLines()
+    initParallax()
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init)
+  } else {
+    init()
+  }
+
+  // Re-initialize on view transitions
+  document.addEventListener('astro:page-load', init)
+
+  // Rebuild power lines on resize (debounced)
+  let resizeTimeout: number | null = null
+  window.addEventListener('resize', () => {
+    if (resizeTimeout) clearTimeout(resizeTimeout)
+    resizeTimeout = window.setTimeout(() => {
+      const svg = document.getElementById('power-svg')
+      if (svg) {
+        svg.innerHTML = ''
+        initPowerLines()
+      }
+    }, 500)
+  })
+</script>

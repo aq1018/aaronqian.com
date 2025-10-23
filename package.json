@@ -28,6 +28,7 @@
     "@tailwindcss/vite": "^4.1.15",
     "astro": "^5.14.7",
     "astro-icon": "^1.1.5",
+    "class-variance-authority": "^0.7.1",
     "tailwindcss": "^4.1.15"
   },
   "devDependencies": {

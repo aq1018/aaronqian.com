@@ -1,4 +1,6 @@
 ---
+import Button from './Button.astro'
+
 interface Props {
   id: string
   ariaLabel: string
@@ -10,10 +12,12 @@ const { id, ariaLabel, target, class: className = '' } = Astro.props
 ---
 
 <div class={`relative ${className}`}>
-  <button
+  <Button
+    variant="ghost"
+    color="neutral"
+    size="sm"
+    class="cursor-pointer"
     {id}
-    type="button"
-    class="flex cursor-pointer items-center gap-1 rounded-lg p-2 text-muted transition-colors"
     aria-label={ariaLabel}
     aria-haspopup="true"
     aria-expanded="false"
@@ -21,7 +25,7 @@ const { id, ariaLabel, target, class: className = '' } = Astro.props
     data-toggle-target={target}
   >
     <slot />
-  </button>
+  </Button>
 
   <slot name="menu" />
 </div>

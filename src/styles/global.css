@@ -1,11 +1,15 @@
+/* Tailwind v4 entry + plugin */
 @import 'tailwindcss';
-@plugin '@tailwindcss/typography';
+@plugin "@tailwindcss/typography";
 
+/* Enable `.dark` class variant for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -----------------------------
+   THEME TOKENS (GLOBAL)
+   ----------------------------- */
 @theme {
-  /* Dark mode configuration */
-  --dark-mode: class;
-
-  /* Color Palette - Bold & Colorful */
+  /* Color Palettes (OKLCH) */
   --color-primary-50: oklch(0.97 0.01 250);
   --color-primary-100: oklch(0.93 0.03 250);
   --color-primary-200: oklch(0.86 0.06 250);
@@ -18,19 +22,20 @@
   --color-primary-900: oklch(0.22 0.06 250);
   --color-primary-950: oklch(0.15 0.03 250);
 
-  --color-accent-50: oklch(0.97 0.01 140);
-  --color-accent-100: oklch(0.93 0.04 140);
-  --color-accent-200: oklch(0.86 0.08 140);
-  --color-accent-300: oklch(0.77 0.14 140);
-  --color-accent-400: oklch(0.67 0.18 140);
-  --color-accent-500: oklch(0.57 0.22 140);
-  --color-accent-600: oklch(0.47 0.2 140);
-  --color-accent-700: oklch(0.37 0.16 140);
-  --color-accent-800: oklch(0.29 0.12 140);
-  --color-accent-900: oklch(0.22 0.08 140);
-  --color-accent-950: oklch(0.15 0.04 140);
+  /* Accent (Harvest Gold in light; will swap in dark below) */
+  --color-accent-50: oklch(0.97 0.02 85);
+  --color-accent-100: oklch(0.94 0.05 85);
+  --color-accent-200: oklch(0.89 0.09 85);
+  --color-accent-300: oklch(0.84 0.13 85);
+  --color-accent-400: oklch(0.79 0.15 85);
+  --color-accent-500: oklch(0.74 0.17 85); /* default accent (light) */
+  --color-accent-600: oklch(0.64 0.15 85);
+  --color-accent-700: oklch(0.54 0.13 85);
+  --color-accent-800: oklch(0.44 0.1 85);
+  --color-accent-900: oklch(0.34 0.07 85);
+  --color-accent-950: oklch(0.24 0.04 85);
 
-  /* Gray scale for light and dark modes */
+  /* Grays */
   --color-gray-50: oklch(0.99 0 0);
   --color-gray-100: oklch(0.96 0 0);
   --color-gray-200: oklch(0.9 0 0);
@@ -43,64 +48,60 @@
   --color-gray-900: oklch(0.14 0 0);
   --color-gray-950: oklch(0.08 0 0);
 
-  /* Font Family */
+  /* Fonts */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
 
-  /* Z-index layers */
-  --z-dropdown: 50;
+  /* Z-index utilities for Tailwind v4 */
   --z-index-dropdown: 50;
 
-  /* Semantic color tokens - Light mode (default) */
-  --color-bg: var(--color-gray-50);
+  /* -----------------------------
+     Semantic tokens (LIGHT defaults)
+     These map to Tailwind classes:
+     bg-surface, text-fg, border-border, text-muted, text-link, etc.
+     ----------------------------- */
+  --color-surface: var(--color-gray-50);
+  --color-bg: var(--color-surface); /* Alias for backward compatibility */
   --color-fg: var(--color-gray-900);
   --color-border: var(--color-gray-200);
   --color-muted: var(--color-gray-600);
   --color-link: var(--color-primary-600);
   --color-link-hover: var(--color-primary-700);
   --color-highlight: var(--color-primary-100);
+
+  /* Accent alias for convenience (bg-accent / text-accent) */
+  --color-accent: var(--color-accent-500);
+  --color-accent-hover: var(--color-accent-400);
 }
 
-/* Override semantic tokens in dark mode */
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-bg: var(--color-gray-950);
+/* -----------------------------
+   THEME OVERRIDES (DARK)
+   Keep overrides in the theme layer for correct order.
+   ----------------------------- */
+@layer theme {
+  .dark {
+    --color-surface: var(--color-gray-950);
     --color-fg: var(--color-gray-50);
     --color-border: var(--color-gray-800);
     --color-muted: var(--color-gray-300);
     --color-link: var(--color-primary-400);
     --color-link-hover: var(--color-primary-300);
     --color-highlight: var(--color-primary-900);
+
+    /* Swap accent family in dark for better pop (cyan) */
+    --color-accent: oklch(0.86 0.17 210); /* ~#00E0FF-ish in OKLCH */
+    --color-accent-hover: oklch(0.88 0.15 210);
   }
 }
 
-/* Manual dark mode class override */
-html.dark {
-  --color-bg: var(--color-gray-950);
-  --color-fg: var(--color-gray-50);
-  --color-border: var(--color-gray-800);
-  --color-muted: var(--color-gray-300);
-  --color-link: var(--color-primary-400);
-  --color-link-hover: var(--color-primary-300);
-  --color-highlight: var(--color-primary-900);
-}
-
-html:not(.dark) {
-  --color-bg: var(--color-gray-50);
-  --color-fg: var(--color-gray-900);
-  --color-border: var(--color-gray-200);
-  --color-muted: var(--color-gray-600);
-  --color-link: var(--color-primary-600);
-  --color-link-hover: var(--color-primary-700);
-  --color-highlight: var(--color-primary-100);
-}
-
-/* Smooth color transitions for theme changes */
+/* -----------------------------
+   Global transitions (optional)
+   ----------------------------- */
 html {
   transition:
     background-color 300ms ease-in-out,
     color 300ms ease-in-out;
 }
-
 *,
 *::before,
 *::after {
@@ -108,4 +109,182 @@ html {
     background-color 300ms ease-in-out,
     color 300ms ease-in-out,
     border-color 300ms ease-in-out;
+}
+
+/* -----------------------------
+   Power Grid Background
+   Clean grid with pulsing electricity lines
+   ----------------------------- */
+
+/* Main container - responsive to theme */
+.power-grid {
+  position: relative;
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.power-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Light mode: harvest gold grid */
+  background-image:
+    linear-gradient(to right, oklch(0.74 0.17 85 / 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.74 0.17 85 / 0.2) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  pointer-events: none;
+}
+
+.dark .power-grid::before {
+  /* Dark mode: cyan grid */
+  background-image:
+    linear-gradient(to right, oklch(0.86 0.17 210 / 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.86 0.17 210 / 0.2) 1px, transparent 1px);
+}
+
+/* SVG layer for pulsing lines */
+.power-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.power-lines svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Pulse animation for electricity flowing along path */
+@keyframes electricFlow {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    stroke-dashoffset: -200%;
+    opacity: 0;
+  }
+}
+
+/* -----------------------------
+   Cursor blink animation
+   ----------------------------- */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+.animate-blink {
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+/* -----------------------------
+   Circuit flow / data pulse animations
+   ----------------------------- */
+@keyframes circuitFlow {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+
+@keyframes circuitFlowVertical {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.circuit-line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  height: 1px;
+  width: 200px;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.circuit-line-vertical {
+  position: absolute;
+  background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
+  width: 1px;
+  height: 200px;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* -----------------------------
+   Button glow effects
+   ----------------------------- */
+.btn-glow-accent {
+  position: relative;
+  isolation: isolate;
+}
+
+.btn-glow-accent::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: var(--color-accent);
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.btn-glow-accent:hover::before {
+  opacity: 0.4;
+}
+
+.dark .btn-glow-accent:hover::before {
+  opacity: 0.6;
+}
+
+/* -----------------------------
+   Mono uppercase utility for CTAs
+   ----------------------------- */
+.text-mono-upper {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }

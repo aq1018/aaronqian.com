@@ -1,22 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Navigation from '../components/Navigation.astro'
+import Hero from '../components/Hero.astro'
 ---
 
 <BaseLayout>
   <Navigation />
-  <main class="flex-1">
-    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-bold text-fg">Aaron Qian</h1>
-      <p class="mt-4 text-xl text-muted">Software Engineer, Freelancer, Father</p>
-      <nav class="mt-8">
-        <a
-          href="/blog"
-          class="inline-flex items-center text-lg font-medium text-link transition-colors hover:text-link-hover"
-        >
-          View Blog Posts →
-        </a>
-      </nav>
-    </div>
-  </main>
+  <Hero />
 </BaseLayout>
