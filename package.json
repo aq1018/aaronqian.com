@@ -8,6 +8,7 @@
     "type-check": "astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "autofix": "npm run format && npm run lint:fix",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
