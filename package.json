@@ -18,8 +18,8 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,astro}": ["prettier --check --config .prettier.mjs", "astro check", "eslint"],
-    "*.{css,json,md}": ["prettier --check --config .prettier.mjs"]
+    "*.{js,jsx,ts,tsx,astro}": ["prettier --check", "astro check", "eslint"],
+    "*.{css,json,md}": ["prettier --check"]
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.3",
