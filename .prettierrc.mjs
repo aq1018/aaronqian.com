@@ -5,48 +5,48 @@ export default {
   useTabs: false,
   semi: false,
   singleQuote: true,
-  quoteProps: "as-needed",
-  trailingComma: "all",
+  quoteProps: 'as-needed',
+  trailingComma: 'all',
   bracketSpacing: true,
   bracketSameLine: false,
-  arrowParens: "always",
-  endOfLine: "lf",
+  arrowParens: 'always',
+  endOfLine: 'lf',
 
-  plugins: ["prettier-plugin-astro"],
+  plugins: ['prettier-plugin-astro'],
 
   overrides: [
     {
-      files: "*.astro",
+      files: '*.astro',
       options: {
-        parser: "astro",
+        parser: 'astro',
       },
     },
     {
-      files: ["*.json", "*.jsonc"],
+      files: ['*.json', '*.jsonc'],
       options: {
-        parser: "json",
-        trailingComma: "none",
+        parser: 'json',
+        trailingComma: 'none',
       },
     },
     {
-      files: ["*.yaml", "*.yml"],
+      files: ['*.yaml', '*.yml'],
       options: {
-        parser: "yaml",
+        parser: 'yaml',
         tabWidth: 2,
         singleQuote: false,
       },
     },
     {
-      files: ["*.md", "*.mdx"],
+      files: ['*.md', '*.mdx'],
       options: {
-        parser: "mdx",
+        parser: 'mdx',
         printWidth: 80,
-        proseWrap: "always",
-        embeddedLanguageFormatting: "auto",
+        proseWrap: 'always',
+        embeddedLanguageFormatting: 'auto',
       },
     },
   ],
 
   // Astro-specific options
   astroAllowShorthand: true,
-};
+}
