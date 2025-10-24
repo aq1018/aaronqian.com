@@ -1,0 +1,13 @@
+/**
+ * UI Component Hook Styles
+ * Orchestrator for all UI component Tailwind directives
+ *
+ * Import component-specific .hook.css files here when they need Tailwind directives
+ * like @theme, @custom-variant, or @layer.
+ *
+ * Example:
+ * @import './Badge.hook.css';
+ * @import './Button.hook.css';
+ */
+
+/* Add component hook CSS imports below as needed */

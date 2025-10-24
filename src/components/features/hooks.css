@@ -1,0 +1,13 @@
+/**
+ * Feature Component Hook Styles
+ * Orchestrator for all feature component Tailwind directives
+ *
+ * Import component-specific .hook.css files here when they need Tailwind directives
+ * like @theme, @custom-variant, or @layer.
+ *
+ * Example:
+ * @import './ThemeToggle.hook.css';
+ * @import './DigitalAnalyzer.hook.css';
+ */
+
+/* Add component hook CSS imports below as needed */

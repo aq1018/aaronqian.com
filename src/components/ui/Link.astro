@@ -1,0 +1,32 @@
+---
+import { linkVariants, type LinkVariants } from './Link.cva'
+
+interface Props extends LinkVariants {
+  href: string
+  external?: boolean
+  target?: string
+  rel?: string
+  class?: string
+  [key: string]: any
+}
+
+const { variant, active, href, external, target, rel, class: className, ...rest } = Astro.props
+
+// Auto-detect external links
+const isExternal =
+  external || (href?.startsWith('http') && !href.includes(Astro.site?.hostname || ''))
+
+// Set target and rel for external links
+const linkTarget = target || (isExternal ? '_blank' : undefined)
+const linkRel = rel || (isExternal ? 'noopener noreferrer' : undefined)
+---
+
+<a
+  {href}
+  target={linkTarget}
+  rel={linkRel}
+  class={linkVariants({ variant, active, class: className })}
+  {...rest}
+>
+  <slot />
+</a>

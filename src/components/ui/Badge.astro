@@ -1,0 +1,32 @@
+---
+import { badgeVariants, type BadgeVariants } from './Badge.cva'
+
+interface Props extends BadgeVariants {
+  class?: string
+  [key: string]: any
+}
+
+const { variant, pulse, class: className, ...rest } = Astro.props
+---
+
+<span class={badgeVariants({ variant, pulse, class: className })} {...rest}>
+  <slot />
+</span>
+
+<style>
+  @keyframes pulseSubtle {
+    0%,
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(var(--color-primary-raw, 0 224 255), 0);
+    }
+    50% {
+      opacity: 0.85;
+      box-shadow: 0 0 8px 2px rgba(var(--color-primary-raw, 0 224 255), 0.4);
+    }
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSubtle 3s ease-in-out infinite;
+  }
+</style>

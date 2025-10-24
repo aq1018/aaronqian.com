@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro'
+import Link from '@/components/ui/Link.astro'
 import { Icon } from 'astro-icon/components'
 
 const currentPath = Astro.url.pathname
@@ -10,43 +11,28 @@ const currentPath = Astro.url.pathname
     <div class="flex h-16 items-center justify-between">
       <!-- Home Icon (Left) -->
       <div class="flex items-center">
-        <a
-          href="/"
-          class:list={[
-            'transition-colors hover:text-primary-hover',
-            currentPath === '/' ? 'text-primary' : 'text-muted',
-          ]}
-          aria-label="Home"
-        >
+        <Link href="/" variant="nav" active={currentPath === '/'} aria-label="Home">
           <Icon name="heroicons:home-solid" class="h-5 w-5" />
-        </a>
+        </Link>
       </div>
 
       <!-- Nav Links (Right) -->
       <div class="flex items-center gap-6">
-        <a
+        <Link
           href="/projects"
-          class:list={[
-            'transition-colors hover:text-primary-hover',
-            currentPath === '/projects' || currentPath.startsWith('/projects/')
-              ? 'font-semibold text-primary'
-              : 'text-muted',
-          ]}
+          variant="nav"
+          active={currentPath === '/projects' || currentPath.startsWith('/projects/')}
         >
           Projects
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/blog"
-          class:list={[
-            'transition-colors hover:text-primary-hover',
-            currentPath === '/blog' || currentPath.startsWith('/blog/')
-              ? 'font-semibold text-primary'
-              : 'text-muted',
-          ]}
+          variant="nav"
+          active={currentPath === '/blog' || currentPath.startsWith('/blog/')}
         >
           Blog
-        </a>
+        </Link>
 
         <!-- Theme Toggle -->
         <ThemeToggle />

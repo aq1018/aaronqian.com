@@ -1,0 +1,31 @@
+---
+import { iconButtonVariants, type IconButtonVariants } from './IconButton.cva'
+
+interface Props extends IconButtonVariants {
+  type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
+  'aria-label': string
+  class?: string
+  [key: string]: any
+}
+
+const {
+  shape,
+  size,
+  type = 'button',
+  disabled = false,
+  'aria-label': ariaLabel,
+  class: className,
+  ...rest
+} = Astro.props
+---
+
+<button
+  {type}
+  {disabled}
+  aria-label={ariaLabel}
+  class={iconButtonVariants({ shape, size, class: className })}
+  {...rest}
+>
+  <slot />
+</button>

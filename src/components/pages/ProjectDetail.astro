@@ -1,6 +1,8 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
+import Link from '@/components/ui/Link.astro'
+import Button from '@/components/ui/Button.astro'
 
 interface Props {
   project: CollectionEntry<'projects'>
@@ -16,10 +18,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
 <header class="border-b border-border bg-surface py-12">
   <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
     <!-- Back link -->
-    <a
-      href="/projects"
-      class="group mb-6 inline-flex items-center gap-2 font-mono text-sm text-muted transition-colors hover:text-link"
-    >
+    <Link href="/projects" variant="back" class="mb-6">
       <svg
         class="h-4 w-4 transition-transform group-hover:-translate-x-1"
         fill="none"
@@ -30,7 +29,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         ></path>
       </svg>
       All Projects
-    </a>
+    </Link>
 
     <!-- Title and status -->
     <div class="mb-4 flex flex-wrap items-baseline gap-4">
@@ -65,11 +64,12 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
     {
       project.data.url && (
         <div class="mt-6">
-          <a
+          <Button
             href={project.data.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-6 py-2.5 font-mono text-sm font-bold tracking-wider text-primary transition-all duration-300 hover:bg-primary/10"
+            external
+            variant="outline"
+            color="primary"
+            class="font-mono text-sm tracking-wider"
           >
             <span>Visit Site</span>
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
                 d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
               />
             </svg>
-          </a>
+          </Button>
         </div>
       )
     }

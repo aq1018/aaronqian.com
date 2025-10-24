@@ -4,6 +4,7 @@
 import { Icon } from 'astro-icon/components'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 import Collapsible from '@/components/ui/Collapsible.astro'
+import Button from '@/components/ui/Button.astro'
 ---
 
 <DigitalAnalyzer class="flex min-h-[85vh] items-center justify-center">
@@ -64,9 +65,12 @@ import Collapsible from '@/components/ui/Collapsible.astro'
     </div>
 
     <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-      <a
+      <Button
         href="/blog"
-        class="group inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-gray-950 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
+        variant="solid"
+        color="primary"
+        size="lg"
+        class="group px-8 py-3.5 text-mono-upper text-sm tracking-wider shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
       >
         <span>Read My Notes</span>
         <svg
@@ -82,17 +86,19 @@ import Collapsible from '@/components/ui/Collapsible.astro'
             stroke-width="2"
             d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
         </svg>
-      </a>
+      </Button>
 
-      <a
+      <Button
         href="https://launchpath.com"
-        target="_blank"
-        rel="noopener noreferrer"
+        variant="outline"
+        color="primary"
+        size="lg"
+        external
         aria-label="Open LaunchPath (new tab)"
-        class="group inline-flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-primary transition-all duration-300 hover:scale-105 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
+        class="group px-8 py-3.5 text-mono-upper text-sm tracking-wider transition-all duration-300 hover:scale-105"
       >
         <span>LaunchPath →</span>
-      </a>
+      </Button>
     </div>
 
     <div class="mt-8 text-center font-mono text-xs text-muted/70">

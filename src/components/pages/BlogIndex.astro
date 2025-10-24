@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
+import Link from '@/components/ui/Link.astro'
 
 interface Props {
   posts: CollectionEntry<'blog'>[]
@@ -18,7 +19,7 @@ const { posts } = Astro.props
         posts.map((post) => (
           <article class="border-b border-border pb-8">
             {post.data.hero && (
-              <a href={`/blog/${post.slug}`} class="block">
+              <Link href={`/blog/${post.slug}`} variant="content" class="block">
                 <Image
                   src={post.data.hero}
                   alt={post.data.title}
@@ -26,15 +27,16 @@ const { posts } = Astro.props
                   height={200}
                   class="mb-4 h-48 w-full rounded-lg object-cover"
                 />
-              </a>
+              </Link>
             )}
             <h2 class="text-2xl font-semibold">
-              <a
+              <Link
                 href={`/blog/${post.slug}`}
-                class="text-link transition-colors hover:text-link-hover"
+                variant="content"
+                class="no-underline hover:underline"
               >
                 {post.data.title}
-              </a>
+              </Link>
             </h2>
             <p class="mt-2 text-sm text-muted">
               {post.data.date.toLocaleDateString('en-US', {
