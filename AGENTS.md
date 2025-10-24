@@ -32,160 +32,215 @@ Failure to follow these rules will result in:
 3. ❓ **If still uncertain, STOP and ASK** - Do NOT guess or make up patterns.
    Ask the user for clarification.
 
+---
+
+## Priority Levels & Agent Behavior
+
+This codebase uses a three-tier priority system to help agents understand what's
+absolute vs. what requires judgment.
+
+### P0 - NEVER VIOLATE (System breaks if ignored)
+
+**These rules are absolute. Violating them causes production failures.**
+
+- ✅ **View Transitions lifecycle patterns** - Must implement cleanup functions
+  to prevent memory leaks
+- ✅ **Memory leak prevention** - Always remove event listeners in cleanup
+  functions
+- ✅ **No `git commit --no-verify`** - Pre-commit hooks are mandatory
+- ✅ **Run `npm run autofix && npm run ci` BEFORE committing** - Fix ALL errors
+  locally before attempting commit
+- ✅ **`data-*` attributes for hook selectors** - Never use CSS classes as hook
+  selectors
+
+### P1 - FOLLOW STRICTLY (Required for consistency)
+
+**These rules maintain architecture consistency. Follow them exactly unless you
+ask for approval to deviate.**
+
+- ✅ **Component structure & naming conventions** - PascalCase, subcomponent
+  prefixes
+- ✅ **CVA file organization** - One `.cva.ts` per component family
+- ✅ **Co-location patterns** - Related files live together
+- ✅ **Hook orchestrator pattern** - Each level has `hooks.ts` and `hooks.css`
+- ✅ **Testing requirements for new code** - New features must have tests before
+  commit
+- ✅ **File naming conventions** - `Component.hook.ts`, `Component.cva.ts`, etc.
+- ✅ **Import aliases** - Use `@/*` instead of relative paths from `src/`
+
+### P2 - USE JUDGMENT (Best practices, ask if deviating)
+
+**These are recommendations. Use good judgment, but ask for approval before
+deviating.**
+
+- ✅ **Specific test coverage percentages** - Target: Utils 100%, Hooks 90%,
+  Components 80%
+- ✅ **Optional file creation thresholds** - When to create `.config.ts`,
+  `.types.ts`, `.utils.ts`
+- ✅ **Documentation style preferences** - Comment formatting, README structure
+- ✅ **Opportunistic refactoring** - Improving existing code while working on
+  related features
+
+### How Priority Affects Agent Behavior
+
+| Priority | Can Deviate? | If Deviating...                                        |
+| -------- | ------------ | ------------------------------------------------------ |
+| **P0**   | ❌ Never     | Do not proceed. Ask user to clarify requirements.      |
+| **P1**   | ⚠️ Rarely    | Ask for approval BEFORE deviating. Explain reasoning.  |
+| **P2**   | ✅ Sometimes | Use judgment. Ask if uncertain whether deviation fits. |
+
+---
+
+## When to Ask vs. Proceed
+
+Understanding when to work autonomously vs. when to ask for guidance is critical
+for velocity.
+
+### Proceed Autonomously (No Approval Needed)
+
+**You can proceed directly when:**
+
+- ✅ **Following documented P1 patterns exactly** - Implementing components
+  using established patterns
+- ✅ **Bug fixes within existing architecture** - Fixing issues without changing
+  patterns
+- ✅ **Adding tests to existing components** - Improving test coverage
+- ✅ **Refactoring that preserves behavior** - Code cleanup without functional
+  changes
+- ✅ **Documentation updates** - Improving clarity without changing meaning
+- ✅ **Styling adjustments** - Using existing design tokens and patterns
+
+### Ask for Approval FIRST
+
+**Stop and ask when:**
+
+- ❓ **Deviating from any P0 or P1 rule** - Need explicit permission
+- ❓ **Creating new architectural patterns** - New component types, new file
+  structures
+- ❓ **Unsure if change qualifies as "complex"** - When delegation threshold is
+  unclear
+- ❓ **Touching >10 files** - High risk of unintended consequences
+- ❓ **Breaking changes to public APIs** - Component props, hook signatures
+- ❓ **Changes affecting build process** - Package.json, config files
+- ❓ **Uncertain about requirements** - User intent is ambiguous
+
+### Use Delegation (TodoWrite + Task Tool)
+
+**Delegate to sub-agents when:**
+
+- 📋 **Creating new component families** - Multiple related files (parent +
+  subcomponents + tests + hooks + CVA)
+- 📋 **4+ file changes with complex logic** - Risk of context overflow
+- 📋 **Large refactoring across multiple components** - Need coordination and
+  oversight
+- 📋 **Any task where context might overflow** - Better to delegate than lose
+  track
+
+### Work Directly (No Delegation)
+
+**Work directly for:**
+
+- 🔨 **1-3 file edits** - Small enough to manage in main context
+- 🔨 **Simple bug fixes** - Straightforward changes
+- 🔨 **Documentation updates** - Low complexity
+- 🔨 **Adding tests to existing code** - Clear, focused task
+
+---
+
 ## AI Context Preservation
 
-**CRITICAL**: Manage your context window effectively to maintain code quality
-and avoid errors.
+**CRITICAL**: Preserve your context window to maintain code quality and avoid
+incomplete implementations.
 
-### When to Delegate to Sub-Agents
+### The Pattern: Planning → Todo List → Delegate
 
-**Delegate large/complex tasks to sub-agents** using the Task tool to preserve
-your context for coordination and decision-making.
+For complex tasks, use this workflow to prevent context overflow:
 
-**Delegate when:**
+1. **Enter Planning Mode** - Break down the task into smaller steps
+2. **Create Todo List** - Use TodoWrite to track all sub-tasks
+3. **Delegate Each Todo** - Use Task tool to delegate each item to a sub-agent
+4. **Coordinate Results** - Your main context stays clean for oversight
 
-- ✅ **Large refactoring** - Renaming files, moving components, restructuring
-  directories
-- ✅ **Multiple file operations** - Creating 5+ related files (component family
-  with tests)
-- ✅ **Exploratory tasks** - Searching codebase for patterns, understanding
-  architecture
-- ✅ **Research tasks** - Reading multiple files to understand implementation
-- ✅ **Repetitive operations** - Applying same pattern across many files
-- ✅ **Complex implementations** - Multi-step feature requiring coordination
-  across files
-- ✅ **Migration tasks** - Updating patterns across entire codebase
+### When to Use This Pattern
 
-**Example - Delegate this**:
+**Use planning mode + delegation for:**
 
-```typescript
-User: 'Create a new Dropdown component with all files following our patterns'
+- Creating new component families (multiple related files)
+- Large refactoring across multiple components
+- Migrating patterns across the codebase
+- Any task requiring **4+ file operations OR complex logic**
+- Complex multi-step features
 
-// This requires:
-// - Dropdown.astro
-// - Dropdown.cva.ts
-// - Dropdown.hook.ts
-// - Dropdown.hook.test.ts
-// - DropdownItem.astro (subcomponent)
-// - DropdownMenu.astro (subcomponent)
-// - Integration into hooks.ts orchestrator
-// ✅ DELEGATE to sub-agent - Complex, 7+ files
+**Work directly for:**
+
+- Single file edits
+- Quick bug fixes
+- Documentation updates
+- Simple refactoring (1-3 files)
+
+### Example Workflow
+
+```text
+User: "Create a new Dropdown component following our patterns"
+
+Step 1: Enter planning mode, create todo list
+[TodoWrite]
+- Research PillToggle pattern (delegate to sub-agent)
+- Create Dropdown.astro + tests (delegate to sub-agent)
+- Create DropdownItem.astro + tests (delegate to sub-agent)
+- Create Dropdown.cva.ts with variants (delegate to sub-agent)
+- Create Dropdown.hook.ts + tests (delegate to sub-agent)
+- Integrate into ui/hooks.ts (do directly - simple)
+- Run CI and verify (do directly)
+
+Step 2: Delegate complex sub-tasks
+[Task tool] "Research PillToggle pattern and document key patterns"
+[Task tool] "Create Dropdown.astro following PillToggle pattern with tests"
+[Task tool] "Create DropdownItem.astro subcomponent with tests"
+... etc
+
+Step 3: Your context stays clean for coordination and final integration
 ```
 
-### When to Work in Same Context
+### Why This Matters
 
-**Handle simple tasks directly** without delegation to maintain efficiency.
+**Without delegation:**
 
-**Work in same context when:**
-
-- ✅ **Single file edits** - Fixing a bug, updating a function
-- ✅ **Simple refactoring** - Renaming a variable, extracting a function
-- ✅ **Documentation updates** - Updating comments, README, this file
-- ✅ **Configuration changes** - Updating package.json, tsconfig.json
-- ✅ **Quick fixes** - Correcting typos, fixing linting errors
-- ✅ **Reading 1-3 files** - Understanding a specific component or pattern
-- ✅ **Git operations** - Committing, creating PRs (after implementation is
-  done)
-
-**Example - Do directly**:
-
-```typescript
-User: 'Fix the typo in Button.astro line 42'
-
-// This requires:
-// - Read Button.astro
-// - Edit one line
-// - Run autofix
-// ✅ DO DIRECTLY - Simple, 1 file
-```
-
-### Decision Matrix
-
-| Task Type                           | Files Affected | Complexity | Action         |
-| ----------------------------------- | -------------- | ---------- | -------------- |
-| Create new component family         | 7+             | High       | 🤖 Delegate    |
-| Refactor across multiple components | 5+             | High       | 🤖 Delegate    |
-| Explore codebase architecture       | Many (read)    | Medium     | 🤖 Delegate    |
-| Migrate pattern across codebase     | 10+            | High       | 🤖 Delegate    |
-| Add feature to existing component   | 2-3            | Medium     | ✅ Do directly |
-| Fix bug in single file              | 1              | Low        | ✅ Do directly |
-| Update documentation                | 1-2            | Low        | ✅ Do directly |
-| Create simple utility function      | 2 (+ test)     | Low        | ✅ Do directly |
-| Commit and create PR                | N/A            | Low        | ✅ Do directly |
-
-### Why Context Preservation Matters
-
-**Running out of context leads to**:
-
+- ❌ Context fills up with implementation details
+- ❌ Lose track of overall requirements
+- ❌ Forget to create necessary files
 - ❌ Incomplete implementations
-- ❌ Forgetting requirements mid-task
-- ❌ Inconsistent patterns
-- ❌ Missed edge cases
-- ❌ Poor coordination between related changes
 
-**Preserving context enables**:
+**With delegation:**
 
-- ✅ Better oversight and coordination
-- ✅ Consistent decision-making
-- ✅ Catching errors across multiple changes
-- ✅ Maintaining architectural vision
-- ✅ Effective communication with user
+- ✅ Main context preserved for high-level coordination
+- ✅ Each sub-agent focuses on one clear task
+- ✅ Better quality control and oversight
+- ✅ Can handle much larger tasks
 
-### Delegation Best Practices
+### Simple Rule
 
-When delegating to sub-agents:
-
-1. **Be specific** - Provide clear, detailed instructions
-2. **Reference patterns** - Point to examples: "Follow the pattern in
-   PillToggle.astro"
-3. **Include requirements** - List all files needed, patterns to follow
-4. **Request verification** - Ask sub-agent to run tests and CI
-5. **Review results** - Check sub-agent's work before committing
-
-**Good delegation example**:
-
-```txt
-Task: Create complete Dropdown component
-
-Requirements:
-- Follow PillToggle.astro pattern for structure
-- Create Dropdown.astro (parent), DropdownItem.astro, DropdownMenu.astro
-- Create Dropdown.cva.ts with variants for all 3 components
-- Create Dropdown.hook.ts with keyboard navigation (Arrow Up/Down, Enter, Escape)
-- Add data-dropdown-* attributes for hook selectors
-- Write comprehensive tests: Dropdown.hook.test.ts
-- Add to ui/hooks.ts orchestrator
-- Follow TDD: write tests FIRST
-- Run npm run ci before finishing
-```
-
-### Red Flags (Context Issues)
-
-**Stop and delegate if you notice**:
-
-- 🚨 You're about to read more than 5 files
-- 🚨 You're creating more than 4 new files
-- 🚨 You're losing track of what you've already done
-- 🚨 You're repeating the same operation across many files
-- 🚨 The task requires understanding a large portion of the codebase
-- 🚨 You're unsure if all requirements will fit in remaining context
-
-**Rule of thumb**: If you're thinking "this is getting complex", delegate it.
+If a task requires more than **4 files OR complex logic**, use planning mode +
+todo list + delegation.
 
 ---
 
 ## Table of Contents
 
-1. [AI Context Preservation](#ai-context-preservation)
-2. [Architecture Overview](#architecture-overview)
-3. [Component Structure](#component-structure)
-4. [File Naming & Co-location](#file-naming--co-location)
-5. [Hook Pattern](#hook-pattern)
-6. [CVA Pattern](#cva-pattern)
-7. [Styling Philosophy](#styling-philosophy)
-8. [Git Commit Workflow](#git-commit-workflow)
-9. [Testing & CI](#testing--ci)
-10. [Component Best Practices](#component-best-practices)
+1. [Priority Levels & Agent Behavior](#priority-levels--agent-behavior)
+2. [When to Ask vs. Proceed](#when-to-ask-vs-proceed)
+3. [AI Context Preservation](#ai-context-preservation)
+4. [Architecture Overview](#architecture-overview)
+5. [Component Structure](#component-structure)
+6. [File Naming & Co-location](#file-naming--co-location)
+7. [Hook Pattern](#hook-pattern)
+8. [CVA Pattern](#cva-pattern)
+9. [Styling Philosophy](#styling-philosophy)
+10. [Git Commit Workflow](#git-commit-workflow)
+11. [Testing & CI](#testing--ci)
+12. [Component Best Practices](#component-best-practices)
+13. [Troubleshooting](#troubleshooting)
+14. [Quick Reference](#quick-reference)
 
 ---
 
@@ -248,14 +303,14 @@ src/components/ui/
 
 ### File Responsibilities
 
-| File                 | Purpose                         | When to Use                                               |
-| -------------------- | ------------------------------- | --------------------------------------------------------- |
-| `Component.astro`    | Template, markup, props         | Always required                                           |
-| `Component.cva.ts`   | CVA variant definitions         | For components with variants                              |
-| `Component.hook.ts`  | Global lifecycle management     | Global DOM Event setup / teardown, e.g. `astro:page-load` |
-| `Component.hook.css` | CSS needing Tailwind directives | Only when `@theme`, `@custom-variant`, etc. needed        |
-| `<style>` in .astro  | Scoped CSS, animations          | Primary CSS method for component-specific styles          |
-| `<script>` in .astro | Client-Side JS                  | Client side interactions, etc                             |
+| File                 | Purpose                         | When to Use                                                                    |
+| -------------------- | ------------------------------- | ------------------------------------------------------------------------------ |
+| `Component.astro`    | Template, markup, props         | Always required                                                                |
+| `Component.cva.ts`   | CVA variant definitions         | For components with variants                                                   |
+| `Component.hook.ts`  | Global lifecycle management     | Global DOM Event setup / teardown, e.g. `astro:page-load` _(See Hook Pattern)_ |
+| `Component.hook.css` | CSS needing Tailwind directives | Only when `@theme`, `@custom-variant`, etc. needed _(See Styling Philosophy)_  |
+| `<style>` in .astro  | Scoped CSS, animations          | Primary CSS method for component-specific styles _(See Styling Philosophy)_    |
+| `<script>` in .astro | Client-Side JS                  | Client side interactions, etc _(See Hook Pattern)_                             |
 
 ---
 
@@ -305,6 +360,10 @@ name. This ensures:
 
 **ONE `.cva.ts` file per component family** - The parent component's `.cva.ts`
 file contains all CVA variants for both the parent and its subcomponents.
+
+**Why this matters**: Keeping all variants for a component family in one file
+prevents drift between parent and child styling, ensures consistency, and makes
+it easier to see all visual variations at once.
 
 **Example structure**:
 
@@ -367,12 +426,13 @@ interface Props extends PillToggleButtonVariants {
 </button>
 ```
 
-**Why?**
+**Benefits:**
 
 - ✅ Single source of truth for component family styling
 - ✅ Co-located variants are easier to maintain
 - ✅ Reduces file proliferation
 - ✅ Clear ownership: variants belong to parent component
+- ✅ Prevents parent/child styling drift
 
 ### When to Create Optional Files
 
@@ -471,6 +531,9 @@ page load would cause duplicate event listener registrations.
 ---
 
 ## Hook Pattern
+
+**For detailed pattern explanation, see this section. All other sections will
+reference back here to avoid repetition.**
 
 ### `.hook.ts` Files (Client-side JavaScript)
 
@@ -616,9 +679,10 @@ directives like:
 
 **DO NOT** use `.hook.css` for:
 
-- Regular CSS → Use `<style>` block in `.astro` file
-- Animations → Use `<style>` block in `.astro` file
-- Component-specific styles → Use `<style>` block in `.astro` file
+- Regular CSS → Use `<style>` block in `.astro` file _(See Styling Philosophy)_
+- Animations → Use `<style>` block in `.astro` file _(See Styling Philosophy)_
+- Component-specific styles → Use `<style>` block in `.astro` file _(See Styling
+  Philosophy)_
 
 **When to use** `.hook.css`:
 
@@ -861,6 +925,9 @@ Use CVA for components with:
 
 ## Styling Philosophy
 
+**This is the authoritative section on styling. All other sections reference
+back here.**
+
 ### Priority Order (Use in this order)
 
 1. **Tailwind inline classes** - Primary styling method
@@ -920,29 +987,97 @@ bg-gray-800        /* Gray palette */
 
 ## Git Commit Workflow
 
-### 🚨 CRITICAL RULE 🚨
+### 🚨 MANDATORY PRE-COMMIT WORKFLOW 🚨
 
-**NEVER COMMIT WITH `--no-verify` OR YOU WILL BE FIRED**
+**NEVER COMMIT WITH `--no-verify` OR THE SYSTEM WILL BREAK**
 
-The pre-commit hooks exist for a reason. Bypassing them is **strictly
-forbidden**.
+The pre-commit hooks exist to prevent production failures. Bypassing them is
+**strictly forbidden**.
 
-### Correct Commit Workflow
+### The Problem
 
-Before committing, **always** run this sequence:
+Running commit → hook fails → fix one error → commit again → hook fails → repeat
+**wastes massive time and fills the git history with unnecessary commits**.
+
+### The Solution
+
+**Run EVERYTHING locally first, fix ALL issues at once, then commit.**
+
+### REQUIRED SEQUENCE
+
+**The required sequence depends on what you're changing:**
+
+#### For Code Changes (TypeScript, Astro, CSS, etc.)
+
+**Follow this exact sequence:**
 
 ```bash
-# 1. Auto-fix formatting and linting issues
+# Step 1: Auto-fix formatting and linting
 npm run autofix
 
-# 2. Run full CI pipeline (test + format check + type-check + lint + build)
+# Step 2: Run full CI pipeline
 npm run ci
+# This runs: test + format check + type-check + lint + build
 
-# 3. Fix any remaining issues manually
+# Step 3: Fix ALL errors and warnings shown
+# Read the output carefully and fix everything
 
-# 4. Commit (hooks will run automatically)
+# Step 4: Repeat steps 1-3 until EVERYTHING passes
+npm run autofix && npm run ci
+
+# Step 5: ONLY THEN stage and commit
+git add .
 git commit -m "Your message"
 ```
+
+#### For Documentation-Only Changes
+
+**Documentation files have different requirements based on location:**
+
+##### A. Root Documentation (AGENTS.md, CLAUDE.md, README.md)
+
+**For documentation NOT part of the Astro build:**
+
+```bash
+# Step 1: Auto-fix formatting and linting
+npm run autofix
+
+# Step 2: Verify output (no errors)
+
+# Step 3: Stage and commit
+git add .
+git commit -m "Your message"
+```
+
+##### B. Content Collection Markdown (src/content/\*_/_.md)
+
+**For markdown files WITH frontmatter schemas (blog, projects, projectLogs):**
+
+```bash
+# Step 1: Auto-fix formatting and linting
+npm run autofix
+
+# Step 2: Validate frontmatter schemas
+npm run type-check
+# This runs `astro check` which validates against Zod schemas
+
+# Step 3: (Optional but recommended) Verify build
+npm run build
+# Catches additional errors like broken images, invalid references
+
+# Step 4: Stage and commit
+git add .
+git commit -m "Your message"
+```
+
+**Why different workflows?**
+
+- **Root documentation**: Only needs formatting/linting
+- **Content collection markdown**: Needs formatting/linting + schema
+  validation + optional build check
+- **Code files**: Need ALL checks (tests, type-check, linting, build)
+- Pre-commit hooks run `prettier --check` on all `.md` files
+- Pre-commit hooks run `astro check` on `.ts`/`.astro` files only
 
 ### What `npm run ci` Does
 
@@ -958,6 +1093,14 @@ This ensures:
 - ✅ No linting errors
 - ✅ Build succeeds
 
+### DO NOT
+
+- ❌ Commit before running full CI locally
+- ❌ Fix errors one at a time through repeated hook failures
+- ❌ Use `git commit --no-verify` (EVER, under ANY circumstances)
+- ❌ Skip `npm run autofix` before `npm run ci`
+- ❌ Ignore warnings (treat them as errors)
+
 ### Pre-commit Hooks (Husky + lint-staged)
 
 Hooks automatically run on staged files:
@@ -969,18 +1112,44 @@ Hooks automatically run on staged files:
 }
 ```
 
-If hooks fail, **fix the issues** - don't bypass them!
+If hooks fail after you've run full CI, **something is wrong with your
+workflow**. Go back and ensure you're following the required sequence.
+
+### Why This Matters
+
+**Pre-commit hooks catch:**
+
+- View Transition bugs that only appear in production
+- Memory leaks from missing cleanup functions
+- TypeScript errors that break the build
+- Formatting inconsistencies
+- Linting violations
+
+**If you bypass hooks, you WILL:**
+
+- Break production
+- Create memory leaks
+- Block other work with broken builds
+- Waste time debugging issues that would have been caught
 
 ---
 
 ## Testing & CI
 
+### Testing Philosophy
+
+**For NEW code**: Tests MUST exist before commit. You can write tests before OR
+during implementation (timing is flexible), but they must be complete and
+passing before you commit.
+
+**For EXISTING code**: When modifying existing components, you SHOULD add tests
+if they're missing. Improve coverage opportunistically. Philosophy: **"Do it
+once, do it right"** - prefer quality over speed. Even if adding comprehensive
+tests slows down the current task, it pays dividends in maintainability.
+
 ### Test-Driven Development (TDD)
 
-**MANDATORY**: All components, hooks, utils, helpers, configs, and types
-**MUST** be tested. Writing tests is not optional.
-
-**TDD Workflow**:
+**TDD Workflow (Recommended for NEW features)**:
 
 1. ✅ **Write tests FIRST** - Define expected behavior before implementation
 2. ✅ **Watch tests fail** - Confirm test is valid (red phase)
@@ -988,16 +1157,23 @@ If hooks fail, **fix the issues** - don't bypass them!
 4. ✅ **Refactor** - Improve code while keeping tests green
 5. ✅ **Commit** - Only commit when tests pass
 
-**What MUST be tested**:
+**Flexible Approach (Acceptable for simpler cases)**:
 
-| File Type             | Test Required | Test File Pattern               | Example                             |
-| --------------------- | ------------- | ------------------------------- | ----------------------------------- |
-| `Component.astro`     | ✅ Yes        | `Component.astro.test.ts`       | `DigitalAnalyzer.astro.test.ts`     |
-| `Component.hook.ts`   | ✅ Yes        | `Component.hook.test.ts`        | `PillToggle.hook.test.ts`           |
-| `Component.utils.ts`  | ✅ Yes        | `Component.utils.test.ts`       | `DigitalAnalyzer.utils.test.ts`     |
-| `Component.config.ts` | ✅ Yes        | `Component.config.test.ts`      | `CuttingMat.config.test.ts`         |
-| `Component.types.ts`  | ✅ Yes        | `Component.types.test.ts`       | `CuttingMat.types.test.ts`          |
-| Subcomponents         | ✅ Yes        | `ComponentSubcomponent.test.ts` | `DigitalAnalyzerGrid.astro.test.ts` |
+1. ✅ **Implement feature** - Write the code
+2. ✅ **Write comprehensive tests** - Cover all logic paths
+3. ✅ **Verify coverage** - Meet minimum targets
+4. ✅ **Commit** - Only commit when tests pass and coverage is adequate
+
+### What MUST be tested
+
+| File Type             | Test Required | Test File Pattern               | Example                         |
+| --------------------- | ------------- | ------------------------------- | ------------------------------- |
+| `Component.astro`     | ✅ Yes        | `Component.test.ts`             | `Button.test.ts`                |
+| `Component.hook.ts`   | ✅ Yes        | `Component.hook.test.ts`        | `PillToggle.hook.test.ts`       |
+| `Component.utils.ts`  | ✅ Yes        | `Component.utils.test.ts`       | `DigitalAnalyzer.utils.test.ts` |
+| `Component.config.ts` | ✅ Yes        | `Component.config.test.ts`      | `CuttingMat.config.test.ts`     |
+| `Component.types.ts`  | ✅ Yes        | `Component.types.test.ts`       | `CuttingMat.types.test.ts`      |
+| Subcomponents         | ✅ Yes        | `ComponentSubcomponent.test.ts` | `PillToggleButton.test.ts`      |
 
 ### Testing Stack
 
@@ -1136,7 +1312,7 @@ describe('Component Types', () => {
 
 ### Test Coverage Requirements
 
-**Minimum coverage targets**:
+**Minimum coverage targets (P2 - Best Practice)**:
 
 - **Utils**: 100% - Pure functions must be fully tested
 - **Hooks**: 90%+ - All logic paths and cleanup must be tested
@@ -1151,7 +1327,7 @@ describe('Component Types', () => {
 - User interactions (clicks, inputs, toggles)
 - State changes
 - Edge cases and error conditions
-- Cleanup and memory management
+- Cleanup and memory management (critical for hooks)
 - Integration between components
 - Accessibility (ARIA attributes, keyboard navigation)
 
@@ -1341,7 +1517,8 @@ const isExternal =
 
 ### Astro View Transitions
 
-All interactive components must support View Transitions:
+All interactive components must support View Transitions. See
+[Hook Pattern](#hook-pattern) for the full lifecycle implementation.
 
 ```typescript
 // In .hook.ts files
@@ -1357,15 +1534,229 @@ In Astro components:
 
 ---
 
+## Troubleshooting
+
+Common problems and their solutions.
+
+### Pre-commit hook failing repeatedly?
+
+**Symptom**: You commit → hook fails → fix error → commit → hook fails → repeat
+
+**Root cause**: You didn't run the appropriate checks BEFORE committing
+
+**Solution for code changes**:
+
+```bash
+# 1. Stop committing
+# 2. Run full CI locally
+npm run autofix && npm run ci
+
+# 3. Fix ALL errors shown
+# 4. Repeat until everything passes
+npm run autofix && npm run ci
+
+# 5. THEN commit
+git add .
+git commit -m "Your message"
+```
+
+**Solution for root documentation (AGENTS.md, CLAUDE.md, README.md)**:
+
+```bash
+# 1. Stop committing
+# 2. Run autofix (format + lint only)
+npm run autofix
+
+# 3. Verify output (should be clean)
+# 4. THEN commit
+git add .
+git commit -m "Your message"
+```
+
+**Solution for content collection markdown (src/content/**/\*.md)\*\*:
+
+```bash
+# 1. Stop committing
+# 2. Run autofix + type-check
+npm run autofix && npm run type-check
+
+# 3. (Optional) Run build to catch runtime errors
+npm run build
+
+# 4. Fix all errors shown
+# 5. THEN commit
+git add .
+git commit -m "Your message"
+```
+
+### Not sure if task needs delegation?
+
+**Rule of thumb**:
+
+- **4+ files OR complex logic** → Use delegation (TodoWrite + Task tool)
+- **Uncertain?** → Delegate (better safe than context overflow)
+- **1-3 simple files** → Work directly
+
+**When to delegate**:
+
+- Creating new component families (multiple related files)
+- Large refactoring across components
+- Any task where you might lose track of requirements
+
+### Hook pattern not working across View Transitions?
+
+**Check 1**: Does each `setup*()` function register its own `astro:page-load`
+listener?
+
+```typescript
+// ✅ Correct
+export function setupComponent() {
+  initializeComponent() // Initial setup
+  document.addEventListener('astro:page-load', initializeComponent) // Re-init
+}
+```
+
+**Check 2**: Is cleanup function implemented and called?
+
+```typescript
+// ✅ Correct
+export function initializeComponent() {
+  if (cleanup !== null) {
+    cleanup() // Clean up previous init
+  }
+
+  // ... setup logic
+
+  cleanup = () => {
+    // Remove listeners, clear state
+  }
+
+  return cleanup
+}
+```
+
+**Check 3**: Is `BaseLayout.astro` calling `initComponentHooks()` only ONCE?
+
+```astro
+<!-- ✅ Correct -->
+<script>
+  initComponentHooks() // Called ONCE, no astro:page-load wrapper
+</script>
+```
+
+### Tests failing in CI but pass locally?
+
+**Cause**: You're not running the full CI pipeline locally
+
+**Solution**:
+
+```bash
+# Don't run individual commands
+# ❌ npm run test
+# ❌ npm run lint
+
+# Run the full CI pipeline exactly
+# ✅ npm run ci
+npm run ci
+
+# This runs: test + format check + type-check + lint + build
+```
+
+### Which workflow for my markdown file?
+
+**Question**: I'm editing a `.md` file - do I need `autofix`, `type-check`, or
+full `ci`?
+
+**Answer**: Depends on location:
+
+| File Location                        | Workflow                                | Why                                         |
+| ------------------------------------ | --------------------------------------- | ------------------------------------------- |
+| Root (AGENTS.md, README.md, etc.)    | `npm run autofix`                       | Not part of build, no schema validation     |
+| `src/content/**/*.md`                | `npm run autofix && npm run type-check` | Has frontmatter with Zod schema validation  |
+| Code files (`.ts`, `.astro`, `.css`) | `npm run autofix && npm run ci`         | Needs tests, type-check, linting, and build |
+
+**Quick check**: If your markdown file is in `src/content/` (blog, projects,
+projectLogs), it has frontmatter schemas and needs `type-check`. If it's in the
+root directory, it doesn't.
+
+### Memory leaks / duplicate event listeners?
+
+**Symptom**: Handlers fire multiple times after navigating between pages
+
+**Cause**: Not properly cleaning up event listeners before View Transitions
+
+**Solution**: Implement cleanup function in `.hook.ts`:
+
+```typescript
+let cleanup: CleanupFunction | null = null
+
+export function initializeComponent() {
+  // Clean up previous initialization
+  if (cleanup !== null) {
+    cleanup()
+  }
+
+  // Setup listeners
+  const handler = () => {
+    /* ... */
+  }
+  element.addEventListener('click', handler)
+
+  // Return cleanup function
+  cleanup = () => {
+    element.removeEventListener('click', handler)
+    cleanup = null
+  }
+
+  return cleanup
+}
+```
+
+### Should I create .hook.css or use `<style>` block?
+
+**Use `.hook.css` ONLY when you need Tailwind v4 directives**:
+
+- `@theme` - Extending theme tokens
+- `@custom-variant` - Custom variants
+- `@layer` - Layer-specific styles
+
+**Use `<style>` block for everything else**:
+
+- Regular CSS
+- Animations (`@keyframes`)
+- Component-specific styles
+
+See [Styling Philosophy](#styling-philosophy) for details.
+
+### Subcomponent CVA: Separate file or parent's file?
+
+**ALWAYS use parent's .cva.ts file** for subcomponent variants.
+
+```typescript
+// ✅ Correct: PillToggle.cva.ts contains variants for PillToggle AND PillToggleButton
+export const pillToggleVariants = cva(/* ... */)
+export const pillToggleButtonVariants = cva(/* ... */)
+export const pillToggleSliderVariants = cva(/* ... */)
+
+// ❌ Wrong: Creating PillToggleButton.cva.ts
+// This causes drift and violates co-location pattern
+```
+
+See [CVA File Organization](#cva-file-organization) for why this matters.
+
+---
+
 ## Quick Reference
 
 ### Creating a New Component Checklist
 
-**TDD Workflow (Test-First)**:
+**Workflow (Follow in order)**:
 
-1. **Write tests FIRST** before any implementation:
-   - Create `Component.test.ts` with expected behavior
-   - Watch tests fail (red phase)
+1. **Determine if tests should be first** (TDD recommended for complex
+   features):
+   - Complex feature → Write tests FIRST
+   - Simple component → Tests during or after implementation OK
+   - MUST have tests before commit regardless
 
 2. **Create component files** in appropriate directory (`ui/`, `features/`,
    `pages/`):
@@ -1373,53 +1764,61 @@ In Astro components:
    - Create `Component.cva.ts` if component has variants (will contain variants
      for all subcomponents too)
    - Create `Component.hook.ts` if interactive behavior needed
-   - Create `Component.utils.ts` if helper functions needed
-   - Create `Component.config.ts` if configuration needed
-   - Create `Component.types.ts` if custom types needed
+   - Create `Component.utils.ts` if 3+ helper functions needed
+   - Create `Component.config.ts` if 3+ configuration options needed
+   - Create `Component.types.ts` if 3+ custom types needed
 
-3. **Implement to make tests pass** (green phase):
-   - Implement minimum code to pass tests
-   - Add hook to appropriate `hooks.ts` orchestrator
-   - Create `Component.hook.css` only if Tailwind directives needed
-   - Import `.hook.css` in `ui/hooks.css` or `features/hooks.css`
+3. **Implement functionality**:
+   - Add hook to appropriate `hooks.ts` orchestrator if using `.hook.ts`
+   - Create `Component.hook.css` ONLY if Tailwind directives needed (`@theme`,
+     etc.)
+   - Import `.hook.css` in `ui/hooks.css` or `features/hooks.css` if created
    - Support custom `class` prop in all components
 
 4. **Create subcomponents** as `Component<Subcomponent>.astro`:
-   - Write tests FIRST for each subcomponent
+   - Name with parent prefix: `PillToggleButton.astro`
    - Subcomponents import variants from parent's `Component.cva.ts` file
-   - Test subcomponent rendering and behavior
+   - Write tests for each subcomponent
 
-5. **Write comprehensive tests**:
-   - `Component.astro.test.ts` - Component rendering and props
+5. **Write comprehensive tests** (if not done in step 1):
+   - `Component.test.ts` - Component rendering and props
    - `Component.hook.test.ts` - Hook behavior and cleanup
-   - `Component.utils.test.ts` - Utility functions (100% coverage)
-   - `Component.config.test.ts` - Configuration validation (100% coverage)
+   - `Component.utils.test.ts` - Utility functions (100% coverage target)
+   - `Component.config.test.ts` - Configuration validation (100% coverage
+     target)
    - `Component.types.test.ts` - Type constraints
    - `Component<Subcomponent>.test.ts` - Subcomponent tests
 
-6. **Refactor and verify**:
-   - Run `npm run test` - Ensure all tests pass
-   - Run `npm run autofix` - Format and lint
-   - Run `npm run ci` - Full CI pipeline must pass
+6. **BEFORE committing**:
+   - **For code changes**: Run `npm run autofix && npm run ci` - Full CI
+     pipeline
+   - **For root documentation** (AGENTS.md, README.md): Run `npm run autofix` -
+     Format + lint only
+   - **For content markdown** (src/content/\*_/_.md): Run
+     `npm run autofix && npm run type-check` - Plus schema validation
+   - Fix ALL errors and warnings
+   - Repeat until everything passes
 
 7. **Commit only when**:
    - ✅ All tests pass
-   - ✅ CI pipeline passes
-   - ✅ Code coverage meets minimums
+   - ✅ Full CI pipeline passes (`npm run ci`)
+   - ✅ Code coverage meets targets (or is improving)
 
 **Critical reminders:**
 
-- ❌ Do NOT implement before writing tests
+- ❌ Do NOT commit before running `npm run autofix && npm run ci`
 - ❌ Do NOT commit with failing tests
 - ❌ Do NOT create separate `.cva.ts` files for subcomponents
 - ❌ Do NOT bypass `--no-verify` on commits
-- ✅ DO write tests FIRST (TDD)
-- ✅ DO achieve minimum coverage targets (Utils: 100%, Hooks: 90%, Config: 100%)
+- ❌ Do NOT use CSS classes as hook selectors
+- ✅ DO run full CI before commit to avoid hook failure loop
+- ✅ DO write tests before commit (timing flexible, but tests required)
 - ✅ DO name subcomponents with parent prefix (e.g., `PillToggleButton.astro`)
 - ✅ DO export all variants from parent's `.cva.ts` file
 - ✅ DO use `data-*` attributes for hook selectors (never CSS classes)
 - ✅ DO test edge cases and error conditions
 - ✅ DO test cleanup and memory management in hooks
+- ✅ DO improve existing code opportunistically (add tests when modifying)
 
 ### Common Commands
 
@@ -1427,11 +1826,11 @@ In Astro components:
 # Development
 npm run dev          # Start dev server
 
-# Code Quality
+# Code Quality (Run BEFORE committing)
 npm run autofix      # Auto-fix formatting + linting
-npm run ci           # Full CI pipeline (required before commit)
+npm run ci           # Full CI pipeline (REQUIRED before commit)
 
-# Individual Checks
+# Individual Checks (Use ci instead for pre-commit)
 npm run lint         # Check linting
 npm run lint:fix     # Fix linting
 npm run format       # Format code
@@ -1441,9 +1840,45 @@ npm run test         # Run tests (watch)
 npm run test:run     # Run tests (once)
 npm run build        # Build for production
 
-# Git
+# Git (Never use --no-verify!)
 git commit           # Commit (hooks run automatically)
-# NEVER use --no-verify!
+```
+
+### Priority Reference
+
+| Rule                              | Priority | Can Deviate?    |
+| --------------------------------- | -------- | --------------- |
+| View Transitions lifecycle        | P0       | ❌ Never        |
+| Run autofix && ci before commit   | P0       | ❌ Never        |
+| No `--no-verify`                  | P0       | ❌ Never        |
+| Component naming conventions      | P1       | ⚠️ Ask first    |
+| CVA file organization             | P1       | ⚠️ Ask first    |
+| Testing for new code              | P1       | ⚠️ Ask first    |
+| Specific coverage percentages     | P2       | ✅ Use judgment |
+| Optional file creation thresholds | P2       | ✅ Use judgment |
+
+### Decision Flowchart
+
+```text
+Should I delegate this task?
+├─ 1-3 simple files? → Work directly
+├─ 4+ files OR complex logic? → Delegate
+└─ Uncertain? → Delegate (safer)
+
+Should I ask for approval?
+├─ Following documented P1 patterns? → Proceed
+├─ Deviating from P0/P1? → Ask first
+└─ Uncertain? → Ask first
+
+Should I create a .hook.css file?
+├─ Need @theme, @custom-variant, @layer? → Yes, create .hook.css
+└─ Regular CSS or animations? → No, use <style> in .astro
+
+Should I use <script> or .hook.ts?
+├─ Needs View Transitions support? → .hook.ts
+├─ Multiple pages? → .hook.ts
+├─ Needs cleanup? → .hook.ts
+└─ One-off, simple interaction? → <script>
 ```
 
 ---
@@ -1452,15 +1887,31 @@ git commit           # Commit (hooks run automatically)
 
 This codebase values:
 
-- **Co-location** - Related files live together
-- **Separation of concerns** - CVA, hooks, styles in separate files
-- **Type safety** - TypeScript everywhere
-- **Quality** - Automated checks before every commit
-- **Accessibility** - Semantic HTML and ARIA
-- **Performance** - Astro View Transitions support
+- **Strict adherence to patterns** - Consistency prevents bugs and technical
+  debt
+- **Co-location** - Related files live together for maintainability
+- **Separation of concerns** - CVA, hooks, styles in separate files with clear
+  responsibilities
+- **Type safety** - TypeScript everywhere catches errors early
+- **Quality over speed** - Do it right the first time, even if it takes longer
+- **Testing discipline** - New code must be tested; improve existing code
+  opportunistically
+- **Memory safety** - Proper cleanup prevents leaks in View Transitions
+- **Accessibility** - Semantic HTML and ARIA for all interactive components
+- **Process discipline** - Always run full CI before committing
 
-When in doubt, follow existing patterns in the codebase. Look at `Button.astro`,
-`Link.astro`, and `Badge.astro` for reference implementations.
+**When in doubt:**
+
+1. Look at existing implementations: `Button.astro`, `Link.astro`, `Badge.astro`
+2. Reference the [Hook Pattern](#hook-pattern), [CVA Pattern](#cva-pattern), and
+   [Styling Philosophy](#styling-philosophy) sections
+3. Check [Troubleshooting](#troubleshooting) for common issues
+4. Ask the user for clarification rather than guessing
+
+**Remember**: The strictness of these patterns exists to prevent production
+failures, not to slow you down. Following them precisely ensures code quality,
+prevents memory leaks, maintains consistency, and makes the codebase
+maintainable long-term.
 
 ---
 
