@@ -1,8 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
+import Section from '@/components/ui/Section.astro'
+import Container from '@/components/ui/Container.astro'
+import Stack from '@/components/ui/Stack.astro'
 import Link from '@/components/ui/Link.astro'
 import Button from '@/components/ui/Button.astro'
+import Heading from '@/components/ui/Heading.astro'
+import Text from '@/components/ui/Text.astro'
 
 interface Props {
   project: CollectionEntry<'projects'>
@@ -15,103 +20,109 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
 ---
 
 <!-- Project Header -->
-<header class="border-b border-border bg-surface py-12">
-  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-    <!-- Back link -->
-    <Link href="/projects" variant="back" class="mb-6">
-      <svg
-        class="h-4 w-4 transition-transform group-hover:-translate-x-1"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
-        ></path>
-      </svg>
-      All Projects
-    </Link>
+<header>
+  <Section variant="subsection" background="surface" class="border-b border-border">
+    <Container>
+      <!-- Back link -->
+      <Link href="/projects" variant="back" class="mb-6">
+        <svg
+          class="h-4 w-4 transition-transform group-hover:-translate-x-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+        All Projects
+      </Link>
 
-    <!-- Title and status -->
-    <div class="mb-4 flex flex-wrap items-baseline gap-4">
-      <h1 class="font-mono text-3xl font-bold text-fg sm:text-4xl">
-        {project.data.title}
-      </h1>
-      <span
-        class={`rounded border px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
-      >
-        {statusLabels[project.data.status]}
-        {
-          project.data.live && (
-            <span class="ml-2 rounded bg-primary px-2 py-0.5 text-xs font-bold text-gray-950">
-              LIVE
-            </span>
-          )
-        }
-      </span>
-    </div>
+      <!-- Title and status -->
+      <div class="mb-4 flex flex-wrap items-baseline gap-4">
+        <Heading level="h1" font="mono" class="text-3xl sm:text-4xl">
+          {project.data.title}
+        </Heading>
+        <span
+          class={`rounded border px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
+        >
+          {statusLabels[project.data.status]}
+          {
+            project.data.live && (
+              <span class="ml-2 rounded bg-primary px-2 py-0.5 text-xs font-bold text-gray-950">
+                LIVE
+              </span>
+            )
+          }
+        </span>
+      </div>
 
-    <!-- Description -->
-    <p class="mb-4 text-lg leading-relaxed text-muted">
-      {project.data.description}
-    </p>
+      <!-- Description -->
+      <Text variant="lead" class="mb-4">
+        {project.data.description}
+      </Text>
 
-    <!-- Aside (witty comment) -->
-    <p class="font-mono text-sm italic text-muted/70">
-      {project.data.aside}
-    </p>
+      <!-- Aside (witty comment) -->
+      <Text font="mono" size="sm" class="italic text-muted/70">
+        {project.data.aside}
+      </Text>
 
-    <!-- External link if available -->
-    {
-      project.data.url && (
-        <div class="mt-6">
-          <Button
-            href={project.data.url}
-            external
-            variant="outline"
-            color="primary"
-            class="font-mono text-sm tracking-wider"
-          >
-            <span>Visit Site</span>
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </Button>
-        </div>
-      )
-    }
-  </div>
+      <!-- External link if available -->
+      {
+        project.data.url && (
+          <div class="mt-6">
+            <Button
+              href={project.data.url}
+              external
+              variant="outline"
+              color="primary"
+              class="font-mono text-sm tracking-wider"
+            >
+              <span>Visit Site</span>
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+            </Button>
+          </div>
+        )
+      }
+    </Container>
+  </Section>
 </header>
 
 <!-- Build Log -->
-<main class="bg-surface py-12">
-  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-    <!-- Log header -->
-    <div class="mb-8 border-b border-border/30 pb-4">
-      <h2 class="font-mono text-2xl font-bold text-fg">Build Log</h2>
-      <p class="mt-2 font-mono text-sm text-muted/70">
-        {projectLogs.length}
-        {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
-      </p>
-    </div>
+<main>
+  <Section variant="subsection" background="surface">
+    <Container>
+      <!-- Log header -->
+      <div class="mb-8 border-b border-border/30 pb-4">
+        <Heading level="h2" font="mono">Build Log</Heading>
+        <Text variant="caption" font="mono" class="mt-2 text-muted/70">
+          {projectLogs.length}
+          {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
+        </Text>
+      </div>
 
-    <!-- Log entries -->
-    {
-      projectLogs.length > 0 ? (
-        <div class="space-y-8">
-          {projectLogs.map((log) => (
-            <ProjectLogEntry log={log} />
-          ))}
-        </div>
-      ) : (
-        <div class="rounded border border-border/30 bg-surface-hover p-8 text-center">
-          <p class="font-mono text-sm text-muted/70">No log entries yet. Check back soon.</p>
-        </div>
-      )
-    }
-  </div>
+      <!-- Log entries -->
+      {
+        projectLogs.length > 0 ? (
+          <Stack gap="medium">
+            {projectLogs.map((log) => (
+              <ProjectLogEntry log={log} />
+            ))}
+          </Stack>
+        ) : (
+          <div class="rounded border border-border/30 bg-surface-hover p-8 text-center">
+            <Text variant="caption" font="mono" class="text-muted/70">
+              No log entries yet. Check back soon.
+            </Text>
+          </div>
+        )
+      }
+    </Container>
+  </Section>
 </main>

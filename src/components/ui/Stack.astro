@@ -1,0 +1,15 @@
+---
+import { stackVariants, type StackVariants } from './Stack.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends StackVariants {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { gap, class: className = '', ...rest } = Astro.props
+---
+
+<div class={cn(stackVariants({ gap }), className)} {...rest}>
+  <slot />
+</div>

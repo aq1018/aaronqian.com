@@ -1,0 +1,15 @@
+---
+import { containerVariants, type ContainerVariants } from './Container.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends ContainerVariants {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { size, class: className = '', ...rest } = Astro.props
+---
+
+<div class={cn(containerVariants({ size }), className)} {...rest}>
+  <slot />
+</div>

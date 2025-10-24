@@ -102,8 +102,7 @@
    COMPONENT HOOK STYLES
    Import component hook CSS files (Tailwind directives)
    ----------------------------- */
-@import '../components/ui/hooks.css';
-@import '../components/features/hooks.css';
+@import '../components/hooks.css';
 
 /* -----------------------------
    THEME OVERRIDES (DARK)

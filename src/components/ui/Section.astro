@@ -1,0 +1,15 @@
+---
+import { sectionVariants, type SectionVariants } from './Section.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends SectionVariants {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { variant, background, class: className, ...rest } = Astro.props
+---
+
+<section class={cn(sectionVariants({ variant, background }), className)} {...rest}>
+  <slot />
+</section>

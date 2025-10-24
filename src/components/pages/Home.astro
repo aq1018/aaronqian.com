@@ -1,7 +1,52 @@
 ---
+import { getCollection } from 'astro:content'
+import { sortProjectsByLatestLog, markLatestProjectAsLive } from '@/lib/projects'
 import HomeHero from './HomeHero.astro'
-import Projects from '@/components/features/Projects.astro'
+import ProjectList from '@/components/features/ProjectList.astro'
+import Section from '@/components/ui/Section.astro'
+import Container from '@/components/ui/Container.astro'
+import Heading from '@/components/ui/Heading.astro'
+
+// Fetch and sort projects by latest log
+const allProjects = await getCollection('projects')
+const projectLogs = await getCollection('projectLogs')
+
+// Sort by latest log and mark latest as live
+const sortedProjects = sortProjectsByLatestLog(allProjects, projectLogs)
+const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
+
+// Take top 3 for home page
+const featuredProjects = projectsWithLive.slice(0, 3)
+
+// Status indicator styles
+const statusStyles = {
+  active: 'text-primary',
+  planning: 'text-muted',
+  done: 'text-fg/60',
+}
+
+const statusLabels = {
+  active: 'ACTIVE',
+  planning: 'PLANNING',
+  done: 'DONE',
+}
 ---
 
 <HomeHero />
-<Projects />
+
+<!-- Projects Section -->
+<Section id="projects" variant="content" background="surface" class="relative">
+  <Container>
+    <!-- Section header -->
+    <div class="mb-12">
+      <Heading level="h2" font="mono" class="sm:text-3xl">Now / Currently Building</Heading>
+      <div
+        class="mt-2 h-0.5 w-16 bg-primary transition-all duration-200 hover:w-24 hover:shadow-[0_0_8px_rgba(var(--color-primary-raw),0.6)]"
+      >
+      </div>
+    </div>
+
+    <!-- Project List -->
+    <ProjectList projects={featuredProjects} {statusStyles} {statusLabels} showFooter={true} />
+  </Container>
+</Section>

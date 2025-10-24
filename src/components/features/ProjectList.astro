@@ -1,0 +1,127 @@
+---
+/**
+ * ProjectList - Reusable project listing component
+ * Renders projects in a table (desktop) and list (mobile) layout
+ * Used by both home page and projects index page
+ */
+import type { CollectionEntry } from 'astro:content'
+import Link from '@/components/ui/Link.astro'
+import Badge from '@/components/ui/Badge.astro'
+import Stack from '@/components/ui/Stack.astro'
+import Text from '@/components/ui/Text.astro'
+
+interface Props {
+  projects: CollectionEntry<'projects'>[]
+  statusStyles: Record<string, string>
+  statusLabels: Record<string, string>
+  showFooter?: boolean
+}
+
+const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
+---
+
+<div>
+  <!-- Projects table - desktop -->
+  <div class="hidden overflow-x-auto md:block">
+    <table class="w-full border-collapse font-mono text-sm">
+      <thead>
+        <tr class="border-b border-border/30">
+          <th class="pb-3 pr-6 text-left font-semibold uppercase tracking-wide text-muted/70"
+            >Project</th
+          >
+          <th class="pb-3 px-6 text-right font-semibold uppercase tracking-wide text-muted/70"
+            >Status</th
+          >
+          <th class="pb-3 pl-6 text-left font-semibold uppercase tracking-wide text-muted/70"
+            >Notes</th
+          >
+        </tr>
+      </thead>
+      <tbody>
+        {
+          projects.map((project) => (
+            <tr class="group border-b border-border/20 transition-colors hover:bg-surface-hover">
+              <td class="py-4 pr-6 align-top">
+                <Link
+                  href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
+                  variant="content"
+                  class="font-semibold"
+                >
+                  {project.data.title}
+                </Link>
+              </td>
+              <td class="py-4 px-6 align-top text-right">
+                <span
+                  class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
+                >
+                  {statusLabels[project.data.status]}
+                  {project.data.live && (
+                    <Badge variant="status" pulse={true} class="ml-2">
+                      LIVE
+                    </Badge>
+                  )}
+                </span>
+              </td>
+              <td class="py-4 pl-6 align-top">
+                <Text variant="muted" class="mb-2 leading-relaxed">
+                  {project.data.description}
+                </Text>
+                <Text size="xs" class="italic text-muted/60">
+                  {project.data.aside}
+                </Text>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Projects list - mobile -->
+  <Stack gap="small" class="md:hidden">
+    {
+      projects.map((project) => (
+        <div class="border-l-2 border-primary/30 pl-4 transition-colors hover:border-primary">
+          <div class="mb-2 flex items-baseline justify-between gap-3">
+            <Link
+              href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
+              variant="content"
+              class="font-mono text-base font-semibold"
+            >
+              {project.data.title}
+            </Link>
+          </div>
+          <div class="mb-3">
+            <span
+              class={`font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
+            >
+              {statusLabels[project.data.status]}
+              {project.data.live && (
+                <Badge variant="status" pulse={true} class="ml-2">
+                  LIVE
+                </Badge>
+              )}
+            </span>
+          </div>
+          <Text size="sm" variant="muted" class="mb-2 leading-relaxed">
+            {project.data.description}
+          </Text>
+          <Text font="mono" size="xs" class="italic text-muted/60">
+            {project.data.aside}
+          </Text>
+        </div>
+      ))
+    }
+  </Stack>
+
+  <!-- Footer -->
+  {
+    showFooter && (
+      <div class="mt-8">
+        <Text variant="caption" font="mono" class="text-muted/70">
+          Updates monthly. Expect context switches.
+        </Text>
+      </div>
+    )
+  }
+</div>

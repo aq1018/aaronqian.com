@@ -1,16 +1,23 @@
 ---
+import {
+  pillToggleVariants,
+  pillToggleSliderVariants,
+  type PillToggleVariants,
+} from './PillToggle.cva'
+import { cn } from '@/lib/utils'
+
 /**
  * PillToggle - A generic pill-shaped toggle component with multiple options
  *
  * @example
  * <PillToggle id="my-toggle">
- *   <button slot="option" data-value="option1">Option 1</button>
- *   <button slot="option" data-value="option2">Option 2</button>
- *   <button slot="option" data-value="option3">Option 3</button>
+ *   <PillToggleButton data-value="option1">Option 1</PillToggleButton>
+ *   <PillToggleButton data-value="option2">Option 2</PillToggleButton>
+ *   <PillToggleButton data-value="option3">Option 3</PillToggleButton>
  * </PillToggle>
  */
 
-export interface Props {
+interface Props extends PillToggleVariants {
   id: string
   ariaLabel?: string
   class?: string
@@ -19,21 +26,13 @@ export interface Props {
 const { id, ariaLabel, class: className } = Astro.props
 ---
 
-<div
-  {id}
-  role="group"
-  aria-label={ariaLabel}
-  class:list={[
-    'relative inline-flex items-center gap-0 rounded-full bg-gray-200 p-1 dark:bg-gray-800',
-    className,
-  ]}
->
+<div {id} role="group" aria-label={ariaLabel} class={cn(pillToggleVariants(), className)}>
   <!-- Sliding indicator background -->
   <div
-    class="pointer-events-none absolute left-0 top-0 z-0 m-1 h-8 w-8 rounded-full bg-primary shadow-md opacity-0 dark:bg-primary-600"
+    class={pillToggleSliderVariants()}
     style="transform: translateX(0px); transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms ease-in;"
     data-slider
   >
   </div>
-  <slot name="option" />
+  <slot />
 </div>

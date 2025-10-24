@@ -1,0 +1,107 @@
+---
+/**
+ * HeroContent - Reusable hero section content layout
+ * Provides standardized styling for hero sections across the site
+ * Supports both props (simple) and slots (complex) for maximum flexibility
+ */
+import { cn } from '@/lib/utils'
+import Container from './Container.astro'
+import Text from './Text.astro'
+import Heading from './Heading.astro'
+
+interface Props {
+  eyebrow?: string
+  title?: string
+  description?: string
+  microLine?: string
+  centered?: boolean
+  size?: 'narrow' | 'default' | 'wide'
+  class?: string
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  microLine,
+  centered = true,
+  size = 'default',
+  class: className,
+} = Astro.props
+
+// Check which slots have content (slots take precedence over props)
+const hasEyebrowSlot = Astro.slots.has('eyebrow')
+const hasTitleSlot = Astro.slots.has('title')
+const hasDescriptionSlot = Astro.slots.has('description')
+const hasMicroLineSlot = Astro.slots.has('microLine')
+---
+
+<Container {size} class={cn('relative z-10 py-16', centered && 'text-center', className)}>
+  <!-- Eyebrow: slot takes precedence over prop -->
+  {
+    (hasEyebrowSlot || eyebrow) &&
+      (hasEyebrowSlot ? (
+        <slot name="eyebrow" />
+      ) : (
+        <Text
+          variant="label"
+          color="primary"
+          align={centered ? 'center' : undefined}
+          class="mb-4 opacity-85"
+        >
+          {eyebrow}
+        </Text>
+      ))
+  }
+
+  <!-- Title: slot takes precedence over prop -->
+  {
+    (hasTitleSlot || title) &&
+      (hasTitleSlot ? (
+        <slot name="title" />
+      ) : (
+        <Heading level="h1" font="mono" align={centered ? 'center' : undefined}>
+          {title}
+        </Heading>
+      ))
+  }
+
+  <!-- Animated accent line -->
+  <div
+    class="mx-auto mt-3 h-0.5 w-20 bg-primary transition-all duration-200 hover:w-28 hover:shadow-[0_0_8px_rgba(var(--color-primary-raw),0.6)]"
+  >
+  </div>
+
+  <!-- Description: slot takes precedence over prop -->
+  {
+    (hasDescriptionSlot || description) &&
+      (hasDescriptionSlot ? (
+        <slot name="description" />
+      ) : (
+        <Text variant="lead" align={centered ? 'center' : undefined} class="mx-auto mt-8 max-w-2xl">
+          {description}
+        </Text>
+      ))
+  }
+
+  <!-- Default slot for custom content (buttons, collapsibles, etc.) -->
+  <slot />
+
+  <!-- Micro-line: slot takes precedence over prop - appears AFTER default slot -->
+  <!-- Note: Use mt-4 when no default slot content, mt-8 when there are CTAs -->
+  {
+    (hasMicroLineSlot || microLine) &&
+      (hasMicroLineSlot ? (
+        <slot name="microLine" />
+      ) : (
+        <Text
+          variant="caption"
+          font="mono"
+          align={centered ? 'center' : undefined}
+          class="mt-4 text-muted/70"
+        >
+          {microLine}
+        </Text>
+      ))
+  }
+</Container>

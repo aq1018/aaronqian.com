@@ -1,5 +1,6 @@
 ---
 import { badgeVariants, type BadgeVariants } from './Badge.cva'
+import { cn } from '@/lib/utils'
 
 interface Props extends BadgeVariants {
   class?: string
@@ -9,7 +10,7 @@ interface Props extends BadgeVariants {
 const { variant, pulse, class: className, ...rest } = Astro.props
 ---
 
-<span class={badgeVariants({ variant, pulse, class: className })} {...rest}>
+<span class={cn(badgeVariants({ variant, pulse }), className)} {...rest}>
   <slot />
 </span>
 

@@ -1,8 +1,11 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import CuttingMat from '@/components/features/CuttingMat.astro'
-import Link from '@/components/ui/Link.astro'
-import Badge from '@/components/ui/Badge.astro'
+import HeroContent from '@/components/ui/HeroContent.astro'
+import ProjectList from '@/components/features/ProjectList.astro'
+import Section from '@/components/ui/Section.astro'
+import Container from '@/components/ui/Container.astro'
+import Text from '@/components/ui/Text.astro'
 
 interface Props {
   projects: CollectionEntry<'projects'>[]
@@ -15,126 +18,23 @@ const { projects, statusStyles, statusLabels } = Astro.props
 
 <!-- Hero Section -->
 <CuttingMat class="cutting-mat py-16 sm:py-20">
-  <div class="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-    <!-- Eyebrow -->
-    <div class="mb-4 font-mono text-xs font-medium uppercase tracking-wide text-primary opacity-85">
-      PROJECT ARCHIVE
-    </div>
-
-    <!-- Title -->
-    <h1 class="font-mono text-4xl font-bold text-fg sm:text-5xl">Projects / Lab Notes</h1>
-
-    <!-- Animated accent line -->
-    <div
-      class="mx-auto mt-3 h-0.5 w-20 bg-primary transition-all duration-200 hover:w-28 hover:shadow-[0_0_8px_rgba(var(--color-primary-raw),0.6)]"
-    >
-    </div>
-
-    <!-- Blurb -->
-    <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted">
-      My digital workshop — half experiments, half excuses to learn new tools.
-    </p>
-
-    <!-- Micro-line -->
-    <p class="mt-4 font-mono text-xs text-muted/70">
+  <HeroContent
+    eyebrow="PROJECT ARCHIVE"
+    title="Projects / Lab Notes"
+    description="My digital workshop — half experiments, half excuses to learn new tools."
+  >
+    <!-- Micro-line in named slot - mt-4 since no CTAs -->
+    <Text slot="microLine" variant="caption" font="mono" align="center" class="mt-4 text-muted/70">
       <span class="text-primary">⚠️</span> Some projects are still in beta. Including me.
-    </p>
-  </div>
+    </Text>
+  </HeroContent>
 </CuttingMat>
 
 <!-- Projects Content -->
-<main class="bg-surface py-16 sm:py-20">
-  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-    <!-- Projects table - desktop -->
-    <div class="hidden md:block overflow-x-auto">
-      <table class="w-full border-collapse font-mono text-sm">
-        <thead>
-          <tr class="border-b border-border/30">
-            <th class="pb-3 pr-6 text-left font-semibold uppercase tracking-wide text-muted/70"
-              >Project</th
-            >
-            <th class="pb-3 px-6 text-right font-semibold uppercase tracking-wide text-muted/70"
-              >Status</th
-            >
-            <th class="pb-3 pl-6 text-left font-semibold uppercase tracking-wide text-muted/70"
-              >Notes</th
-            >
-          </tr>
-        </thead>
-        <tbody>
-          {
-            projects.map((project) => (
-              <tr class="group border-b border-border/20 transition-colors hover:bg-surface-hover">
-                <td class="py-4 pr-6 align-top">
-                  <Link
-                    href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-                    variant="content"
-                    class="font-semibold"
-                  >
-                    {project.data.title}
-                  </Link>
-                </td>
-                <td class="py-4 px-6 align-top text-right">
-                  <span
-                    class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
-                  >
-                    {statusLabels[project.data.status]}
-                    {project.data.live && (
-                      <Badge variant="status" pulse={true} class="ml-2">
-                        LIVE
-                      </Badge>
-                    )}
-                  </span>
-                </td>
-                <td class="py-4 pl-6 align-top">
-                  <p class="mb-2 leading-relaxed text-muted">{project.data.description}</p>
-                  <p class="text-xs italic text-muted/60">{project.data.aside}</p>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Projects list - mobile -->
-    <div class="space-y-6 md:hidden">
-      {
-        projects.map((project) => (
-          <div class="border-l-2 border-primary/30 pl-4 transition-colors hover:border-primary">
-            <div class="mb-2 flex items-baseline justify-between gap-3">
-              <Link
-                href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-                variant="content"
-                class="font-mono text-base font-semibold"
-              >
-                {project.data.title}
-              </Link>
-            </div>
-            <div class="mb-3">
-              <span
-                class={`font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
-              >
-                {statusLabels[project.data.status]}
-                {project.data.live && (
-                  <Badge variant="status" pulse={true} class="ml-2">
-                    LIVE
-                  </Badge>
-                )}
-              </span>
-            </div>
-            <p class="mb-2 font-sans text-sm leading-relaxed text-muted">
-              {project.data.description}
-            </p>
-            <p class="font-mono text-xs italic text-muted/60">{project.data.aside}</p>
-          </div>
-        ))
-      }
-    </div>
-
-    <!-- Footer -->
-    <div class="mt-12 border-t border-border/20 pt-6 text-center">
-      <p class="font-mono text-xs text-muted/70">Updates monthly. Expect context switches.</p>
-    </div>
-  </div>
+<main>
+  <Section variant="content" background="surface">
+    <Container>
+      <ProjectList {projects} {statusStyles} {statusLabels} />
+    </Container>
+  </Section>
 </main>

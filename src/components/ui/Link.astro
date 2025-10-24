@@ -1,5 +1,6 @@
 ---
 import { linkVariants, type LinkVariants } from './Link.cva'
+import { cn } from '@/lib/utils'
 
 interface Props extends LinkVariants {
   href: string
@@ -25,7 +26,7 @@ const linkRel = rel || (isExternal ? 'noopener noreferrer' : undefined)
   {href}
   target={linkTarget}
   rel={linkRel}
-  class={linkVariants({ variant, active, class: className })}
+  class={cn(linkVariants({ variant, active }), className)}
   {...rest}
 >
   <slot />

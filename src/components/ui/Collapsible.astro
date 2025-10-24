@@ -1,53 +1,46 @@
 ---
 /**
  * Collapsible component - expandable/collapsible content section
+ * Uses CVA for base styles and .hook.ts for behavior
+ * State is controlled via data-open attribute + CSS
  */
+import { collapsibleVariants, collapsibleContentVariants } from './Collapsible.cva'
+import { cn } from '@/lib/utils'
+
 interface Props {
   id: string
   open?: boolean
   class?: string
 }
 
-const { id, open = false, class: className } = Astro.props
+const { id, open = false, class: className, ...rest } = Astro.props
 ---
 
 <div
   {id}
-  class={`collapsible ${className ?? ''}`}
+  class={cn(collapsibleVariants(), className)}
   data-collapsible
-  data-open={open}
+  data-open={String(open)}
   aria-expanded={open}
+  {...rest}
 >
-  <div class="collapsible-content">
+  <div class={collapsibleContentVariants()}>
     <slot />
   </div>
 </div>
 
-<style>
-  .collapsible {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
+<style is:global>
+  /* Modern CSS Grid technique for smooth height transitions
+   * Uses grid-template-rows: 0fr (collapsed) and 1fr (expanded)
+   * Supported in Chrome 107+, Firefox 66+, Safari 16+ */
+
+  /* Closed state - collapsed */
+  .collapsible-wrapper[data-open='false'] {
+    grid-template-rows: 0fr;
   }
 
-  .collapsible[data-open='false'] {
-    max-height: 0;
-  }
-
-  .collapsible[data-open='true'] {
-    max-height: 500px; /* Adjust based on expected content height */
-  }
-
-  .collapsible-content {
-    padding: 0;
-    transition: padding 0.3s ease-out;
-  }
-
-  .collapsible[data-open='false'] .collapsible-content {
-    padding: 0;
-  }
-
-  .collapsible[data-open='true'] .collapsible-content {
-    padding: 1rem 0;
+  /* Open state - expanded */
+  .collapsible-wrapper[data-open='true'] {
+    grid-template-rows: 1fr;
   }
 </style>

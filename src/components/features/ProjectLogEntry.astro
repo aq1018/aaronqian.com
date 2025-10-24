@@ -1,6 +1,8 @@
 ---
 // ProjectLogEntry - Terminal-style log entry component
 import type { CollectionEntry } from 'astro:content'
+import Heading from '@/components/ui/Heading.astro'
+import Text from '@/components/ui/Text.astro'
 
 interface Props {
   log: CollectionEntry<'projectLogs'>
@@ -36,12 +38,18 @@ const getTagColor = (tag: string) => {
 <article class="group border-l-2 border-border/30 pl-6 transition-colors hover:border-primary/50">
   <!-- Timestamp and title -->
   <header class="mb-3">
-    <time datetime={log.data.date.toISOString()} class="font-mono text-xs text-muted/70">
+    <Text
+      as="time"
+      variant="caption"
+      font="mono"
+      class="text-muted/70"
+      datetime={log.data.date.toISOString()}
+    >
       [{formatTimestamp(log.data.date)}]
-    </time>
-    <h3 class="mt-1 font-mono text-lg font-semibold text-fg">
+    </Text>
+    <Heading level="h3" font="mono" class="mt-1 text-lg">
       {log.data.title}
-    </h3>
+    </Heading>
   </header>
 
   <!-- Tags -->

@@ -3,6 +3,8 @@
 import { getCollection } from 'astro:content'
 import Link from '@/components/ui/Link.astro'
 import Badge from '@/components/ui/Badge.astro'
+import Heading from '@/components/ui/Heading.astro'
+import Text from '@/components/ui/Text.astro'
 
 const projects = await getCollection('projects')
 const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
@@ -25,7 +27,7 @@ const statusLabels = {
   <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
     <!-- Section header -->
     <div class="mb-12">
-      <h2 class="font-mono text-2xl font-bold text-fg sm:text-3xl">Now / Currently Building</h2>
+      <Heading level="h2" font="mono" class="sm:text-3xl">Now / Currently Building</Heading>
       <div
         class="mt-2 h-0.5 w-16 bg-primary transition-all duration-200 hover:w-24 hover:shadow-[0_0_8px_rgba(var(--color-primary-raw),0.6)]"
       >
@@ -74,8 +76,12 @@ const statusLabels = {
                   </span>
                 </td>
                 <td class="py-4 pl-6 align-top">
-                  <p class="mb-2 text-muted leading-relaxed">{project.data.description}</p>
-                  <p class="text-xs italic text-muted/60">{project.data.aside}</p>
+                  <Text variant="muted" class="mb-2 leading-relaxed">
+                    {project.data.description}
+                  </Text>
+                  <Text size="xs" class="italic text-muted/60">
+                    {project.data.aside}
+                  </Text>
                 </td>
               </tr>
             ))
@@ -110,18 +116,22 @@ const statusLabels = {
                 )}
               </span>
             </div>
-            <p class="mb-2 font-sans text-sm leading-relaxed text-muted">
+            <Text size="sm" variant="muted" class="mb-2 leading-relaxed">
               {project.data.description}
-            </p>
-            <p class="font-mono text-xs italic text-muted/60">{project.data.aside}</p>
+            </Text>
+            <Text font="mono" size="xs" class="italic text-muted/60">
+              {project.data.aside}
+            </Text>
           </div>
         ))
       }
     </div>
 
     <!-- Footer -->
-    <div class="mt-12 border-t border-border/20 pt-6 text-center">
-      <p class="font-mono text-xs text-muted/70">Updates monthly. Expect context switches.</p>
+    <div class="mt-8">
+      <Text variant="caption" font="mono" class="text-muted/70"
+        >Updates monthly. Expect context switches.</Text
+      >
     </div>
   </div>
 </section>

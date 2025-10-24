@@ -1,0 +1,32 @@
+---
+import { textVariants, type TextVariants } from './Text.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends TextVariants {
+  as?: 'p' | 'span' | 'div' | 'label'
+  class?: string
+  [key: string]: any
+}
+
+const {
+  as = 'p',
+  size,
+  variant,
+  leading,
+  font,
+  weight,
+  align,
+  color,
+  class: className,
+  ...rest
+} = Astro.props as Props
+
+const Element = as
+---
+
+<Element
+  class={cn(textVariants({ size, variant, leading, font, weight, align, color }), className)}
+  {...rest}
+>
+  <slot />
+</Element>

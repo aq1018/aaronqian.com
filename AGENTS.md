@@ -67,6 +67,8 @@ ask for approval to deviate.**
   commit
 - ✅ **File naming conventions** - `Component.hook.ts`, `Component.cva.ts`, etc.
 - ✅ **Import aliases** - Use `@/*` instead of relative paths from `src/`
+- ✅ **Layout primitives for spacing** - Use Section, Container, Stack
+  components instead of inline spacing classes
 
 ### P2 - USE JUDGMENT (Best practices, ask if deviating)
 
@@ -1466,6 +1468,219 @@ All must pass before merging. No exceptions.
 
 ## Component Best Practices
 
+### Layout Primitives (MANDATORY)
+
+**ALWAYS use layout primitive components for spacing and layout. Never use
+inline spacing classes directly in page components.**
+
+This codebase provides three layout primitives for standardized, responsive
+spacing:
+
+#### Section - Standardized Section Padding
+
+Use for wrapping content sections with responsive vertical padding.
+
+```astro
+---
+import Section from '@/components/ui/Section.astro'
+---
+
+<!-- Hero section (largest padding) -->
+<Section variant="hero" background="surface">
+  <h1>Welcome to my site</h1>
+</Section>
+
+<!-- Main content section (medium padding) -->
+<Section variant="content">
+  <p>Main content area</p>
+</Section>
+
+<!-- Subsection (smallest padding) -->
+<Section variant="subsection" background="surface">
+  <h3>Related Content</h3>
+</Section>
+```
+
+**Variants:**
+
+- `hero`: `py-20 sm:py-24 lg:py-28` - Dramatic hero sections
+- `content`: `py-16 sm:py-20 lg:py-24` - Main content areas (default)
+- `subsection`: `py-12 sm:py-14 lg:py-16` - Nested sections
+
+**Props:**
+
+- `variant`: Section padding size
+- `background`: 'surface' | 'bg' - Background color
+- `class`: Custom classes (merged with `cn`)
+
+#### Container - Max-width and Horizontal Padding
+
+Use for centering content with responsive horizontal padding.
+
+```astro
+---
+import Container from '@/components/ui/Container.astro'
+---
+
+<!-- Default container (max-w-4xl) -->
+<Container>
+  <h1>My Content</h1>
+</Container>
+
+<!-- Narrow (great for blog posts) -->
+<Container size="narrow">
+  <article>Blog content...</article>
+</Container>
+
+<!-- Wide (great for dashboards) -->
+<Container size="wide">
+  <div class="grid grid-cols-3 gap-4">...</div>
+</Container>
+```
+
+**Variants:**
+
+- `narrow`: `max-w-3xl` - Blog posts, focused content
+- `default`: `max-w-4xl` - Standard content width
+- `wide`: `max-w-7xl` - Dashboards, wide layouts
+
+**Props:**
+
+- `size`: Container width
+- `class`: Custom classes (merged with `cn`)
+
+**Base classes:** `mx-auto px-4 sm:px-6 lg:px-8` (always applied)
+
+#### Stack - Vertical Spacing Between Items
+
+Use for grouping related items with consistent vertical spacing.
+
+```astro
+---
+import Stack from '@/components/ui/Stack.astro'
+---
+
+<!-- Default medium gap -->
+<Stack>
+  <Heading>Title</Heading>
+  <Text>Paragraph 1</Text>
+  <Text>Paragraph 2</Text>
+</Stack>
+
+<!-- Small gap for tightly related items -->
+<Stack gap="small">
+  <label>Email</label>
+  <input type="email" />
+</Stack>
+
+<!-- Large gap for major sections -->
+<Stack gap="large">
+  <section>Section 1</section>
+  <section>Section 2</section>
+</Stack>
+```
+
+**Variants:**
+
+- `tight`: `space-y-2 sm:space-y-3` - Very related items
+- `small`: `space-y-4 sm:space-y-5 lg:space-y-6` - Related items
+- `medium`: `space-y-8 sm:space-y-10 lg:space-y-12` - Content items (default)
+- `large`: `space-y-12 sm:space-y-14 lg:space-y-16` - Major sections
+
+**Props:**
+
+- `gap`: Vertical spacing size
+- `class`: Custom classes (merged with `cn`)
+
+#### Composing Layout Primitives
+
+**Pattern:** Combine primitives for complete layouts:
+
+```astro
+---
+import Section from '@/components/ui/Section.astro'
+import Container from '@/components/ui/Container.astro'
+import Stack from '@/components/ui/Stack.astro'
+import Heading from '@/components/ui/Heading.astro'
+import Text from '@/components/ui/Text.astro'
+---
+
+<Section variant="content" background="surface">
+  <Container size="default">
+    <Stack gap="medium">
+      <Heading level="h2">Projects</Heading>
+      <Text>Featured work and experiments</Text>
+
+      <Stack gap="small">
+        <ProjectCard />
+        <ProjectCard />
+        <ProjectCard />
+      </Stack>
+    </Stack>
+  </Container>
+</Section>
+```
+
+#### Anti-Patterns (DO NOT DO THIS)
+
+**❌ DON'T use inline spacing classes:**
+
+```astro
+<!-- WRONG: Inline spacing classes -->
+<section class="py-16 sm:py-20">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div class="space-y-8">
+      <h2>Title</h2>
+      <p>Content</p>
+    </div>
+  </div>
+</section>
+```
+
+**✅ DO use layout primitives:**
+
+```astro
+<!-- CORRECT: Layout primitives -->
+<Section variant="content">
+  <Container>
+    <Stack gap="medium">
+      <Heading level="h2">Title</Heading>
+      <Text>Content</Text>
+    </Stack>
+  </Container>
+</Section>
+```
+
+#### When to Use Utility Classes
+
+**You CAN use utility classes for:**
+
+- One-off spacing adjustments: `mt-4`, `mb-6`
+- Component-specific gaps: `gap-2` in flex containers
+- Edge cases that don't fit primitive variants
+
+**Rule of thumb:** If you're using the same spacing pattern 2+ times, use a
+primitive component instead.
+
+#### Why This Matters
+
+**Benefits:**
+
+- ✅ **Consistency** - All spacing follows the same responsive scale
+- ✅ **Maintainability** - Change spacing system in one place
+- ✅ **Discoverability** - Clear, semantic component names
+- ✅ **Type-safety** - TypeScript prevents invalid variants
+- ✅ **Mobile-optimized** - All primitives scale from mobile → desktop
+- ✅ **Prevents deviation** - Can't use wrong spacing without bypassing
+  component
+
+**Prevents:**
+
+- ❌ Inconsistent spacing across pages
+- ❌ Non-responsive spacing (fixed `py-16` everywhere)
+- ❌ Ad-hoc spacing values (`py-13`, `space-y-7`)
+- ❌ Technical debt from inline classes
+
 ### Props Pattern
 
 Always support custom className and use `cn` utility for class merging:
@@ -1843,12 +2058,14 @@ See [CVA File Organization](#cva-file-organization) for why this matters.
 - ❌ Do NOT bypass `--no-verify` on commits
 - ❌ Do NOT use CSS classes as hook selectors
 - ❌ Do NOT pass className directly to CVA variants
+- ❌ Do NOT use inline spacing classes (use Section, Container, Stack)
 - ✅ DO run full CI before commit to avoid hook failure loop
 - ✅ DO write tests before commit (timing flexible, but tests required)
 - ✅ DO name subcomponents with parent prefix (e.g., `PillToggleButton.astro`)
 - ✅ DO export all variants from parent's `.cva.ts` file
 - ✅ DO use `data-*` attributes for hook selectors (never CSS classes)
 - ✅ DO use `cn()` utility to merge CVA variants with custom classes
+- ✅ DO use layout primitives (Section, Container, Stack) for spacing
 - ✅ DO test edge cases and error conditions
 - ✅ DO test cleanup and memory management in hooks
 - ✅ DO improve existing code opportunistically (add tests when modifying)
@@ -1887,6 +2104,7 @@ git commit           # Commit (hooks run automatically)
 | Component naming conventions      | P1       | ⚠️ Ask first    |
 | CVA file organization             | P1       | ⚠️ Ask first    |
 | Use `cn()` for class merging      | P1       | ⚠️ Ask first    |
+| Layout primitives for spacing     | P1       | ⚠️ Ask first    |
 | Testing for new code              | P1       | ⚠️ Ask first    |
 | Specific coverage percentages     | P2       | ✅ Use judgment |
 | Optional file creation thresholds | P2       | ✅ Use judgment |
@@ -1903,6 +2121,12 @@ Should I ask for approval?
 ├─ Following documented P1 patterns? → Proceed
 ├─ Deviating from P0/P1? → Ask first
 └─ Uncertain? → Ask first
+
+Should I use layout primitives or inline spacing?
+├─ Section padding (py-*)? → Use <Section>
+├─ Container width (max-w-*)? → Use <Container>
+├─ Vertical spacing (space-y-*)? → Use <Stack>
+└─ One-off adjustment? → Utility class OK
 
 Should I create a .hook.css file?
 ├─ Need @theme, @custom-variant, @layer? → Yes, create .hook.css

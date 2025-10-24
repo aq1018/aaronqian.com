@@ -1,11 +1,16 @@
 ---
 // Projects Index Page - Full listing of all projects
 import { getCollection } from 'astro:content'
+import { sortProjectsByLatestLog, markLatestProjectAsLive } from '@/lib/projects'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import ProjectsIndex from '@/components/pages/ProjectsIndex.astro'
 
+// Fetch and sort projects by latest log
 const projects = await getCollection('projects')
-const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
+const projectLogs = await getCollection('projectLogs')
+
+const sortedProjects = sortProjectsByLatestLog(projects, projectLogs)
+const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
 
 // Status indicator styles
 const statusStyles = {
@@ -25,5 +30,5 @@ const statusLabels = {
   title="Projects — Aaron Qian"
   description="Current projects, experiments, and build logs. Engineering lab in progress."
 >
-  <ProjectsIndex projects={sortedProjects} {statusStyles} {statusLabels} />
+  <ProjectsIndex projects={projectsWithLive} {statusStyles} {statusLabels} />
 </BaseLayout>
