@@ -1,8 +1,9 @@
 ---
 // Projects Index Page - Full listing of all projects
 import { getCollection } from 'astro:content'
-import BaseLayout from '../../layouts/BaseLayout.astro'
-import Navigation from '../../components/Navigation.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import CuttingMat from '@/components/CuttingMat.astro'
+import Navigation from '@/components/Navigation.astro'
 
 const projects = await getCollection('projects')
 const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
@@ -28,7 +29,7 @@ const statusLabels = {
   <Navigation />
 
   <!-- Hero Section -->
-  <header class="cutting-mat relative py-16 sm:py-20" data-cutting-mat>
+  <CuttingMat class="cutting-mat py-16 sm:py-20">
     <div class="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
       <!-- Eyebrow -->
       <div
@@ -56,7 +57,7 @@ const statusLabels = {
         <span class="text-accent">⚠️</span> Some projects are still in beta. Including me.
       </p>
     </div>
-  </header>
+  </CuttingMat>
 
   <!-- Projects Content -->
   <main class="bg-surface py-16 sm:py-20">
@@ -153,11 +154,6 @@ const statusLabels = {
     </div>
   </main>
 </BaseLayout>
-
-<script>
-  import { setupCuttingMat } from '../../lib/cuttingMat'
-  setupCuttingMat()
-</script>
 
 <style>
   @keyframes pulseSubtle {

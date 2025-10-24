@@ -1,9 +1,9 @@
 ---
 // Project Detail Page - Shows project info + log entries in reverse chronological order
 import { getCollection, type CollectionEntry } from 'astro:content'
-import BaseLayout from '../../layouts/BaseLayout.astro'
-import Navigation from '../../components/Navigation.astro'
-import ProjectLogEntry from '../../components/ProjectLogEntry.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navigation from '@/components/Navigation.astro'
+import ProjectLogEntry from '@/components/ProjectLogEntry.astro'
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects')

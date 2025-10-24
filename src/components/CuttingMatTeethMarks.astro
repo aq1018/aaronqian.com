@@ -1,0 +1,39 @@
+---
+/**
+ * Creates ruler teeth marks on the x-axis
+ */
+
+interface Props {
+  width: number
+  height: number
+  minorInterval: number
+  opacity: number
+  strokeWidth: number
+}
+
+const { width, height, minorInterval, opacity, strokeWidth } = Astro.props
+
+const centerX = width / 2
+const bottomY = height
+const toothInterval = minorInterval / 2
+const toothHeight = 8 // pixels upward from x-axis
+
+// Generate teeth positions
+const teeth: number[] = []
+for (let x = centerX % toothInterval; x < width; x += toothInterval) {
+  teeth.push(x)
+}
+---
+
+{
+  teeth.map((x) => (
+    <line
+      x1={x}
+      y1={bottomY}
+      x2={x}
+      y2={bottomY - toothHeight}
+      opacity={opacity}
+      stroke-width={strokeWidth}
+    />
+  ))
+}

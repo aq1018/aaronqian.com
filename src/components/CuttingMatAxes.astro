@@ -1,0 +1,23 @@
+---
+/**
+ * Creates X and Y coordinate axes
+ */
+
+interface Props {
+  width: number
+  height: number
+  opacity: number
+  strokeWidth: number
+}
+
+const { width, height, opacity, strokeWidth } = Astro.props
+
+const centerX = width / 2
+const bottomY = height
+---
+
+<!-- X-axis: horizontal line at bottom -->
+<line x1="0" y1={bottomY} x2={width} y2={bottomY} {opacity} stroke-width={strokeWidth}></line>
+
+<!-- Y-axis: vertical line at center -->
+<line x1={centerX} y1="0" x2={centerX} y2={bottomY} {opacity} stroke-width={strokeWidth}></line>

@@ -1,27 +1,36 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import '@testing-library/jest-dom/vitest'
+import { experimental_AstroContainer as AstroContainer } from 'astro/container'
+import { describe, expect, it } from 'vitest'
 
-import { createAngleLabels } from './createAngleLabels'
+import AngleLabels from '@/components/CuttingMatAngleLabels.astro'
 
-describe('createAngleLabels', () => {
+describe('AngleLabels', () => {
+  const renderComponent = async (props: {
+    width: number
+    height: number
+    angleLineCount: number
+    angleLabelArcIndex: number
+    majorLineInterval: number
+    labelOpacity: number
+  }) => {
+    const container = await AstroContainer.create()
+    const result = await container.renderToString(AngleLabels, { props })
+    const div = document.createElement('div')
+    div.innerHTML = result
+    return div
+  }
+
   const width = 4000
   const height = 4000
   const centerX = width / 2
   const bottomY = height
   const angleLineCount = 5
   const majorLineInterval = 200
-  const angleLabelArcIndex = 2 // third arc
+  const angleLabelArcIndex = 2
   const labelOpacity = 0.175
 
-  beforeEach(() => {
-    document.documentElement.classList.remove('dark')
-  })
-
-  afterEach(() => {
-    document.documentElement.classList.remove('dark')
-  })
-
-  it('should create text elements for each angle', () => {
-    const labels = createAngleLabels({
+  it('should create text elements for each angle', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount,
@@ -30,15 +39,13 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
+    const labels = root.querySelectorAll('text')
     // Should have 2x angleLineCount (background + foreground for each)
     expect(labels.length).toBe(angleLineCount * 2)
-    labels.forEach((label) => {
-      expect(label.tagName).toBe('text')
-    })
   })
 
-  it('should create background and foreground text pairs', () => {
-    const labels = createAngleLabels({
+  it('should create background and foreground text pairs', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount: 5,
@@ -47,7 +54,7 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
-    // Every pair should have same position and content
+    const labels = root.querySelectorAll('text')
     for (let i = 0; i < 5; i += 1) {
       const bg = labels[i * 2]
       const fg = labels[i * 2 + 1]
@@ -58,8 +65,8 @@ describe('createAngleLabels', () => {
     }
   })
 
-  it('should display correct angle values', () => {
-    const labels = createAngleLabels({
+  it('should display correct angle values', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount: 5,
@@ -68,17 +75,17 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
-    // For 5 angles: 30°, 60°, 90°, 120°, 150°
+    const labels = root.querySelectorAll('text')
     const expectedLabels = ['30°', '60°', '90°', '120°', '150°']
 
     for (let i = 0; i < 5; i += 1) {
-      const fg = labels[i * 2 + 1] // Get foreground text
+      const fg = labels[i * 2 + 1]
       expect(fg.textContent).toBe(expectedLabels[i])
     }
   })
 
-  it('should position labels above the specified arc', () => {
-    const labels = createAngleLabels({
+  it('should position labels above the specified arc', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount,
@@ -87,13 +94,11 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
-    // Arc radius = (index + 1) * arcRadiusInterval * majorLineInterval
-    // arcRadiusInterval defaults to 1
-    const arcRadius = (angleLabelArcIndex + 1) * 1 * majorLineInterval // = 3 * 200 = 600
-    const labelOffset = 20 // pixels above arc
-    const expectedDistance = arcRadius + labelOffset // = 620
+    const labels = root.querySelectorAll('text')
+    const arcRadius = (angleLabelArcIndex + 1) * 1 * majorLineInterval
+    const labelOffset = 20
+    const expectedDistance = arcRadius + labelOffset
 
-    // Check first foreground label (30°)
     const firstLabel = labels[1]
     const x = Number.parseFloat(firstLabel.getAttribute('x') ?? '0')
     const y = Number.parseFloat(firstLabel.getAttribute('y') ?? '0')
@@ -105,8 +110,8 @@ describe('createAngleLabels', () => {
     expect(distance).toBeCloseTo(expectedDistance, 0.1)
   })
 
-  it('should apply opacity to foreground text only', () => {
-    const labels = createAngleLabels({
+  it('should apply opacity to foreground text only', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount,
@@ -115,18 +120,15 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
-    // Background should not have opacity (uses fill/stroke for halo effect)
-    // Foreground should have opacity
+    const labels = root.querySelectorAll('text')
     for (let i = 0; i < angleLineCount; i += 1) {
       const fg = labels[i * 2 + 1]
       expect(fg.getAttribute('opacity')).toBe(String(labelOpacity))
     }
   })
 
-  it('should use light background color in light mode', () => {
-    document.documentElement.classList.remove('dark')
-
-    const labels = createAngleLabels({
+  it('should use CSS variable for background color', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount,
@@ -135,16 +137,17 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
-    const bg = labels[0] // First background text
-    const bgColor = bg.getAttribute('fill')
+    const labels = root.querySelectorAll('text')
+    const bg = labels[0]
+    const bgFill = bg.getAttribute('fill')
+    const bgStroke = bg.getAttribute('stroke')
 
-    expect(bgColor).toBe('oklch(0.99 0 0)') // Light mode color
+    expect(bgFill).toBe('var(--color-bg)')
+    expect(bgStroke).toBe('var(--color-bg)')
   })
 
-  it('should use dark background color in dark mode', () => {
-    document.documentElement.classList.add('dark')
-
-    const labels = createAngleLabels({
+  it('should set correct text attributes', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount,
@@ -153,22 +156,7 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
-    const bg = labels[0] // First background text
-    const bgColor = bg.getAttribute('fill')
-
-    expect(bgColor).toBe('oklch(0.08 0 0)') // Dark mode color
-  })
-
-  it('should set correct text attributes', () => {
-    const labels = createAngleLabels({
-      width,
-      height,
-      angleLineCount,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
-    })
-
+    const labels = root.querySelectorAll('text')
     labels.forEach((label) => {
       expect(label.getAttribute('font-size')).toBe('14')
       expect(label.getAttribute('font-family')).toBe('monospace')
@@ -178,8 +166,8 @@ describe('createAngleLabels', () => {
     })
   })
 
-  it('should create background with stroke for halo effect', () => {
-    const labels = createAngleLabels({
+  it('should create background with stroke for halo effect', async () => {
+    const root = await renderComponent({
       width,
       height,
       angleLineCount,
@@ -188,7 +176,7 @@ describe('createAngleLabels', () => {
       labelOpacity,
     })
 
-    // Check background text
+    const labels = root.querySelectorAll('text')
     for (let i = 0; i < angleLineCount; i += 1) {
       const bg = labels[i * 2]
       expect(bg.getAttribute('stroke-width')).toBe('6')

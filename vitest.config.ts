@@ -1,6 +1,7 @@
-import { defineConfig } from 'vitest/config'
+import 'vitest/config'
+import { getViteConfig } from 'astro/config'
 
-export default defineConfig({
+export default getViteConfig({
   test: {
     environment: 'happy-dom',
     globals: true,

@@ -1,0 +1,79 @@
+---
+/**
+ * Creates horizontal and vertical grid lines
+ */
+
+interface Props {
+  width: number
+  height: number
+  majorLineInterval: number
+  minorInterval: number
+  majorOpacity: number
+  minorOpacity: number
+  majorStrokeWidth: number
+  minorStrokeWidth: number
+}
+
+const {
+  width,
+  height,
+  majorLineInterval,
+  minorInterval,
+  majorOpacity,
+  minorOpacity,
+  majorStrokeWidth,
+  minorStrokeWidth,
+} = Astro.props
+
+const centerX = width / 2
+const bottomY = height
+
+// Generate vertical grid lines
+const verticalLines: Array<{
+  x: number
+  isMajor: boolean
+}> = []
+for (let offset = minorInterval; offset < width / 2; offset += minorInterval) {
+  const isMajor = offset % majorLineInterval === 0
+  verticalLines.push({ x: centerX + offset, isMajor })
+  verticalLines.push({ x: centerX - offset, isMajor })
+}
+
+// Generate horizontal grid lines
+const horizontalLines: Array<{
+  y: number
+  isMajor: boolean
+}> = []
+for (let offset = minorInterval; offset < height; offset += minorInterval) {
+  const isMajor = offset % majorLineInterval === 0
+  horizontalLines.push({ y: bottomY - offset, isMajor })
+}
+---
+
+{
+  /* Vertical lines */
+  verticalLines.map(({ x, isMajor }) => (
+    <line
+      x1={x}
+      y1="0"
+      x2={x}
+      y2={bottomY}
+      opacity={isMajor ? majorOpacity : minorOpacity}
+      stroke-width={isMajor ? majorStrokeWidth : minorStrokeWidth}
+    />
+  ))
+}
+
+{
+  /* Horizontal lines */
+  horizontalLines.map(({ y, isMajor }) => (
+    <line
+      x1="0"
+      y1={y}
+      x2={width}
+      y2={y}
+      opacity={isMajor ? majorOpacity : minorOpacity}
+      stroke-width={isMajor ? majorStrokeWidth : minorStrokeWidth}
+    />
+  ))
+}

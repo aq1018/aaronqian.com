@@ -1,0 +1,28 @@
+---
+/**
+ * Creates gradient mask for side fade effect
+ */
+
+interface Props {
+  width: number
+  height: number
+}
+
+const { width, height } = Astro.props
+---
+
+<defs>
+  <!-- Linear gradient (horizontal fade from sides) -->
+  <linearGradient id="fade-gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+    <!-- Gradient stops: fade from edges (0% opacity) to center (100% opacity) -->
+    <stop offset="0%" stop-color="white" stop-opacity="0"></stop>
+    <stop offset="20%" stop-color="white" stop-opacity="1"></stop>
+    <stop offset="80%" stop-color="white" stop-opacity="1"></stop>
+    <stop offset="100%" stop-color="white" stop-opacity="0"></stop>
+  </linearGradient>
+
+  <!-- Mask that uses the gradient -->
+  <mask id="fade-mask">
+    <rect x="0" y="0" {width} {height} fill="url(#fade-gradient)"></rect>
+  </mask>
+</defs>
