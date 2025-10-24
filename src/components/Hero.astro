@@ -16,7 +16,7 @@ import Collapsible from './Collapsible.astro'
 
   <div class="relative z-10 mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8">
     <div
-      class="mb-8 font-mono text-xs font-medium uppercase tracking-wide text-accent opacity-85 sm:text-sm"
+      class="mb-8 font-mono text-xs font-medium uppercase tracking-wide text-primary opacity-85 sm:text-sm"
     >
       Aaron Qian
     </div>
@@ -26,7 +26,7 @@ import Collapsible from './Collapsible.astro'
     >
       Input coffee <button
         id="lightning-bolt"
-        class="inline-block cursor-pointer text-accent opacity-70 transition-all duration-200 ease-out hover:opacity-100 motion-reduce:transition-none motion-reduce:transform-none"
+        class="inline-block cursor-pointer text-primary opacity-70 transition-all duration-200 ease-out hover:opacity-100 motion-reduce:transition-none motion-reduce:transform-none"
         aria-label="Toggle secret message"
         aria-controls="secret-message"
         aria-expanded="false"
@@ -44,7 +44,7 @@ import Collapsible from './Collapsible.astro'
       <div class="space-y-2">
         <div
           id="ascii-display"
-          class="text-center font-mono text-lg text-accent"
+          class="text-center font-mono text-lg text-primary"
           aria-live="polite"
           aria-atomic="true"
         >
@@ -73,7 +73,7 @@ import Collapsible from './Collapsible.astro'
     <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
       <a
         href="/blog"
-        class="group inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-gray-950 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
+        class="group inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-gray-950 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
       >
         <span>Read My Notes</span>
         <svg
@@ -96,7 +96,7 @@ import Collapsible from './Collapsible.astro'
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Open LaunchPath (new tab)"
-        class="group inline-flex items-center gap-2 rounded-lg border-2 border-accent bg-transparent px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-accent transition-all duration-300 hover:scale-105 hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg"
+        class="group inline-flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-primary transition-all duration-300 hover:scale-105 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
       >
         <span>LaunchPath →</span>
       </a>
@@ -158,3 +158,28 @@ import Collapsible from './Collapsible.astro'
     }
   })
 </script>
+
+<style>
+  /* Cursor blink for ASCII display at 0.8 Hz (1.25s period) */
+  @keyframes cursorBlink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-cursor-blink {
+    animation: cursorBlink 1.25s ease-in-out infinite;
+  }
+
+  /* Mono uppercase utility for CTAs */
+  .text-mono-upper {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>

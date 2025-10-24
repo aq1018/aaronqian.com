@@ -215,10 +215,10 @@ describe('getGlowColor', () => {
     expect(color).toBe('rgba(0, 224, 255, 0.5)')
   })
 
-  it('should return blue glow for light mode', () => {
+  it('should return cyan glow for light mode', () => {
     const color = getGlowColor(false, 0.3)
 
-    expect(color).toBe('rgba(87, 146, 250, 0.3)')
+    expect(color).toBe('rgba(0, 180, 216, 0.3)')
   })
 
   it('should use default opacity', () => {
@@ -235,9 +235,9 @@ describe('getLightningGlowColor', () => {
     expect(color).toBe('rgba(0, 224, 255, 1)')
   })
 
-  it('should return gold for light mode', () => {
+  it('should return cyan for light mode', () => {
     const color = getLightningGlowColor(false)
 
-    expect(color).toBe('rgba(218, 165, 32, 1)')
+    expect(color).toBe('rgba(0, 180, 216, 1)')
   })
 })

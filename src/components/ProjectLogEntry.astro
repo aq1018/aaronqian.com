@@ -21,7 +21,7 @@ const formatTimestamp = (date: Date) => {
 
 // Tag colors (terminal aesthetic)
 const tagColors: Record<string, string> = {
-  milestone: 'bg-accent/20 text-accent border-accent/40',
+  milestone: 'bg-primary/20 text-primary border-primary/40',
   bug: 'bg-red-500/20 text-red-400 border-red-500/40',
   experiment: 'bg-primary-500/20 text-primary-400 border-primary-500/40',
   ux: 'bg-purple-500/20 text-purple-400 border-purple-500/40',
@@ -33,7 +33,7 @@ const getTagColor = (tag: string) => {
 }
 ---
 
-<article class="group border-l-2 border-border/30 pl-6 transition-colors hover:border-accent/50">
+<article class="group border-l-2 border-border/30 pl-6 transition-colors hover:border-primary/50">
   <!-- Timestamp and title -->
   <header class="mb-3">
     <time datetime={log.data.date.toISOString()} class="font-mono text-xs text-muted/70">
@@ -61,7 +61,7 @@ const getTagColor = (tag: string) => {
 
   <!-- Log content (markdown) -->
   <div
-    class="prose prose-sm prose-invert max-w-none font-mono text-sm leading-relaxed text-muted prose-headings:font-mono prose-headings:text-fg prose-p:text-muted prose-a:text-link prose-a:underline prose-a:decoration-transparent prose-a:transition-colors hover:prose-a:decoration-link prose-strong:text-fg prose-code:rounded prose-code:bg-surface-hover prose-code:px-1 prose-code:py-0.5 prose-code:font-mono prose-code:text-accent prose-pre:bg-surface-hover prose-pre:text-fg prose-ul:text-muted prose-ol:text-muted"
+    class="prose prose-sm prose-invert max-w-none font-mono text-sm leading-relaxed text-muted prose-headings:font-mono prose-headings:text-fg prose-p:text-muted prose-a:text-link prose-a:underline prose-a:decoration-transparent prose-a:transition-colors hover:prose-a:decoration-link prose-strong:text-fg prose-code:rounded prose-code:bg-surface-hover prose-code:px-1 prose-code:py-0.5 prose-code:font-mono prose-code:text-primary prose-pre:bg-surface-hover prose-pre:text-fg prose-ul:text-muted prose-ol:text-muted"
   >
     <Content />
   </div>

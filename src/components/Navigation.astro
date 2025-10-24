@@ -13,8 +13,8 @@ const currentPath = Astro.url.pathname
         <a
           href="/"
           class:list={[
-            'transition-colors hover:text-link-hover',
-            currentPath === '/' ? 'font-semibold text-link' : 'text-muted',
+            'transition-colors hover:text-primary-hover',
+            currentPath === '/' ? 'text-primary' : 'text-muted',
           ]}
           aria-label="Home"
         >
@@ -27,9 +27,9 @@ const currentPath = Astro.url.pathname
         <a
           href="/projects"
           class:list={[
-            'transition-colors hover:text-link-hover',
+            'transition-colors hover:text-primary-hover',
             currentPath === '/projects' || currentPath.startsWith('/projects/')
-              ? 'font-semibold text-link'
+              ? 'font-semibold text-primary'
               : 'text-muted',
           ]}
         >
@@ -39,9 +39,9 @@ const currentPath = Astro.url.pathname
         <a
           href="/blog"
           class:list={[
-            'transition-colors hover:text-link-hover',
+            'transition-colors hover:text-primary-hover',
             currentPath === '/blog' || currentPath.startsWith('/blog/')
-              ? 'font-semibold text-link'
+              ? 'font-semibold text-primary'
               : 'text-muted',
           ]}
         >

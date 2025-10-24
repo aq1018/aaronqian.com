@@ -85,11 +85,11 @@ describe('DigitalAnalyzerTrace', () => {
     expect(path?.getAttribute('opacity')).toBe('0')
   })
 
-  it('should have text-accent class', async () => {
+  it('should have text-primary class', async () => {
     const root = await renderComponent(defaultProps)
     const path = root.querySelector('path')
 
-    expect(path?.classList.contains('text-accent')).toBe(true)
+    expect(path?.classList.contains('text-primary')).toBe(true)
   })
 
   it('should contain SMIL animate elements', async () => {

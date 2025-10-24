@@ -98,15 +98,15 @@ export function generateSquareWavePath(
 }
 
 /**
- * Get glow color based on theme
+ * Get glow color based on theme (cyan for both light and dark)
  */
 export function getGlowColor(isDark: boolean, opacity = 0.3): string {
-  return isDark ? `rgba(0, 224, 255, ${opacity})` : `rgba(87, 146, 250, ${opacity})`
+  return isDark ? `rgba(0, 224, 255, ${opacity})` : `rgba(0, 180, 216, ${opacity})`
 }
 
 /**
- * Get lightning bolt glow color (more intense)
+ * Get lightning bolt glow color (more intense cyan)
  */
 export function getLightningGlowColor(isDark: boolean): string {
-  return isDark ? 'rgba(0, 224, 255, 1)' : 'rgba(218, 165, 32, 1)'
+  return isDark ? 'rgba(0, 224, 255, 1)' : 'rgba(0, 180, 216, 1)'
 }

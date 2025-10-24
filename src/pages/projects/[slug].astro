@@ -35,7 +35,7 @@ const projectLogs = allLogs
 
 // Status badge styles
 const statusStyles = {
-  active: 'bg-accent/20 text-accent border-accent/40',
+  active: 'bg-primary/20 text-primary border-primary/40',
   planning: 'bg-muted/20 text-muted border-border',
   done: 'bg-fg/20 text-fg/60 border-fg/40',
 }
@@ -81,7 +81,7 @@ const statusLabels = {
           {statusLabels[project.data.status]}
           {
             project.data.live && (
-              <span class="ml-2 rounded bg-accent px-2 py-0.5 text-xs font-bold text-gray-950">
+              <span class="ml-2 rounded bg-primary px-2 py-0.5 text-xs font-bold text-gray-950">
                 LIVE
               </span>
             )
@@ -107,7 +107,7 @@ const statusLabels = {
               href={project.data.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-lg border-2 border-accent bg-transparent px-6 py-2.5 font-mono text-sm font-bold tracking-wider text-accent transition-all duration-300 hover:bg-accent/10"
+              class="inline-flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-6 py-2.5 font-mono text-sm font-bold tracking-wider text-primary transition-all duration-300 hover:bg-primary/10"
             >
               <span>Visit Site</span>
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

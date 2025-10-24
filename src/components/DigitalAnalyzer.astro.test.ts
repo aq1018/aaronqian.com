@@ -121,12 +121,12 @@ describe('DigitalAnalyzer', () => {
     expect(pulsesSvg?.tagName).toBe('svg')
   })
 
-  it('should apply text-accent class to grid lines group', async () => {
+  it('should apply text-primary class to grid lines group', async () => {
     const root = await renderComponent()
     const groups = root.querySelectorAll('g')
 
-    const accentGroup = Array.from(groups).find((g) => g.classList.contains('text-accent'))
-    expect(accentGroup).toBeDefined()
+    const primaryGroup = Array.from(groups).find((g) => g.classList.contains('text-primary'))
+    expect(primaryGroup).toBeDefined()
   })
 
   it('should set pointer-events none on SVGs', async () => {

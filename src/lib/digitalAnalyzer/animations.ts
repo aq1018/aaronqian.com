@@ -341,7 +341,7 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
     pathElement.setAttribute('d', pathData)
     pathElement.setAttribute('stroke', 'currentColor')
     pathElement.setAttribute('stroke-width', String(config.lineStrokeWidth))
-    pathElement.classList.add('text-accent')
+    pathElement.classList.add('text-primary')
     pathElement.setAttribute('fill', 'none')
     pathElement.setAttribute('stroke-linecap', 'square') // Square for digital signals
     pathElement.setAttribute('stroke-linejoin', 'miter') // Sharp corners for digital signals

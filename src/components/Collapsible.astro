@@ -30,6 +30,10 @@ const { id, open = false, class: className } = Astro.props
     transition: max-height 0.3s ease-out;
   }
 
+  .collapsible[data-open='false'] {
+    max-height: 0;
+  }
+
   .collapsible[data-open='true'] {
     max-height: 500px; /* Adjust based on expected content height */
   }
@@ -37,6 +41,10 @@ const { id, open = false, class: className } = Astro.props
   .collapsible-content {
     padding: 0;
     transition: padding 0.3s ease-out;
+  }
+
+  .collapsible[data-open='false'] .collapsible-content {
+    padding: 0;
   }
 
   .collapsible[data-open='true'] .collapsible-content {

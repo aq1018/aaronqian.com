@@ -10,7 +10,7 @@ const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
 
 // Status indicator styles
 const statusStyles = {
-  active: 'text-accent',
+  active: 'text-primary',
   planning: 'text-muted',
   done: 'text-fg/60',
 }
@@ -33,7 +33,7 @@ const statusLabels = {
     <div class="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
       <!-- Eyebrow -->
       <div
-        class="mb-4 font-mono text-xs font-medium uppercase tracking-wide text-accent opacity-85"
+        class="mb-4 font-mono text-xs font-medium uppercase tracking-wide text-primary opacity-85"
       >
         PROJECT ARCHIVE
       </div>
@@ -43,7 +43,7 @@ const statusLabels = {
 
       <!-- Animated accent line -->
       <div
-        class="mx-auto mt-3 h-0.5 w-20 bg-accent transition-all duration-200 hover:w-28 hover:shadow-[0_0_8px_rgba(var(--color-accent-raw),0.6)]"
+        class="mx-auto mt-3 h-0.5 w-20 bg-primary transition-all duration-200 hover:w-28 hover:shadow-[0_0_8px_rgba(var(--color-primary-raw),0.6)]"
       >
       </div>
 
@@ -54,7 +54,7 @@ const statusLabels = {
 
       <!-- Micro-line -->
       <p class="mt-4 font-mono text-xs text-muted/70">
-        <span class="text-accent">⚠️</span> Some projects are still in beta. Including me.
+        <span class="text-primary">⚠️</span> Some projects are still in beta. Including me.
       </p>
     </div>
   </CuttingMat>
@@ -96,7 +96,7 @@ const statusLabels = {
                     >
                       {statusLabels[project.data.status]}
                       {project.data.live && (
-                        <span class="ml-2 rounded bg-accent px-2 py-0.5 text-xs font-bold text-gray-950 animate-pulse-subtle">
+                        <span class="ml-2 rounded bg-primary px-2 py-0.5 text-xs font-bold text-gray-950 animate-pulse-subtle">
                           LIVE
                         </span>
                       )}
@@ -117,7 +117,7 @@ const statusLabels = {
       <div class="space-y-6 md:hidden">
         {
           sortedProjects.map((project) => (
-            <div class="border-l-2 border-accent/30 pl-4 transition-colors hover:border-accent">
+            <div class="border-l-2 border-primary/30 pl-4 transition-colors hover:border-primary">
               <div class="mb-2 flex items-baseline justify-between gap-3">
                 <a
                   href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
@@ -132,7 +132,7 @@ const statusLabels = {
                 >
                   {statusLabels[project.data.status]}
                   {project.data.live && (
-                    <span class="ml-2 rounded bg-accent px-2 py-0.5 text-xs font-bold text-gray-950 animate-pulse-subtle">
+                    <span class="ml-2 rounded bg-primary px-2 py-0.5 text-xs font-bold text-gray-950 animate-pulse-subtle">
                       LIVE
                     </span>
                   )}
@@ -160,11 +160,11 @@ const statusLabels = {
     0%,
     100% {
       opacity: 1;
-      box-shadow: 0 0 0 0 rgba(var(--color-accent-raw, 250 200 88), 0);
+      box-shadow: 0 0 0 0 rgba(var(--color-primary-raw, 0 224 255), 0);
     }
     50% {
       opacity: 0.85;
-      box-shadow: 0 0 8px 2px rgba(var(--color-accent-raw, 250 200 88), 0.4);
+      box-shadow: 0 0 8px 2px rgba(var(--color-primary-raw, 0 224 255), 0.4);
     }
   }
 
