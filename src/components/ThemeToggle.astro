@@ -1,32 +1,20 @@
 ---
 import { Icon } from 'astro-icon/components'
 
-import Menu from './Menu.astro'
-import MenuItem from './MenuItem.astro'
-import ToggleButton from './ToggleButton.astro'
+import PillToggle from './PillToggle.astro'
+
+const buttonClasses =
+  'relative z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors duration-200 text-gray-600 dark:text-gray-400 [&.selected]:text-white dark:[&.selected]:text-white'
 ---
 
-<ToggleButton id="theme-toggle" ariaLabel="Toggle theme menu" target="theme-menu">
-  <!-- Current theme icon (only one visible at a time) -->
-  <Icon id="theme-icon-light" name="heroicons:sun-20-solid" class="hidden h-5 w-5" />
-  <Icon id="theme-icon-dark" name="heroicons:moon-20-solid" class="hidden h-5 w-5" />
-  <Icon id="theme-icon-system" name="heroicons:computer-desktop-20-solid" class="hidden h-5 w-5" />
-  <!-- Chevron -->
-  <Icon name="heroicons:chevron-down-20-solid" class="h-4 w-4" />
-
-  <!-- Dropdown menu -->
-  <Menu slot="menu" id="theme-menu" class="w-36">
-    <MenuItem value="light">
-      <Icon name="heroicons:sun-20-solid" class="h-5 w-5" />
-      <span>Light</span>
-    </MenuItem>
-    <MenuItem value="dark">
-      <Icon name="heroicons:moon-20-solid" class="h-5 w-5" />
-      <span>Dark</span>
-    </MenuItem>
-    <MenuItem value="system">
-      <Icon name="heroicons:computer-desktop-20-solid" class="h-5 w-5" />
-      <span>System</span>
-    </MenuItem>
-  </Menu>
-</ToggleButton>
+<PillToggle id="theme-toggle" ariaLabel="Choose theme">
+  <button slot="option" data-value="light" aria-label="Light theme" class={buttonClasses}>
+    <Icon name="heroicons:sun-20-solid" class="h-4 w-4" />
+  </button>
+  <button slot="option" data-value="dark" aria-label="Dark theme" class={buttonClasses}>
+    <Icon name="heroicons:moon-20-solid" class="h-4 w-4" />
+  </button>
+  <button slot="option" data-value="system" aria-label="System theme" class={buttonClasses}>
+    <Icon name="heroicons:computer-desktop-20-solid" class="h-4 w-4" />
+  </button>
+</PillToggle>

@@ -1,6 +1,6 @@
 /**
  * Centralized theme toggle manager
- * Handles theme switching, icon visibility, and menu selection state
+ * Handles theme switching, button selection state, and slider animation
  */
 
 import { applyTheme, getTheme, setTheme } from './theme'
@@ -12,7 +12,7 @@ let cleanup: CleanupFunction | null = null
 
 /**
  * Initialize theme toggle behavior
- * Manages icon visibility, menu selection, and theme switching
+ * Manages button selection and theme switching
  */
 export function initializeThemeToggle(): CleanupFunction {
   // Clean up previous initialization if it exists
@@ -21,87 +21,88 @@ export function initializeThemeToggle(): CleanupFunction {
   }
 
   // Get DOM elements
-  const lightIcon = document.getElementById('theme-icon-light')
-  const darkIcon = document.getElementById('theme-icon-dark')
-  const systemIcon = document.getElementById('theme-icon-system')
-  const menuItems = document.querySelectorAll<HTMLElement>('#theme-menu .menu-item')
-  const themeMenu = document.getElementById('theme-menu')
-  const themeButton = document.getElementById('theme-toggle')
+  const themeButtons = document.querySelectorAll<HTMLButtonElement>(
+    '#theme-toggle button[data-value]',
+  )
+  const slider = document.querySelector<HTMLElement>('#theme-toggle [data-slider]')
 
   // Return early if required elements don't exist
-  if (
-    lightIcon === null ||
-    darkIcon === null ||
-    systemIcon === null ||
-    menuItems.length === 0 ||
-    themeMenu === null ||
-    themeButton === null
-  ) {
+  if (themeButtons.length === 0) {
     return () => {}
   }
 
-  // Store non-null references for use in closures
-  const icons = { light: lightIcon, dark: darkIcon, system: systemIcon }
-  const menu = themeMenu
-  const button = themeButton
-
   /**
-   * Update which icon is visible based on current theme
+   * Update slider position to match selected button
    */
-  function updateThemeIcon(theme: Theme): void {
-    icons.light.classList.add('hidden')
-    icons.dark.classList.add('hidden')
-    icons.system.classList.add('hidden')
+  function updateSliderPosition(theme: Theme, skipTransition = false): void {
+    if (slider === null) return
 
-    if (theme === 'light') {
-      icons.light.classList.remove('hidden')
-    } else if (theme === 'dark') {
-      icons.dark.classList.remove('hidden')
-    } else {
-      icons.system.classList.remove('hidden')
-    }
+    themeButtons.forEach((button, index) => {
+      const buttonValue = button.getAttribute('data-value')
+      if (buttonValue === theme) {
+        // Calculate position: each button is 32px (w-8)
+        const offset = index * 32
+
+        if (skipTransition) {
+          // Disable transition for instant positioning
+          const currentTransition = slider.style.transition
+          slider.style.transition = 'none'
+          slider.style.transform = `translateX(${offset}px)`
+          // Force reflow to apply the change
+          void slider.offsetHeight
+          slider.style.transition = currentTransition
+        } else {
+          slider.style.transform = `translateX(${offset}px)`
+        }
+      }
+    })
   }
 
   /**
-   * Update which menu item is selected
+   * Update which button is selected
    */
-  function updateMenuSelection(theme: Theme): void {
-    menuItems.forEach((item) => {
-      const itemValue = item.getAttribute('data-value')
-      if (itemValue === theme) {
-        item.classList.add('selected')
+  function updateButtonSelection(theme: Theme, skipTransition = false): void {
+    themeButtons.forEach((button) => {
+      const buttonValue = button.getAttribute('data-value')
+      if (buttonValue === theme) {
+        button.classList.add('selected')
       } else {
-        item.classList.remove('selected')
+        button.classList.remove('selected')
       }
     })
+    updateSliderPosition(theme, skipTransition)
   }
 
   // Initialize theme on page load
   const theme = getTheme()
   applyTheme(theme)
-  updateThemeIcon(theme)
-  updateMenuSelection(theme)
 
-  // Handle menu item clicks
-  const clickHandlers = new Map<HTMLElement, EventListener>()
-  menuItems.forEach((item) => {
+  // Position slider instantly (no transition) and then show it
+  updateButtonSelection(theme, true)
+
+  // Show the slider after positioning it
+  if (slider !== null) {
+    // Use requestAnimationFrame to ensure position is applied first
+    requestAnimationFrame(() => {
+      slider.style.opacity = '1'
+    })
+  }
+
+  // Handle button clicks
+  const clickHandlers = new Map<HTMLButtonElement, EventListener>()
+  themeButtons.forEach((button) => {
     const handler = (e: Event): void => {
       e.stopPropagation()
-      const selectedTheme = item.getAttribute('data-value')
+      const selectedTheme = button.getAttribute('data-value')
 
       if (selectedTheme === 'light' || selectedTheme === 'dark' || selectedTheme === 'system') {
         setTheme(selectedTheme)
         applyTheme(selectedTheme)
-        updateThemeIcon(selectedTheme)
-        updateMenuSelection(selectedTheme)
-
-        // Close menu
-        menu.classList.add('hidden')
-        button.setAttribute('aria-expanded', 'false')
+        updateButtonSelection(selectedTheme)
       }
     }
-    item.addEventListener('click', handler)
-    clickHandlers.set(item, handler)
+    button.addEventListener('click', handler)
+    clickHandlers.set(button, handler)
   })
 
   // Listen for system theme changes
@@ -110,7 +111,6 @@ export function initializeThemeToggle(): CleanupFunction {
     const currentTheme = getTheme()
     if (currentTheme === 'system') {
       applyTheme(currentTheme)
-      updateThemeIcon(currentTheme)
     }
   }
   mediaQuery.addEventListener('change', mediaQueryHandler)
@@ -118,8 +118,8 @@ export function initializeThemeToggle(): CleanupFunction {
   // Return cleanup function
   cleanup = () => {
     // Remove click handlers
-    clickHandlers.forEach((handler, item) => {
-      item.removeEventListener('click', handler)
+    clickHandlers.forEach((handler, button) => {
+      button.removeEventListener('click', handler)
     })
     clickHandlers.clear()
 

@@ -31,245 +31,141 @@ describe('Theme Toggle System', () => {
   })
 
   describe('initializeThemeToggle', () => {
-    it('should initialize theme icons and menu items', () => {
+    it('should initialize theme toggle buttons', () => {
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       const cleanup = initializeThemeToggle()
 
-      const lightIcon = document.getElementById('theme-icon-light')
-      const darkIcon = document.getElementById('theme-icon-dark')
-      const systemIcon = document.getElementById('theme-icon-system')
+      const buttons = document.querySelectorAll('#theme-toggle button[data-value]')
 
       // Should initialize successfully
-      expect(lightIcon).toBeTruthy()
-      expect(darkIcon).toBeTruthy()
-      expect(systemIcon).toBeTruthy()
+      expect(buttons.length).toBe(3)
 
       cleanup()
     })
 
-    it('should show correct icon for light theme', () => {
+    it('should mark correct button as selected for light theme', () => {
       localStorage.setItem('theme', 'light')
 
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       const cleanup = initializeThemeToggle()
 
-      const lightIcon = document.getElementById('theme-icon-light') as HTMLElement
-      const darkIcon = document.getElementById('theme-icon-dark') as HTMLElement
-      const systemIcon = document.getElementById('theme-icon-system') as HTMLElement
+      const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      expect(lightIcon.classList.contains('hidden')).toBe(false)
-      expect(darkIcon.classList.contains('hidden')).toBe(true)
-      expect(systemIcon.classList.contains('hidden')).toBe(true)
+      expect(buttons[0].classList.contains('selected')).toBe(true)
+      expect(buttons[1].classList.contains('selected')).toBe(false)
+      expect(buttons[2].classList.contains('selected')).toBe(false)
 
       cleanup()
     })
 
-    it('should show correct icon for dark theme', () => {
+    it('should mark correct button as selected for dark theme', () => {
       localStorage.setItem('theme', 'dark')
 
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       const cleanup = initializeThemeToggle()
 
-      const lightIcon = document.getElementById('theme-icon-light') as HTMLElement
-      const darkIcon = document.getElementById('theme-icon-dark') as HTMLElement
-      const systemIcon = document.getElementById('theme-icon-system') as HTMLElement
+      const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      expect(lightIcon.classList.contains('hidden')).toBe(true)
-      expect(darkIcon.classList.contains('hidden')).toBe(false)
-      expect(systemIcon.classList.contains('hidden')).toBe(true)
+      expect(buttons[0].classList.contains('selected')).toBe(false)
+      expect(buttons[1].classList.contains('selected')).toBe(true)
+      expect(buttons[2].classList.contains('selected')).toBe(false)
 
       cleanup()
     })
 
-    it('should show correct icon for system theme', () => {
+    it('should mark correct button as selected for system theme', () => {
       localStorage.setItem('theme', 'system')
 
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       const cleanup = initializeThemeToggle()
 
-      const lightIcon = document.getElementById('theme-icon-light') as HTMLElement
-      const darkIcon = document.getElementById('theme-icon-dark') as HTMLElement
-      const systemIcon = document.getElementById('theme-icon-system') as HTMLElement
+      const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      expect(lightIcon.classList.contains('hidden')).toBe(true)
-      expect(darkIcon.classList.contains('hidden')).toBe(true)
-      expect(systemIcon.classList.contains('hidden')).toBe(false)
+      expect(buttons[0].classList.contains('selected')).toBe(false)
+      expect(buttons[1].classList.contains('selected')).toBe(false)
+      expect(buttons[2].classList.contains('selected')).toBe(true)
 
       cleanup()
     })
 
-    it('should mark correct menu item as selected', () => {
-      localStorage.setItem('theme', 'dark')
-
-      document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
-        </div>
-      `
-
-      const cleanup = initializeThemeToggle()
-
-      const menuItems = document.querySelectorAll<HTMLElement>('.menu-item')
-
-      expect(menuItems[0].classList.contains('selected')).toBe(false)
-      expect(menuItems[1].classList.contains('selected')).toBe(true)
-      expect(menuItems[2].classList.contains('selected')).toBe(false)
-
-      cleanup()
-    })
-
-    it('should change theme when menu item is clicked', () => {
+    it('should change theme when button is clicked', () => {
       localStorage.setItem('theme', 'light')
 
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       const cleanup = initializeThemeToggle()
 
-      const darkMenuItem = document.querySelectorAll<HTMLElement>('.menu-item')[1]
-      const darkIcon = document.getElementById('theme-icon-dark') as HTMLElement
+      const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
+      const darkButton = buttons[1]
 
       // Click dark theme
-      darkMenuItem.click()
+      darkButton.click()
 
       // Should update localStorage
       expect(localStorage.getItem('theme')).toBe('dark')
 
-      // Should update icon
-      expect(darkIcon.classList.contains('hidden')).toBe(false)
-
       // Should update selection
-      expect(darkMenuItem.classList.contains('selected')).toBe(true)
-
-      cleanup()
-    })
-
-    it('should close menu after selecting theme', () => {
-      document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu" aria-expanded="false">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
-        </div>
-      `
-
-      const cleanup = initializeThemeToggle()
-
-      const menu = document.getElementById('theme-menu') as HTMLElement
-      const button = document.getElementById('theme-toggle') as HTMLElement
-      const lightMenuItem = document.querySelectorAll<HTMLElement>('.menu-item')[0]
-
-      // Open menu manually
-      menu.classList.remove('hidden')
-      button.setAttribute('aria-expanded', 'true')
-
-      // Click theme
-      lightMenuItem.click()
-
-      // Should close menu
-      expect(menu.classList.contains('hidden')).toBe(true)
-      expect(button.getAttribute('aria-expanded')).toBe('false')
+      expect(darkButton.classList.contains('selected')).toBe(true)
+      expect(buttons[0].classList.contains('selected')).toBe(false)
 
       cleanup()
     })
 
     it('should apply theme to document when changed', () => {
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       const cleanup = initializeThemeToggle()
 
-      const darkMenuItem = document.querySelectorAll<HTMLElement>('.menu-item')[1]
+      const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
       // Click dark theme
-      darkMenuItem.click()
+      buttons[1].click()
 
       // Should add dark class to html element
       expect(document.documentElement.classList.contains('dark')).toBe(true)
 
       // Click light theme
-      const lightMenuItem = document.querySelectorAll<HTMLElement>('.menu-item')[0]
-      lightMenuItem.click()
+      buttons[0].click()
 
       // Should remove dark class
       expect(document.documentElement.classList.contains('dark')).toBe(false)
@@ -314,15 +210,10 @@ describe('Theme Toggle System', () => {
       })
 
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
@@ -367,15 +258,10 @@ describe('Theme Toggle System', () => {
       })
 
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
@@ -398,29 +284,24 @@ describe('Theme Toggle System', () => {
 
     it('should clean up event listeners when cleanup is called', () => {
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       const cleanup = initializeThemeToggle()
 
-      const menuItems = document.querySelectorAll<HTMLElement>('.menu-item')
+      const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      // Spy on one of the menu items to verify cleanup
-      const removeEventListenerSpy = vi.spyOn(menuItems[0], 'removeEventListener')
+      // Spy on one of the buttons to verify cleanup
+      const removeEventListenerSpy = vi.spyOn(buttons[0], 'removeEventListener')
 
       // Call cleanup
       cleanup()
 
-      // Should remove event listeners from menu items
+      // Should remove event listeners from buttons
       expect(removeEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function))
 
       removeEventListenerSpy.mockRestore()
@@ -437,25 +318,6 @@ describe('Theme Toggle System', () => {
 
       cleanup()
     })
-
-    it('should handle missing icons gracefully', () => {
-      document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
-        </div>
-      `
-
-      const cleanup = initializeThemeToggle()
-
-      // Should return early without errors
-      expect(cleanup).toBeDefined()
-
-      cleanup()
-    })
   })
 
   describe('setupThemeToggle', () => {
@@ -463,24 +325,19 @@ describe('Theme Toggle System', () => {
       localStorage.setItem('theme', 'dark')
 
       document.body.innerHTML = `
-        <button id="theme-toggle" data-toggle-button data-toggle-target="theme-menu">
-          <svg id="theme-icon-light" class="hidden"></svg>
-          <svg id="theme-icon-dark" class="hidden"></svg>
-          <svg id="theme-icon-system" class="hidden"></svg>
-        </button>
-        <div id="theme-menu" class="hidden">
-          <div class="menu-item" data-value="light">Light</div>
-          <div class="menu-item" data-value="dark">Dark</div>
-          <div class="menu-item" data-value="system">System</div>
+        <div id="theme-toggle">
+          <button data-value="light">Light</button>
+          <button data-value="dark">Dark</button>
+          <button data-value="system">System</button>
         </div>
       `
 
       setupThemeToggle()
 
-      const darkIcon = document.getElementById('theme-icon-dark') as HTMLElement
+      const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      // Should work immediately
-      expect(darkIcon.classList.contains('hidden')).toBe(false)
+      // Should work immediately - dark button should be selected
+      expect(buttons[1].classList.contains('selected')).toBe(true)
     })
 
     it('should setup View Transitions event listeners', () => {
