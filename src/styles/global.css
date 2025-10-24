@@ -187,6 +187,29 @@ html {
 }
 
 /* -----------------------------
+   Cutting Mat Background
+   Technical grid with measurement markings
+   ----------------------------- */
+
+.cutting-mat {
+  position: relative;
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+/* All gridlines now rendered via SVG in cuttingMat.ts */
+
+/* Cutting mat uses accent color from parent */
+.cutting-mat {
+  color: var(--color-accent);
+}
+
+/* Container for cutting mat overlays (circles, diagonal lines, ruler markings) */
+.cutting-mat-overlays {
+  pointer-events: none;
+}
+
+/* -----------------------------
    Cursor blink animation
    ----------------------------- */
 @keyframes blink {
