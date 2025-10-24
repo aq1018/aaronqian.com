@@ -13,6 +13,7 @@ Failure to follow these rules will result in:
 - ❌ Memory leaks and duplicate event listeners
 - ❌ Inconsistent component architecture
 - ❌ Failed CI/CD pipeline and blocked merges
+- ❌ Untested code that will break in production
 - ❌ Technical debt and maintenance issues
 
 **Before making ANY changes:**
@@ -63,9 +64,14 @@ This is an Astro 5 website using:
 ```txt
 src/components/
 ├── ui/              # Generic, reusable UI components (Button, Link, Badge, etc.)
+│   ├── hooks.ts     # UI hooks orchestrator
+│   └── hooks.css    # UI Tailwind directives orchestrator
 ├── features/        # Feature-specific components (Navigation, ThemeToggle, etc.)
+│   ├── hooks.ts     # Feature hooks orchestrator
+│   └── hooks.css    # Feature Tailwind directives orchestrator
 ├── pages/           # Page-level components (HomeHero, BlogIndex, etc.)
-└── hooks.ts         # Main hooks orchestrator
+├── hooks.ts         # Main hooks orchestrator (imports ui & features)
+└── hooks.css        # Main CSS orchestrator (imports ui & features)
 ```
 
 **Hierarchy**:
@@ -124,12 +130,108 @@ system.
 ### Naming Convention
 
 - **Components**: PascalCase (`Button.astro`, `ThemeToggle.astro`)
-- **CVA files**: `<Component>.cva.ts`
+- **Subcomponents**: `<Parent><Child>.astro` (e.g., `PillToggleButton.astro`,
+  `DigitalAnalyzerGrid.astro`, `CuttingMatAxes.astro`)
+- **CVA files**: `<Component>.cva.ts` (one per component family, contains
+  variants for parent and all subcomponents)
 - **Hook files**: `<Component>.hook.ts`, `<Component>.hook.css`
-- **Test files**: `<Component>.test.ts`
+- **Test files**: `<Component>.test.ts` or `<Component><Subcomponent>.test.ts`
 - **Config files**: `<Component>.config.ts`
 - **Type files**: `<Component>.types.ts`
 - **Util files**: `<Component>.utils.ts`
+
+### Subcomponent Naming Rules
+
+**Pattern**: `<ParentComponent><SubcomponentName>.astro`
+
+**Examples**:
+
+- `PillToggle.astro` → subcomponents: `PillToggleButton.astro`,
+  `PillToggleSlider.astro`
+- `DigitalAnalyzer.astro` → subcomponents: `DigitalAnalyzerGrid.astro`,
+  `DigitalAnalyzerTrace.astro`
+- `CuttingMat.astro` → subcomponents: `CuttingMatAxes.astro`,
+  `CuttingMatGridLines.astro`
+
+**Critical Rule**: All subcomponents must be prefixed with the parent component
+name. This ensures:
+
+- Clear ownership and relationship
+- Easy file sorting and discovery
+- Prevents naming collisions
+
+### CVA File Organization
+
+**ONE `.cva.ts` file per component family** - The parent component's `.cva.ts`
+file contains all CVA variants for both the parent and its subcomponents.
+
+**Example structure**:
+
+```typescript
+// PillToggle.cva.ts - Single CVA file for entire PillToggle family
+import { cva, type VariantProps } from 'class-variance-authority'
+
+// Parent component variants
+export const pillToggleVariants = cva(
+  ['relative', 'inline-flex', 'rounded-full'],
+  {
+    variants: {
+      size: {
+        sm: 'h-8',
+        md: 'h-10',
+        lg: 'h-12',
+      },
+    },
+    defaultVariants: { size: 'md' },
+  },
+)
+
+// Subcomponent variants in the SAME file
+export const pillToggleButtonVariants = cva(
+  ['relative', 'z-10', 'px-4', 'transition-colors'],
+  {
+    variants: {
+      selected: {
+        true: 'text-fg',
+        false: 'text-muted hover:text-fg',
+      },
+    },
+    defaultVariants: { selected: false },
+  },
+)
+
+export type PillToggleVariants = VariantProps<typeof pillToggleVariants>
+export type PillToggleButtonVariants = VariantProps<
+  typeof pillToggleButtonVariants
+>
+```
+
+**Usage in subcomponents**:
+
+```astro
+---
+// PillToggleButton.astro imports from parent's CVA file
+import {
+  pillToggleButtonVariants,
+  type PillToggleButtonVariants,
+} from './PillToggle.cva'
+
+interface Props extends PillToggleButtonVariants {
+  class?: string
+}
+---
+
+<button class={pillToggleButtonVariants({ selected, class: className })}>
+  <slot />
+</button>
+```
+
+**Why?**
+
+- ✅ Single source of truth for component family styling
+- ✅ Co-located variants are easier to maintain
+- ✅ Reduces file proliferation
+- ✅ Clear ownership: variants belong to parent component
 
 ### When to Create Optional Files
 
@@ -309,6 +411,59 @@ export function setupComponent(): void {
 - Always implement cleanup to prevent memory leaks
 - Use a cleanup tracking pattern to prevent duplicate listeners
 
+### `data-*` Attributes Pattern for Hooks
+
+**CRITICAL**: Always use `data-*` attributes as selectors in `.hook.ts` files
+for global event delegation. This prevents coupling to CSS classes and provides
+semantic, stable selectors.
+
+**Pattern**:
+
+```astro
+---
+// Component.astro
+---
+
+<!-- Use data-* attributes for hook targeting -->
+<button data-toggle-button data-toggle-target="menu-id">Toggle</button>
+<div id="menu-id" class="hidden">Menu content</div>
+```
+
+```typescript
+// Component.hook.ts
+export function initializeComponent() {
+  // Select elements using data attributes
+  const buttons = document.querySelectorAll('[data-toggle-button]')
+
+  buttons.forEach((button) => {
+    const targetId = button.getAttribute('data-toggle-target')
+    const target = document.getElementById(targetId)
+    // ... setup logic
+  })
+}
+```
+
+**Real-world examples from codebase**:
+
+- **PillToggle**: `data-toggle-button`, `data-toggle-target`
+- **ThemeToggle**: `data-value`, `data-slider`
+- **DigitalAnalyzer**: `data-digital-analyzer`, `data-lightning-bolt`
+
+**Why `data-*` attributes?**
+
+- ✅ Semantic purpose: Clear intent for JavaScript interaction
+- ✅ Stable selectors: Won't break if CSS classes change
+- ✅ HTML5 standard: Valid, accessible attributes
+- ✅ Namespacing: Prevents conflicts with other attributes
+- ❌ Never use CSS classes for hook selectors (`.class-name`)
+- ❌ Never use IDs for multiple elements (`#id` is unique per page)
+
+**Naming convention**:
+
+- Use kebab-case: `data-toggle-button`, not `data-toggleButton`
+- Be specific: `data-digital-analyzer` not `data-component`
+- Prefix with component name when possible: `data-theme-toggle-button`
+
 ### `.hook.css` Files (Tailwind Directives)
 
 **IMPORTANT**: Only create `.hook.css` files when you need Tailwind v4
@@ -351,7 +506,24 @@ Then import in `ui/hooks.css`:
 @import './OtherComponent.hook.css';
 ```
 
-The `ui/hooks.css` file is imported by `global.css`
+**CSS Orchestration (mirrors hooks.ts structure)**:
+
+```css
+/* src/components/ui/hooks.css */
+@import './Badge.hook.css';
+/* ... other UI component hook CSS */
+
+/* src/components/features/hooks.css */
+@import './ThemeToggle.hook.css';
+/* ... other feature component hook CSS */
+
+/* src/components/hooks.css - Main orchestrator */
+@import './ui/hooks.css';
+@import './features/hooks.css';
+
+/* src/styles/global.css */
+@import '../components/hooks.css';
+```
 
 ### When to Use `<script>` vs `.hook.ts`
 
@@ -662,36 +834,292 @@ If hooks fail, **fix the issues** - don't bypass them!
 
 ## Testing & CI
 
-### Testing
+### Test-Driven Development (TDD)
+
+**MANDATORY**: All components, hooks, utils, helpers, configs, and types
+**MUST** be tested. Writing tests is not optional.
+
+**TDD Workflow**:
+
+1. ✅ **Write tests FIRST** - Define expected behavior before implementation
+2. ✅ **Watch tests fail** - Confirm test is valid (red phase)
+3. ✅ **Implement minimum code** - Make tests pass (green phase)
+4. ✅ **Refactor** - Improve code while keeping tests green
+5. ✅ **Commit** - Only commit when tests pass
+
+**What MUST be tested**:
+
+| File Type             | Test Required | Test File Pattern               | Example                             |
+| --------------------- | ------------- | ------------------------------- | ----------------------------------- |
+| `Component.astro`     | ✅ Yes        | `Component.astro.test.ts`       | `DigitalAnalyzer.astro.test.ts`     |
+| `Component.hook.ts`   | ✅ Yes        | `Component.hook.test.ts`        | `PillToggle.hook.test.ts`           |
+| `Component.utils.ts`  | ✅ Yes        | `Component.utils.test.ts`       | `DigitalAnalyzer.utils.test.ts`     |
+| `Component.config.ts` | ✅ Yes        | `Component.config.test.ts`      | `CuttingMat.config.test.ts`         |
+| `Component.types.ts`  | ✅ Yes        | `Component.types.test.ts`       | `CuttingMat.types.test.ts`          |
+| Subcomponents         | ✅ Yes        | `ComponentSubcomponent.test.ts` | `DigitalAnalyzerGrid.astro.test.ts` |
+
+### Testing Stack
+
+- **Framework**: Vitest
+- **DOM Testing**: `@testing-library/dom` (for hooks and components)
+- **Assertions**: Vitest's `expect` API
+- **Mocking**: Vitest's `vi` utilities
+
+### Test File Structure
+
+**Pattern for hooks**:
+
+```typescript
+// PillToggle.hook.test.ts
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { initializeToggles, setupToggles } from './PillToggle.hook'
+
+describe('PillToggle Hook', () => {
+  beforeEach(() => {
+    // Reset DOM before each test
+    document.body.innerHTML = ''
+  })
+
+  afterEach(() => {
+    // Clean up
+    document.body.innerHTML = ''
+  })
+
+  describe('initializeToggles', () => {
+    it('should initialize toggle buttons and menus', () => {
+      // Arrange: Setup DOM
+      document.body.innerHTML = `
+        <button data-toggle-button>Toggle</button>
+        <div class="hidden">Menu</div>
+      `
+
+      // Act: Initialize
+      const cleanup = initializeToggles()
+
+      // Assert: Verify behavior
+      const button = document.querySelector('[data-toggle-button]')
+      expect(button).toBeTruthy()
+
+      // Cleanup
+      cleanup()
+    })
+
+    it('should toggle menu visibility on click', () => {
+      // Test user interaction
+    })
+
+    it('should cleanup event listeners', () => {
+      // Test memory leak prevention
+    })
+  })
+})
+```
+
+**Pattern for utils**:
+
+```typescript
+// Component.utils.test.ts
+import { describe, expect, it } from 'vitest'
+import { calculateGridSize, generateSquareWavePath } from './Component.utils'
+
+describe('calculateGridSize', () => {
+  it('should calculate grid size based on container width', () => {
+    const result = calculateGridSize(1600, 2)
+    expect(result).toBe(100)
+  })
+
+  it('should handle edge cases', () => {
+    expect(calculateGridSize(0, 1)).toBe(0)
+  })
+})
+
+describe('generateSquareWavePath', () => {
+  it('should generate valid SVG path for binary data', () => {
+    const path = generateSquareWavePath('10101010', 0, 100, 50)
+    expect(path).toContain('M')
+    expect(path).toContain('L')
+  })
+})
+```
+
+**Pattern for config**:
+
+```typescript
+// Component.config.test.ts
+import { describe, expect, it } from 'vitest'
+import { defaultOptions } from './Component.config'
+
+describe('Component Config', () => {
+  describe('defaultOptions', () => {
+    it('should have all required properties', () => {
+      expect(defaultOptions).toHaveProperty('opacity')
+      expect(defaultOptions).toHaveProperty('duration')
+    })
+
+    it('should have valid default values', () => {
+      expect(defaultOptions.opacity).toBeGreaterThan(0)
+      expect(defaultOptions.opacity).toBeLessThanOrEqual(1)
+    })
+
+    it('should allow merging with custom options', () => {
+      const custom = { ...defaultOptions, opacity: 0.5 }
+      expect(custom.opacity).toBe(0.5)
+    })
+  })
+})
+```
+
+**Pattern for types**:
+
+```typescript
+// Component.types.test.ts
+import { describe, expect, it } from 'vitest'
+import type { ComponentOptions } from './Component.types'
+
+describe('Component Types', () => {
+  it('should accept valid ComponentOptions', () => {
+    const validOptions: ComponentOptions = {
+      mode: 'light',
+      enabled: true,
+    }
+    expect(validOptions).toBeDefined()
+  })
+
+  it('should enforce type constraints', () => {
+    // Type-level tests using TypeScript compiler
+    // @ts-expect-error - Invalid mode should fail
+    const invalid: ComponentOptions = { mode: 'invalid' }
+  })
+})
+```
+
+### Test Coverage Requirements
+
+**Minimum coverage targets**:
+
+- **Utils**: 100% - Pure functions must be fully tested
+- **Hooks**: 90%+ - All logic paths and cleanup must be tested
+- **Config**: 100% - Configuration validation is critical
+- **Components**: 80%+ - Major rendering paths and interactions
+
+**What to test**:
+
+✅ **DO test**:
+
+- Business logic and calculations
+- User interactions (clicks, inputs, toggles)
+- State changes
+- Edge cases and error conditions
+- Cleanup and memory management
+- Integration between components
+- Accessibility (ARIA attributes, keyboard navigation)
+
+❌ **DON'T test**:
+
+- Third-party library internals
+- Trivial getters/setters
+- Type definitions (TypeScript handles this)
+
+### Running Tests
 
 ```bash
-# Run tests in watch mode (development)
+# Development: Watch mode with hot reload
 npm run test
 
-# Run tests once (CI)
+# CI: Run once and exit
 npm run test:run
+
+# Coverage report (if configured)
+npm run test:coverage
 ```
 
-### Test Files
+### Test-First Example Workflow
 
-Co-locate tests with components:
+**Scenario**: Adding a new `formatDate` utility
 
-```txt
-src/components/ui/Button.test.ts
-src/components/features/DigitalAnalyzer.test.ts
+```typescript
+// 1. Write test FIRST
+// utils/date.test.ts
+import { describe, expect, it } from 'vitest'
+import { formatDate } from './date'
+
+describe('formatDate', () => {
+  it('should format ISO date to MM/DD/YYYY', () => {
+    expect(formatDate('2024-10-24')).toBe('10/24/2024')
+  })
+})
+
+// 2. Watch test FAIL (function doesn't exist yet)
+// ❌ Test fails: formatDate is not defined
+
+// 3. Implement minimum code to pass
+// utils/date.ts
+export function formatDate(isoDate: string): string {
+  const date = new Date(isoDate)
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+}
+
+// 4. Watch test PASS
+// ✅ Test passes
+
+// 5. Add more test cases (edge cases)
+// utils/date.test.ts
+it('should handle invalid dates', () => {
+  expect(() => formatDate('invalid')).toThrow()
+})
+
+// 6. Refactor implementation to handle edge cases
+// 7. Commit when all tests pass
 ```
+
+### Pre-Commit Test Enforcement
+
+Tests run automatically in the pre-commit hook via Husky:
+
+```bash
+# .husky/pre-commit runs:
+npm run test:run  # Must pass
+npm run lint      # Must pass
+npm run build     # Must pass
+```
+
+**NEVER bypass tests** with `--no-verify`. If tests are failing, fix them.
 
 ### CI Pipeline
 
 The full CI pipeline runs:
 
-1. **Tests** - Vitest (`npm run test:run`)
+1. **Tests** - Vitest (`npm run test:run`) ← **MUST PASS**
 2. **Format check** - Prettier (`npm run format:check`)
 3. **Type check** - Astro check (`npm run type-check`)
 4. **Linting** - ESLint (`npm run lint`)
 5. **Build** - Astro build (`npm run build`)
 
-All must pass before merging.
+All must pass before merging. No exceptions.
+
+### Testing Best Practices
+
+1. **AAA Pattern**: Arrange, Act, Assert
+
+   ```typescript
+   it('should do something', () => {
+     // Arrange: Setup
+     const input = 'test'
+
+     // Act: Execute
+     const result = myFunction(input)
+
+     // Assert: Verify
+     expect(result).toBe('expected')
+   })
+   ```
+
+2. **One assertion per test** (when possible)
+3. **Descriptive test names**: `"should <expected behavior> when <condition>"`
+4. **Test behavior, not implementation**
+5. **Clean up side effects**: Use `beforeEach` and `afterEach`
+6. **Mock external dependencies**: Don't test third-party code
+7. **Test edge cases**: Empty arrays, null, undefined, boundary values
 
 ---
 
@@ -792,17 +1220,65 @@ In Astro components:
 
 ### Creating a New Component Checklist
 
-- Create `Component.astro` in appropriate directory (`ui/`, `features/`,
-  `pages/`)
-- Create `Component.cva.ts` if component has variants
-- Create `Component.hook.ts` if interactive behavior needed
-- Add hook to appropriate `hooks.ts` orchestrator
-- Create `Component.hook.css` only if Tailwind directives needed
-- Import `.hook.css` in `ui/hooks.css` or `features/hooks.css`
-- Support custom `class` prop
-- Include TypeScript types
-- Write tests in `Component.test.ts`
-- Run `npm run autofix && npm run ci` before committing
+**TDD Workflow (Test-First)**:
+
+1. **Write tests FIRST** before any implementation:
+   - Create `Component.test.ts` with expected behavior
+   - Watch tests fail (red phase)
+
+2. **Create component files** in appropriate directory (`ui/`, `features/`,
+   `pages/`):
+   - Create `Component.astro`
+   - Create `Component.cva.ts` if component has variants (will contain variants
+     for all subcomponents too)
+   - Create `Component.hook.ts` if interactive behavior needed
+   - Create `Component.utils.ts` if helper functions needed
+   - Create `Component.config.ts` if configuration needed
+   - Create `Component.types.ts` if custom types needed
+
+3. **Implement to make tests pass** (green phase):
+   - Implement minimum code to pass tests
+   - Add hook to appropriate `hooks.ts` orchestrator
+   - Create `Component.hook.css` only if Tailwind directives needed
+   - Import `.hook.css` in `ui/hooks.css` or `features/hooks.css`
+   - Support custom `class` prop in all components
+
+4. **Create subcomponents** as `Component<Subcomponent>.astro`:
+   - Write tests FIRST for each subcomponent
+   - Subcomponents import variants from parent's `Component.cva.ts` file
+   - Test subcomponent rendering and behavior
+
+5. **Write comprehensive tests**:
+   - `Component.astro.test.ts` - Component rendering and props
+   - `Component.hook.test.ts` - Hook behavior and cleanup
+   - `Component.utils.test.ts` - Utility functions (100% coverage)
+   - `Component.config.test.ts` - Configuration validation (100% coverage)
+   - `Component.types.test.ts` - Type constraints
+   - `Component<Subcomponent>.test.ts` - Subcomponent tests
+
+6. **Refactor and verify**:
+   - Run `npm run test` - Ensure all tests pass
+   - Run `npm run autofix` - Format and lint
+   - Run `npm run ci` - Full CI pipeline must pass
+
+7. **Commit only when**:
+   - ✅ All tests pass
+   - ✅ CI pipeline passes
+   - ✅ Code coverage meets minimums
+
+**Critical reminders:**
+
+- ❌ Do NOT implement before writing tests
+- ❌ Do NOT commit with failing tests
+- ❌ Do NOT create separate `.cva.ts` files for subcomponents
+- ❌ Do NOT bypass `--no-verify` on commits
+- ✅ DO write tests FIRST (TDD)
+- ✅ DO achieve minimum coverage targets (Utils: 100%, Hooks: 90%, Config: 100%)
+- ✅ DO name subcomponents with parent prefix (e.g., `PillToggleButton.astro`)
+- ✅ DO export all variants from parent's `.cva.ts` file
+- ✅ DO use `data-*` attributes for hook selectors (never CSS classes)
+- ✅ DO test edge cases and error conditions
+- ✅ DO test cleanup and memory management in hooks
 
 ### Common Commands
 
