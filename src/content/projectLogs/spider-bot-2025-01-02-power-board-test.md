@@ -1,7 +1,9 @@
 ---
 date: 2025-01-02T14:30:00-08:00
 title: 'Power board v1 tested'
-tags: ['hardware', 'power-systems']
+tags:
+  - hardware
+  - power-systems
 project: 'spider-bot'
 ---
 

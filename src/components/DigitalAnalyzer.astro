@@ -1,14 +1,14 @@
 ---
 /**
- * Power grid background component with dynamic sizing
- * Technical grid with animated electricity pulses
+ * Digital analyzer background component with dynamic sizing
+ * Technical grid with animated signal traces
  * ViewBox and grid are calculated at runtime based on container dimensions
  */
 
-import { defaultOptions } from '@/lib/powerGrid/config'
-import type { PowerGridOptions } from '@/lib/powerGrid/types'
+import { defaultOptions } from '@/lib/digitalAnalyzer/config'
+import type { DigitalAnalyzerOptions } from '@/lib/digitalAnalyzer/types'
 
-interface Props extends Partial<PowerGridOptions> {
+interface Props extends Partial<DigitalAnalyzerOptions> {
   class?: string
 }
 
@@ -18,39 +18,39 @@ const { class: className, ...options } = Astro.props
 const config = { ...defaultOptions, ...options }
 ---
 
-<div class={`power-grid relative ${className ?? ''}`} data-power-grid>
+<div class={`digital-analyzer relative ${className ?? ''}`} data-digital-analyzer>
   <slot />
 
   <!-- Static grid lines layer (viewBox set dynamically by JS) -->
   <svg
-    class="power-grid-static absolute inset-0 h-full w-full"
+    class="digital-analyzer-static absolute inset-0 h-full w-full"
     preserveAspectRatio="none"
     style="pointer-events: none;"
   >
     <!-- Radial gradient mask for fading at edges -->
     <defs>
-      <radialGradient id="power-grid-fade">
+      <radialGradient id="digital-analyzer-fade">
         <stop offset="0%" stop-color="white" stop-opacity="0.8"></stop>
         <stop offset="70%" stop-color="white" stop-opacity="0.4"></stop>
         <stop offset="100%" stop-color="white" stop-opacity="0.1"></stop>
       </radialGradient>
-      <mask id="power-grid-mask">
+      <mask id="digital-analyzer-mask">
         <!-- Rect dimensions set dynamically by JS -->
-        <rect x="0" y="0" fill="url(#power-grid-fade)"></rect>
+        <rect x="0" y="0" fill="url(#digital-analyzer-fade)"></rect>
       </mask>
     </defs>
 
     <!-- Grid lines populated dynamically by JS -->
-    <g stroke="currentColor" class="text-accent" fill="none" mask="url(#power-grid-mask)"></g>
+    <g stroke="currentColor" class="text-accent" fill="none" mask="url(#digital-analyzer-mask)"></g>
   </svg>
 
-  <!-- Animated electricity pulses layer (viewBox and pulses set dynamically by JS) -->
+  <!-- Animated signal traces layer (viewBox and traces set dynamically by JS) -->
   <svg
-    id="power-svg"
-    class="power-grid-pulses absolute inset-0 h-full w-full"
+    id="digital-analyzer-svg"
+    class="digital-analyzer-traces absolute inset-0 h-full w-full"
     preserveAspectRatio="none"
     style="pointer-events: none;"
   >
-    <!-- Pulses added dynamically via animations.ts -->
+    <!-- Traces added dynamically via animations.ts -->
   </svg>
 </div>

@@ -1,7 +1,9 @@
 ---
 date: 2025-01-13T16:00:00-08:00
 title: 'MG90S servos ordered — more torque needed'
-tags: ['hardware', 'mechanical']
+tags:
+  - hardware
+  - mechanical
 project: 'spider-bot'
 ---
 

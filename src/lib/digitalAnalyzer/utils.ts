@@ -1,5 +1,5 @@
 /**
- * Pure utility functions for power grid digital signal analyzer
+ * Pure utility functions for digital analyzer signal visualization
  * No side effects, easy to test
  */
 

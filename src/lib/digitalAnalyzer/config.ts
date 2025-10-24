@@ -1,11 +1,11 @@
 /**
- * Default configuration for power grid digital signal analyzer
+ * Default configuration for digital analyzer signal visualization
  * Dimensions are calculated dynamically at runtime based on container size
  */
 
-import type { PowerGridOptions } from './types'
+import type { DigitalAnalyzerOptions } from './types'
 
-export const defaultOptions: Required<Omit<PowerGridOptions, 'customBinaryData'>> & {
+export const defaultOptions: Required<Omit<DigitalAnalyzerOptions, 'customBinaryData'>> & {
   customBinaryData: undefined
 } = {
   // Grid appearance

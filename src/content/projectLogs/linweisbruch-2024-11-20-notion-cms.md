@@ -1,7 +1,9 @@
 ---
 date: 2024-11-20T11:30:00-08:00
 title: 'Notion CMS integrated'
-tags: ['cms', 'content']
+tags:
+  - cms
+  - content
 project: 'linweisbruch'
 ---
 

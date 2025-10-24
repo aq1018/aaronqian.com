@@ -1,12 +1,12 @@
 ---
 // Hero Section - Tech Lab meets Meditation Space
-// Features: Power grid with pulsing electricity lines, energy dots in corners
+// Features: Digital analyzer with animated signal traces
 import { Icon } from 'astro-icon/components'
-import PowerGrid from './PowerGrid.astro'
+import DigitalAnalyzer from './DigitalAnalyzer.astro'
 import Collapsible from './Collapsible.astro'
 ---
 
-<PowerGrid class="flex min-h-[85vh] items-center justify-center" data-parallax>
+<DigitalAnalyzer class="flex min-h-[85vh] items-center justify-center" data-parallax>
   <div
     id="parallax-bg"
     class="pointer-events-none absolute inset-0 z-[1] transition-transform duration-300 ease-out"
@@ -113,13 +113,13 @@ import Collapsible from './Collapsible.astro'
       </p>
     </div>
   </div>
-</PowerGrid>
+</DigitalAnalyzer>
 
 <script>
-  import { setupPowerGrid } from '../lib/powerGrid/animations'
+  import { setupDigitalAnalyzer } from '../lib/digitalAnalyzer/animations'
   import { setupParallax } from '../lib/parallax'
 
-  setupPowerGrid()
+  setupDigitalAnalyzer()
   setupParallax()
 
   // Detect OS and update keyboard shortcut display

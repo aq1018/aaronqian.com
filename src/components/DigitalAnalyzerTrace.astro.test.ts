@@ -2,9 +2,9 @@ import '@testing-library/jest-dom/vitest'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
 
-import PowerGridElectricityPulse from '@/components/PowerGridElectricityPulse.astro'
+import DigitalAnalyzerTrace from '@/components/DigitalAnalyzerTrace.astro'
 
-describe('PowerGridElectricityPulse', () => {
+describe('DigitalAnalyzerTrace', () => {
   const renderComponent = async (props: {
     width: number
     height: number
@@ -17,7 +17,7 @@ describe('PowerGridElectricityPulse', () => {
     fadeDuration: number
   }) => {
     const container = await AstroContainer.create()
-    const result = await container.renderToString(PowerGridElectricityPulse, { props })
+    const result = await container.renderToString(DigitalAnalyzerTrace, { props })
     const div = document.createElement('div')
     div.innerHTML = result
     return div

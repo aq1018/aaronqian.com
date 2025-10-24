@@ -2,9 +2,9 @@ import '@testing-library/jest-dom/vitest'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
 
-import PowerGridLines from '@/components/PowerGridLines.astro'
+import DigitalAnalyzerGrid from '@/components/DigitalAnalyzerGrid.astro'
 
-describe('PowerGridLines', () => {
+describe('DigitalAnalyzerGrid', () => {
   const renderComponent = async (props: {
     width: number
     height: number
@@ -12,7 +12,7 @@ describe('PowerGridLines', () => {
     opacity: number
   }) => {
     const container = await AstroContainer.create()
-    const result = await container.renderToString(PowerGridLines, { props })
+    const result = await container.renderToString(DigitalAnalyzerGrid, { props })
     const div = document.createElement('div')
     div.innerHTML = result
     return div

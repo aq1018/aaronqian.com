@@ -1,7 +1,9 @@
 ---
 date: 2025-01-05T11:20:00-08:00
 title: 'CH32 migration started'
-tags: ['hardware', 'cost-reduction']
+tags:
+  - hardware
+  - cost-reduction
 project: 'smart-servo'
 ---
 

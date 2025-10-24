@@ -1,11 +1,11 @@
 /**
- * Type definitions for power grid digital signal analyzer
+ * Type definitions for digital analyzer signal visualization
  */
 
 export type DataSource = 'config' | 'random' | 'prop'
 export type WaveformStyle = 'square' // Future: 'rounded'
 
-export interface PowerGridOptions {
+export interface DigitalAnalyzerOptions {
   // Grid appearance
   gridOpacity?: number
 

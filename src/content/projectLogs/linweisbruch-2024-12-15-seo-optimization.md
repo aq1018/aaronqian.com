@@ -1,7 +1,9 @@
 ---
 date: 2024-12-15T16:20:00-08:00
 title: 'SEO optimization deployed'
-tags: ['seo', 'performance']
+tags:
+  - seo
+  - performance
 project: 'linweisbruch'
 ---
 

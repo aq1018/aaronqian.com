@@ -1,11 +1,11 @@
 /**
- * Runtime animations for power grid digital signal analyzer
+ * Runtime animations for digital analyzer signal visualization
  * Orchestrates waveform timing and lightning bolt sync with dynamic sizing
  */
 
 /* eslint-disable max-lines -- Complex animation orchestration requires length for readability */
 import { calculateGridSize, defaultOptions } from './config'
-import type { PowerGridOptions } from './types'
+import type { DigitalAnalyzerOptions } from './types'
 import {
   generateGridLines,
   generateRandomBinary,
@@ -16,7 +16,7 @@ import {
 } from './utils'
 
 type CleanupFunction = () => void
-type PowerGridConfig = Required<Omit<PowerGridOptions, 'customBinaryData'>> & {
+type DigitalAnalyzerConfig = Required<Omit<DigitalAnalyzerOptions, 'customBinaryData'>> & {
   customBinaryData: string | undefined
 }
 
@@ -24,17 +24,17 @@ let cleanup: CleanupFunction | null = null
 let resizeObserver: ResizeObserver | null = null
 
 /**
- * Initialize power grid animations with dynamic sizing
+ * Initialize digital analyzer animations with dynamic sizing
  */
-export function initializePowerGrid(): CleanupFunction {
+export function initializeDigitalAnalyzer(): CleanupFunction {
   // Clean up previous initialization if it exists
   if (cleanup !== null) {
     cleanup()
   }
 
-  const containerEl = document.querySelector('[data-power-grid]')
-  const svgEl = document.getElementById('power-svg')
-  const staticSvgEl = document.querySelector('.power-grid-static')
+  const containerEl = document.querySelector('[data-digital-analyzer]')
+  const svgEl = document.getElementById('digital-analyzer-svg')
+  const staticSvgEl = document.querySelector('.digital-analyzer-static')
   const lightningBolt = document.querySelector<HTMLElement>('[data-lightning-bolt]')
 
   if (svgEl === null || containerEl === null || staticSvgEl === null) {
@@ -50,7 +50,7 @@ export function initializePowerGrid(): CleanupFunction {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- SVGElement requires double cast
   const staticSvg = staticSvgEl as unknown as SVGSVGElement
 
-  const config: PowerGridConfig = defaultOptions
+  const config: DigitalAnalyzerConfig = defaultOptions
   let activeTraces = 0
   const timeoutIds: number[] = []
   let width = 0
@@ -84,7 +84,7 @@ export function initializePowerGrid(): CleanupFunction {
     gridLines = generateGridLines(height, gridSize)
 
     // Update grid mask size
-    const maskRect = staticSvg.querySelector('#power-grid-mask rect')
+    const maskRect = staticSvg.querySelector('#digital-analyzer-mask rect')
     if (maskRect !== null) {
       maskRect.setAttribute('width', String(width))
       maskRect.setAttribute('height', String(height))
@@ -465,10 +465,10 @@ export function initializePowerGrid(): CleanupFunction {
 /**
  * Setup with automatic cleanup for Astro View Transitions
  */
-export function setupPowerGrid(): void {
-  initializePowerGrid()
+export function setupDigitalAnalyzer(): void {
+  initializeDigitalAnalyzer()
 
-  document.addEventListener('astro:page-load', initializePowerGrid)
+  document.addEventListener('astro:page-load', initializeDigitalAnalyzer)
 
   document.addEventListener('astro:before-preparation', () => {
     if (cleanup !== null) {

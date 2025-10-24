@@ -2,28 +2,28 @@ import '@testing-library/jest-dom/vitest'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
 
-import PowerGrid from '@/components/PowerGrid.astro'
+import DigitalAnalyzer from '@/components/DigitalAnalyzer.astro'
 
-describe('PowerGrid', () => {
+describe('DigitalAnalyzer', () => {
   const renderComponent = async (props?: { class?: string }) => {
     const container = await AstroContainer.create()
-    const result = await container.renderToString(PowerGrid, { props: props ?? {} })
+    const result = await container.renderToString(DigitalAnalyzer, { props: props ?? {} })
     const div = document.createElement('div')
     div.innerHTML = result
     return div
   }
 
-  it('should create container div with data-power-grid attribute', async () => {
+  it('should create container div with data-digital-analyzer attribute', async () => {
     const root = await renderComponent()
-    const container = root.querySelector('[data-power-grid]')
+    const container = root.querySelector('[data-digital-analyzer]')
 
     expect(container).toBeDefined()
-    expect(container?.classList.contains('power-grid')).toBe(true)
+    expect(container?.classList.contains('digital-analyzer')).toBe(true)
   })
 
   it('should apply custom class name', async () => {
     const root = await renderComponent({ class: 'custom-class' })
-    const container = root.querySelector('[data-power-grid]')
+    const container = root.querySelector('[data-digital-analyzer]')
 
     expect(container?.classList.contains('custom-class')).toBe(true)
   })
@@ -37,7 +37,7 @@ describe('PowerGrid', () => {
 
   it('should have static grid lines SVG', async () => {
     const root = await renderComponent()
-    const staticSvg = root.querySelector('.power-grid-static')
+    const staticSvg = root.querySelector('.digital-analyzer-static')
 
     expect(staticSvg).toBeDefined()
     expect(staticSvg?.tagName).toBe('svg')
@@ -45,10 +45,10 @@ describe('PowerGrid', () => {
 
   it('should have pulses SVG with id', async () => {
     const root = await renderComponent()
-    const pulsesSvg = root.querySelector('#power-svg')
+    const pulsesSvg = root.querySelector('#digital-analyzer-svg')
 
     expect(pulsesSvg).toBeDefined()
-    expect(pulsesSvg?.classList.contains('power-grid-pulses')).toBe(true)
+    expect(pulsesSvg?.classList.contains('digital-analyzer-traces')).toBe(true)
   })
 
   it('should not set viewBox on SVGs (set dynamically by JS)', async () => {
@@ -73,7 +73,7 @@ describe('PowerGrid', () => {
 
   it('should have radial gradient mask definition', async () => {
     const root = await renderComponent()
-    const gradient = root.querySelector('#power-grid-fade')
+    const gradient = root.querySelector('#digital-analyzer-fade')
 
     expect(gradient).toBeDefined()
     expect(gradient?.tagName).toBe('radialGradient')
@@ -81,7 +81,7 @@ describe('PowerGrid', () => {
 
   it('should have mask definition', async () => {
     const root = await renderComponent()
-    const mask = root.querySelector('#power-grid-mask')
+    const mask = root.querySelector('#digital-analyzer-mask')
 
     expect(mask).toBeDefined()
     expect(mask?.tagName).toBe('mask')
@@ -93,7 +93,7 @@ describe('PowerGrid', () => {
 
     // Find the group with mask attribute
     const maskedGroup = Array.from(groups).find(
-      (g) => g.getAttribute('mask') === 'url(#power-grid-mask)',
+      (g) => g.getAttribute('mask') === 'url(#digital-analyzer-mask)',
     )
 
     expect(maskedGroup).toBeDefined()
@@ -101,7 +101,7 @@ describe('PowerGrid', () => {
 
   it('should have empty grid group (populated dynamically by JS)', async () => {
     const root = await renderComponent()
-    const staticSvg = root.querySelector('.power-grid-static')
+    const staticSvg = root.querySelector('.digital-analyzer-static')
 
     // Grid group should exist but be empty (populated by JavaScript)
     const gridGroup = staticSvg?.querySelector('g')
@@ -113,7 +113,7 @@ describe('PowerGrid', () => {
 
   it('should have empty pulses SVG ready for dynamic content', async () => {
     const root = await renderComponent()
-    const pulsesSvg = root.querySelector('#power-svg')
+    const pulsesSvg = root.querySelector('#digital-analyzer-svg')
 
     // Pulses are added dynamically by JavaScript at runtime
     // Server-rendered HTML should have empty SVG container

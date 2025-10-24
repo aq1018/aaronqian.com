@@ -1,7 +1,9 @@
 ---
 date: 2024-12-28T13:45:00-08:00
 title: 'SureLC API exploration'
-tags: ['api', 'integration']
+tags:
+  - api
+  - integration
 project: 'ai-ams'
 ---
 

@@ -1,7 +1,9 @@
 ---
 date: 2025-01-08T09:15:00-08:00
 title: 'Multi-step form experiment deployed'
-tags: ['ux', 'experiment']
+tags:
+  - ux
+  - experiment
 project: 'insurrly'
 ---
 

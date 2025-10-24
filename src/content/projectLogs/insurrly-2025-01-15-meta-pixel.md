@@ -1,7 +1,9 @@
 ---
 date: 2025-01-15T14:30:00-08:00
 title: 'Meta Pixel integration complete'
-tags: ['analytics', 'conversion-tracking']
+tags:
+  - analytics
+  - conversion-tracking
 project: 'insurrly'
 ---
 

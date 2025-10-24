@@ -1,7 +1,9 @@
 ---
 date: 2025-01-14T19:45:00-08:00
 title: 'PID tuning breakthrough — cascaded loop working'
-tags: ['control-systems', 'milestone']
+tags:
+  - control-systems
+  - milestone
 project: 'smart-servo'
 ---
 

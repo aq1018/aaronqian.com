@@ -1,7 +1,9 @@
 ---
 date: 2025-01-10T10:00:00-08:00
 title: 'Agency interviews complete — workflow mapped'
-tags: ['research', 'user-interviews']
+tags:
+  - research
+  - user-interviews
 project: 'ai-ams'
 ---
 
