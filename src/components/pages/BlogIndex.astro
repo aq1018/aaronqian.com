@@ -53,11 +53,11 @@ const { posts } = Astro.props
               </Text>
               {post.data.description && <Text class="mt-3">{post.data.description}</Text>}
               {post.data.tags && (
-                <div class="mt-3 flex flex-wrap gap-2">
+                <Stack direction="horizontal" gap="tight" class="mt-3 flex-wrap">
                   {post.data.tags.map((tag) => (
                     <span class="rounded bg-highlight px-2 py-1 text-sm text-muted">{tag}</span>
                   ))}
-                </div>
+                </Stack>
               )}
             </article>
           ))

@@ -7,9 +7,9 @@ interface Props extends StackVariants {
   [key: string]: any // Allow any additional HTML attributes
 }
 
-const { gap, class: className = '', ...rest } = Astro.props
+const { direction, gap, class: className = '', ...rest } = Astro.props
 ---
 
-<div class={cn(stackVariants({ gap }), className)} {...rest}>
+<div class={cn(stackVariants({ direction, gap }), className)} {...rest}>
   <slot />
 </div>

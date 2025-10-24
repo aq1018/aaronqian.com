@@ -38,7 +38,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
       </Link>
 
       <!-- Title and status -->
-      <div class="mb-4 flex flex-wrap items-baseline gap-4">
+      <Stack direction="horizontal" gap="small" class="mb-4 flex-wrap items-baseline">
         <Heading level="h1" font="mono" class="text-3xl sm:text-4xl">
           {project.data.title}
         </Heading>
@@ -54,7 +54,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
             )
           }
         </span>
-      </div>
+      </Stack>
 
       <!-- Description -->
       <Text variant="lead" class="mb-4">

@@ -1,13 +1,15 @@
 ---
 import ThemeToggle from './ThemeToggle.astro'
 import Link from '@/components/ui/Link.astro'
+import Container from '@/components/ui/Container.astro'
+import Stack from '@/components/ui/Stack.astro'
 import { Icon } from 'astro-icon/components'
 
 const currentPath = Astro.url.pathname
 ---
 
 <nav class="sticky top-0 z-50 border-b border-border bg-surface/95 backdrop-blur-sm">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <Container size="wide">
     <div class="flex h-16 items-center justify-between">
       <!-- Home Icon (Left) -->
       <div class="flex items-center">
@@ -17,7 +19,7 @@ const currentPath = Astro.url.pathname
       </div>
 
       <!-- Nav Links (Right) -->
-      <div class="flex items-center gap-4 sm:gap-6">
+      <Stack direction="horizontal" gap="small">
         <Link
           href="/projects"
           variant="nav"
@@ -36,7 +38,7 @@ const currentPath = Astro.url.pathname
 
         <!-- Theme Toggle -->
         <ThemeToggle />
-      </div>
+      </Stack>
     </div>
-  </div>
+  </Container>
 </nav>

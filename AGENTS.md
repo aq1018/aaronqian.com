@@ -1551,26 +1551,39 @@ import Container from '@/components/ui/Container.astro'
 
 **Base classes:** `mx-auto px-4 sm:px-6 lg:px-8` (always applied)
 
-#### Stack - Vertical Spacing Between Items
+#### Stack - Directional Spacing (Vertical or Horizontal)
 
-Use for grouping related items with consistent vertical spacing.
+Use for grouping related items with consistent spacing in either direction.
 
 ```astro
 ---
 import Stack from '@/components/ui/Stack.astro'
 ---
 
-<!-- Default medium gap -->
+<!-- Vertical stacking (default) -->
 <Stack>
   <Heading>Title</Heading>
   <Text>Paragraph 1</Text>
   <Text>Paragraph 2</Text>
 </Stack>
 
+<!-- Horizontal stacking (navigation, buttons, tags) -->
+<Stack direction="horizontal" gap="small">
+  <Button>Primary</Button>
+  <Button variant="outline">Secondary</Button>
+</Stack>
+
 <!-- Small gap for tightly related items -->
 <Stack gap="small">
   <label>Email</label>
   <input type="email" />
+</Stack>
+
+<!-- Horizontal tags with tight spacing -->
+<Stack direction="horizontal" gap="tight" class="flex-wrap">
+  <Badge>React</Badge>
+  <Badge>TypeScript</Badge>
+  <Badge>Astro</Badge>
 </Stack>
 
 <!-- Large gap for major sections -->
@@ -1580,17 +1593,29 @@ import Stack from '@/components/ui/Stack.astro'
 </Stack>
 ```
 
-**Variants:**
+**Direction Variants:**
 
-- `tight`: `space-y-2 sm:space-y-3` - Very related items
-- `small`: `space-y-4 sm:space-y-5 lg:space-y-6` - Related items
-- `medium`: `space-y-8 sm:space-y-10 lg:space-y-12` - Content items (default)
-- `large`: `space-y-12 sm:space-y-14 lg:space-y-16` - Major sections
+- `vertical`: `flex-col` - Vertical stacking (default)
+- `horizontal`: `flex-row items-center` - Horizontal stacking
+
+**Gap Variants:**
+
+- `tight`: `gap-2 sm:gap-3` - Very related items (0.5rem → 0.75rem)
+- `small`: `gap-4 sm:gap-5 lg:gap-6` - Related items (1rem → 1.25rem → 1.5rem)
+- `medium`: `gap-8 sm:gap-10 lg:gap-12` - Content items (2rem → 2.5rem → 3rem)
+  (default)
+- `large`: `gap-12 sm:gap-14 lg:gap-16` - Major sections (3rem → 3.5rem → 4rem)
 
 **Props:**
 
-- `gap`: Vertical spacing size
+- `direction`: 'vertical' | 'horizontal' - Stack direction (default: 'vertical')
+- `gap`: 'tight' | 'small' | 'medium' | 'large' - Spacing size (default:
+  'medium')
 - `class`: Custom classes (merged with `cn`)
+
+**Note:** Stack uses CSS `gap` property (not `space-y-*`/`space-x-*`), which
+works for both flex-col and flex-row. This ensures consistent spacing behavior
+across directions.
 
 #### Composing Layout Primitives
 
@@ -1603,6 +1628,8 @@ import Container from '@/components/ui/Container.astro'
 import Stack from '@/components/ui/Stack.astro'
 import Heading from '@/components/ui/Heading.astro'
 import Text from '@/components/ui/Text.astro'
+import Button from '@/components/ui/Button.astro'
+import Badge from '@/components/ui/Badge.astro'
 ---
 
 <Section variant="content" background="surface">
@@ -1611,10 +1638,24 @@ import Text from '@/components/ui/Text.astro'
       <Heading level="h2">Projects</Heading>
       <Text>Featured work and experiments</Text>
 
+      <!-- Horizontal tags -->
+      <Stack direction="horizontal" gap="tight" class="flex-wrap">
+        <Badge>React</Badge>
+        <Badge>TypeScript</Badge>
+        <Badge>Astro</Badge>
+      </Stack>
+
+      <!-- Vertical list of project cards -->
       <Stack gap="small">
         <ProjectCard />
         <ProjectCard />
         <ProjectCard />
+      </Stack>
+
+      <!-- Horizontal CTA buttons -->
+      <Stack direction="horizontal" gap="small">
+        <Button>View All</Button>
+        <Button variant="outline">Learn More</Button>
       </Stack>
     </Stack>
   </Container>
@@ -1623,10 +1664,10 @@ import Text from '@/components/ui/Text.astro'
 
 #### Anti-Patterns (DO NOT DO THIS)
 
-**❌ DON'T use inline spacing classes:**
+**❌ DON'T use inline spacing classes for layout:**
 
 ```astro
-<!-- WRONG: Inline spacing classes -->
+<!-- WRONG: Manual section/container spacing -->
 <section class="py-16 sm:py-20">
   <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
     <div class="space-y-8">
@@ -1635,12 +1676,24 @@ import Text from '@/components/ui/Text.astro'
     </div>
   </div>
 </section>
+
+<!-- WRONG: Inline horizontal spacing -->
+<div class="flex items-center gap-4">
+  <button>Button 1</button>
+  <button>Button 2</button>
+</div>
+
+<!-- WRONG: Inline vertical spacing -->
+<div class="space-y-6">
+  <div>Item 1</div>
+  <div>Item 2</div>
+</div>
 ```
 
 **✅ DO use layout primitives:**
 
 ```astro
-<!-- CORRECT: Layout primitives -->
+<!-- CORRECT: Section + Container + Stack -->
 <Section variant="content">
   <Container>
     <Stack gap="medium">
@@ -1649,18 +1702,72 @@ import Text from '@/components/ui/Text.astro'
     </Stack>
   </Container>
 </Section>
+
+<!-- CORRECT: Horizontal Stack -->
+<Stack direction="horizontal" gap="small">
+  <Button>Button 1</Button>
+  <Button>Button 2</Button>
+</Stack>
+
+<!-- CORRECT: Vertical Stack -->
+<Stack gap="small">
+  <div>Item 1</div>
+  <div>Item 2</div>
+</Stack>
 ```
 
-#### When to Use Utility Classes
+#### When to Use Utility Classes vs. Primitives
 
-**You CAN use utility classes for:**
+**ALWAYS use primitives for:**
 
-- One-off spacing adjustments: `mt-4`, `mb-6`
-- Component-specific gaps: `gap-2` in flex containers
-- Edge cases that don't fit primitive variants
+- ✅ **Section vertical padding** - Use Section primitive (NOT `py-16 sm:py-20`)
+- ✅ **Container width/horizontal padding** - Use Container primitive (NOT
+  `mx-auto max-w-4xl px-4`)
+- ✅ **Vertical stacking** - Use Stack with `direction="vertical"` (NOT
+  `space-y-*`)
+- ✅ **Horizontal layouts** - Use Stack with `direction="horizontal"` (NOT
+  `gap-*` inline)
+- ✅ **Repeating patterns** - If used 2+ times, create/use a primitive
 
-**Rule of thumb:** If you're using the same spacing pattern 2+ times, use a
-primitive component instead.
+**Inline spacing IS acceptable for:**
+
+- ✅ **Component-internal micro-spacing** - Badge/tag padding (`px-2 py-1`),
+  button padding
+- ✅ **Table layouts** - Cell padding (`py-4 px-6`) specific to table design
+- ✅ **Design-specific patterns** - Border accent spacing (`pl-4`, `pl-6`) for
+  visual alignment
+- ✅ **One-off margin adjustments** - Unique positioning that doesn't generalize
+  (`mt-4`, `mb-6`)
+- ✅ **Fine-tuning within primitives** - Adjusting spacing inside a
+  Stack/Section (`mt-2`, `mb-3`)
+
+**Examples of acceptable inline spacing:**
+
+```astro
+<!-- ✅ Component-internal padding -->
+<span class="rounded bg-highlight px-2 py-1 text-sm">Tag</span>
+
+<!-- ✅ Table cell padding -->
+<td class="py-4 px-6 align-top">Content</td>
+
+<!-- ✅ Border accent spacing -->
+<article class="border-l-2 border-border pl-6">
+  <h3>Title</h3>
+</article>
+
+<!-- ✅ One-off adjustment within Stack -->
+<Stack gap="medium">
+  <Heading>Title</Heading>
+  <div class="mt-2 h-0.5 w-16 bg-primary"></div>
+  <!-- Accent line -->
+  <Text class="mt-8">Description</Text>
+  <!-- Extra spacing before description -->
+</Stack>
+```
+
+**Rule of thumb:** If it's layout spacing between sibling elements, use Stack.
+If it's component-internal padding or one-off positioning, inline classes are
+fine.
 
 #### Why This Matters
 

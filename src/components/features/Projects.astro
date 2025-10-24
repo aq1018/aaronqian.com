@@ -5,6 +5,9 @@ import Link from '@/components/ui/Link.astro'
 import Badge from '@/components/ui/Badge.astro'
 import Heading from '@/components/ui/Heading.astro'
 import Text from '@/components/ui/Text.astro'
+import Section from '@/components/ui/Section.astro'
+import Container from '@/components/ui/Container.astro'
+import Stack from '@/components/ui/Stack.astro'
 
 const projects = await getCollection('projects')
 const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
@@ -23,8 +26,8 @@ const statusLabels = {
 }
 ---
 
-<section id="projects" class="relative bg-surface py-16 sm:py-20">
-  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+<Section variant="content" background="surface" class="relative" id="projects">
+  <Container>
     <!-- Section header -->
     <div class="mb-12">
       <Heading level="h2" font="mono" class="sm:text-3xl">Now / Currently Building</Heading>
@@ -91,11 +94,11 @@ const statusLabels = {
     </div>
 
     <!-- Projects list - mobile -->
-    <div class="space-y-6 md:hidden">
+    <Stack gap="small" class="md:hidden">
       {
         sortedProjects.map((project) => (
           <div class="border-l-2 border-primary/30 pl-4 transition-colors hover:border-primary">
-            <div class="mb-2 flex items-baseline justify-between gap-3">
+            <Stack direction="horizontal" gap="tight" class="mb-2 items-baseline justify-between">
               <Link
                 href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
                 variant="content"
@@ -103,7 +106,7 @@ const statusLabels = {
               >
                 {project.data.title}
               </Link>
-            </div>
+            </Stack>
             <div class="mb-3">
               <span
                 class={`font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
@@ -125,7 +128,7 @@ const statusLabels = {
           </div>
         ))
       }
-    </div>
+    </Stack>
 
     <!-- Footer -->
     <div class="mt-8">
@@ -133,5 +136,5 @@ const statusLabels = {
         >Updates monthly. Expect context switches.</Text
       >
     </div>
-  </div>
-</section>
+  </Container>
+</Section>

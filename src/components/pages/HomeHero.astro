@@ -8,6 +8,7 @@ import Collapsible from '@/components/ui/Collapsible.astro'
 import Button from '@/components/ui/Button.astro'
 import Heading from '@/components/ui/Heading.astro'
 import Text from '@/components/ui/Text.astro'
+import Stack from '@/components/ui/Stack.astro'
 ---
 
 <DigitalAnalyzer class="flex min-h-[85vh] items-center justify-center">
@@ -40,7 +41,7 @@ import Text from '@/components/ui/Text.astro'
 
     <!-- Custom interactive content in default slot -->
     <Collapsible id="secret-message" class="mx-auto max-w-3xl">
-      <div class="space-y-2">
+      <Stack gap="tight">
         <div
           id="ascii-display"
           class="text-center font-mono text-lg text-primary"
@@ -57,19 +58,23 @@ import Text from '@/components/ui/Text.astro'
         >
           <span id="binary-buffer"></span>
         </div>
-      </div>
+      </Stack>
     </Collapsible>
 
-    <div class="mt-8 mx-auto max-w-3xl space-y-2">
+    <Stack gap="tight" class="mt-8 mx-auto max-w-3xl">
       <Text variant="lead" align="center" class="sm:text-xl md:text-2xl">
         Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
       </Text>
       <Text variant="lead" align="center" class="sm:text-xl md:text-2xl">
         Safety goggles recommended. Coffee mandatory.
       </Text>
-    </div>
+    </Stack>
 
-    <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+    <Stack
+      direction="horizontal"
+      gap="small"
+      class="mt-12 flex-col items-center justify-center sm:flex-row"
+    >
       <Button
         href="/blog"
         variant="solid"
@@ -104,7 +109,7 @@ import Text from '@/components/ui/Text.astro'
       >
         <span>LaunchPath →</span>
       </Button>
-    </div>
+    </Stack>
 
     <!-- Micro-line in named slot - mt-8 since there are CTAs above -->
     <Text
@@ -115,14 +120,14 @@ import Text from '@/components/ui/Text.astro'
       align="center"
       class="mt-8 text-muted/70"
     >
-      <span class="inline-flex items-center justify-center gap-2">
+      <Stack direction="horizontal" gap="tight" class="inline-flex items-center justify-center">
         <span
           >Decoder controls: Click/Tap ⚡ or press <kbd
             id="keyboard-shortcut"
             class="rounded bg-muted/10 px-1.5 py-0.5 font-semibold text-muted">⌘K</kbd
           > to toggle.</span
         >
-      </span>
+      </Stack>
     </Text>
   </HeroContent>
 </DigitalAnalyzer>

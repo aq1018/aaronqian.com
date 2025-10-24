@@ -1,6 +1,7 @@
 ---
 // ProjectLogEntry - Terminal-style log entry component
 import type { CollectionEntry } from 'astro:content'
+import Stack from '@/components/ui/Stack.astro'
 import Heading from '@/components/ui/Heading.astro'
 import Text from '@/components/ui/Text.astro'
 
@@ -55,7 +56,7 @@ const getTagColor = (tag: string) => {
   <!-- Tags -->
   {
     log.data.tags.length > 0 && (
-      <div class="mb-4 flex flex-wrap gap-2">
+      <Stack direction="horizontal" gap="tight" class="mb-4 flex-wrap">
         {log.data.tags.map((tag) => (
           <span
             class={`rounded border px-2 py-0.5 font-mono text-xs font-medium ${getTagColor(tag)}`}
@@ -63,7 +64,7 @@ const getTagColor = (tag: string) => {
             {tag}
           </span>
         ))}
-      </div>
+      </Stack>
     )
   }
 

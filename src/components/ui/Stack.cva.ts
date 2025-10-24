@@ -1,15 +1,20 @@
 import { type VariantProps, cva } from 'class-variance-authority'
 
-export const stackVariants = cva(['flex', 'flex-col'], {
+export const stackVariants = cva(['flex'], {
   variants: {
+    direction: {
+      vertical: 'flex-col',
+      horizontal: 'flex-row items-center',
+    },
     gap: {
-      tight: 'space-y-2 sm:space-y-3',
-      small: 'space-y-4 sm:space-y-5 lg:space-y-6',
-      medium: 'space-y-8 sm:space-y-10 lg:space-y-12',
-      large: 'space-y-12 sm:space-y-14 lg:space-y-16',
+      tight: 'gap-2 sm:gap-3',
+      small: 'gap-4 sm:gap-5 lg:gap-6',
+      medium: 'gap-8 sm:gap-10 lg:gap-12',
+      large: 'gap-12 sm:gap-14 lg:gap-16',
     },
   },
   defaultVariants: {
+    direction: 'vertical',
     gap: 'medium',
   },
 })

@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import Section from '@/components/ui/Section.astro'
 import Container from '@/components/ui/Container.astro'
+import Stack from '@/components/ui/Stack.astro'
 import Heading from '@/components/ui/Heading.astro'
 import Text from '@/components/ui/Text.astro'
 
@@ -50,11 +51,11 @@ const { Content } = await post.render()
         </Text>
         {
           post.data.tags && (
-            <div class="mt-4 flex flex-wrap gap-2">
+            <Stack direction="horizontal" gap="tight" class="mt-4 flex-wrap">
               {post.data.tags.map((tag) => (
                 <span class="rounded bg-highlight px-2 py-1 text-sm text-muted">{tag}</span>
               ))}
-            </div>
+            </Stack>
           )
         }
       </div>
