@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions'
+import Navigation from '@/components/features/Navigation.astro'
 
 interface Props {
   title?: string
@@ -41,13 +42,7 @@ const {
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-    <!-- Fonts & Styles -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Styles -->
     <link rel="stylesheet" href="/src/styles/global.css" />
 
     <!-- Client Router for SPA-like navigation -->
@@ -55,7 +50,7 @@ const {
 
     <!-- Dark mode script - runs before page render to prevent flash -->
     <script is:inline>
-      function updateTheme() {
+      ;(function () {
         const theme = localStorage.getItem('theme') || 'system'
         const isDark =
           theme === 'dark' ||
@@ -66,31 +61,18 @@ const {
         } else {
           document.documentElement.classList.remove('dark')
         }
-      }
-
-      updateTheme()
-
-      // Listen for system theme changes when in system mode
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (localStorage.getItem('theme') === 'system' || !localStorage.getItem('theme')) {
-          updateTheme()
-        }
-      })
-
-      // Re-apply theme after View Transitions navigation
-      document.addEventListener('astro:after-swap', updateTheme)
+      })()
     </script>
   </head>
   <body class="flex min-h-full flex-col bg-bg font-sans text-fg">
+    <Navigation />
     <slot />
 
-    <!-- Initialize toggle systems after DOM is ready -->
+    <!-- Initialize component hooks after DOM is ready -->
     <script>
-      import { setupToggles } from '../lib/toggles'
-      import { setupThemeToggle } from '../lib/themeToggle'
+      import { initComponentHooks } from '@/components/hooks'
 
-      setupToggles()
-      setupThemeToggle()
+      initComponentHooks()
     </script>
   </body>
 </html>

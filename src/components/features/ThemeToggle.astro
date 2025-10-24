@@ -1,0 +1,20 @@
+---
+import { Icon } from 'astro-icon/components'
+
+import PillToggle from '@/components/ui/PillToggle.astro'
+
+const buttonClasses =
+  'relative z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors duration-200 text-gray-600 dark:text-gray-400 [&.selected]:text-white dark:[&.selected]:text-white'
+---
+
+<PillToggle id="theme-toggle" ariaLabel="Choose theme">
+  <button slot="option" data-value="light" aria-label="Light theme" class={buttonClasses}>
+    <Icon name="heroicons:sun-20-solid" class="h-4 w-4" />
+  </button>
+  <button slot="option" data-value="dark" aria-label="Dark theme" class={buttonClasses}>
+    <Icon name="heroicons:moon-20-solid" class="h-4 w-4" />
+  </button>
+  <button slot="option" data-value="system" aria-label="System theme" class={buttonClasses}>
+    <Icon name="heroicons:computer-desktop-20-solid" class="h-4 w-4" />
+  </button>
+</PillToggle>

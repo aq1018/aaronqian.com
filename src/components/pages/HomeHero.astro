@@ -1,0 +1,172 @@
+---
+// Hero Section - Tech Lab meets Meditation Space
+// Features: Digital analyzer with animated signal traces
+import { Icon } from 'astro-icon/components'
+import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
+import Collapsible from '@/components/ui/Collapsible.astro'
+---
+
+<DigitalAnalyzer class="flex min-h-[85vh] items-center justify-center">
+  <div class="relative z-10 mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8">
+    <div
+      class="mb-8 font-mono text-xs font-medium uppercase tracking-wide text-primary opacity-85 sm:text-sm"
+    >
+      Aaron Qian
+    </div>
+
+    <h1
+      class="whitespace-nowrap font-mono text-3xl font-semibold leading-tight text-fg sm:text-4xl md:text-5xl lg:text-6xl"
+    >
+      Input coffee <button
+        id="lightning-bolt"
+        class="inline-block cursor-pointer text-primary opacity-70 transition-all duration-200 ease-out hover:opacity-100 motion-reduce:transition-none motion-reduce:transform-none"
+        aria-label="Toggle secret message"
+        aria-controls="secret-message"
+        aria-expanded="false"
+        data-lightning-bolt
+        type="button"
+      >
+        <Icon
+          name="heroicons:bolt-solid"
+          class="inline-block h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14"
+        />
+      </button> Output code
+    </h1>
+
+    <Collapsible id="secret-message" class="mx-auto max-w-3xl">
+      <div class="space-y-2">
+        <div
+          id="ascii-display"
+          class="text-center font-mono text-lg text-primary"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span id="ascii-text"></span><span id="ascii-cursor" class="animate-cursor-blink">▊</span>
+        </div>
+        <div
+          id="binary-display"
+          class="text-center font-mono text-sm text-muted/70"
+          aria-live="polite"
+          aria-atomic="false"
+        >
+          <span id="binary-buffer"></span>
+        </div>
+      </div>
+    </Collapsible>
+
+    <div class="mt-8 mx-auto max-w-3xl space-y-2">
+      <p class="font-sans text-lg leading-relaxed text-muted sm:text-xl md:text-2xl">
+        Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
+      </p>
+      <p class="font-sans text-lg leading-relaxed text-muted sm:text-xl md:text-2xl">
+        Safety goggles recommended. Coffee mandatory.
+      </p>
+    </div>
+
+    <div class="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <a
+        href="/blog"
+        class="group inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-gray-950 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
+      >
+        <span>Read My Notes</span>
+        <svg
+          class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+
+      <a
+        href="https://launchpath.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open LaunchPath (new tab)"
+        class="group inline-flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-8 py-3.5 text-mono-upper text-sm font-bold tracking-wider text-primary transition-all duration-300 hover:scale-105 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg"
+      >
+        <span>LaunchPath →</span>
+      </a>
+    </div>
+
+    <div class="mt-8 text-center font-mono text-xs text-muted/70">
+      <p class="inline-flex items-center justify-center gap-2">
+        <span
+          >Decoder controls: Click/Tap ⚡ or press <kbd
+            id="keyboard-shortcut"
+            class="rounded bg-muted/10 px-1.5 py-0.5 font-semibold text-muted">⌘K</kbd
+          > to toggle.</span
+        >
+      </p>
+    </div>
+  </div>
+</DigitalAnalyzer>
+
+<script>
+  // Detect OS and update keyboard shortcut display
+  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+  const shortcutDisplay = document.getElementById('keyboard-shortcut')
+  if (shortcutDisplay) {
+    shortcutDisplay.textContent = isMac ? '⌘K' : 'Ctrl+K'
+  }
+
+  // Toggle collapsible secret message
+  const lightningBolt = document.getElementById('lightning-bolt')
+  const collapsible = document.getElementById('secret-message')
+
+  function toggleSecretMessage() {
+    if (!collapsible || !lightningBolt) return
+
+    const isOpen = collapsible.getAttribute('data-open') === 'true'
+    const newState = !isOpen
+
+    collapsible.setAttribute('data-open', String(newState))
+    collapsible.setAttribute('aria-expanded', String(newState))
+    lightningBolt.setAttribute('aria-expanded', String(newState))
+  }
+
+  // Click handler for lightning bolt
+  if (lightningBolt) {
+    lightningBolt.addEventListener('click', toggleSecretMessage)
+  }
+
+  // Keyboard shortcut handler (Cmd/Ctrl+K)
+  document.addEventListener('keydown', (e) => {
+    const modifierKey = isMac ? e.metaKey : e.ctrlKey
+    if (modifierKey && e.key === 'k') {
+      e.preventDefault()
+      toggleSecretMessage()
+    }
+  })
+</script>
+
+<style>
+  /* Cursor blink for ASCII display at 0.8 Hz (1.25s period) */
+  @keyframes cursorBlink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-cursor-blink {
+    animation: cursorBlink 1.25s ease-in-out infinite;
+  }
+
+  /* Mono uppercase utility for CTAs */
+  .text-mono-upper {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  post: CollectionEntry<'blog'>
+}
+
+const { post } = Astro.props
+const { Content } = await post.render()
+---
+
+<main class="flex-1">
+  <article class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+    <a
+      href="/blog"
+      class="inline-flex items-center text-link transition-colors hover:text-link-hover"
+    >
+      ← Back to blog
+    </a>
+
+    <h1 class="mt-6 text-4xl font-bold leading-tight text-fg sm:text-5xl">
+      {post.data.title}
+    </h1>
+
+    {
+      post.data.hero && (
+        <Image
+          src={post.data.hero}
+          alt={post.data.title}
+          class="mt-8 h-auto w-full max-h-96 rounded-lg object-cover"
+        />
+      )
+    }
+
+    <div class="mb-8 border-b border-border pb-4">
+      <p class="mt-4 text-muted">
+        {
+          post.data.date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })
+        }
+      </p>
+      {
+        post.data.tags && (
+          <div class="mt-4 flex flex-wrap gap-2">
+            {post.data.tags.map((tag) => (
+              <span class="rounded bg-highlight px-2 py-1 text-sm text-muted">{tag}</span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+      <Content />
+    </div>
+  </article>
+</main>
