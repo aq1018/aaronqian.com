@@ -32,19 +32,160 @@ Failure to follow these rules will result in:
 3. ❓ **If still uncertain, STOP and ASK** - Do NOT guess or make up patterns.
    Ask the user for clarification.
 
+## AI Context Preservation
+
+**CRITICAL**: Manage your context window effectively to maintain code quality
+and avoid errors.
+
+### When to Delegate to Sub-Agents
+
+**Delegate large/complex tasks to sub-agents** using the Task tool to preserve
+your context for coordination and decision-making.
+
+**Delegate when:**
+
+- ✅ **Large refactoring** - Renaming files, moving components, restructuring
+  directories
+- ✅ **Multiple file operations** - Creating 5+ related files (component family
+  with tests)
+- ✅ **Exploratory tasks** - Searching codebase for patterns, understanding
+  architecture
+- ✅ **Research tasks** - Reading multiple files to understand implementation
+- ✅ **Repetitive operations** - Applying same pattern across many files
+- ✅ **Complex implementations** - Multi-step feature requiring coordination
+  across files
+- ✅ **Migration tasks** - Updating patterns across entire codebase
+
+**Example - Delegate this**:
+
+```typescript
+User: 'Create a new Dropdown component with all files following our patterns'
+
+// This requires:
+// - Dropdown.astro
+// - Dropdown.cva.ts
+// - Dropdown.hook.ts
+// - Dropdown.hook.test.ts
+// - DropdownItem.astro (subcomponent)
+// - DropdownMenu.astro (subcomponent)
+// - Integration into hooks.ts orchestrator
+// ✅ DELEGATE to sub-agent - Complex, 7+ files
+```
+
+### When to Work in Same Context
+
+**Handle simple tasks directly** without delegation to maintain efficiency.
+
+**Work in same context when:**
+
+- ✅ **Single file edits** - Fixing a bug, updating a function
+- ✅ **Simple refactoring** - Renaming a variable, extracting a function
+- ✅ **Documentation updates** - Updating comments, README, this file
+- ✅ **Configuration changes** - Updating package.json, tsconfig.json
+- ✅ **Quick fixes** - Correcting typos, fixing linting errors
+- ✅ **Reading 1-3 files** - Understanding a specific component or pattern
+- ✅ **Git operations** - Committing, creating PRs (after implementation is
+  done)
+
+**Example - Do directly**:
+
+```typescript
+User: 'Fix the typo in Button.astro line 42'
+
+// This requires:
+// - Read Button.astro
+// - Edit one line
+// - Run autofix
+// ✅ DO DIRECTLY - Simple, 1 file
+```
+
+### Decision Matrix
+
+| Task Type                           | Files Affected | Complexity | Action         |
+| ----------------------------------- | -------------- | ---------- | -------------- |
+| Create new component family         | 7+             | High       | 🤖 Delegate    |
+| Refactor across multiple components | 5+             | High       | 🤖 Delegate    |
+| Explore codebase architecture       | Many (read)    | Medium     | 🤖 Delegate    |
+| Migrate pattern across codebase     | 10+            | High       | 🤖 Delegate    |
+| Add feature to existing component   | 2-3            | Medium     | ✅ Do directly |
+| Fix bug in single file              | 1              | Low        | ✅ Do directly |
+| Update documentation                | 1-2            | Low        | ✅ Do directly |
+| Create simple utility function      | 2 (+ test)     | Low        | ✅ Do directly |
+| Commit and create PR                | N/A            | Low        | ✅ Do directly |
+
+### Why Context Preservation Matters
+
+**Running out of context leads to**:
+
+- ❌ Incomplete implementations
+- ❌ Forgetting requirements mid-task
+- ❌ Inconsistent patterns
+- ❌ Missed edge cases
+- ❌ Poor coordination between related changes
+
+**Preserving context enables**:
+
+- ✅ Better oversight and coordination
+- ✅ Consistent decision-making
+- ✅ Catching errors across multiple changes
+- ✅ Maintaining architectural vision
+- ✅ Effective communication with user
+
+### Delegation Best Practices
+
+When delegating to sub-agents:
+
+1. **Be specific** - Provide clear, detailed instructions
+2. **Reference patterns** - Point to examples: "Follow the pattern in
+   PillToggle.astro"
+3. **Include requirements** - List all files needed, patterns to follow
+4. **Request verification** - Ask sub-agent to run tests and CI
+5. **Review results** - Check sub-agent's work before committing
+
+**Good delegation example**:
+
+```txt
+Task: Create complete Dropdown component
+
+Requirements:
+- Follow PillToggle.astro pattern for structure
+- Create Dropdown.astro (parent), DropdownItem.astro, DropdownMenu.astro
+- Create Dropdown.cva.ts with variants for all 3 components
+- Create Dropdown.hook.ts with keyboard navigation (Arrow Up/Down, Enter, Escape)
+- Add data-dropdown-* attributes for hook selectors
+- Write comprehensive tests: Dropdown.hook.test.ts
+- Add to ui/hooks.ts orchestrator
+- Follow TDD: write tests FIRST
+- Run npm run ci before finishing
+```
+
+### Red Flags (Context Issues)
+
+**Stop and delegate if you notice**:
+
+- 🚨 You're about to read more than 5 files
+- 🚨 You're creating more than 4 new files
+- 🚨 You're losing track of what you've already done
+- 🚨 You're repeating the same operation across many files
+- 🚨 The task requires understanding a large portion of the codebase
+- 🚨 You're unsure if all requirements will fit in remaining context
+
+**Rule of thumb**: If you're thinking "this is getting complex", delegate it.
+
 ---
 
 ## Table of Contents
 
-1. [Architecture Overview](#architecture-overview)
-2. [Component Structure](#component-structure)
-3. [File Naming & Co-location](#file-naming--co-location)
-4. [Hook Pattern](#hook-pattern)
-5. [CVA Pattern](#cva-pattern)
-6. [Styling Philosophy](#styling-philosophy)
-7. [Git Commit Workflow](#git-commit-workflow)
-8. [Testing & CI](#testing--ci)
-9. [Component Best Practices](#component-best-practices)
+1. [AI Context Preservation](#ai-context-preservation)
+2. [Architecture Overview](#architecture-overview)
+3. [Component Structure](#component-structure)
+4. [File Naming & Co-location](#file-naming--co-location)
+5. [Hook Pattern](#hook-pattern)
+6. [CVA Pattern](#cva-pattern)
+7. [Styling Philosophy](#styling-philosophy)
+8. [Git Commit Workflow](#git-commit-workflow)
+9. [Testing & CI](#testing--ci)
+10. [Component Best Practices](#component-best-practices)
 
 ---
 
