@@ -1,0 +1,56 @@
+---
+/**
+ * Power grid background component with dynamic sizing
+ * Technical grid with animated electricity pulses
+ * ViewBox and grid are calculated at runtime based on container dimensions
+ */
+
+import { defaultOptions } from '@/lib/powerGrid/config'
+import type { PowerGridOptions } from '@/lib/powerGrid/types'
+
+interface Props extends Partial<PowerGridOptions> {
+  class?: string
+}
+
+const { class: className, ...options } = Astro.props
+
+// Merge with defaults (runtime dimensions will be set by JavaScript)
+const config = { ...defaultOptions, ...options }
+---
+
+<div class={`power-grid relative ${className ?? ''}`} data-power-grid>
+  <slot />
+
+  <!-- Static grid lines layer (viewBox set dynamically by JS) -->
+  <svg
+    class="power-grid-static absolute inset-0 h-full w-full"
+    preserveAspectRatio="none"
+    style="pointer-events: none;"
+  >
+    <!-- Radial gradient mask for fading at edges -->
+    <defs>
+      <radialGradient id="power-grid-fade">
+        <stop offset="0%" stop-color="white" stop-opacity="0.8"></stop>
+        <stop offset="70%" stop-color="white" stop-opacity="0.4"></stop>
+        <stop offset="100%" stop-color="white" stop-opacity="0.1"></stop>
+      </radialGradient>
+      <mask id="power-grid-mask">
+        <!-- Rect dimensions set dynamically by JS -->
+        <rect x="0" y="0" fill="url(#power-grid-fade)"></rect>
+      </mask>
+    </defs>
+
+    <!-- Grid lines populated dynamically by JS -->
+    <g stroke="currentColor" class="text-accent" fill="none" mask="url(#power-grid-mask)"></g>
+  </svg>
+
+  <!-- Animated electricity pulses layer (viewBox and pulses set dynamically by JS) -->
+  <svg
+    id="power-svg"
+    class="power-grid-pulses absolute inset-0 h-full w-full"
+    preserveAspectRatio="none"
+    style="pointer-events: none;"
+  >
+    <!-- Pulses added dynamically via animations.ts -->
+  </svg>
+</div>

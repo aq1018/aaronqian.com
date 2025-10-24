@@ -1,0 +1,56 @@
+---
+/**
+ * Creates horizontal and vertical grid lines for power grid background
+ */
+
+interface Props {
+  width: number
+  height: number
+  gridSize: number
+  opacity: number
+}
+
+const { width, height, gridSize, opacity } = Astro.props
+
+// Generate horizontal grid lines
+const horizontalLines: number[] = []
+for (let y = gridSize; y < height; y += gridSize) {
+  horizontalLines.push(y)
+}
+
+// Generate vertical grid lines
+const verticalLines: number[] = []
+for (let x = gridSize; x < width; x += gridSize) {
+  verticalLines.push(x)
+}
+---
+
+{
+  /* Horizontal lines */
+  horizontalLines.map((y) => (
+    <line
+      x1="0"
+      y1={y}
+      x2={width}
+      y2={y}
+      stroke="currentColor"
+      opacity={opacity}
+      stroke-width="1"
+    />
+  ))
+}
+
+{
+  /* Vertical lines */
+  verticalLines.map((x) => (
+    <line
+      x1={x}
+      y1="0"
+      x2={x}
+      y2={height}
+      stroke="currentColor"
+      opacity={opacity}
+      stroke-width="1"
+    />
+  ))
+}

@@ -1,0 +1,45 @@
+---
+/**
+ * Collapsible component - expandable/collapsible content section
+ */
+interface Props {
+  id: string
+  open?: boolean
+  class?: string
+}
+
+const { id, open = false, class: className } = Astro.props
+---
+
+<div
+  {id}
+  class={`collapsible ${className ?? ''}`}
+  data-collapsible
+  data-open={open}
+  aria-expanded={open}
+>
+  <div class="collapsible-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .collapsible {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .collapsible[data-open='true'] {
+    max-height: 500px; /* Adjust based on expected content height */
+  }
+
+  .collapsible-content {
+    padding: 0;
+    transition: padding 0.3s ease-out;
+  }
+
+  .collapsible[data-open='true'] .collapsible-content {
+    padding: 1rem 0;
+  }
+</style>

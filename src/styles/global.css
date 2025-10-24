@@ -72,6 +72,11 @@
   /* Accent alias for convenience (bg-accent / text-accent) */
   --color-accent: var(--color-accent-500);
   --color-accent-hover: var(--color-accent-400);
+
+  /* Tooltip colors */
+  --color-tooltip-bg: var(--color-gray-900);
+  --color-tooltip-fg: var(--color-accent-500);
+  --color-tooltip-border: var(--color-gray-700);
 }
 
 /* -----------------------------
@@ -91,6 +96,11 @@
     /* Swap accent family in dark for better pop (cyan) */
     --color-accent: oklch(0.86 0.17 210); /* ~#00E0FF-ish in OKLCH */
     --color-accent-hover: oklch(0.88 0.15 210);
+
+    /* Tooltip colors in dark mode */
+    --color-tooltip-bg: var(--color-gray-800);
+    --color-tooltip-fg: var(--color-accent);
+    --color-tooltip-border: var(--color-gray-600);
   }
 }
 
@@ -121,7 +131,7 @@ html {
 
 /* -----------------------------
    Power Grid Background
-   Clean grid with pulsing electricity lines
+   SVG-based grid with pulsing electricity lines
    ----------------------------- */
 
 /* Main container - responsive to theme */
@@ -129,61 +139,6 @@ html {
   position: relative;
   background-color: var(--color-surface);
   overflow: hidden;
-}
-
-.power-grid::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  /* Light mode: harvest gold grid */
-  background-image:
-    linear-gradient(to right, oklch(0.74 0.17 85 / 0.2) 1px, transparent 1px),
-    linear-gradient(to bottom, oklch(0.74 0.17 85 / 0.2) 1px, transparent 1px);
-  background-size: 80px 80px;
-  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
-  -webkit-mask-image: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  pointer-events: none;
-}
-
-.dark .power-grid::before {
-  /* Dark mode: cyan grid */
-  background-image:
-    linear-gradient(to right, oklch(0.86 0.17 210 / 0.2) 1px, transparent 1px),
-    linear-gradient(to bottom, oklch(0.86 0.17 210 / 0.2) 1px, transparent 1px);
-}
-
-/* SVG layer for pulsing lines */
-.power-lines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.power-lines svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* Pulse animation for electricity flowing along path */
-@keyframes electricFlow {
-  0% {
-    stroke-dashoffset: 0;
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.5;
-  }
-  90% {
-    opacity: 0.5;
-  }
-  100% {
-    stroke-dashoffset: -200%;
-    opacity: 0;
-  }
 }
 
 /* -----------------------------
@@ -224,6 +179,21 @@ html {
 }
 .animate-blink {
   animation: blink 1.2s ease-in-out infinite;
+}
+
+/* Cursor blink for ASCII display at 0.8 Hz (1.25s period) */
+@keyframes cursorBlink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+.animate-cursor-blink {
+  animation: cursorBlink 1.25s ease-in-out infinite;
 }
 
 /* -----------------------------

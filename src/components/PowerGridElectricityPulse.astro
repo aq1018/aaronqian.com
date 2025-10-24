@@ -1,0 +1,127 @@
+---
+/**
+ * Creates an animated electricity pulse that travels across grid lines
+ * Uses SMIL animations for declarative path animation
+ */
+
+interface Props {
+  width: number
+  height: number
+  gridSize: number
+  pulseIndex: number
+  opacity: number
+  strokeWidth: number
+  drawDuration: number
+  fadeDelay: number
+  fadeDuration: number
+}
+
+const {
+  width,
+  height,
+  gridSize,
+  pulseIndex,
+  opacity,
+  strokeWidth,
+  drawDuration,
+  fadeDelay,
+  fadeDuration,
+} = Astro.props
+
+// Generate grid line positions
+const gridLines: number[] = []
+for (let y = gridSize; y < height - gridSize; y += gridSize) {
+  gridLines.push(y)
+}
+
+// Select random starting line based on pulse index (for variation)
+const randomSeed = (pulseIndex * 2654435761) % 2147483647
+const lineIndex = Math.floor((randomSeed / 2147483647) * gridLines.length)
+let currentY = gridLines[lineIndex] ?? gridSize
+let currentX = 0
+
+// Generate path segments (following grid, occasionally jumping to adjacent lines)
+const pathSegments: string[] = []
+pathSegments.push(`M 0 ${currentY}`)
+
+while (currentX < width) {
+  const horizontalStep = gridSize + ((randomSeed + currentX) % (gridSize * 2))
+  currentX += horizontalStep
+
+  if (currentX >= width) {
+    pathSegments.push(`L ${width} ${currentY}`)
+    break
+  }
+
+  // 30% chance to jump to adjacent line
+  const shouldJump = (randomSeed + currentX) % 10 < 3
+  if (shouldJump && gridLines.length > 1) {
+    const currentIndex = gridLines.indexOf(currentY)
+    const canGoUp = currentIndex > 0
+    const canGoDown = currentIndex < gridLines.length - 1
+
+    let newY = currentY
+    if (canGoUp && canGoDown) {
+      newY =
+        (randomSeed + currentX) % 2 === 0
+          ? gridLines[currentIndex - 1]
+          : gridLines[currentIndex + 1]
+    } else if (canGoUp) {
+      newY = gridLines[currentIndex - 1]
+    } else if (canGoDown) {
+      newY = gridLines[currentIndex + 1]
+    }
+
+    pathSegments.push(`L ${currentX} ${currentY}`)
+    pathSegments.push(`L ${currentX} ${newY}`)
+    currentY = newY
+  } else {
+    pathSegments.push(`L ${currentX} ${currentY}`)
+  }
+}
+
+const pathData = pathSegments.join(' ')
+
+// Animation timing
+const totalDuration = drawDuration + fadeDelay + fadeDuration
+const drawEnd = (drawDuration / totalDuration) * 100
+const fadeStart = ((drawDuration + fadeDelay) / totalDuration) * 100
+---
+
+<path
+  d={pathData}
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  fill="none"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="text-accent"
+  opacity="0"
+  pathLength="100"
+  stroke-dasharray="100 100"
+  stroke-dashoffset="100"
+>
+  <!-- Animate stroke reveal (draw the path) -->
+  <animate
+    attributeName="stroke-dashoffset"
+    from="100"
+    to="0"
+    dur={`${drawDuration}ms`}
+    fill="freeze"></animate>
+
+  <!-- Fade in opacity during draw -->
+  <animate attributeName="opacity" from="0" to={opacity} dur={`${drawDuration}ms`} fill="freeze"
+  ></animate>
+
+  <!-- Fade out opacity after delay -->
+  <animate
+    attributeName="opacity"
+    from={opacity}
+    to="0"
+    begin={`${fadeDelay}ms`}
+    dur={`${fadeDuration}ms`}
+    fill="freeze"></animate>
+
+  <!-- Remove element after animation completes -->
+  <set attributeName="display" to="none" begin={`${totalDuration}ms`}></set>
+</path>
