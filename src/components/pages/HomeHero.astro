@@ -110,7 +110,7 @@ import Collapsible from '@/components/ui/Collapsible.astro'
 
 <script>
   // Detect OS and update keyboard shortcut display
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+  const isMac = navigator.userAgent.toUpperCase().indexOf('MAC') >= 0
   const shortcutDisplay = document.getElementById('keyboard-shortcut')
   if (shortcutDisplay) {
     shortcutDisplay.textContent = isMac ? '⌘K' : 'Ctrl+K'

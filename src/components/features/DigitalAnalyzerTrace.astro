@@ -82,10 +82,8 @@ while (currentX < width) {
 
 const pathData = pathSegments.join(' ')
 
-// Animation timing
+// Animation timing (totalDuration used for calculating percentages if needed)
 const totalDuration = drawDuration + fadeDelay + fadeDuration
-const drawEnd = (drawDuration / totalDuration) * 100
-const fadeStart = ((drawDuration + fadeDelay) / totalDuration) * 100
 ---
 
 <path

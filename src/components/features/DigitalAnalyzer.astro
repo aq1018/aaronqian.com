@@ -5,17 +5,13 @@
  * ViewBox and grid are calculated at runtime based on container dimensions
  */
 
-import { defaultOptions } from './DigitalAnalyzer.config'
 import type { DigitalAnalyzerOptions } from './DigitalAnalyzer.types'
 
 interface Props extends Partial<DigitalAnalyzerOptions> {
   class?: string
 }
 
-const { class: className, ...options } = Astro.props
-
-// Merge with defaults (runtime dimensions will be set by JavaScript)
-const config = { ...defaultOptions, ...options }
+const { class: className } = Astro.props
 ---
 
 <div class={`digital-analyzer relative ${className ?? ''}`} data-digital-analyzer>
