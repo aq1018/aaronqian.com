@@ -877,6 +877,7 @@ Then in the component:
 ---
 // Button.astro
 import { buttonVariants, type ButtonVariants } from './Button.cva'
+import { cn } from '@/lib/utils'
 
 interface Props extends ButtonVariants {
   href?: string
@@ -899,12 +900,35 @@ const Element = href ? 'a' : 'button'
 <Element
   {href}
   disabled={!href && disabled}
-  class={buttonVariants({ variant, color, size, class: className })}
+  class={cn(buttonVariants({ variant, color, size }), className)}
   {...rest}
 >
   <slot />
 </Element>
 ```
+
+**IMPORTANT: Always use `cn` utility for class merging**
+
+```typescript
+import { cn } from '@/lib/utils'
+
+// ✅ Correct - Use cn() to merge CVA variants with custom classes
+class={cn(buttonVariants({ variant, color, size }), className)}
+
+// ❌ Wrong - Don't pass className to CVA directly
+class={buttonVariants({ variant, color, size, class: className })}
+```
+
+**Why `cn` is required:**
+
+The `cn` utility combines `clsx` + `tailwind-merge` to:
+
+- **Deduplicate Tailwind classes**: `cn('px-2', 'px-4')` → `'px-4'` (not both)
+- **Handle conditional classes**: `cn('base', condition && 'active')`
+- **Merge classes correctly**: Prevents conflicts and ensures proper precedence
+
+Without `cn`, custom classes can conflict with CVA variant classes, leading to
+unexpected styling.
 
 ### When to Use CVA
 
@@ -1444,10 +1468,13 @@ All must pass before merging. No exceptions.
 
 ### Props Pattern
 
-Always support custom className:
+Always support custom className and use `cn` utility for class merging:
 
 ```ts
-interface Props {
+import { cn } from '@/lib/utils'
+import { componentVariants, type ComponentVariants } from './Component.cva'
+
+interface Props extends ComponentVariants {
   // Component-specific props
   variant?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
@@ -1461,10 +1488,14 @@ const { variant, size, class: className, ...rest } = Astro.props
 
 ### Element Polymorphism
 
-Support rendering as different elements when appropriate:
+Support rendering as different elements when appropriate. Always use `cn` for
+class merging:
 
 ```astro
 ---
+import { cn } from '@/lib/utils'
+import { buttonVariants } from './Button.cva'
+
 // Button can render as <button> or <a> based on href prop
 const Element = href ? 'a' : 'button'
 ---
@@ -1472,7 +1503,7 @@ const Element = href ? 'a' : 'button'
 <Element
   {href}
   type={!href ? type : undefined}
-  class={buttonVariants({ variant, class: className })}
+  class={cn(buttonVariants({ variant, size }), className)}
   {...rest}
 >
   <slot />
@@ -1811,11 +1842,13 @@ See [CVA File Organization](#cva-file-organization) for why this matters.
 - ❌ Do NOT create separate `.cva.ts` files for subcomponents
 - ❌ Do NOT bypass `--no-verify` on commits
 - ❌ Do NOT use CSS classes as hook selectors
+- ❌ Do NOT pass className directly to CVA variants
 - ✅ DO run full CI before commit to avoid hook failure loop
 - ✅ DO write tests before commit (timing flexible, but tests required)
 - ✅ DO name subcomponents with parent prefix (e.g., `PillToggleButton.astro`)
 - ✅ DO export all variants from parent's `.cva.ts` file
 - ✅ DO use `data-*` attributes for hook selectors (never CSS classes)
+- ✅ DO use `cn()` utility to merge CVA variants with custom classes
 - ✅ DO test edge cases and error conditions
 - ✅ DO test cleanup and memory management in hooks
 - ✅ DO improve existing code opportunistically (add tests when modifying)
@@ -1853,6 +1886,7 @@ git commit           # Commit (hooks run automatically)
 | No `--no-verify`                  | P0       | ❌ Never        |
 | Component naming conventions      | P1       | ⚠️ Ask first    |
 | CVA file organization             | P1       | ⚠️ Ask first    |
+| Use `cn()` for class merging      | P1       | ⚠️ Ask first    |
 | Testing for new code              | P1       | ⚠️ Ask first    |
 | Specific coverage percentages     | P2       | ✅ Use judgment |
 | Optional file creation thresholds | P2       | ✅ Use judgment |
