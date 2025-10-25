@@ -27,10 +27,66 @@ Failure to follow these rules will result in:
 
 1. 🔍 **Look at actual implementation first** - Search the codebase for similar
    patterns and prior art
-2. 📖 **Reference implementations** - Study `Button.astro`, `Link.astro`,
-   `Badge.astro`, `ThemeToggle.hook.ts`, `DigitalAnalyzer.hook.ts`
+2. 📖 **Study reference implementations** - See section below
 3. ❓ **If still uncertain, STOP and ASK** - Do NOT guess or make up patterns.
    Ask the user for clarification.
+
+---
+
+## 📚 Reference Implementations
+
+**Study these files when working on similar patterns:**
+
+### Simple Components
+
+- **Button**: `ui/Button.astro`, `ui/Button.cva.ts`, `ui/Button.test.ts` -
+  Element polymorphism, CVA variants
+- **Link**: `ui/Link.astro`, `ui/Link.cva.ts` - External link handling,
+  polymorphism
+- **Badge**: `ui/Badge.astro`, `ui/Badge.cva.ts` - Simple CVA component
+
+### Layout Primitives
+
+- **Section**: `ui/Section.astro`, `ui/Section.cva.ts`, `ui/Section.test.ts` -
+  Vertical padding variants
+- **Container**: `ui/Container.astro`, `ui/Container.cva.ts` - Max-width and
+  horizontal padding
+- **Stack**: `ui/Stack.astro`, `ui/Stack.cva.ts` - Directional spacing (vertical
+  & horizontal)
+
+### Hooks & Lifecycle
+
+- **ThemeToggle**: `features/ThemeToggle.hook.ts`,
+  `features/ThemeToggle.hook.test.ts` - Complete hook with cleanup
+- **PillToggle**: `ui/PillToggle.hook.ts`, `ui/PillToggle.hook.test.ts` - Toggle
+  interaction hook
+- **DigitalAnalyzer**: `features/DigitalAnalyzer.hook.ts` - Complex hook with
+  state management
+- **Orchestrators**: `components/hooks.ts` (main), `ui/hooks.ts`,
+  `features/hooks.ts`
+- **CSS Orchestrators**: `components/hooks.css`, `ui/hooks.css`,
+  `features/hooks.css`
+
+### Component Families (Parent + Subcomponents)
+
+- **PillToggle**: `ui/PillToggle.astro`, `ui/PillToggle.cva.ts` (contains parent
+  AND subcomponent variants), `ui/PillToggleButton.astro` (imports parent CVA)
+- **DigitalAnalyzer**: `features/DigitalAnalyzer.astro` +
+  `DigitalAnalyzer.config.ts` + `DigitalAnalyzer.types.ts` +
+  `DigitalAnalyzer.utils.ts` + `DigitalAnalyzer.hook.ts` +
+  `DigitalAnalyzerGrid.astro` + `DigitalAnalyzerTrace.astro`
+- **CuttingMat**: `features/CuttingMat.astro` + `CuttingMat.config.ts` +
+  `CuttingMat.types.ts` + 8 subcomponents (`CuttingMatAxes.astro`,
+  `CuttingMatGridLines.astro`, etc.)
+
+### Testing Patterns
+
+- **Component tests**: `ui/Button.test.ts`, `ui/Link.test.ts`
+- **Hook tests**: `ui/PillToggle.hook.test.ts`,
+  `features/ThemeToggle.hook.test.ts`
+- **Utils tests**: `features/DigitalAnalyzer.utils.test.ts`
+- **Config tests**: `features/CuttingMat.config.test.ts`
+- **Types tests**: `features/CuttingMat.types.test.ts`
 
 ---
 
@@ -224,25 +280,6 @@ Step 3: Your context stays clean for coordination and final integration
 
 If a task requires more than **4 files OR complex logic**, use planning mode +
 todo list + delegation.
-
----
-
-## Table of Contents
-
-1. [Priority Levels & Agent Behavior](#priority-levels--agent-behavior)
-2. [When to Ask vs. Proceed](#when-to-ask-vs-proceed)
-3. [AI Context Preservation](#ai-context-preservation)
-4. [Architecture Overview](#architecture-overview)
-5. [Component Structure](#component-structure)
-6. [File Naming & Co-location](#file-naming--co-location)
-7. [Hook Pattern](#hook-pattern)
-8. [CVA Pattern](#cva-pattern)
-9. [Styling Philosophy](#styling-philosophy)
-10. [Git Commit Workflow](#git-commit-workflow)
-11. [Testing & CI](#testing--ci)
-12. [Component Best Practices](#component-best-practices)
-13. [Troubleshooting](#troubleshooting)
-14. [Quick Reference](#quick-reference)
 
 ---
 
@@ -542,273 +579,90 @@ reference back here to avoid repetition.**
 Use for interactive client-side behavior. Always support Astro View Transitions
 lifecycle.
 
-**Important**: Each `.hook.ts` file manages its own lifecycle by registering its
-own `astro:page-load` listener. This allows components to have full control over
-their initialization and cleanup logic without relying on external
-orchestration.
+**Pattern Requirements**:
 
-**Pattern**:
+- Each `.hook.ts` file manages its own lifecycle by registering
+  `astro:page-load` listener
+- Export `setup*()` function (called once by orchestrator on initial load)
+- Export `initialize*()` function (called on every page load/transition)
+- **MUST** implement cleanup function to prevent memory leaks
+- Track cleanup state to prevent duplicate listeners
+
+**Minimal Pattern**:
 
 ```typescript
-// Component.hook.ts
 type CleanupFunction = () => void
-
 let cleanup: CleanupFunction | null = null
 
-/**
- * Initialize component behavior
- * Returns a cleanup function to prevent memory leaks
- */
 export function initializeComponent(): CleanupFunction {
-  // Clean up previous initialization if it exists
-  if (cleanup !== null) {
-    cleanup()
-  }
-
-  // Your initialization logic here
-  const elements = document.querySelectorAll('[data-component]')
-  const handlers = new Map()
-
-  elements.forEach((element) => {
-    const handler = (e: Event) => {
-      // Handle event
-    }
-    element.addEventListener('click', handler)
-    handlers.set(element, handler)
-  })
-
-  // Return cleanup function
+  if (cleanup !== null) cleanup() // Clean up previous
+  // ... initialization logic ...
   cleanup = () => {
-    handlers.forEach((handler, element) => {
-      element.removeEventListener('click', handler)
-    })
-    handlers.clear()
-    cleanup = null
+    /* remove listeners, clear state */
   }
-
   return cleanup
 }
 
-/**
- * Setup function called by hooks orchestrator
- * Registers its own astro:page-load listener
- */
 export function setupComponent(): void {
-  // Initial setup on first page load
-  initializeComponent()
-
-  // Re-initialize after View Transitions navigation
-  document.addEventListener('astro:page-load', initializeComponent)
-
-  // Cleanup before page swap to prevent memory leaks
-  document.addEventListener('astro:before-preparation', () => {
-    if (cleanup !== null) {
-      cleanup()
-    }
-  })
+  initializeComponent() // Initial
+  document.addEventListener('astro:page-load', initializeComponent) // Re-init
+  document.addEventListener('astro:before-preparation', () => cleanup?.())
 }
 ```
 
-**Key points**:
+**Reference**: `features/ThemeToggle.hook.ts`, `ui/PillToggle.hook.ts`,
+`features/DigitalAnalyzer.hook.ts`
 
-- Each `setup*()` function registers its own `astro:page-load` listener
-- `BaseLayout.astro` calls `initComponentHooks()` **once** on initial page load
-- Individual components handle their own re-initialization on navigation
-- Always implement cleanup to prevent memory leaks
-- Use a cleanup tracking pattern to prevent duplicate listeners
+### `data-*` Attributes for Hook Selectors
 
-### `data-*` Attributes Pattern for Hooks
+**CRITICAL (P0)**: Always use `data-*` attributes as selectors in `.hook.ts`
+files. Never use CSS classes.
 
-**CRITICAL**: Always use `data-*` attributes as selectors in `.hook.ts` files
-for global event delegation. This prevents coupling to CSS classes and provides
-semantic, stable selectors.
+**Why**: Semantic, stable selectors that won't break when styling changes.
 
-**Pattern**:
+**Naming**: kebab-case, specific, prefixed with component name
 
-```astro
----
-// Component.astro
----
+```html
+<!-- ✅ Correct -->
+<button data-theme-toggle data-value="dark">Toggle</button>
 
-<!-- Use data-* attributes for hook targeting -->
-<button data-toggle-button data-toggle-target="menu-id">Toggle</button>
-<div id="menu-id" class="hidden">Menu content</div>
+<!-- ❌ Wrong -->
+<button class="toggle-button">Toggle</button>
 ```
 
-```typescript
-// Component.hook.ts
-export function initializeComponent() {
-  // Select elements using data attributes
-  const buttons = document.querySelectorAll('[data-toggle-button]')
-
-  buttons.forEach((button) => {
-    const targetId = button.getAttribute('data-toggle-target')
-    const target = document.getElementById(targetId)
-    // ... setup logic
-  })
-}
-```
-
-**Real-world examples from codebase**:
-
-- **PillToggle**: `data-toggle-button`, `data-toggle-target`
-- **ThemeToggle**: `data-value`, `data-slider`
-- **DigitalAnalyzer**: `data-digital-analyzer`, `data-lightning-bolt`
-
-**Why `data-*` attributes?**
-
-- ✅ Semantic purpose: Clear intent for JavaScript interaction
-- ✅ Stable selectors: Won't break if CSS classes change
-- ✅ HTML5 standard: Valid, accessible attributes
-- ✅ Namespacing: Prevents conflicts with other attributes
-- ❌ Never use CSS classes for hook selectors (`.class-name`)
-- ❌ Never use IDs for multiple elements (`#id` is unique per page)
-
-**Naming convention**:
-
-- Use kebab-case: `data-toggle-button`, not `data-toggleButton`
-- Be specific: `data-digital-analyzer` not `data-component`
-- Prefix with component name when possible: `data-theme-toggle-button`
+**Reference**: `features/ThemeToggle.astro`, `ui/PillToggle.astro`
 
 ### `.hook.css` Files (Tailwind Directives)
 
-**IMPORTANT**: Only create `.hook.css` files when you need Tailwind v4
-directives like:
+**ONLY create when you need Tailwind v4 directives**: `@theme`,
+`@custom-variant`, `@layer`
 
-- `@theme` - Extending theme tokens
-- `@custom-variant` - Custom variants
-- `@layer` - Layer-specific styles
+**DO NOT use for**: Regular CSS, animations, component styles → Use `<style>`
+block in `.astro` instead
 
-**DO NOT** use `.hook.css` for:
+**Orchestration**: Import in `ui/hooks.css` or `features/hooks.css`, which roll
+up to `components/hooks.css`, imported by `styles/global.css`
 
-- Regular CSS → Use `<style>` block in `.astro` file _(See Styling Philosophy)_
-- Animations → Use `<style>` block in `.astro` file _(See Styling Philosophy)_
-- Component-specific styles → Use `<style>` block in `.astro` file _(See Styling
-  Philosophy)_
-
-**When to use** `.hook.css`:
-
-```css
-/* Badge.hook.css - Example of when it's needed */
-@theme {
-  --animation-pulse-subtle: pulseSubtle 3s ease-in-out infinite;
-}
-
-@keyframes pulseSubtle {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-```
-
-Then import in `ui/hooks.css`:
-
-```css
-/* src/components/ui/hooks.css */
-@import './Badge.hook.css';
-@import './OtherComponent.hook.css';
-```
-
-**CSS Orchestration (mirrors hooks.ts structure)**:
-
-```css
-/* src/components/ui/hooks.css */
-@import './Badge.hook.css';
-/* ... other UI component hook CSS */
-
-/* src/components/features/hooks.css */
-@import './ThemeToggle.hook.css';
-/* ... other feature component hook CSS */
-
-/* src/components/hooks.css - Main orchestrator */
-@import './ui/hooks.css';
-@import './features/hooks.css';
-
-/* src/styles/global.css */
-@import '../components/hooks.css';
-```
+**Reference**: `ui/Badge.hook.css`, `ui/hooks.css`, `features/hooks.css`,
+`components/hooks.css`
 
 ### When to Use `<script>` vs `.hook.ts`
 
-Understanding when to use inline `<script>` blocks versus separate `.hook.ts`
-files is critical for maintainable code.
+**Use `<script>` in `.astro`**:
 
-#### Use `<script>` in `.astro` when:
+- One-off, component-specific behavior
+- No cleanup needed
+- Simple interactions on component's own elements
 
-- ✅ **One-off, component-specific behavior** - Logic that only applies to this
-  component instance
-- ✅ **No cleanup needed** - Simple DOM manipulation with no listeners to remove
-- ✅ **No shared state across navigations** - Doesn't need to persist through
-  View Transitions
-- ✅ **Simple interactions** - Basic event handling on the component's own
-  elements
+**Use `.hook.ts`**:
 
-**Example:**
+- Needs to survive View Transitions
+- Requires cleanup/state management
+- Global listeners (`document`/`window`)
+- Shared across multiple pages
 
-```astro
-<!-- Component.astro -->
-<div id="counter">0</div>
-<button id="increment">+</button>
-
-<script>
-  // Simple, component-specific logic
-  const button = document.getElementById('increment')
-  const counter = document.getElementById('counter')
-  let count = 0
-
-  button?.addEventListener('click', () => {
-    count++
-    if (counter) counter.textContent = String(count)
-  })
-</script>
-```
-
-#### Use `.hook.ts` when:
-
-- ✅ **Behavior needs to survive View Transitions** - Must work across page
-  navigations
-- ✅ **Requires cleanup/state management** - Event listeners that need proper
-  removal
-- ✅ **Event delegation or global listeners** - Listening on `document` or
-  `window`
-- ✅ **Shared functionality across multiple pages** - Same behavior on different
-  pages
-- ✅ **Complex state management** - Tracking state across multiple elements or
-  pages
-
-**Example:**
-
-```typescript
-// Component.hook.ts
-export function setupComponent() {
-  const initializeComponent = () => {
-    // Logic that needs to run on every page load
-    const elements = document.querySelectorAll('[data-component]')
-    elements.forEach((element) => {
-      element.addEventListener('click', handleClick)
-    })
-  }
-
-  // Initial setup
-  initializeComponent()
-
-  // Re-initialize after View Transitions
-  document.addEventListener('astro:page-load', initializeComponent)
-
-  // Cleanup before navigation
-  document.addEventListener('astro:before-preparation', () => {
-    // Remove listeners, clear state, etc.
-  })
-}
-```
-
-**Rule of thumb**: If you're using Astro View Transitions and your component
-appears on multiple pages, use `.hook.ts`. For simple, one-off interactions on a
-single instance, use `<script>`.
+**Rule**: View Transitions + multiple pages = `.hook.ts`. Simple one-off =
+`<script>`.
 
 ---
 
@@ -816,121 +670,46 @@ single instance, use `<script>`.
 
 ### `.cva.ts` Files (Class Variance Authority)
 
-Extract all CVA variant definitions to separate `.cva.ts` files for better
-organization and reusability.
+Extract CVA variant definitions to separate `.cva.ts` files.
 
-**Pattern**:
+**Structure**:
 
 ```typescript
-// Button.cva.ts
 import { cva, type VariantProps } from 'class-variance-authority'
 
-export const buttonVariants = cva(
+export const componentVariants = cva(
   [
-    // Base styles (always applied)
-    'inline-flex',
-    'items-center',
-    'justify-center',
-    'gap-2',
-    'rounded-lg',
-    'font-medium',
-    'transition-colors',
+    /* base classes */
   ],
   {
     variants: {
-      variant: {
-        solid: '',
-        outline: 'border-2 bg-transparent',
-        ghost: 'bg-transparent',
-      },
-      color: {
-        primary: '',
-        accent: '',
-        neutral: '',
-      },
-      size: {
-        sm: 'px-3 py-1.5 text-sm',
-        md: 'px-4 py-2 text-base',
-        lg: 'px-6 py-3 text-lg',
-      },
+      /* variant definitions */
     },
     compoundVariants: [
-      {
-        variant: 'solid',
-        color: 'primary',
-        class: 'bg-primary-600 text-white hover:bg-primary-700',
-      },
-      // ... more compound variants
+      /* compound combinations */
     ],
     defaultVariants: {
-      variant: 'solid',
-      color: 'primary',
-      size: 'md',
+      /* defaults */
     },
   },
 )
 
-export type ButtonVariants = VariantProps<typeof buttonVariants>
+export type ComponentVariants = VariantProps<typeof componentVariants>
 ```
 
-Then in the component:
-
-```astro
----
-// Button.astro
-import { buttonVariants, type ButtonVariants } from './Button.cva'
-import { cn } from '@/lib/utils'
-
-interface Props extends ButtonVariants {
-  href?: string
-  disabled?: boolean
-  class?: string
-}
-
-const {
-  variant,
-  color,
-  size,
-  href,
-  disabled,
-  class: className,
-  ...rest
-} = Astro.props
-const Element = href ? 'a' : 'button'
----
-
-<Element
-  {href}
-  disabled={!href && disabled}
-  class={cn(buttonVariants({ variant, color, size }), className)}
-  {...rest}
->
-  <slot />
-</Element>
-```
-
-**IMPORTANT: Always use `cn` utility for class merging**
+**CRITICAL: Always use `cn()` utility for class merging**
 
 ```typescript
-import { cn } from '@/lib/utils'
+// ✅ Correct
+class={cn(buttonVariants({ variant, size }), className)}
 
-// ✅ Correct - Use cn() to merge CVA variants with custom classes
-class={cn(buttonVariants({ variant, color, size }), className)}
-
-// ❌ Wrong - Don't pass className to CVA directly
-class={buttonVariants({ variant, color, size, class: className })}
+// ❌ Wrong
+class={buttonVariants({ variant, size, class: className })}
 ```
 
-**Why `cn` is required:**
+**Why**: `cn()` deduplicates Tailwind classes and prevents conflicts.
 
-The `cn` utility combines `clsx` + `tailwind-merge` to:
-
-- **Deduplicate Tailwind classes**: `cn('px-2', 'px-4')` → `'px-4'` (not both)
-- **Handle conditional classes**: `cn('base', condition && 'active')`
-- **Merge classes correctly**: Prevents conflicts and ensures proper precedence
-
-Without `cn`, custom classes can conflict with CVA variant classes, leading to
-unexpected styling.
+**Reference**: `ui/Button.cva.ts`, `ui/Badge.cva.ts`, `ui/Link.cva.ts`
 
 ### When to Use CVA
 
@@ -1013,150 +792,32 @@ bg-gray-800        /* Gray palette */
 
 ## Git Commit Workflow
 
-### 🚨 MANDATORY PRE-COMMIT WORKFLOW 🚨
+### 🚨 MANDATORY (P0) 🚨
 
-**NEVER COMMIT WITH `--no-verify` OR THE SYSTEM WILL BREAK**
+**NEVER use `git commit --no-verify`**
 
-The pre-commit hooks exist to prevent production failures. Bypassing them is
-**strictly forbidden**.
+### Pre-Commit Sequence
 
-### The Problem
+**Run ALL checks locally BEFORE committing to avoid hook failure loops.**
 
-Running commit → hook fails → fix one error → commit again → hook fails → repeat
-**wastes massive time and fills the git history with unnecessary commits**.
+| File Type                                    | Workflow                                |
+| -------------------------------------------- | --------------------------------------- |
+| **Code** (`.ts`, `.astro`, `.css`)           | `npm run autofix && npm run ci`         |
+| **Root docs** (AGENTS.md, README.md)         | `npm run autofix`                       |
+| **Content markdown** (`src/content/**/*.md`) | `npm run autofix && npm run type-check` |
 
-### The Solution
+### `npm run ci` Pipeline
 
-**Run EVERYTHING locally first, fix ALL issues at once, then commit.**
+Runs: test + format check + type-check + lint + build (all must pass)
 
-### REQUIRED SEQUENCE
+### Pre-commit Hooks (Husky)
 
-**The required sequence depends on what you're changing:**
+Automatically run on staged files:
 
-#### For Code Changes (TypeScript, Astro, CSS, etc.)
+- `*.{ts,astro}`: prettier, astro check, eslint
+- `*.{css,json,md}`: prettier
 
-**Follow this exact sequence:**
-
-```bash
-# Step 1: Auto-fix formatting and linting
-npm run autofix
-
-# Step 2: Run full CI pipeline
-npm run ci
-# This runs: test + format check + type-check + lint + build
-
-# Step 3: Fix ALL errors and warnings shown
-# Read the output carefully and fix everything
-
-# Step 4: Repeat steps 1-3 until EVERYTHING passes
-npm run autofix && npm run ci
-
-# Step 5: ONLY THEN stage and commit
-git add .
-git commit -m "Your message"
-```
-
-#### For Documentation-Only Changes
-
-**Documentation files have different requirements based on location:**
-
-##### A. Root Documentation (AGENTS.md, CLAUDE.md, README.md)
-
-**For documentation NOT part of the Astro build:**
-
-```bash
-# Step 1: Auto-fix formatting and linting
-npm run autofix
-
-# Step 2: Verify output (no errors)
-
-# Step 3: Stage and commit
-git add .
-git commit -m "Your message"
-```
-
-##### B. Content Collection Markdown (src/content/\*_/_.md)
-
-**For markdown files WITH frontmatter schemas (blog, projects, projectLogs):**
-
-```bash
-# Step 1: Auto-fix formatting and linting
-npm run autofix
-
-# Step 2: Validate frontmatter schemas
-npm run type-check
-# This runs `astro check` which validates against Zod schemas
-
-# Step 3: (Optional but recommended) Verify build
-npm run build
-# Catches additional errors like broken images, invalid references
-
-# Step 4: Stage and commit
-git add .
-git commit -m "Your message"
-```
-
-**Why different workflows?**
-
-- **Root documentation**: Only needs formatting/linting
-- **Content collection markdown**: Needs formatting/linting + schema
-  validation + optional build check
-- **Code files**: Need ALL checks (tests, type-check, linting, build)
-- Pre-commit hooks run `prettier --check` on all `.md` files
-- Pre-commit hooks run `astro check` on `.ts`/`.astro` files only
-
-### What `npm run ci` Does
-
-```json
-"ci": "npm run test:run && npm run format:check && npm run type-check && npm run lint && npm run build"
-```
-
-This ensures:
-
-- ✅ All tests pass
-- ✅ Code is properly formatted
-- ✅ No TypeScript errors
-- ✅ No linting errors
-- ✅ Build succeeds
-
-### DO NOT
-
-- ❌ Commit before running full CI locally
-- ❌ Fix errors one at a time through repeated hook failures
-- ❌ Use `git commit --no-verify` (EVER, under ANY circumstances)
-- ❌ Skip `npm run autofix` before `npm run ci`
-- ❌ Ignore warnings (treat them as errors)
-
-### Pre-commit Hooks (Husky + lint-staged)
-
-Hooks automatically run on staged files:
-
-```json
-"lint-staged": {
-  "*.{js,jsx,ts,tsx,astro}": ["prettier --check", "astro check", "eslint"],
-  "*.{css,json,md}": ["prettier --check"]
-}
-```
-
-If hooks fail after you've run full CI, **something is wrong with your
-workflow**. Go back and ensure you're following the required sequence.
-
-### Why This Matters
-
-**Pre-commit hooks catch:**
-
-- View Transition bugs that only appear in production
-- Memory leaks from missing cleanup functions
-- TypeScript errors that break the build
-- Formatting inconsistencies
-- Linting violations
-
-**If you bypass hooks, you WILL:**
-
-- Break production
-- Create memory leaks
-- Block other work with broken builds
-- Waste time debugging issues that would have been caught
+**If hooks fail after running CI, your workflow is wrong. Go back and verify.**
 
 ---
 
@@ -1210,131 +871,17 @@ tests slows down the current task, it pays dividends in maintainability.
 
 ### Test File Structure
 
-**Pattern for hooks**:
+**Test patterns**: AAA (Arrange, Act, Assert), `beforeEach`/`afterEach` for
+cleanup
 
-```typescript
-// PillToggle.hook.test.ts
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { initializeToggles, setupToggles } from './PillToggle.hook'
+**Reference**:
 
-describe('PillToggle Hook', () => {
-  beforeEach(() => {
-    // Reset DOM before each test
-    document.body.innerHTML = ''
-  })
-
-  afterEach(() => {
-    // Clean up
-    document.body.innerHTML = ''
-  })
-
-  describe('initializeToggles', () => {
-    it('should initialize toggle buttons and menus', () => {
-      // Arrange: Setup DOM
-      document.body.innerHTML = `
-        <button data-toggle-button>Toggle</button>
-        <div class="hidden">Menu</div>
-      `
-
-      // Act: Initialize
-      const cleanup = initializeToggles()
-
-      // Assert: Verify behavior
-      const button = document.querySelector('[data-toggle-button]')
-      expect(button).toBeTruthy()
-
-      // Cleanup
-      cleanup()
-    })
-
-    it('should toggle menu visibility on click', () => {
-      // Test user interaction
-    })
-
-    it('should cleanup event listeners', () => {
-      // Test memory leak prevention
-    })
-  })
-})
-```
-
-**Pattern for utils**:
-
-```typescript
-// Component.utils.test.ts
-import { describe, expect, it } from 'vitest'
-import { calculateGridSize, generateSquareWavePath } from './Component.utils'
-
-describe('calculateGridSize', () => {
-  it('should calculate grid size based on container width', () => {
-    const result = calculateGridSize(1600, 2)
-    expect(result).toBe(100)
-  })
-
-  it('should handle edge cases', () => {
-    expect(calculateGridSize(0, 1)).toBe(0)
-  })
-})
-
-describe('generateSquareWavePath', () => {
-  it('should generate valid SVG path for binary data', () => {
-    const path = generateSquareWavePath('10101010', 0, 100, 50)
-    expect(path).toContain('M')
-    expect(path).toContain('L')
-  })
-})
-```
-
-**Pattern for config**:
-
-```typescript
-// Component.config.test.ts
-import { describe, expect, it } from 'vitest'
-import { defaultOptions } from './Component.config'
-
-describe('Component Config', () => {
-  describe('defaultOptions', () => {
-    it('should have all required properties', () => {
-      expect(defaultOptions).toHaveProperty('opacity')
-      expect(defaultOptions).toHaveProperty('duration')
-    })
-
-    it('should have valid default values', () => {
-      expect(defaultOptions.opacity).toBeGreaterThan(0)
-      expect(defaultOptions.opacity).toBeLessThanOrEqual(1)
-    })
-
-    it('should allow merging with custom options', () => {
-      const custom = { ...defaultOptions, opacity: 0.5 }
-      expect(custom.opacity).toBe(0.5)
-    })
-  })
-})
-```
-
-**Pattern for types**:
-
-```typescript
-// Component.types.test.ts
-import { describe, expect, it } from 'vitest'
-import type { ComponentOptions } from './Component.types'
-
-describe('Component Types', () => {
-  it('should accept valid ComponentOptions', () => {
-    const validOptions: ComponentOptions = {
-      mode: 'light',
-      enabled: true,
-    }
-    expect(validOptions).toBeDefined()
-  })
-
-  it('should enforce type constraints', () => {
-    // Type-level tests using TypeScript compiler
-    // @ts-expect-error - Invalid mode should fail
-    const invalid: ComponentOptions = { mode: 'invalid' }
-  })
-})
-```
+- **Hook tests**: `ui/PillToggle.hook.test.ts`,
+  `features/ThemeToggle.hook.test.ts`
+- **Utils tests**: `features/DigitalAnalyzer.utils.test.ts`
+- **Config tests**: `features/CuttingMat.config.test.ts`
+- **Types tests**: `features/CuttingMat.types.test.ts`
+- **Component tests**: `ui/Button.test.ts`, `ui/Link.test.ts`
 
 ### Test Coverage Requirements
 
@@ -1366,53 +913,8 @@ describe('Component Types', () => {
 ### Running Tests
 
 ```bash
-# Development: Watch mode with hot reload
-npm run test
-
-# CI: Run once and exit
-npm run test:run
-
-# Coverage report (if configured)
-npm run test:coverage
-```
-
-### Test-First Example Workflow
-
-**Scenario**: Adding a new `formatDate` utility
-
-```typescript
-// 1. Write test FIRST
-// utils/date.test.ts
-import { describe, expect, it } from 'vitest'
-import { formatDate } from './date'
-
-describe('formatDate', () => {
-  it('should format ISO date to MM/DD/YYYY', () => {
-    expect(formatDate('2024-10-24')).toBe('10/24/2024')
-  })
-})
-
-// 2. Watch test FAIL (function doesn't exist yet)
-// ❌ Test fails: formatDate is not defined
-
-// 3. Implement minimum code to pass
-// utils/date.ts
-export function formatDate(isoDate: string): string {
-  const date = new Date(isoDate)
-  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-}
-
-// 4. Watch test PASS
-// ✅ Test passes
-
-// 5. Add more test cases (edge cases)
-// utils/date.test.ts
-it('should handle invalid dates', () => {
-  expect(() => formatDate('invalid')).toThrow()
-})
-
-// 6. Refactor implementation to handle edge cases
-// 7. Commit when all tests pass
+npm run test       # Development: Watch mode
+npm run test:run   # CI: Run once and exit
 ```
 
 ### Pre-Commit Test Enforcement
@@ -1442,740 +944,186 @@ All must pass before merging. No exceptions.
 
 ### Testing Best Practices
 
-1. **AAA Pattern**: Arrange, Act, Assert
-
-   ```typescript
-   it('should do something', () => {
-     // Arrange: Setup
-     const input = 'test'
-
-     // Act: Execute
-     const result = myFunction(input)
-
-     // Assert: Verify
-     expect(result).toBe('expected')
-   })
-   ```
-
-2. **One assertion per test** (when possible)
-3. **Descriptive test names**: `"should <expected behavior> when <condition>"`
-4. **Test behavior, not implementation**
-5. **Clean up side effects**: Use `beforeEach` and `afterEach`
-6. **Mock external dependencies**: Don't test third-party code
-7. **Test edge cases**: Empty arrays, null, undefined, boundary values
+1. AAA Pattern (Arrange, Act, Assert)
+2. One assertion per test (when possible)
+3. Descriptive names: `"should <behavior> when <condition>"`
+4. Test behavior, not implementation
+5. Clean up side effects: `beforeEach`/`afterEach`
+6. Mock external dependencies
+7. Test edge cases: empty arrays, null, undefined, boundaries
 
 ---
 
 ## Component Best Practices
 
-### Layout Primitives (MANDATORY)
+### Layout Primitives (MANDATORY P1)
 
-**ALWAYS use layout primitive components for spacing and layout. Never use
-inline spacing classes directly in page components.**
+**ALWAYS use layout primitives for spacing. Never use inline spacing classes in
+page components.**
 
-This codebase provides three layout primitives for standardized, responsive
-spacing:
+#### Section - Vertical Padding
 
-#### Section - Standardized Section Padding
+Wraps content sections with responsive vertical padding.
 
-Use for wrapping content sections with responsive vertical padding.
+| Variant      | Classes                   | Use Case               |
+| ------------ | ------------------------- | ---------------------- |
+| `hero`       | `py-20 sm:py-24 lg:py-28` | Hero sections          |
+| `content`    | `py-16 sm:py-20 lg:py-24` | Main content (default) |
+| `subsection` | `py-12 sm:py-14 lg:py-16` | Nested sections        |
 
-```astro
----
-import Section from '@/components/ui/Section.astro'
----
+**Props**: `variant`, `background` ('surface' \| 'bg'), `class`
 
-<!-- Hero section (largest padding) -->
-<Section variant="hero" background="surface">
-  <h1>Welcome to my site</h1>
-</Section>
+#### Container - Max-width & Horizontal Padding
 
-<!-- Main content section (medium padding) -->
-<Section variant="content">
-  <p>Main content area</p>
-</Section>
+Centers content with responsive horizontal padding.
 
-<!-- Subsection (smallest padding) -->
-<Section variant="subsection" background="surface">
-  <h3>Related Content</h3>
-</Section>
-```
+| Size      | Classes     | Use Case                    |
+| --------- | ----------- | --------------------------- |
+| `narrow`  | `max-w-3xl` | Blog posts, focused content |
+| `default` | `max-w-4xl` | Standard content            |
+| `wide`    | `max-w-7xl` | Dashboards, wide layouts    |
 
-**Variants:**
+**Base**: `mx-auto px-4 sm:px-6 lg:px-8` (always applied) **Props**: `size`,
+`class`
 
-- `hero`: `py-20 sm:py-24 lg:py-28` - Dramatic hero sections
-- `content`: `py-16 sm:py-20 lg:py-24` - Main content areas (default)
-- `subsection`: `py-12 sm:py-14 lg:py-16` - Nested sections
+#### Stack - Directional Spacing
 
-**Props:**
+Groups related items with consistent spacing (vertical or horizontal).
 
-- `variant`: Section padding size
-- `background`: 'surface' | 'bg' - Background color
-- `class`: Custom classes (merged with `cn`)
+**Direction**: `vertical` (flex-col, default) \| `horizontal` (flex-row)
 
-#### Container - Max-width and Horizontal Padding
+**Gap Sizes**:
 
-Use for centering content with responsive horizontal padding.
+| Gap      | Classes                      | Use Case                |
+| -------- | ---------------------------- | ----------------------- |
+| `tight`  | `gap-2 sm:gap-3`             | Very related items      |
+| `small`  | `gap-4 sm:gap-5 lg:gap-6`    | Related items           |
+| `medium` | `gap-8 sm:gap-10 lg:gap-12`  | Content items (default) |
+| `large`  | `gap-12 sm:gap-14 lg:gap-16` | Major sections          |
 
-```astro
----
-import Container from '@/components/ui/Container.astro'
----
+**Props**: `direction`, `gap`, `class`
 
-<!-- Default container (max-w-4xl) -->
-<Container>
-  <h1>My Content</h1>
-</Container>
+**Note**: Uses CSS `gap` (not `space-y-*`/`space-x-*`) for directional
+consistency.
 
-<!-- Narrow (great for blog posts) -->
-<Container size="narrow">
-  <article>Blog content...</article>
-</Container>
+**Reference**: `ui/Section.astro`, `ui/Container.astro`, `ui/Stack.astro`
 
-<!-- Wide (great for dashboards) -->
-<Container size="wide">
-  <div class="grid grid-cols-3 gap-4">...</div>
-</Container>
-```
+#### Composing & Anti-Patterns
 
-**Variants:**
+**Composition**: `Section` > `Container` > `Stack` > content
 
-- `narrow`: `max-w-3xl` - Blog posts, focused content
-- `default`: `max-w-4xl` - Standard content width
-- `wide`: `max-w-7xl` - Dashboards, wide layouts
+**❌ DON'T**: `py-16`, `mx-auto max-w-4xl`, `space-y-*`, `flex gap-*` inline
+**✅ DO**: Use `Section`, `Container`, `Stack` primitives
 
-**Props:**
-
-- `size`: Container width
-- `class`: Custom classes (merged with `cn`)
-
-**Base classes:** `mx-auto px-4 sm:px-6 lg:px-8` (always applied)
-
-#### Stack - Directional Spacing (Vertical or Horizontal)
-
-Use for grouping related items with consistent spacing in either direction.
-
-```astro
----
-import Stack from '@/components/ui/Stack.astro'
----
-
-<!-- Vertical stacking (default) -->
-<Stack>
-  <Heading>Title</Heading>
-  <Text>Paragraph 1</Text>
-  <Text>Paragraph 2</Text>
-</Stack>
-
-<!-- Horizontal stacking (navigation, buttons, tags) -->
-<Stack direction="horizontal" gap="small">
-  <Button>Primary</Button>
-  <Button variant="outline">Secondary</Button>
-</Stack>
-
-<!-- Small gap for tightly related items -->
-<Stack gap="small">
-  <label>Email</label>
-  <input type="email" />
-</Stack>
-
-<!-- Horizontal tags with tight spacing -->
-<Stack direction="horizontal" gap="tight" class="flex-wrap">
-  <Badge>React</Badge>
-  <Badge>TypeScript</Badge>
-  <Badge>Astro</Badge>
-</Stack>
-
-<!-- Large gap for major sections -->
-<Stack gap="large">
-  <section>Section 1</section>
-  <section>Section 2</section>
-</Stack>
-```
-
-**Direction Variants:**
-
-- `vertical`: `flex-col` - Vertical stacking (default)
-- `horizontal`: `flex-row items-center` - Horizontal stacking
-
-**Gap Variants:**
-
-- `tight`: `gap-2 sm:gap-3` - Very related items (0.5rem → 0.75rem)
-- `small`: `gap-4 sm:gap-5 lg:gap-6` - Related items (1rem → 1.25rem → 1.5rem)
-- `medium`: `gap-8 sm:gap-10 lg:gap-12` - Content items (2rem → 2.5rem → 3rem)
-  (default)
-- `large`: `gap-12 sm:gap-14 lg:gap-16` - Major sections (3rem → 3.5rem → 4rem)
-
-**Props:**
-
-- `direction`: 'vertical' | 'horizontal' - Stack direction (default: 'vertical')
-- `gap`: 'tight' | 'small' | 'medium' | 'large' - Spacing size (default:
-  'medium')
-- `class`: Custom classes (merged with `cn`)
-
-**Note:** Stack uses CSS `gap` property (not `space-y-*`/`space-x-*`), which
-works for both flex-col and flex-row. This ensures consistent spacing behavior
-across directions.
-
-#### Composing Layout Primitives
-
-**Pattern:** Combine primitives for complete layouts:
-
-```astro
----
-import Section from '@/components/ui/Section.astro'
-import Container from '@/components/ui/Container.astro'
-import Stack from '@/components/ui/Stack.astro'
-import Heading from '@/components/ui/Heading.astro'
-import Text from '@/components/ui/Text.astro'
-import Button from '@/components/ui/Button.astro'
-import Badge from '@/components/ui/Badge.astro'
----
-
-<Section variant="content" background="surface">
-  <Container size="default">
-    <Stack gap="medium">
-      <Heading level="h2">Projects</Heading>
-      <Text>Featured work and experiments</Text>
-
-      <!-- Horizontal tags -->
-      <Stack direction="horizontal" gap="tight" class="flex-wrap">
-        <Badge>React</Badge>
-        <Badge>TypeScript</Badge>
-        <Badge>Astro</Badge>
-      </Stack>
-
-      <!-- Vertical list of project cards -->
-      <Stack gap="small">
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-      </Stack>
-
-      <!-- Horizontal CTA buttons -->
-      <Stack direction="horizontal" gap="small">
-        <Button>View All</Button>
-        <Button variant="outline">Learn More</Button>
-      </Stack>
-    </Stack>
-  </Container>
-</Section>
-```
-
-#### Anti-Patterns (DO NOT DO THIS)
-
-**❌ DON'T use inline spacing classes for layout:**
-
-```astro
-<!-- WRONG: Manual section/container spacing -->
-<section class="py-16 sm:py-20">
-  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-    <div class="space-y-8">
-      <h2>Title</h2>
-      <p>Content</p>
-    </div>
-  </div>
-</section>
-
-<!-- WRONG: Inline horizontal spacing -->
-<div class="flex items-center gap-4">
-  <button>Button 1</button>
-  <button>Button 2</button>
-</div>
-
-<!-- WRONG: Inline vertical spacing -->
-<div class="space-y-6">
-  <div>Item 1</div>
-  <div>Item 2</div>
-</div>
-```
-
-**✅ DO use layout primitives:**
-
-```astro
-<!-- CORRECT: Section + Container + Stack -->
-<Section variant="content">
-  <Container>
-    <Stack gap="medium">
-      <Heading level="h2">Title</Heading>
-      <Text>Content</Text>
-    </Stack>
-  </Container>
-</Section>
-
-<!-- CORRECT: Horizontal Stack -->
-<Stack direction="horizontal" gap="small">
-  <Button>Button 1</Button>
-  <Button>Button 2</Button>
-</Stack>
-
-<!-- CORRECT: Vertical Stack -->
-<Stack gap="small">
-  <div>Item 1</div>
-  <div>Item 2</div>
-</Stack>
-```
+**Reference**: `pages/HomeHero.astro`, `pages/BlogIndex.astro` for composition
+examples
 
 #### When to Use Utility Classes vs. Primitives
 
-**ALWAYS use primitives for:**
+**Use primitives**: Section padding, container width, vertical/horizontal
+stacking, any repeating pattern
 
-- ✅ **Section vertical padding** - Use Section primitive (NOT `py-16 sm:py-20`)
-- ✅ **Container width/horizontal padding** - Use Container primitive (NOT
-  `mx-auto max-w-4xl px-4`)
-- ✅ **Vertical stacking** - Use Stack with `direction="vertical"` (NOT
-  `space-y-*`)
-- ✅ **Horizontal layouts** - Use Stack with `direction="horizontal"` (NOT
-  `gap-*` inline)
-- ✅ **Repeating patterns** - If used 2+ times, create/use a primitive
+**Inline spacing OK**: Component-internal micro-spacing (badge padding, button
+padding), table cells, border accents, one-off adjustments within primitives
 
-**Inline spacing IS acceptable for:**
-
-- ✅ **Component-internal micro-spacing** - Badge/tag padding (`px-2 py-1`),
-  button padding
-- ✅ **Table layouts** - Cell padding (`py-4 px-6`) specific to table design
-- ✅ **Design-specific patterns** - Border accent spacing (`pl-4`, `pl-6`) for
-  visual alignment
-- ✅ **One-off margin adjustments** - Unique positioning that doesn't generalize
-  (`mt-4`, `mb-6`)
-- ✅ **Fine-tuning within primitives** - Adjusting spacing inside a
-  Stack/Section (`mt-2`, `mb-3`)
-
-**Examples of acceptable inline spacing:**
-
-```astro
-<!-- ✅ Component-internal padding -->
-<span class="rounded bg-highlight px-2 py-1 text-sm">Tag</span>
-
-<!-- ✅ Table cell padding -->
-<td class="py-4 px-6 align-top">Content</td>
-
-<!-- ✅ Border accent spacing -->
-<article class="border-l-2 border-border pl-6">
-  <h3>Title</h3>
-</article>
-
-<!-- ✅ One-off adjustment within Stack -->
-<Stack gap="medium">
-  <Heading>Title</Heading>
-  <div class="mt-2 h-0.5 w-16 bg-primary"></div>
-  <!-- Accent line -->
-  <Text class="mt-8">Description</Text>
-  <!-- Extra spacing before description -->
-</Stack>
-```
-
-**Rule of thumb:** If it's layout spacing between sibling elements, use Stack.
-If it's component-internal padding or one-off positioning, inline classes are
-fine.
-
-#### Why This Matters
-
-**Benefits:**
-
-- ✅ **Consistency** - All spacing follows the same responsive scale
-- ✅ **Maintainability** - Change spacing system in one place
-- ✅ **Discoverability** - Clear, semantic component names
-- ✅ **Type-safety** - TypeScript prevents invalid variants
-- ✅ **Mobile-optimized** - All primitives scale from mobile → desktop
-- ✅ **Prevents deviation** - Can't use wrong spacing without bypassing
-  component
-
-**Prevents:**
-
-- ❌ Inconsistent spacing across pages
-- ❌ Non-responsive spacing (fixed `py-16` everywhere)
-- ❌ Ad-hoc spacing values (`py-13`, `space-y-7`)
-- ❌ Technical debt from inline classes
+**Rule**: Layout spacing between siblings = Stack. Component-internal or one-off
+= inline classes OK.
 
 ### Props Pattern
 
-Always support custom className and use `cn` utility for class merging:
+Always support custom `class` prop. Extend CVA variant types.
 
-```ts
-import { cn } from '@/lib/utils'
-import { componentVariants, type ComponentVariants } from './Component.cva'
-
-interface Props extends ComponentVariants {
-  // Component-specific props
-  variant?: 'primary' | 'secondary'
-  size?: 'sm' | 'md' | 'lg'
-
-  // Always include
-  class?: string
-}
-
-const { variant, size, class: className, ...rest } = Astro.props
-```
+**Reference**: `ui/Button.astro`, `ui/Link.astro`
 
 ### Element Polymorphism
 
-Support rendering as different elements when appropriate. Always use `cn` for
-class merging:
+Render as different elements based on props (e.g., `button` vs `a` based on
+`href`). Always use `cn()` for class merging.
 
-```astro
----
-import { cn } from '@/lib/utils'
-import { buttonVariants } from './Button.cva'
-
-// Button can render as <button> or <a> based on href prop
-const Element = href ? 'a' : 'button'
----
-
-<Element
-  {href}
-  type={!href ? type : undefined}
-  class={cn(buttonVariants({ variant, size }), className)}
-  {...rest}
->
-  <slot />
-</Element>
-```
+**Reference**: `ui/Button.astro` (button/a polymorphism)
 
 ### External Links
 
-Link component should handle external links safely:
+Handle external links safely with `target="_blank"` and
+`rel="noopener noreferrer"`.
 
-```astro
----
-const isExternal =
-  external ||
-  (href?.startsWith('http') && !href.startsWith(window.location.origin))
----
-
-<a
-  {href}
-  target={isExternal ? '_blank' : undefined}
-  rel={isExternal ? 'noopener noreferrer' : undefined}
->
-  <slot />
-</a>
-```
+**Reference**: `ui/Link.astro`
 
 ### Accessibility
 
-- Use semantic HTML elements
-- Include ARIA labels when needed
-- Support keyboard navigation
-- Ensure focus states are visible
+- Semantic HTML elements
+- ARIA labels when needed
+- Keyboard navigation support
+- Visible focus states
 
-```astro
-<button
-  aria-label={ariaLabel}
-  class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
->
-  <slot />
-</button>
-```
+**Reference**: `ui/Button.astro`, `features/Navigation.astro`
 
 ### Astro View Transitions
 
-All interactive components must support View Transitions. See
-[Hook Pattern](#hook-pattern) for the full lifecycle implementation.
+All interactive components must support View Transitions. See Hook Pattern for
+lifecycle implementation.
 
-```typescript
-// In .hook.ts files
-document.addEventListener('astro:page-load', initializeComponent)
-document.addEventListener('astro:before-preparation', cleanupComponent)
-```
-
-In Astro components:
-
-```astro
-<a href="/page" transition:name="unique-name">Link</a>
-```
+**Reference**: `features/ThemeToggle.hook.ts`, `ui/PillToggle.hook.ts`
 
 ---
 
 ## Troubleshooting
 
-Common problems and their solutions.
-
 ### Pre-commit hook failing repeatedly?
 
-**Symptom**: You commit → hook fails → fix error → commit → hook fails → repeat
-
-**Root cause**: You didn't run the appropriate checks BEFORE committing
-
-**Solution for code changes**:
-
-```bash
-# 1. Stop committing
-# 2. Run full CI locally
-npm run autofix && npm run ci
-
-# 3. Fix ALL errors shown
-# 4. Repeat until everything passes
-npm run autofix && npm run ci
-
-# 5. THEN commit
-git add .
-git commit -m "Your message"
-```
-
-**Solution for root documentation (AGENTS.md, CLAUDE.md, README.md)**:
-
-```bash
-# 1. Stop committing
-# 2. Run autofix (format + lint only)
-npm run autofix
-
-# 3. Verify output (should be clean)
-# 4. THEN commit
-git add .
-git commit -m "Your message"
-```
-
-**Solution for content collection markdown (src/content/**/\*.md)\*\*:
-
-```bash
-# 1. Stop committing
-# 2. Run autofix + type-check
-npm run autofix && npm run type-check
-
-# 3. (Optional) Run build to catch runtime errors
-npm run build
-
-# 4. Fix all errors shown
-# 5. THEN commit
-git add .
-git commit -m "Your message"
-```
-
-### Not sure if task needs delegation?
-
-**Rule of thumb**:
-
-- **4+ files OR complex logic** → Use delegation (TodoWrite + Task tool)
-- **Uncertain?** → Delegate (better safe than context overflow)
-- **1-3 simple files** → Work directly
-
-**When to delegate**:
-
-- Creating new component families (multiple related files)
-- Large refactoring across components
-- Any task where you might lose track of requirements
+**Solution**: Run checks BEFORE committing (see Git Commit Workflow table)
 
 ### Hook pattern not working across View Transitions?
 
-**Check 1**: Does each `setup*()` function register its own `astro:page-load`
-listener?
+**Check**:
 
-```typescript
-// ✅ Correct
-export function setupComponent() {
-  initializeComponent() // Initial setup
-  document.addEventListener('astro:page-load', initializeComponent) // Re-init
-}
-```
+1. Each `setup*()` registers `astro:page-load` listener
+2. Cleanup function implemented and called
+3. `BaseLayout.astro` calls `initComponentHooks()` ONCE (no `astro:page-load`
+   wrapper)
 
-**Check 2**: Is cleanup function implemented and called?
-
-```typescript
-// ✅ Correct
-export function initializeComponent() {
-  if (cleanup !== null) {
-    cleanup() // Clean up previous init
-  }
-
-  // ... setup logic
-
-  cleanup = () => {
-    // Remove listeners, clear state
-  }
-
-  return cleanup
-}
-```
-
-**Check 3**: Is `BaseLayout.astro` calling `initComponentHooks()` only ONCE?
-
-```astro
-<!-- ✅ Correct -->
-<script>
-  initComponentHooks() // Called ONCE, no astro:page-load wrapper
-</script>
-```
+**Reference**: `features/ThemeToggle.hook.ts`, `ui/PillToggle.hook.ts`
 
 ### Tests failing in CI but pass locally?
 
-**Cause**: You're not running the full CI pipeline locally
+**Solution**: Run `npm run ci` (not individual commands)
 
-**Solution**:
+### Memory leaks / duplicate listeners?
 
-```bash
-# Don't run individual commands
-# ❌ npm run test
-# ❌ npm run lint
+**Solution**: Implement cleanup function in `.hook.ts` (see Hook Pattern
+section)
 
-# Run the full CI pipeline exactly
-# ✅ npm run ci
-npm run ci
+### .hook.css or `<style>` block?
 
-# This runs: test + format check + type-check + lint + build
-```
+**`.hook.css`**: ONLY for Tailwind directives (`@theme`, `@custom-variant`,
+`@layer`) **`<style>`**: Everything else (regular CSS, animations)
 
-### Which workflow for my markdown file?
+### Subcomponent CVA file?
 
-**Question**: I'm editing a `.md` file - do I need `autofix`, `type-check`, or
-full `ci`?
-
-**Answer**: Depends on location:
-
-| File Location                        | Workflow                                | Why                                         |
-| ------------------------------------ | --------------------------------------- | ------------------------------------------- |
-| Root (AGENTS.md, README.md, etc.)    | `npm run autofix`                       | Not part of build, no schema validation     |
-| `src/content/**/*.md`                | `npm run autofix && npm run type-check` | Has frontmatter with Zod schema validation  |
-| Code files (`.ts`, `.astro`, `.css`) | `npm run autofix && npm run ci`         | Needs tests, type-check, linting, and build |
-
-**Quick check**: If your markdown file is in `src/content/` (blog, projects,
-projectLogs), it has frontmatter schemas and needs `type-check`. If it's in the
-root directory, it doesn't.
-
-### Memory leaks / duplicate event listeners?
-
-**Symptom**: Handlers fire multiple times after navigating between pages
-
-**Cause**: Not properly cleaning up event listeners before View Transitions
-
-**Solution**: Implement cleanup function in `.hook.ts`:
-
-```typescript
-let cleanup: CleanupFunction | null = null
-
-export function initializeComponent() {
-  // Clean up previous initialization
-  if (cleanup !== null) {
-    cleanup()
-  }
-
-  // Setup listeners
-  const handler = () => {
-    /* ... */
-  }
-  element.addEventListener('click', handler)
-
-  // Return cleanup function
-  cleanup = () => {
-    element.removeEventListener('click', handler)
-    cleanup = null
-  }
-
-  return cleanup
-}
-```
-
-### Should I create .hook.css or use `<style>` block?
-
-**Use `.hook.css` ONLY when you need Tailwind v4 directives**:
-
-- `@theme` - Extending theme tokens
-- `@custom-variant` - Custom variants
-- `@layer` - Layer-specific styles
-
-**Use `<style>` block for everything else**:
-
-- Regular CSS
-- Animations (`@keyframes`)
-- Component-specific styles
-
-See [Styling Philosophy](#styling-philosophy) for details.
-
-### Subcomponent CVA: Separate file or parent's file?
-
-**ALWAYS use parent's .cva.ts file** for subcomponent variants.
-
-```typescript
-// ✅ Correct: PillToggle.cva.ts contains variants for PillToggle AND PillToggleButton
-export const pillToggleVariants = cva(/* ... */)
-export const pillToggleButtonVariants = cva(/* ... */)
-export const pillToggleSliderVariants = cva(/* ... */)
-
-// ❌ Wrong: Creating PillToggleButton.cva.ts
-// This causes drift and violates co-location pattern
-```
-
-See [CVA File Organization](#cva-file-organization) for why this matters.
+**ALWAYS** use parent's `.cva.ts` file for subcomponent variants (never create
+separate `.cva.ts` for subcomponents)
 
 ---
 
 ## Quick Reference
 
-### Creating a New Component Checklist
+### Creating a New Component
 
-**Workflow (Follow in order)**:
+1. **Tests**: TDD recommended; must have tests before commit
+2. **Files**: Create `.astro`, `.cva.ts` (if variants), `.hook.ts` (if
+   interactive), `.utils.ts`/`.config.ts`/`.types.ts` (if 3+ items)
+3. **Implement**: Add to `hooks.ts` orchestrator, support `class` prop
+4. **Subcomponents**: Prefix with parent name, import parent's CVA
+5. **Tests**: Component, hook, utils, config, types tests
+6. **Before commit**: Run appropriate workflow (see Git Commit table)
+7. **Commit when**: All tests pass, CI passes, coverage targets met
 
-1. **Determine if tests should be first** (TDD recommended for complex
-   features):
-   - Complex feature → Write tests FIRST
-   - Simple component → Tests during or after implementation OK
-   - MUST have tests before commit regardless
+**Critical P0/P1 Rules**:
 
-2. **Create component files** in appropriate directory (`ui/`, `features/`,
-   `pages/`):
-   - Create `Component.astro`
-   - Create `Component.cva.ts` if component has variants (will contain variants
-     for all subcomponents too)
-   - Create `Component.hook.ts` if interactive behavior needed
-   - Create `Component.utils.ts` if 3+ helper functions needed
-   - Create `Component.config.ts` if 3+ configuration options needed
-   - Create `Component.types.ts` if 3+ custom types needed
-
-3. **Implement functionality**:
-   - Add hook to appropriate `hooks.ts` orchestrator if using `.hook.ts`
-   - Create `Component.hook.css` ONLY if Tailwind directives needed (`@theme`,
-     etc.)
-   - Import `.hook.css` in `ui/hooks.css` or `features/hooks.css` if created
-   - Support custom `class` prop in all components
-
-4. **Create subcomponents** as `Component<Subcomponent>.astro`:
-   - Name with parent prefix: `PillToggleButton.astro`
-   - Subcomponents import variants from parent's `Component.cva.ts` file
-   - Write tests for each subcomponent
-
-5. **Write comprehensive tests** (if not done in step 1):
-   - `Component.test.ts` - Component rendering and props
-   - `Component.hook.test.ts` - Hook behavior and cleanup
-   - `Component.utils.test.ts` - Utility functions (100% coverage target)
-   - `Component.config.test.ts` - Configuration validation (100% coverage
-     target)
-   - `Component.types.test.ts` - Type constraints
-   - `Component<Subcomponent>.test.ts` - Subcomponent tests
-
-6. **BEFORE committing**:
-   - **For code changes**: Run `npm run autofix && npm run ci` - Full CI
-     pipeline
-   - **For root documentation** (AGENTS.md, README.md): Run `npm run autofix` -
-     Format + lint only
-   - **For content markdown** (src/content/\*_/_.md): Run
-     `npm run autofix && npm run type-check` - Plus schema validation
-   - Fix ALL errors and warnings
-   - Repeat until everything passes
-
-7. **Commit only when**:
-   - ✅ All tests pass
-   - ✅ Full CI pipeline passes (`npm run ci`)
-   - ✅ Code coverage meets targets (or is improving)
-
-**Critical reminders:**
-
-- ❌ Do NOT commit before running `npm run autofix && npm run ci`
-- ❌ Do NOT commit with failing tests
-- ❌ Do NOT create separate `.cva.ts` files for subcomponents
-- ❌ Do NOT bypass `--no-verify` on commits
-- ❌ Do NOT use CSS classes as hook selectors
-- ❌ Do NOT pass className directly to CVA variants
-- ❌ Do NOT use inline spacing classes (use Section, Container, Stack)
-- ✅ DO run full CI before commit to avoid hook failure loop
-- ✅ DO write tests before commit (timing flexible, but tests required)
-- ✅ DO name subcomponents with parent prefix (e.g., `PillToggleButton.astro`)
-- ✅ DO export all variants from parent's `.cva.ts` file
-- ✅ DO use `data-*` attributes for hook selectors (never CSS classes)
-- ✅ DO use `cn()` utility to merge CVA variants with custom classes
-- ✅ DO use layout primitives (Section, Container, Stack) for spacing
-- ✅ DO test edge cases and error conditions
-- ✅ DO test cleanup and memory management in hooks
-- ✅ DO improve existing code opportunistically (add tests when modifying)
+- ❌ No `--no-verify`, no CSS class selectors in hooks, no separate subcomponent
+  CVA files
+- ✅ Use `data-*` for hooks, `cn()` for class merging, layout primitives for
+  spacing
 
 ### Common Commands
 
@@ -2218,65 +1166,25 @@ git commit           # Commit (hooks run automatically)
 
 ### Decision Flowchart
 
-```text
-Should I delegate this task?
-├─ 1-3 simple files? → Work directly
-├─ 4+ files OR complex logic? → Delegate
-└─ Uncertain? → Delegate (safer)
-
-Should I ask for approval?
-├─ Following documented P1 patterns? → Proceed
-├─ Deviating from P0/P1? → Ask first
-└─ Uncertain? → Ask first
-
-Should I use layout primitives or inline spacing?
-├─ Section padding (py-*)? → Use <Section>
-├─ Container width (max-w-*)? → Use <Container>
-├─ Vertical spacing (space-y-*)? → Use <Stack>
-└─ One-off adjustment? → Utility class OK
-
-Should I create a .hook.css file?
-├─ Need @theme, @custom-variant, @layer? → Yes, create .hook.css
-└─ Regular CSS or animations? → No, use <style> in .astro
-
-Should I use <script> or .hook.ts?
-├─ Needs View Transitions support? → .hook.ts
-├─ Multiple pages? → .hook.ts
-├─ Needs cleanup? → .hook.ts
-└─ One-off, simple interaction? → <script>
-```
+**Delegate?** 4+ files OR complex logic = Yes. 1-3 simple files = No. **Ask
+approval?** Deviating from P0/P1 = Yes. Following patterns = No. **Layout?**
+Section/Container/Stack for layout. Inline for component-internal.
+**.hook.css?** Tailwind directives = Yes. Regular CSS = `<style>` in .astro.
+**`.hook.ts`?** View Transitions + multiple pages = Yes. One-off = `<script>`.
 
 ---
 
 ## Summary
 
-This codebase values:
+This codebase values strict adherence to patterns, co-location, type safety,
+testing discipline, memory safety (cleanup functions), and accessibility.
 
-- **Strict adherence to patterns** - Consistency prevents bugs and technical
-  debt
-- **Co-location** - Related files live together for maintainability
-- **Separation of concerns** - CVA, hooks, styles in separate files with clear
-  responsibilities
-- **Type safety** - TypeScript everywhere catches errors early
-- **Quality over speed** - Do it right the first time, even if it takes longer
-- **Testing discipline** - New code must be tested; improve existing code
-  opportunistically
-- **Memory safety** - Proper cleanup prevents leaks in View Transitions
-- **Accessibility** - Semantic HTML and ARIA for all interactive components
-- **Process discipline** - Always run full CI before committing
+**When in doubt**: Study reference implementations (see top section), check
+relevant pattern sections, review Troubleshooting, or ask user for
+clarification.
 
-**When in doubt:**
-
-1. Look at existing implementations: `Button.astro`, `Link.astro`, `Badge.astro`
-2. Reference the [Hook Pattern](#hook-pattern), [CVA Pattern](#cva-pattern), and
-   [Styling Philosophy](#styling-philosophy) sections
-3. Check [Troubleshooting](#troubleshooting) for common issues
-4. Ask the user for clarification rather than guessing
-
-**Remember**: The strictness of these patterns exists to prevent production
-failures, not to slow you down. Following them precisely ensures code quality,
-prevents memory leaks, maintains consistency, and makes the codebase
-maintainable long-term.
+**Remember**: These strict patterns prevent production failures, memory leaks,
+and technical debt.
 
 ---
 
