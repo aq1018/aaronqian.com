@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 import Navigation from '@/components/features/Navigation.astro'
+import '@/styles/global.css'
 
 interface Props {
   title?: string
@@ -57,9 +58,6 @@ const {
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, Astro.url)} />
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
 
     <!-- Client Router for SPA-like navigation -->
     <ClientRouter />

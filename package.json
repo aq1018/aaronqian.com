@@ -15,7 +15,7 @@
     "ci": "npm run test:run && npm run format:check && npm run type-check && npm run lint && npm run build",
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "npm run build && npx wrangler dev",
+    "preview": "npx wrangler dev",
     "deploy": "npm run build && npx wrangler deploy",
     "astro": "astro",
     "prepare": "husky"
