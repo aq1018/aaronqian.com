@@ -5,22 +5,17 @@
 
 import type { DigitalAnalyzerOptions } from './DigitalAnalyzer.types'
 
-export const defaultOptions: Required<Omit<DigitalAnalyzerOptions, 'customBinaryData'>> & {
-  customBinaryData: undefined
-} = {
+export const defaultOptions: Required<DigitalAnalyzerOptions> = {
   // Grid appearance
   gridOpacity: 0.2, // Static grid line opacity
 
   // Digital signal waveform configuration
   byteCount: 2, // Number of bytes per trace (determines how many grid cells horizontally)
   bitsPerByte: 8, // Bits per byte constant
-  dataSource: 'config', // 'random' | 'config' | 'prop'
+  dataSource: 'config', // 'random' | 'config'
   defaultMessage: 'HTTP/1.1 404 CoffeeNotFound', // Message used when dataSource is 'config'
-  waveformStyle: 'square', // Waveform style: 'square' (for future: 'rounded')
-  customBinaryData: undefined, // For prop-based data source
 
   // Trace behavior
-  maxConcurrentTraces: 1, // Max number of traces drawing at once
   traceInitialDelay: 800, // Delay before first trace (ms)
   traceMinInterval: 1000, // Minimum time between traces (ms)
   traceMaxInterval: 1500, // Maximum time between traces (ms)

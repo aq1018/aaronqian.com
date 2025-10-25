@@ -2,8 +2,7 @@
  * Type definitions for digital analyzer signal visualization
  */
 
-export type DataSource = 'config' | 'random' | 'prop'
-export type WaveformStyle = 'square' // Future: 'rounded'
+export type DataSource = 'config' | 'random'
 
 export interface DigitalAnalyzerOptions {
   // Grid appearance
@@ -14,11 +13,8 @@ export interface DigitalAnalyzerOptions {
   bitsPerByte?: number
   dataSource?: DataSource
   defaultMessage?: string
-  waveformStyle?: WaveformStyle
-  customBinaryData?: string | undefined // For prop-based data source
 
   // Trace behavior
-  maxConcurrentTraces?: number
   traceInitialDelay?: number
   traceMinInterval?: number
   traceMaxInterval?: number
