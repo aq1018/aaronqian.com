@@ -16,6 +16,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:cf": "npm run build && npx wrangler dev",
+    "deploy": "npm run build && npx wrangler deploy",
     "astro": "astro",
     "prepare": "husky"
   },
