@@ -108,6 +108,8 @@ absolute vs. what requires judgment.
   locally before attempting commit
 - ✅ **`data-*` attributes for hook selectors** - Never use CSS classes as hook
   selectors
+- ✅ **Never modify ESLint config or use disable comments** - Fix errors with
+  proper typing instead
 
 ### P1 - FOLLOW STRICTLY (Required for consistency)
 
@@ -125,6 +127,8 @@ ask for approval to deviate.**
 - ✅ **Import aliases** - Use `@/*` instead of relative paths from `src/`
 - ✅ **Layout primitives for spacing** - Use Section, Container, Stack
   components instead of inline spacing classes
+- ✅ **Type guards over type assertions** - Use or extend
+  `src/utils/typeGuards.ts` instead of `as` casts
 
 ### P2 - USE JUDGMENT (Best practices, ask if deviating)
 
@@ -951,6 +955,8 @@ All must pass before merging. No exceptions.
 5. Clean up side effects: `beforeEach`/`afterEach`
 6. Mock external dependencies
 7. Test edge cases: empty arrays, null, undefined, boundaries
+8. Every test must have at least one `expect()` assertion
+9. Don't test compile-time type checking (ESLint handles this)
 
 ---
 
@@ -1103,6 +1109,11 @@ section)
 **ALWAYS** use parent's `.cva.ts` file for subcomponent variants (never create
 separate `.cva.ts` for subcomponents)
 
+### ESLint errors?
+
+**Solution**: Use type guards from `src/utils/typeGuards.ts` or add new ones.
+Never modify ESLint config or use disable comments
+
 ---
 
 ## Quick Reference
@@ -1156,11 +1167,13 @@ git commit           # Commit (hooks run automatically)
 | View Transitions lifecycle        | P0       | ❌ Never        |
 | Run autofix && ci before commit   | P0       | ❌ Never        |
 | No `--no-verify`                  | P0       | ❌ Never        |
+| No ESLint config edits or disable | P0       | ❌ Never        |
 | Component naming conventions      | P1       | ⚠️ Ask first    |
 | CVA file organization             | P1       | ⚠️ Ask first    |
 | Use `cn()` for class merging      | P1       | ⚠️ Ask first    |
 | Layout primitives for spacing     | P1       | ⚠️ Ask first    |
 | Testing for new code              | P1       | ⚠️ Ask first    |
+| Type guards over assertions       | P1       | ⚠️ Ask first    |
 | Specific coverage percentages     | P2       | ✅ Use judgment |
 | Optional file creation thresholds | P2       | ✅ Use judgment |
 
