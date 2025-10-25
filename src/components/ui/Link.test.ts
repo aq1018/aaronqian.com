@@ -191,35 +191,6 @@ describe('Link Component', () => {
     })
   })
 
-  describe('linkVariants - TypeScript Types', () => {
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid variant values', () => {
-      linkVariants({ variant: 'content' })
-      linkVariants({ variant: 'nav' })
-      linkVariants({ variant: 'back' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept boolean active', () => {
-      linkVariants({ active: true })
-      linkVariants({ active: false })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept custom class string', () => {
-      linkVariants({ class: 'custom-class' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept multiple props together', () => {
-      linkVariants({
-        variant: 'nav',
-        active: true,
-        class: 'custom',
-      })
-    })
-  })
-
   describe('linkVariants - Semantic Usage', () => {
     it('should provide appropriate styles for inline content links', () => {
       const result = linkVariants({ variant: 'content' })

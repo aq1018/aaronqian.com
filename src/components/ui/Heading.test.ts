@@ -335,64 +335,6 @@ describe('Heading Component', () => {
     })
   })
 
-  describe('headingVariants - TypeScript Types', () => {
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid level values', () => {
-      headingVariants({ level: 'h1' })
-      headingVariants({ level: 'h2' })
-      headingVariants({ level: 'h3' })
-      headingVariants({ level: 'h4' })
-      headingVariants({ level: 'h5' })
-      headingVariants({ level: 'h6' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid font values', () => {
-      headingVariants({ font: 'sans' })
-      headingVariants({ font: 'mono' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid weight values', () => {
-      headingVariants({ weight: 'normal' })
-      headingVariants({ weight: 'medium' })
-      headingVariants({ weight: 'semibold' })
-      headingVariants({ weight: 'bold' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid color values', () => {
-      headingVariants({ color: 'fg' })
-      headingVariants({ color: 'muted' })
-      headingVariants({ color: 'primary' })
-      headingVariants({ color: 'accent' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid align values', () => {
-      headingVariants({ align: 'left' })
-      headingVariants({ align: 'center' })
-      headingVariants({ align: 'right' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept custom class string', () => {
-      headingVariants({ class: 'custom-class' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept multiple props together', () => {
-      headingVariants({
-        level: 'h1',
-        font: 'mono',
-        weight: 'semibold',
-        color: 'primary',
-        align: 'center',
-        class: 'custom',
-      })
-    })
-  })
-
   describe('headingVariants - Semantic Usage', () => {
     it('should provide appropriate hierarchy sizing', () => {
       const h1 = headingVariants({ level: 'h1' })

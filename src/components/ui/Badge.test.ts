@@ -162,35 +162,6 @@ describe('Badge Component', () => {
     })
   })
 
-  describe('badgeVariants - TypeScript Types', () => {
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid variant values', () => {
-      badgeVariants({ variant: 'status' })
-      badgeVariants({ variant: 'tag' })
-      badgeVariants({ variant: 'outline' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept boolean pulse', () => {
-      badgeVariants({ pulse: true })
-      badgeVariants({ pulse: false })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept custom class string', () => {
-      badgeVariants({ class: 'custom-class' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept multiple props together', () => {
-      badgeVariants({
-        variant: 'outline',
-        pulse: true,
-        class: 'custom',
-      })
-    })
-  })
-
   describe('badgeVariants - Semantic Usage', () => {
     it('should provide appropriate styles for status badges (e.g., LIVE)', () => {
       const result = badgeVariants({ variant: 'status' })

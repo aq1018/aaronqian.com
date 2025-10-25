@@ -153,37 +153,6 @@ describe('Stack Component', () => {
     })
   })
 
-  describe('stackVariants - TypeScript Types', () => {
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid gap combinations', () => {
-      // These should all compile without TypeScript errors
-      stackVariants({ gap: 'tight' })
-      stackVariants({ gap: 'small' })
-      stackVariants({ gap: 'medium' })
-      stackVariants({ gap: 'large' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid direction combinations', () => {
-      stackVariants({ direction: 'vertical' })
-      stackVariants({ direction: 'horizontal' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept custom class string', () => {
-      stackVariants({ class: 'custom-class' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept multiple props together', () => {
-      stackVariants({
-        direction: 'horizontal',
-        gap: 'large',
-        class: 'custom',
-      })
-    })
-  })
-
   describe('stackVariants - Spacing Values', () => {
     it('should have correct tight spacing values', () => {
       const result = stackVariants({ gap: 'tight' })

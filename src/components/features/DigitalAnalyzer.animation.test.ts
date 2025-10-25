@@ -11,12 +11,10 @@ import type { TraceAnimationOptions } from './DigitalAnalyzer.animation'
 import { DisplayManager } from './DigitalAnalyzer.display'
 
 describe('TraceAnimationManager', () => {
-  /* eslint-disable @typescript-eslint/init-declarations -- Variables initialized in beforeEach for test isolation */
   let mockPathElement: SVGPathElement
   let mockLightningBolt: HTMLElement
   let displayManager: DisplayManager
   let mockGetLightningGlowColor: (isDark: boolean) => string
-  /* eslint-enable @typescript-eslint/init-declarations */
 
   beforeEach(() => {
     // Setup DOM

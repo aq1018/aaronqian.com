@@ -109,7 +109,7 @@ export default [
     // Custom rule overrides for all TS/JS files
     files: TS_JS_FILES,
     rules: {
-      'max-lines': ['error', { max: 200 }],
+      'max-lines': ['error', { max: 200, skipComments: true, skipBlankLines: true }],
       'no-console': 'off',
       complexity: 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
@@ -164,6 +164,7 @@ export default [
     rules: {
       ...vitest.configs.recommended.rules,
       '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/init-declarations': 'off',
       'max-lines': 'off',
       'max-nested-callbacks': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',

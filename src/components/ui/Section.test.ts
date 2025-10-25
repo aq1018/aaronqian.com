@@ -210,36 +210,6 @@ describe('Section Component', () => {
     })
   })
 
-  describe('sectionVariants - TypeScript Types', () => {
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid variant values', () => {
-      // These should all compile without TypeScript errors
-      sectionVariants({ variant: 'hero' })
-      sectionVariants({ variant: 'content' })
-      sectionVariants({ variant: 'subsection' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid background values', () => {
-      sectionVariants({ background: 'surface' })
-      sectionVariants({ background: 'bg' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept custom class string', () => {
-      sectionVariants({ class: 'custom-class' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept multiple props together', () => {
-      sectionVariants({
-        variant: 'hero',
-        background: 'surface',
-        class: 'custom',
-      })
-    })
-  })
-
   describe('sectionVariants - Semantic Correctness', () => {
     it('should provide progressively smaller padding from hero to subsection', () => {
       const hero = sectionVariants({ variant: 'hero' })

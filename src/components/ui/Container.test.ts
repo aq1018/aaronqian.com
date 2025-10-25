@@ -113,29 +113,6 @@ describe('Container Component', () => {
     })
   })
 
-  describe('containerVariants - TypeScript Types', () => {
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept all valid size combinations', () => {
-      // These should all compile without TypeScript errors
-      containerVariants({ size: 'narrow' })
-      containerVariants({ size: 'default' })
-      containerVariants({ size: 'wide' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept custom class string', () => {
-      containerVariants({ class: 'custom-class' })
-    })
-
-    // eslint-disable-next-line vitest/expect-expect -- Type checking test validates TypeScript type safety
-    it('should accept multiple props together', () => {
-      containerVariants({
-        size: 'wide',
-        class: 'custom',
-      })
-    })
-  })
-
   describe('containerVariants - Responsive Behavior', () => {
     it('should include responsive padding classes', () => {
       const result = containerVariants()

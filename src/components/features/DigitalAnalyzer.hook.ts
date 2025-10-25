@@ -3,8 +3,6 @@
  * Orchestrates waveform timing and lightning bolt sync with dynamic sizing
  */
 
-/* eslint-disable max-lines -- Hook orchestration reduced from 479 to ~200 lines via module extraction */
-
 import { createTraceAnimation } from './DigitalAnalyzer.animation'
 import { defaultOptions } from './DigitalAnalyzer.config'
 import { DataSourceManager } from './DigitalAnalyzer.data'
@@ -16,6 +14,8 @@ import {
   getGlowColor,
   getLightningGlowColor,
 } from './DigitalAnalyzer.utils'
+
+import { queryElement, querySVGElement } from '@/utils/typeGuards'
 
 type CleanupFunction = () => void
 type DigitalAnalyzerConfig = Required<DigitalAnalyzerOptions>
@@ -32,25 +32,21 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
     cleanup()
   }
 
-  const containerEl = document.querySelector('[data-digital-analyzer]')
-  const svgEl = document.getElementById('digital-analyzer-svg')
-  const staticSvgEl = document.querySelector('.digital-analyzer-static')
-  const lightningBolt = document.querySelector<HTMLElement>('[data-lightning-bolt]')
+  const container = queryElement<HTMLElement>('[data-digital-analyzer]')
+  const svgResult = querySVGElement('#digital-analyzer-svg')
+  const staticSvgResult = querySVGElement('.digital-analyzer-static')
+  const lightningBolt = queryElement<HTMLElement>('[data-lightning-bolt]')
 
-  if (svgEl === null || containerEl === null || staticSvgEl === null) {
+  if (svgResult === null || container === null || staticSvgResult === null) {
     cleanup = () => {}
     return cleanup
   }
 
-  // These are guaranteed non-null after the check above
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Validated non-null by check above
-  const container = containerEl as HTMLElement
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- SVGElement requires double cast
-  const svg = svgEl as unknown as SVGSVGElement
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- SVGElement requires double cast
-  const staticSvg = staticSvgEl as unknown as SVGSVGElement
+  // Type narrowing: guaranteed non-null after check above
+  const svg: SVGSVGElement = svgResult
+  const staticSvg: SVGSVGElement = staticSvgResult
 
-  const config: DigitalAnalyzerConfig = defaultOptions as DigitalAnalyzerConfig
+  const config: DigitalAnalyzerConfig = defaultOptions
   const bitCount = config.byteCount * config.bitsPerByte
   let currentTimeline: gsap.core.Timeline | null = null
 

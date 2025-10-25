@@ -8,11 +8,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { DisplayManager } from './DigitalAnalyzer.display'
 
 describe('DisplayManager', () => {
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let binaryBuffer!: HTMLElement
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let asciiDisplay!: HTMLElement
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let displayManager!: DisplayManager
 
   beforeEach(() => {

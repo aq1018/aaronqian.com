@@ -7,15 +7,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { type GridConfig, GridManager } from './DigitalAnalyzer.grid'
 
 describe('GridManager', () => {
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let staticSvg!: SVGSVGElement
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let dynamicSvg!: SVGSVGElement
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let gridGroup!: SVGGElement
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let maskRect!: SVGRectElement
-  // eslint-disable-next-line @typescript-eslint/init-declarations -- Initialized in beforeEach
   let config!: GridConfig
 
   beforeEach(() => {
