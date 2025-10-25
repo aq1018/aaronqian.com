@@ -9,11 +9,7 @@ import { DataSourceManager } from './DigitalAnalyzer.data'
 import { DisplayManager } from './DigitalAnalyzer.display'
 import { GridManager } from './DigitalAnalyzer.grid'
 import type { DigitalAnalyzerOptions } from './DigitalAnalyzer.types'
-import {
-  generateSquareWavePath,
-  getGlowColor,
-  getLightningGlowColor,
-} from './DigitalAnalyzer.utils'
+import { generateSquareWavePath, getGlowColor } from './DigitalAnalyzer.utils'
 
 import { queryElement, querySVGElement } from '@/utils/typeGuards'
 
@@ -125,8 +121,7 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
     // Setup draw animation - start with path hidden
     pathElement.style.strokeDasharray = `${pathLength} ${pathLength}`
     pathElement.style.strokeDashoffset = String(pathLength)
-    const isDark = document.documentElement.classList.contains('dark')
-    const glowColor = getGlowColor(isDark, config.lineOpacity)
+    const glowColor = getGlowColor(config.lineOpacity)
     pathElement.style.filter = `drop-shadow(0 0 3px ${glowColor})`
     pathElement.style.opacity = String(config.lineOpacity)
 
@@ -148,7 +143,6 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
         byteCount: config.byteCount,
         dataSource: config.dataSource,
       },
-      getLightningGlowColor,
     })
 
     // Track current timeline
@@ -192,11 +186,10 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
     // Clear SVG traces
     svg.innerHTML = ''
 
-    // Reset lightning bolt
+    // Reset lightning bolt to initial state
     if (lightningBolt !== null) {
-      lightningBolt.style.opacity = ''
       lightningBolt.style.transform = ''
-      lightningBolt.style.filter = ''
+      lightningBolt.style.filter = 'brightness(0.7)'
     }
 
     // Clear display managers

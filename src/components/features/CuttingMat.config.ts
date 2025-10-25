@@ -13,9 +13,9 @@ export const defaultOptions: Required<CuttingMatOptions> = {
   angleLabelArcIndex: -1,
   showTeeth: true,
   angleMarkRadius: 1.5,
-  majorOpacity: 0.175,
-  minorOpacity: 0.12,
-  labelOpacity: 0.175,
+  majorOpacity: 0.3,
+  minorOpacity: 0.2,
+  labelOpacity: 0.3,
   majorStrokeWidth: 1.5,
   minorStrokeWidth: 1,
 }

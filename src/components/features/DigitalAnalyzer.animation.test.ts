@@ -14,7 +14,6 @@ describe('TraceAnimationManager', () => {
   let mockPathElement: SVGPathElement
   let mockLightningBolt: HTMLElement
   let displayManager: DisplayManager
-  let mockGetLightningGlowColor: (isDark: boolean) => string
 
   beforeEach(() => {
     // Setup DOM
@@ -35,9 +34,6 @@ describe('TraceAnimationManager', () => {
 
     // Create display manager
     displayManager = new DisplayManager('binary-buffer', 'ascii-text')
-
-    // Mock glow color function
-    mockGetLightningGlowColor = vi.fn((isDark: boolean) => (isDark ? '#00ffff' : '#0088ff'))
 
     // Add dark class to test light theme initially
     document.documentElement.classList.remove('dark')
@@ -66,7 +62,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'config',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -75,7 +70,7 @@ describe('TraceAnimationManager', () => {
       expect(timeline).toBeInstanceOf(gsap.core.Timeline)
     })
 
-    it('should set lightning bolt glow at position 0', () => {
+    it('should energize lightning bolt at position 0', () => {
       const options: TraceAnimationOptions = {
         pathElement: mockPathElement,
         binaryData: '10101010',
@@ -90,21 +85,16 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
 
-      // Verify glow color function was called
-      expect(mockGetLightningGlowColor).toHaveBeenCalledWith(false) // light theme
-
       // Timeline should be created
       expect(timeline).toBeDefined()
+      expect(timeline).toBeInstanceOf(gsap.core.Timeline)
     })
 
-    it('should handle dark theme for lightning glow color', () => {
-      document.documentElement.classList.add('dark')
-
+    it('should handle lightning bolt brightness animation', () => {
       const options: TraceAnimationOptions = {
         pathElement: mockPathElement,
         binaryData: '10101010',
@@ -119,12 +109,12 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
-      createTraceAnimation(options)
+      const timeline = createTraceAnimation(options)
 
-      expect(mockGetLightningGlowColor).toHaveBeenCalledWith(true) // dark theme
+      // Timeline should be created and animate lightning bolt
+      expect(timeline).toBeDefined()
     })
 
     it('should NOT call clearBinaryBuffer (now handled in hook.ts to prevent race conditions)', () => {
@@ -144,7 +134,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       createTraceAnimation(options)
@@ -172,7 +161,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -208,7 +196,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 2,
           dataSource: 'config',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -240,7 +227,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -269,7 +255,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -298,7 +283,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -327,7 +311,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -353,7 +336,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       // Should not throw
@@ -377,7 +359,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 0,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -405,7 +386,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'config',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -431,7 +411,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)
@@ -458,7 +437,6 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
-        getLightningGlowColor: mockGetLightningGlowColor,
       }
 
       const timeline = createTraceAnimation(options)

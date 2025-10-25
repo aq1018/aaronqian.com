@@ -209,35 +209,23 @@ describe('generateSquareWavePath', () => {
 })
 
 describe('getGlowColor', () => {
-  it('should return cyan glow for dark mode', () => {
-    const color = getGlowColor(true, 0.5)
+  it('should return color-mix with primary color and custom opacity', () => {
+    const color = getGlowColor(0.5)
 
-    expect(color).toBe('rgba(0, 224, 255, 0.5)')
+    expect(color).toBe('color-mix(in srgb, var(--color-primary) 50%, transparent)')
   })
 
-  it('should return cyan glow for light mode', () => {
-    const color = getGlowColor(false, 0.3)
+  it('should return color-mix with primary color and default opacity', () => {
+    const color = getGlowColor()
 
-    expect(color).toBe('rgba(0, 180, 216, 0.3)')
-  })
-
-  it('should use default opacity', () => {
-    const color = getGlowColor(true)
-
-    expect(color).toBe('rgba(0, 224, 255, 0.3)')
+    expect(color).toBe('color-mix(in srgb, var(--color-primary) 30%, transparent)')
   })
 })
 
 describe('getLightningGlowColor', () => {
-  it('should return bright cyan for dark mode', () => {
-    const color = getLightningGlowColor(true)
+  it('should return primary-400 CSS variable', () => {
+    const color = getLightningGlowColor()
 
-    expect(color).toBe('rgba(0, 224, 255, 1)')
-  })
-
-  it('should return cyan for light mode', () => {
-    const color = getLightningGlowColor(false)
-
-    expect(color).toBe('rgba(0, 180, 216, 1)')
+    expect(color).toBe('var(--color-primary-400)')
   })
 })

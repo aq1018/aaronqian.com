@@ -25,7 +25,8 @@ import Stack from '@/components/ui/Stack.astro'
       Input coffee <button
         id="lightning-bolt"
         data-lightning-bolt
-        class="inline-block cursor-pointer text-primary opacity-70 transition-all duration-200 ease-out hover:opacity-100 motion-reduce:transition-none motion-reduce:transform-none"
+        class="inline-block cursor-pointer text-primary transition-all duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none"
+        style="filter: brightness(0.7);"
         aria-label="Toggle secret message"
         aria-controls="secret-message"
         aria-expanded="false"
@@ -75,16 +76,10 @@ import Stack from '@/components/ui/Stack.astro'
       gap="small"
       class="mt-12 flex-col items-center justify-center sm:flex-row"
     >
-      <Button
-        href="/blog"
-        variant="solid"
-        color="primary"
-        size="lg"
-        class="group px-8 py-3.5 text-mono-upper text-sm tracking-wider shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
-      >
+      <Button href="/blog" variant="solid" color="primary" size="lg">
         <span>Read My Notes</span>
         <svg
-          class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+          class="h-4 w-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -105,7 +100,6 @@ import Stack from '@/components/ui/Stack.astro'
         size="lg"
         external
         aria-label="Open LaunchPath (new tab)"
-        class="group px-8 py-3.5 text-mono-upper text-sm tracking-wider transition-all duration-300 hover:scale-105"
       >
         <span>LaunchPath →</span>
       </Button>

@@ -84,22 +84,6 @@ describe('HeroContent', () => {
     })
   })
 
-  describe('Animated accent line', () => {
-    it('should always render accent line', async () => {
-      const root = await renderComponent()
-      const accentLine = root.querySelector('.bg-primary')
-      expect(accentLine).toBeTruthy()
-    })
-
-    it('should have correct accent line classes', async () => {
-      const root = await renderComponent()
-      const accentLine = root.querySelector('.bg-primary')
-      expect(accentLine?.className).toContain('h-0.5')
-      expect(accentLine?.className).toContain('w-20')
-      expect(accentLine?.className).toContain('bg-primary')
-    })
-  })
-
   describe('Default classes', () => {
     it('should apply default wrapper classes', async () => {
       const root = await renderComponent()
@@ -120,14 +104,13 @@ describe('HeroContent', () => {
       expect(wrapper).toBeTruthy()
     })
 
-    it('should render only accent line when no props provided', async () => {
+    it('should render minimal content when no props provided', async () => {
       const root = await renderComponent()
-      const accentLine = root.querySelector('.bg-primary')
-      expect(accentLine).toBeTruthy()
+      const wrapper = root.querySelector('div')
+      expect(wrapper).toBeTruthy()
       // Should not have much text content
-      const textContent = root.textContent
-      const trimmedLength = textContent.trim().length
-      expect(trimmedLength).toBeLessThan(10)
+      const trimmedContent = root.textContent.trim()
+      expect(trimmedContent.length).toBeLessThan(10)
     })
   })
 })

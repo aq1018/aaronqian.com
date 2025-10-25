@@ -66,12 +66,6 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
       ))
   }
 
-  <!-- Animated accent line -->
-  <div
-    class="mx-auto mt-3 h-0.5 w-20 bg-primary transition-all duration-200 hover:w-28 hover:shadow-[0_0_8px_rgba(var(--color-primary-raw),0.6)]"
-  >
-  </div>
-
   <!-- Description: slot takes precedence over prop -->
   {
     (hasDescriptionSlot || description) &&

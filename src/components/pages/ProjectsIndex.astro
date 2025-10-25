@@ -17,26 +17,18 @@ const { projects, statusStyles, statusLabels } = Astro.props
 ---
 
 <!-- Hero Section -->
-<Section variant="content">
-  <CuttingMat class="cutting-mat">
-    <HeroContent
-      eyebrow="PROJECT ARCHIVE"
-      title="Projects / Lab Notes"
-      description="My digital workshop — half experiments, half excuses to learn new tools."
-    >
-      <!-- Micro-line in named slot - mt-4 since no CTAs -->
-      <Text
-        slot="microLine"
-        variant="caption"
-        font="mono"
-        align="center"
-        class="mt-4 text-muted/70"
-      >
-        <span class="text-primary">⚠️</span> Some projects are still in beta. Including me.
-      </Text>
-    </HeroContent>
-  </CuttingMat>
-</Section>
+<CuttingMat class="cutting-mat w-full py-16 sm:py-20 lg:py-24">
+  <HeroContent
+    eyebrow="PROJECT ARCHIVE"
+    title="Projects / Lab Notes"
+    description="My digital workshop — half experiments, half excuses to learn new tools."
+  >
+    <!-- Micro-line in named slot - mt-4 since no CTAs -->
+    <Text slot="microLine" variant="caption" font="mono" align="center" class="mt-4 text-muted/70">
+      <span class="text-primary">⚠️</span> Some projects are still in beta. Including me.
+    </Text>
+  </HeroContent>
+</CuttingMat>
 
 <!-- Projects Content -->
 <main>

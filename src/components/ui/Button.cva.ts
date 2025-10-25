@@ -8,6 +8,9 @@ export const buttonVariants = cva(
     'gap-2',
     'rounded-lg',
     'font-medium',
+    'font-mono',
+    'uppercase',
+    'tracking-wider',
     'transition-colors',
     'focus-visible:outline',
     'focus-visible:outline-2',
@@ -28,9 +31,9 @@ export const buttonVariants = cva(
         neutral: '',
       },
       size: {
-        sm: 'px-3 py-1.5 text-sm',
-        md: 'px-4 py-2 text-base',
-        lg: 'px-6 py-3 text-lg',
+        sm: 'px-3 py-1.5',
+        md: 'px-4 py-2',
+        lg: 'px-6 py-3',
       },
       fullWidth: {
         true: 'w-full',
@@ -42,21 +45,21 @@ export const buttonVariants = cva(
         variant: 'solid',
         color: 'primary',
         class:
-          'bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600 dark:bg-primary-500 dark:hover:bg-primary-400',
+          'bg-primary-500 text-white hover:bg-primary-600 focus-visible:outline-primary-500 dark:bg-primary-600 dark:text-white dark:hover:bg-primary-500',
       },
       // Primary Outline
       {
         variant: 'outline',
         color: 'primary',
         class:
-          'border-primary-600 text-primary-700 hover:bg-primary-50 focus-visible:outline-primary-600 dark:border-primary-400 dark:text-primary-300 dark:hover:bg-primary-950',
+          'border-primary-500 text-primary-500 hover:bg-primary-50 focus-visible:outline-primary-500 dark:border-primary-600 dark:text-primary-600 dark:hover:bg-primary-950',
       },
       // Primary Ghost
       {
         variant: 'ghost',
         color: 'primary',
         class:
-          'text-primary-700 hover:bg-primary-100 focus-visible:outline-primary-600 dark:text-primary-300 dark:hover:bg-primary-900',
+          'text-primary-500 hover:bg-primary-100 focus-visible:outline-primary-500 dark:text-primary-600 dark:hover:bg-primary-900',
       },
 
       // Accent Solid

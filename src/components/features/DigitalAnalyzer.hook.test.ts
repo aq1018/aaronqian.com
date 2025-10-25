@@ -203,9 +203,8 @@ describe('Digital Analyzer Hook', () => {
       // Cleanup should reset styles
       cleanup()
 
-      expect(lightningBolt?.style.opacity).toBe('')
       expect(lightningBolt?.style.transform).toBe('')
-      expect(lightningBolt?.style.filter).toBe('')
+      expect(lightningBolt?.style.filter).toBe('brightness(0.7)')
     })
 
     it('should handle missing lightning bolt gracefully', () => {

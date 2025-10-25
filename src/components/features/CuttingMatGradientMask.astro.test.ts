@@ -23,7 +23,7 @@ describe('GradientMask', () => {
   it('should contain gradient and mask elements', async () => {
     const root = await renderComponent({ width: 4000, height: 4000 })
 
-    const gradient = root.querySelector('linearGradient')
+    const gradient = root.querySelector('radialGradient')
     const mask = root.querySelector('mask')
 
     expect(gradient).not.toBeNull()
@@ -33,18 +33,15 @@ describe('GradientMask', () => {
   it('should create gradient with correct id', async () => {
     const root = await renderComponent({ width: 4000, height: 4000 })
 
-    const gradient = root.querySelector('linearGradient')
+    const gradient = root.querySelector('radialGradient')
     expect(gradient?.getAttribute('id')).toBe('fade-gradient')
   })
 
-  it('should create horizontal gradient', async () => {
+  it('should create radial gradient', async () => {
     const root = await renderComponent({ width: 4000, height: 4000 })
 
-    const gradient = root.querySelector('linearGradient')
-    expect(gradient?.getAttribute('x1')).toBe('0%')
-    expect(gradient?.getAttribute('x2')).toBe('100%')
-    expect(gradient?.getAttribute('y1')).toBe('0%')
-    expect(gradient?.getAttribute('y2')).toBe('0%')
+    const gradient = root.querySelector('radialGradient')
+    expect(gradient).not.toBeNull()
   })
 
   it('should create gradient with 4 stops', async () => {
@@ -59,8 +56,8 @@ describe('GradientMask', () => {
 
     const stops = root.querySelectorAll('stop')
     expect(stops[0].getAttribute('offset')).toBe('0%')
-    expect(stops[1].getAttribute('offset')).toBe('20%')
-    expect(stops[2].getAttribute('offset')).toBe('80%')
+    expect(stops[1].getAttribute('offset')).toBe('50%')
+    expect(stops[2].getAttribute('offset')).toBe('70%')
     expect(stops[3].getAttribute('offset')).toBe('100%')
   })
 
@@ -68,10 +65,10 @@ describe('GradientMask', () => {
     const root = await renderComponent({ width: 4000, height: 4000 })
 
     const stops = root.querySelectorAll('stop')
-    expect(stops[0].getAttribute('stop-opacity')).toBe('0')
-    expect(stops[1].getAttribute('stop-opacity')).toBe('1')
-    expect(stops[2].getAttribute('stop-opacity')).toBe('1')
-    expect(stops[3].getAttribute('stop-opacity')).toBe('0')
+    expect(stops[0].getAttribute('stop-opacity')).toBe('0.8')
+    expect(stops[1].getAttribute('stop-opacity')).toBe('0.6')
+    expect(stops[2].getAttribute('stop-opacity')).toBe('0.4')
+    expect(stops[3].getAttribute('stop-opacity')).toBe('0.1')
   })
 
   it('should create mask with correct id', async () => {
@@ -81,28 +78,30 @@ describe('GradientMask', () => {
     expect(mask?.getAttribute('id')).toBe('fade-mask')
   })
 
-  it('should create mask rect with correct dimensions', async () => {
+  it('should create mask ellipse with correct dimensions', async () => {
     const root = await renderComponent({ width: 4000, height: 4000 })
 
-    const rect = root.querySelector('mask rect')
-    expect(rect?.getAttribute('x')).toBe('0')
-    expect(rect?.getAttribute('y')).toBe('0')
-    expect(rect?.getAttribute('width')).toBe('4000')
-    expect(rect?.getAttribute('height')).toBe('4000')
+    const ellipse = root.querySelector('mask ellipse')
+    expect(ellipse?.getAttribute('cx')).toBe('2000')
+    expect(ellipse?.getAttribute('cy')).toBe('2000')
+    expect(ellipse?.getAttribute('rx')).toBe('2000')
+    expect(ellipse?.getAttribute('ry')).toBe('2800')
   })
 
-  it('should create mask rect referencing gradient', async () => {
+  it('should create mask ellipse referencing gradient', async () => {
     const root = await renderComponent({ width: 4000, height: 4000 })
 
-    const rect = root.querySelector('mask rect')
-    expect(rect?.getAttribute('fill')).toBe('url(#fade-gradient)')
+    const ellipse = root.querySelector('mask ellipse')
+    expect(ellipse?.getAttribute('fill')).toBe('url(#fade-gradient)')
   })
 
   it('should handle different dimensions', async () => {
     const root = await renderComponent({ width: 2000, height: 3000 })
 
-    const rect = root.querySelector('mask rect')
-    expect(rect?.getAttribute('width')).toBe('2000')
-    expect(rect?.getAttribute('height')).toBe('3000')
+    const ellipse = root.querySelector('mask ellipse')
+    expect(ellipse?.getAttribute('cx')).toBe('1000')
+    expect(ellipse?.getAttribute('cy')).toBe('1500')
+    expect(ellipse?.getAttribute('rx')).toBe('1000')
+    expect(ellipse?.getAttribute('ry')).toBe('2100')
   })
 })

@@ -7,6 +7,10 @@ import { gsap } from 'gsap'
 
 import type { DisplayManager } from './DigitalAnalyzer.display'
 
+/** Lightning bolt brightness levels */
+const LIGHTNING_BRIGHTNESS_DIM = 0.7 // Dimmed state (70% brightness)
+const LIGHTNING_BRIGHTNESS_BRIGHT = 1.3 // Energized state (130% brightness)
+
 /** Configuration for trace animation timing and behavior */
 export interface TraceAnimationConfig {
   traceDrawDuration: number
@@ -25,7 +29,6 @@ export interface TraceAnimationOptions {
   displayManager: DisplayManager
   lightningBolt: HTMLElement | null
   config: TraceAnimationConfig
-  getLightningGlowColor: (isDark: boolean) => string
 }
 
 /**
@@ -43,22 +46,21 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
     displayManager,
     lightningBolt,
     config,
-    getLightningGlowColor,
   } = options
 
   const timeline = gsap.timeline()
   const bitCount = binaryData.length
 
-  // 1. Lightning bolt glow (immediate, at position 0)
+  // 1. Lightning bolt energize (immediate, at position 0)
   if (lightningBolt !== null) {
-    const isDark = document.documentElement.classList.contains('dark')
-    const glowColor = getLightningGlowColor(isDark)
-    timeline.set(
+    // Use brightness filter instead of opacity for consistent "bright" effect in both modes
+    timeline.to(
       lightningBolt,
       {
-        opacity: 1,
         scale: 1.1,
-        filter: `drop-shadow(0 0 12px ${glowColor}) drop-shadow(0 0 4px ${glowColor})`,
+        filter: `brightness(${LIGHTNING_BRIGHTNESS_BRIGHT})`,
+        duration: 0.2,
+        ease: 'power2.out',
       },
       0,
     )
@@ -113,12 +115,13 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
   // 5. Lightning bolt reset (after draw completes)
   if (lightningBolt !== null) {
     const resetTime = config.traceDrawDuration / 1000
-    timeline.set(
+    timeline.to(
       lightningBolt,
       {
-        opacity: 0.7,
         scale: 1,
-        filter: 'none',
+        filter: `brightness(${LIGHTNING_BRIGHTNESS_DIM})`,
+        duration: 0.3,
+        ease: 'power2.out',
       },
       resetTime,
     )
