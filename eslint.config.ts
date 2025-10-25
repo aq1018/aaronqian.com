@@ -48,6 +48,7 @@ export default [
       'dist/',
       'node_modules/',
       '.astro/',
+      '.wrangler/',
       'coverage/',
       '.claude/',
       '.vscode/',

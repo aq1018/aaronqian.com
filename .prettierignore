@@ -4,6 +4,9 @@ dist/
 coverage/
 storybook-static/
 
+# Wrangler
+.wrangler/
+
 # Dependencies
 node_modules/
 

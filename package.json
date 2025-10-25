@@ -24,6 +24,7 @@
     "*.{css,json,md}": ["prettier --check"]
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.6.10",
     "@fontsource-variable/inter": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@iconify-json/heroicons": "^1.2.3",
@@ -63,6 +64,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2",
-    "vitest": "^4.0.1"
+    "vitest": "^4.0.1",
+    "wrangler": "^4.45.0"
   }
 }
