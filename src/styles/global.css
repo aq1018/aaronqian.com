@@ -81,7 +81,6 @@
      bg-surface, text-fg, border-border, text-muted, text-link, etc.
      ----------------------------- */
   --color-surface: var(--color-gray-300);
-  --color-bg: var(--color-surface); /* Alias for backward compatibility */
   --color-fg: var(--color-gray-900);
   --color-border: var(--color-gray-400);
   --color-muted: var(--color-gray-500); /* Improved contrast from gray-600 */

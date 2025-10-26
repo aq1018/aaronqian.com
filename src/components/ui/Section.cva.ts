@@ -9,12 +9,11 @@ export const sectionVariants = cva(['w-full'], {
     },
     background: {
       surface: 'bg-surface',
-      bg: 'bg-bg',
     },
   },
   defaultVariants: {
     variant: 'content',
-    background: 'bg',
+    background: 'surface',
   },
 })
 

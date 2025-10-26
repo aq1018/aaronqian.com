@@ -11,14 +11,14 @@ describe('Section Component', () => {
   })
 
   describe('sectionVariants - Default Variants', () => {
-    it('should apply default variants (content, bg)', () => {
+    it('should apply default variants (content, surface)', () => {
       const result = sectionVariants()
       // Default: content variant
       expect(result).toContain('py-16')
       expect(result).toContain('sm:py-20')
       expect(result).toContain('lg:py-24')
-      // Default background: bg
-      expect(result).toContain('bg-bg')
+      // Default background: surface
+      expect(result).toContain('bg-surface')
     })
   })
 
@@ -49,13 +49,6 @@ describe('Section Component', () => {
     it('should apply surface background correctly', () => {
       const result = sectionVariants({ background: 'surface' })
       expect(result).toContain('bg-surface')
-      expect(result).not.toContain('bg-bg')
-    })
-
-    it('should apply bg background correctly', () => {
-      const result = sectionVariants({ background: 'bg' })
-      expect(result).toContain('bg-bg')
-      expect(result).not.toContain('bg-surface')
     })
   })
 
@@ -64,7 +57,7 @@ describe('Section Component', () => {
       const result = sectionVariants({ class: 'custom-class' })
       expect(result).toContain('custom-class')
       expect(result).toContain('py-16') // Default variant still applied
-      expect(result).toContain('bg-bg') // Default background still applied
+      expect(result).toContain('bg-surface') // Default background still applied
     })
 
     it('should support multiple custom classes', () => {
@@ -82,16 +75,6 @@ describe('Section Component', () => {
       expect(result).toContain('sm:py-24')
       expect(result).toContain('lg:py-28')
       expect(result).toContain('bg-surface')
-      expect(result).not.toContain('bg-bg')
-    })
-
-    it('should combine content variant with bg background', () => {
-      const result = sectionVariants({ variant: 'content', background: 'bg' })
-      expect(result).toContain('py-16')
-      expect(result).toContain('sm:py-20')
-      expect(result).toContain('lg:py-24')
-      expect(result).toContain('bg-bg')
-      expect(result).not.toContain('bg-surface')
     })
 
     it('should combine subsection variant with surface background', () => {
@@ -105,7 +88,7 @@ describe('Section Component', () => {
 
   describe('sectionVariants - All Combinations', () => {
     const variants = ['hero', 'content', 'subsection'] as const
-    const backgrounds = ['surface', 'bg'] as const
+    const backgrounds = ['surface'] as const
 
     it('should generate valid classes for all variant combinations', () => {
       variants.forEach((variant) => {
@@ -158,14 +141,14 @@ describe('Section Component', () => {
 
     it('should handle undefined background (use default)', () => {
       const result = sectionVariants({ background: undefined })
-      expect(result).toContain('bg-bg') // Default bg
+      expect(result).toContain('bg-surface') // Default surface
     })
 
     it('should handle empty object (use all defaults)', () => {
       const result = sectionVariants({})
       expect(result).toContain('w-full')
       expect(result).toContain('py-16')
-      expect(result).toContain('bg-bg')
+      expect(result).toContain('bg-surface')
     })
 
     it('should handle null class gracefully', () => {
@@ -226,10 +209,8 @@ describe('Section Component', () => {
 
     it('should apply correct semantic background tokens', () => {
       const surface = sectionVariants({ background: 'surface' })
-      const bg = sectionVariants({ background: 'bg' })
 
       expect(surface).toContain('bg-surface')
-      expect(bg).toContain('bg-bg')
     })
   })
 })
