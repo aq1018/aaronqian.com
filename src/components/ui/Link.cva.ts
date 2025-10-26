@@ -4,7 +4,7 @@ export const linkVariants = cva(['transition-colors'], {
   variants: {
     variant: {
       // Navigation links (nav bar)
-      nav: 'hover:text-primary-hover',
+      nav: 'hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]',
       // Content links (inline, underlined)
       content: 'text-link underline decoration-transparent hover:decoration-link',
       // Back buttons (with arrow)

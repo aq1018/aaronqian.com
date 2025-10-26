@@ -37,13 +37,13 @@ describe('Link Component', () => {
 
     it('should render nav variant correctly (inactive)', () => {
       const result = linkVariants({ variant: 'nav', active: false })
-      expect(result).toContain('hover:text-primary-hover')
+      expect(result).toContain('hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]')
       expect(result).toContain('text-muted')
     })
 
     it('should render nav variant correctly (active)', () => {
       const result = linkVariants({ variant: 'nav', active: true })
-      expect(result).toContain('hover:text-primary-hover')
+      expect(result).toContain('hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]')
       expect(result).toContain('font-semibold')
       expect(result).toContain('text-primary')
     })
@@ -108,7 +108,7 @@ describe('Link Component', () => {
     it('should merge custom classes with nav variant', () => {
       const result = linkVariants({ variant: 'nav', class: 'custom-nav' })
       expect(result).toContain('custom-nav')
-      expect(result).toContain('hover:text-primary-hover')
+      expect(result).toContain('hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]')
     })
 
     it('should merge custom classes with back variant', () => {
@@ -201,7 +201,7 @@ describe('Link Component', () => {
 
     it('should provide appropriate styles for navigation links', () => {
       const result = linkVariants({ variant: 'nav' })
-      expect(result).toContain('hover:text-primary-hover')
+      expect(result).toContain('hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]')
     })
 
     it('should provide appropriate styles for back navigation', () => {
@@ -231,7 +231,7 @@ describe('Link Component', () => {
       const back = linkVariants({ variant: 'back' })
 
       expect(content).toContain('hover:decoration-link')
-      expect(nav).toContain('hover:text-primary-hover')
+      expect(nav).toContain('hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]')
       expect(back).toContain('hover:text-link')
     })
 

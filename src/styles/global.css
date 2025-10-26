@@ -85,16 +85,13 @@
   --color-border: var(--color-gray-400);
   --color-muted: var(--color-gray-500); /* Improved contrast from gray-600 */
   --color-link: var(--color-primary-500);
-  --color-link-hover: var(--color-primary-400);
   --color-highlight: var(--color-primary-100);
 
   /* Primary alias for convenience (bg-primary / text-primary) */
   --color-primary: var(--color-primary-500);
-  --color-primary-hover: var(--color-primary-400);
 
   /* Accent alias for convenience (bg-accent / text-accent) */
   --color-accent: var(--color-accent-600);
-  --color-accent-hover: var(--color-accent-500);
 }
 
 /* -----------------------------
@@ -114,16 +111,13 @@
     --color-border: var(--color-gray-800);
     --color-muted: var(--color-gray-400); /* Slightly brighter - was gray-500 */
     --color-link: var(--color-primary-400);
-    --color-link-hover: var(--color-primary-300);
     --color-highlight: var(--color-primary-900);
 
     /* Primary remains cyan in dark mode */
     --color-primary: var(--color-primary-400);
-    --color-primary-hover: var(--color-primary-300);
 
     /* Accent remains harvest gold in dark mode */
     --color-accent: var(--color-accent-400);
-    --color-accent-hover: var(--color-accent-300);
   }
 }
 
