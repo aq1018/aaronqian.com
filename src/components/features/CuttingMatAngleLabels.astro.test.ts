@@ -142,8 +142,8 @@ describe('AngleLabels', () => {
     const bgFill = bg.getAttribute('fill')
     const bgStroke = bg.getAttribute('stroke')
 
-    expect(bgFill).toBe('var(--color-surface)')
-    expect(bgStroke).toBe('var(--color-surface)')
+    expect(bgFill).toBe('var(--color-background)')
+    expect(bgStroke).toBe('var(--color-background)')
   })
 
   it('should set correct text attributes', async () => {

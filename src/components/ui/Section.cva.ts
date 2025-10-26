@@ -8,7 +8,7 @@ export const sectionVariants = cva(['w-full'], {
       subsection: ['py-12', 'sm:py-14', 'lg:py-16'],
     },
     background: {
-      surface: 'bg-surface',
+      surface: 'bg-background',
     },
   },
   defaultVariants: {
