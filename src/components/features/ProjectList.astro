@@ -40,7 +40,7 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
       <tbody>
         {
           projects.map((project) => (
-            <tr class="group border-b border-border/20 transition-colors hover:bg-surface-hover">
+            <tr class="group border-b border-border/20 transition-colors hover:bg-muted/10">
               <td class="py-4 pr-6 align-top">
                 <Link
                   href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}

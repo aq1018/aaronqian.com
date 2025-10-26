@@ -16,7 +16,7 @@ const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
 const statusStyles = {
   active: 'text-primary',
   planning: 'text-muted',
-  done: 'text-fg/60',
+  done: 'text-content/60',
 }
 
 const statusLabels = {
@@ -52,7 +52,7 @@ const statusLabels = {
         <tbody>
           {
             sortedProjects.map((project) => (
-              <tr class="group border-b border-border/20 transition-colors hover:bg-surface-hover">
+              <tr class="group border-b border-border/20 transition-colors hover:bg-muted/10">
                 <td class="py-4 pr-6 align-top">
                   <Link
                     href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
