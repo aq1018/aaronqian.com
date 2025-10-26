@@ -55,6 +55,7 @@ export default [
       '.prettierrc.mjs',
       'package-lock.json',
       'src/styles/global.css', // Exception: Contains Tailwind v4 @custom-variant syntax that CSS parser cannot handle
+      '*.generated.*', // Ignore all generated files
     ],
   },
 

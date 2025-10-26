@@ -14,6 +14,9 @@ export default defineConfig({
       watch: {
         ignored: ['**/*.test.ts', '**/*.spec.ts'],
       },
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     },
   },
 

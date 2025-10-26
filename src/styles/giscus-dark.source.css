@@ -1,0 +1,89 @@
+/* Giscus Dark Theme - Generated from design tokens */
+/* Source file - compiled to public/giscus-dark.css via PostCSS */
+
+@import './base.css';
+@import './colors.css';
+@import './dark.css';
+
+:root {
+  /* Syntax highlighting */
+  --color-prettylights-syntax-comment: var(--color-muted-dark);
+  --color-prettylights-syntax-constant: var(--color-primary-dark);
+  --color-prettylights-syntax-entity: var(--color-accent-dark);
+  --color-prettylights-syntax-storage-modifier-import: var(--color-content-dark);
+  --color-prettylights-syntax-entity-tag: var(--color-success-dark);
+  --color-prettylights-syntax-keyword: var(--color-primary-dark);
+  --color-prettylights-syntax-string: var(--color-accent-dark);
+  --color-prettylights-syntax-variable: var(--color-content-dark);
+  --color-prettylights-syntax-brackethighlighter-unmatched: var(--color-danger-dark);
+  --color-prettylights-syntax-invalid-illegal-text: var(--color-danger-content-dark);
+  --color-prettylights-syntax-invalid-illegal-bg: var(--color-danger-dark);
+  --color-prettylights-syntax-carriage-return-text: var(--color-danger-content-dark);
+  --color-prettylights-syntax-carriage-return-bg: var(--color-danger-dark);
+  --color-prettylights-syntax-string-regexp: var(--color-success-dark);
+  --color-prettylights-syntax-markup-list: var(--color-warning-dark);
+  --color-prettylights-syntax-markup-heading: var(--color-primary-dark);
+  --color-prettylights-syntax-markup-italic: var(--color-content-dark);
+  --color-prettylights-syntax-markup-bold: var(--color-content-dark);
+  --color-prettylights-syntax-markup-deleted-text: var(--color-danger-dark);
+  --color-prettylights-syntax-markup-inserted-text: var(--color-success-dark);
+  --color-prettylights-syntax-markup-changed-text: var(--color-warning-dark);
+  --color-prettylights-syntax-markup-ignored-text: var(--color-muted-dark);
+  --color-prettylights-syntax-markup-ignored-bg: var(--color-primary-dark);
+  --color-prettylights-syntax-meta-diff-range: var(--color-primary-dark);
+  --color-prettylights-syntax-brackethighlighter-angle: var(--color-muted-dark);
+  --color-prettylights-syntax-sublimelinter-gutter-mark: var(--color-muted-dark);
+  --color-prettylights-syntax-constant-other-reference-link: var(--color-accent-dark);
+
+  /* Canvas colors */
+  --color-canvas-default: var(--color-background-dark);
+  --color-canvas-subtle: var(--color-background-dark);
+  --color-canvas-overlay: var(--color-background-dark);
+
+  /* Border colors */
+  --color-border-default: var(--color-border-dark);
+  --color-border-muted: var(--color-border-dark);
+
+  /* Text colors */
+  --color-fg-default: var(--color-content-dark);
+  --color-fg-muted: var(--color-muted-dark);
+  --color-fg-subtle: var(--color-muted-dark);
+
+  /* Accent/primary */
+  --color-accent-fg: var(--color-primary-dark);
+  --color-accent-emphasis: var(--color-primary-dark);
+
+  /* Success */
+  --color-success-fg: var(--color-success-dark);
+  --color-success-emphasis: var(--color-success-dark);
+
+  /* Danger */
+  --color-danger-fg: var(--color-danger-dark);
+  --color-danger-emphasis: var(--color-danger-dark);
+
+  /* Warning */
+  --color-attention-fg: var(--color-warning-dark);
+  --color-attention-emphasis: var(--color-warning-dark);
+
+  /* Buttons */
+  --color-btn-text: var(--color-content-dark);
+  --color-btn-bg: var(--color-background-dark);
+  --color-btn-border: var(--color-border-dark);
+  --color-btn-hover-bg: var(--color-background-dark);
+  --color-btn-hover-border: var(--color-border-dark);
+
+  /* Primary button */
+  --color-btn-primary-text: var(--color-primary-content-dark);
+  --color-btn-primary-bg: var(--color-primary-dark);
+  --color-btn-primary-border: var(--color-primary-dark);
+  --color-btn-primary-hover-bg: var(--color-primary-dark);
+  --color-btn-primary-hover-border: var(--color-primary-dark);
+
+  /* Form controls */
+  --color-input-bg: var(--color-background-dark);
+  --color-input-border: var(--color-border-dark);
+
+  /* Neutral */
+  --color-neutral-muted: var(--color-border-dark);
+  --color-neutral-emphasis: var(--color-neutral-dark);
+}

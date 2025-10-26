@@ -10,5 +10,11 @@
   "observability": {
     "enabled": true
   },
-  "workers_dev": false
+  "workers_dev": false,
+  "vars": {
+    "PUBLIC_GISCUS_REPO": "aq1018/aaronqian.com",
+    "PUBLIC_GISCUS_REPO_ID": "R_kgDOQIxv6g",
+    "PUBLIC_GISCUS_CATEGORY": "Announcements",
+    "PUBLIC_GISCUS_CATEGORY_ID": "DIC_kwDOQIxv6s4CxFW6"
+  }
 }

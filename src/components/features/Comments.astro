@@ -1,0 +1,63 @@
+---
+/**
+ * Comments component using Giscus (GitHub Discussions)
+ *
+ * Setup required:
+ * 1. Enable Discussions on your repo: Settings → Features → Discussions
+ * 2. Install Giscus app: https://github.com/apps/giscus
+ * 3. Get your category ID from: https://giscus.app
+ *
+ * Initial theme is detected client-side to match user preference.
+ * Theme syncing after load is handled by Comments.hook.ts
+ */
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+// Configuration from environment variables
+const REPO = import.meta.env.PUBLIC_GISCUS_REPO
+const REPO_ID = import.meta.env.PUBLIC_GISCUS_REPO_ID
+const CATEGORY = import.meta.env.PUBLIC_GISCUS_CATEGORY
+const CATEGORY_ID = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID
+const ORIGIN = Astro.url.origin
+---
+
+<div class={className} data-comments>
+  <!-- Dynamically load Giscus with correct initial theme -->
+  <script is:inline define:vars={{ REPO, REPO_ID, CATEGORY, CATEGORY_ID, ORIGIN }}>
+    ;(function () {
+      // Determine current theme using same logic as BaseLayout.astro
+      const theme = localStorage.getItem('theme') || 'system'
+      const isDark =
+        theme === 'dark' ||
+        (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+      // Build theme URL
+      const themeUrl = `${ORIGIN}/giscus-${isDark ? 'dark' : 'light'}.generated.css`
+
+      // Create and configure Giscus script
+      const script = document.createElement('script')
+      script.src = 'https://giscus.app/client.js'
+      script.setAttribute('data-repo', REPO)
+      script.setAttribute('data-repo-id', REPO_ID)
+      script.setAttribute('data-category', CATEGORY)
+      script.setAttribute('data-category-id', CATEGORY_ID)
+      script.setAttribute('data-mapping', 'pathname')
+      script.setAttribute('data-strict', '1')
+      script.setAttribute('data-reactions-enabled', '1')
+      script.setAttribute('data-emit-metadata', '0')
+      script.setAttribute('data-input-position', 'top')
+      script.setAttribute('data-theme', themeUrl)
+      script.setAttribute('data-lang', 'en')
+      script.setAttribute('data-loading', 'lazy')
+      script.setAttribute('crossorigin', 'anonymous')
+      script.async = true
+
+      // Append to comments container
+      document.currentScript.parentElement.appendChild(script)
+    })()
+  </script>
+</div>

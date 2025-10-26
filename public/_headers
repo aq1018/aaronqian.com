@@ -1,0 +1,6 @@
+# CORS headers for Giscus custom themes
+# Allows Giscus iframe to load custom CSS from this domain
+
+/giscus-*.generated.css
+  Access-Control-Allow-Origin: https://giscus.app
+  Access-Control-Max-Age: 86400

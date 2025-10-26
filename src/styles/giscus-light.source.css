@@ -1,0 +1,89 @@
+/* Giscus Light Theme - Generated from design tokens */
+/* Source file - compiled to public/giscus-light.css via PostCSS */
+
+@import './base.css';
+@import './colors.css';
+@import './light.css';
+
+:root {
+  /* Syntax highlighting */
+  --color-prettylights-syntax-comment: var(--color-muted-light);
+  --color-prettylights-syntax-constant: var(--color-primary-light);
+  --color-prettylights-syntax-entity: var(--color-accent-light);
+  --color-prettylights-syntax-storage-modifier-import: var(--color-content-light);
+  --color-prettylights-syntax-entity-tag: var(--color-success-light);
+  --color-prettylights-syntax-keyword: var(--color-primary-light);
+  --color-prettylights-syntax-string: var(--color-accent-light);
+  --color-prettylights-syntax-variable: var(--color-content-light);
+  --color-prettylights-syntax-brackethighlighter-unmatched: var(--color-danger-light);
+  --color-prettylights-syntax-invalid-illegal-text: var(--color-danger-content-light);
+  --color-prettylights-syntax-invalid-illegal-bg: var(--color-danger-light);
+  --color-prettylights-syntax-carriage-return-text: var(--color-danger-content-light);
+  --color-prettylights-syntax-carriage-return-bg: var(--color-danger-light);
+  --color-prettylights-syntax-string-regexp: var(--color-success-light);
+  --color-prettylights-syntax-markup-list: var(--color-warning-light);
+  --color-prettylights-syntax-markup-heading: var(--color-primary-light);
+  --color-prettylights-syntax-markup-italic: var(--color-content-light);
+  --color-prettylights-syntax-markup-bold: var(--color-content-light);
+  --color-prettylights-syntax-markup-deleted-text: var(--color-danger-light);
+  --color-prettylights-syntax-markup-inserted-text: var(--color-success-light);
+  --color-prettylights-syntax-markup-changed-text: var(--color-warning-light);
+  --color-prettylights-syntax-markup-ignored-text: var(--color-muted-light);
+  --color-prettylights-syntax-markup-ignored-bg: var(--color-primary-light);
+  --color-prettylights-syntax-meta-diff-range: var(--color-primary-light);
+  --color-prettylights-syntax-brackethighlighter-angle: var(--color-muted-light);
+  --color-prettylights-syntax-sublimelinter-gutter-mark: var(--color-muted-light);
+  --color-prettylights-syntax-constant-other-reference-link: var(--color-accent-light);
+
+  /* Canvas colors */
+  --color-canvas-default: var(--color-background-light);
+  --color-canvas-subtle: var(--color-background-light);
+  --color-canvas-overlay: var(--color-background-light);
+
+  /* Border colors */
+  --color-border-default: var(--color-border-light);
+  --color-border-muted: var(--color-border-light);
+
+  /* Text colors */
+  --color-fg-default: var(--color-content-light);
+  --color-fg-muted: var(--color-muted-light);
+  --color-fg-subtle: var(--color-muted-light);
+
+  /* Accent/primary */
+  --color-accent-fg: var(--color-primary-light);
+  --color-accent-emphasis: var(--color-primary-light);
+
+  /* Success */
+  --color-success-fg: var(--color-success-light);
+  --color-success-emphasis: var(--color-success-light);
+
+  /* Danger */
+  --color-danger-fg: var(--color-danger-light);
+  --color-danger-emphasis: var(--color-danger-light);
+
+  /* Warning */
+  --color-attention-fg: var(--color-warning-light);
+  --color-attention-emphasis: var(--color-warning-light);
+
+  /* Buttons */
+  --color-btn-text: var(--color-content-light);
+  --color-btn-bg: var(--color-background-light);
+  --color-btn-border: var(--color-border-light);
+  --color-btn-hover-bg: var(--color-background-light);
+  --color-btn-hover-border: var(--color-border-light);
+
+  /* Primary button */
+  --color-btn-primary-text: var(--color-primary-content-light);
+  --color-btn-primary-bg: var(--color-primary-light);
+  --color-btn-primary-border: var(--color-primary-light);
+  --color-btn-primary-hover-bg: var(--color-primary-light);
+  --color-btn-primary-hover-border: var(--color-primary-light);
+
+  /* Form controls */
+  --color-input-bg: var(--color-background-light);
+  --color-input-border: var(--color-border-light);
+
+  /* Neutral */
+  --color-neutral-muted: var(--color-border-light);
+  --color-neutral-emphasis: var(--color-neutral-light);
+}

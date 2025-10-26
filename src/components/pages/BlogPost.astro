@@ -7,6 +7,7 @@ import Container from '@/components/ui/Container.astro'
 import Stack from '@/components/ui/Stack.astro'
 import Heading from '@/components/ui/Heading.astro'
 import Text from '@/components/ui/Text.astro'
+import Comments from '@/components/features/Comments.astro'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -66,6 +67,8 @@ const { Content } = await post.render()
       <div class="prose prose-lg dark:prose-invert max-w-none">
         <Content />
       </div>
+
+      <Comments class="mt-16" />
     </Container>
   </Section>
 </main>

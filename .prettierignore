@@ -38,8 +38,11 @@ pnpm-lock.yaml
 .cache/
 .parcel-cache/
 
-# Generated files
+# Astro Generated files
 .astro/
 
 # Claude
 .claude/
+
+# Generated files
+*.generated.*

@@ -9,5 +9,14 @@
   },
   "eslint.useFlatConfig": true,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "astro"],
-  "cSpell.words": ["aaronqian", "gridline", "heroicons", "iconify", "oklch", "Qian", "Subcomponent"]
+  "cSpell.words": [
+    "aaronqian",
+    "giscus",
+    "gridline",
+    "heroicons",
+    "iconify",
+    "oklch",
+    "Qian",
+    "Subcomponent"
+  ]
 }

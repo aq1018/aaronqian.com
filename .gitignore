@@ -33,3 +33,6 @@ pnpm-debug.log*
 !.claude/hooks/
 .claude/hooks/*
 !.claude/hooks/format-and-lint.sh
+
+# generated files
+*.generated.*
