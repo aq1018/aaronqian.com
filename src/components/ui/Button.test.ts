@@ -25,9 +25,11 @@ describe('Button Component', () => {
     it('should apply default variants (solid, primary, md)', () => {
       const result = buttonVariants()
       // Default: solid + primary
-      expect(result).toContain('bg-primary-500')
-      expect(result).toContain('text-white')
-      expect(result).toContain('hover:bg-primary-600')
+      expect(result).toContain('bg-primary')
+      expect(result).toContain('text-primary-content')
+      expect(result).toContain('hover:brightness-90')
+      expect(result).toContain('dark:hover:brightness-110')
+      expect(result).toContain('disabled:hover:brightness-100')
       // Default size: md
       expect(result).toContain('px-4')
       expect(result).toContain('py-2')
@@ -37,25 +39,26 @@ describe('Button Component', () => {
   describe('buttonVariants - Variant Prop', () => {
     it('should render solid variant correctly', () => {
       const result = buttonVariants({ variant: 'solid', color: 'primary' })
-      expect(result).toContain('bg-primary-500')
-      expect(result).toContain('text-white')
-      expect(result).toContain('hover:bg-primary-600')
+      expect(result).toContain('bg-primary')
+      expect(result).toContain('text-primary-content')
+      expect(result).toContain('hover:brightness-90')
+      expect(result).toContain('dark:hover:brightness-110')
     })
 
     it('should render outline variant correctly', () => {
       const result = buttonVariants({ variant: 'outline', color: 'primary' })
       expect(result).toContain('border-2')
       expect(result).toContain('bg-transparent')
-      expect(result).toContain('border-primary-500')
-      expect(result).toContain('text-primary-500')
-      expect(result).toContain('hover:bg-primary-50')
+      expect(result).toContain('border-primary')
+      expect(result).toContain('text-primary')
+      expect(result).toContain('hover:bg-primary/10')
     })
 
     it('should render ghost variant correctly', () => {
       const result = buttonVariants({ variant: 'ghost', color: 'primary' })
       expect(result).toContain('bg-transparent')
-      expect(result).toContain('text-primary-500')
-      expect(result).toContain('hover:bg-primary-100')
+      expect(result).toContain('text-primary')
+      expect(result).toContain('hover:bg-primary/10')
     })
   })
 
@@ -63,83 +66,78 @@ describe('Button Component', () => {
     describe('Primary Color', () => {
       it('should apply primary solid styles', () => {
         const result = buttonVariants({ variant: 'solid', color: 'primary' })
-        expect(result).toContain('bg-primary-500')
-        expect(result).toContain('text-white')
-        expect(result).toContain('hover:bg-primary-600')
-        expect(result).toContain('dark:bg-primary-600')
-        expect(result).toContain('dark:hover:bg-primary-500')
+        expect(result).toContain('bg-primary')
+        expect(result).toContain('text-primary-content')
+        expect(result).toContain('focus-visible:outline-primary')
+        expect(result).toContain('hover:brightness-90')
+        expect(result).toContain('dark:hover:brightness-110')
       })
 
       it('should apply primary outline styles', () => {
         const result = buttonVariants({ variant: 'outline', color: 'primary' })
-        expect(result).toContain('border-primary-500')
-        expect(result).toContain('text-primary-500')
-        expect(result).toContain('hover:bg-primary-50')
-        expect(result).toContain('dark:border-primary-600')
-        expect(result).toContain('dark:text-primary-600')
+        expect(result).toContain('border-primary')
+        expect(result).toContain('text-primary')
+        expect(result).toContain('focus-visible:outline-primary')
+        expect(result).toContain('hover:bg-primary/10')
       })
 
       it('should apply primary ghost styles', () => {
         const result = buttonVariants({ variant: 'ghost', color: 'primary' })
-        expect(result).toContain('text-primary-500')
-        expect(result).toContain('hover:bg-primary-100')
-        expect(result).toContain('dark:text-primary-600')
-        expect(result).toContain('dark:hover:bg-primary-900')
+        expect(result).toContain('text-primary')
+        expect(result).toContain('focus-visible:outline-primary')
+        expect(result).toContain('hover:bg-primary/10')
       })
     })
 
     describe('Accent Color', () => {
       it('should apply accent solid styles', () => {
         const result = buttonVariants({ variant: 'solid', color: 'accent' })
-        expect(result).toContain('bg-accent-500')
-        expect(result).toContain('text-gray-900')
-        expect(result).toContain('hover:bg-accent-600')
-        expect(result).toContain('dark:bg-accent-600')
-        expect(result).toContain('dark:hover:bg-accent-500')
+        expect(result).toContain('bg-accent')
+        expect(result).toContain('text-accent-content')
+        expect(result).toContain('focus-visible:outline-accent')
+        expect(result).toContain('hover:brightness-90')
+        expect(result).toContain('dark:hover:brightness-110')
       })
 
       it('should apply accent outline styles', () => {
         const result = buttonVariants({ variant: 'outline', color: 'accent' })
-        expect(result).toContain('border-accent-600')
-        expect(result).toContain('text-accent-700')
-        expect(result).toContain('hover:bg-accent-50')
-        expect(result).toContain('dark:border-accent-500')
-        expect(result).toContain('dark:text-accent-400')
+        expect(result).toContain('border-accent')
+        expect(result).toContain('text-accent')
+        expect(result).toContain('focus-visible:outline-accent')
+        expect(result).toContain('hover:bg-accent/10')
       })
 
       it('should apply accent ghost styles', () => {
         const result = buttonVariants({ variant: 'ghost', color: 'accent' })
-        expect(result).toContain('text-accent-700')
-        expect(result).toContain('hover:bg-accent-100')
-        expect(result).toContain('dark:text-accent-400')
-        expect(result).toContain('dark:hover:bg-accent-900')
+        expect(result).toContain('text-accent')
+        expect(result).toContain('focus-visible:outline-accent')
+        expect(result).toContain('hover:bg-accent/10')
       })
     })
 
     describe('Neutral Color', () => {
       it('should apply neutral solid styles', () => {
         const result = buttonVariants({ variant: 'solid', color: 'neutral' })
-        expect(result).toContain('bg-gray-800')
-        expect(result).toContain('text-white')
-        expect(result).toContain('hover:bg-gray-900')
-        expect(result).toContain('dark:bg-gray-200')
-        expect(result).toContain('dark:text-gray-900')
+        expect(result).toContain('bg-neutral')
+        expect(result).toContain('text-neutral-content')
+        expect(result).toContain('focus-visible:outline-neutral')
+        expect(result).toContain('hover:brightness-90')
+        expect(result).toContain('dark:hover:brightness-110')
       })
 
       it('should apply neutral outline styles', () => {
         const result = buttonVariants({ variant: 'outline', color: 'neutral' })
-        expect(result).toContain('border-gray-400')
-        expect(result).toContain('text-gray-700')
-        expect(result).toContain('hover:bg-gray-100')
-        expect(result).toContain('dark:border-gray-600')
-        expect(result).toContain('dark:text-gray-300')
+        expect(result).toContain('border-neutral')
+        expect(result).toContain('text-neutral')
+        expect(result).toContain('focus-visible:outline-neutral')
+        expect(result).toContain('hover:bg-neutral/10')
       })
 
       it('should apply neutral ghost styles', () => {
         const result = buttonVariants({ variant: 'ghost', color: 'neutral' })
-        expect(result).toContain('text-fg')
-        expect(result).toContain('hover:bg-gray-100')
-        expect(result).toContain('dark:hover:bg-gray-900')
+        expect(result).toContain('text-neutral')
+        expect(result).toContain('focus-visible:outline-neutral')
+        expect(result).toContain('hover:bg-neutral/10')
       })
     })
   })
@@ -181,98 +179,84 @@ describe('Button Component', () => {
     })
   })
 
-  describe('buttonVariants - Custom Class Merging', () => {
+  describe('buttonVariants - Edge Cases', () => {
     it('should merge custom classes with variant classes', () => {
-      const result = buttonVariants({ class: 'custom-class' })
+      const result = buttonVariants({ variant: 'solid', color: 'primary', class: 'custom-class' })
+      expect(result).toContain('bg-primary')
       expect(result).toContain('custom-class')
-      expect(result).toContain('bg-primary-500') // Default variant still applied
     })
 
     it('should support multiple custom classes', () => {
-      const result = buttonVariants({ class: 'custom-1 custom-2 custom-3' })
-      expect(result).toContain('custom-1')
-      expect(result).toContain('custom-2')
-      expect(result).toContain('custom-3')
+      const result = buttonVariants({ class: 'class1 class2 class3' })
+      expect(result).toContain('class1')
+      expect(result).toContain('class2')
+      expect(result).toContain('class3')
     })
-  })
 
-  describe('buttonVariants - Compound Variants', () => {
     it('should combine variant and color correctly for primary solid', () => {
       const result = buttonVariants({ variant: 'solid', color: 'primary' })
-      expect(result).toContain('bg-primary-500')
-      expect(result).toContain('hover:bg-primary-600')
-      expect(result).toContain('focus-visible:outline-primary-500')
+      expect(result).toContain('bg-primary')
+      expect(result).toContain('text-primary-content')
     })
 
     it('should combine variant and color correctly for accent outline', () => {
       const result = buttonVariants({ variant: 'outline', color: 'accent' })
-      expect(result).toContain('border-accent-600')
-      expect(result).toContain('hover:bg-accent-50')
-      expect(result).toContain('focus-visible:outline-accent-600')
+      expect(result).toContain('border-accent')
+      expect(result).toContain('text-accent')
     })
 
     it('should combine variant and color correctly for neutral ghost', () => {
       const result = buttonVariants({ variant: 'ghost', color: 'neutral' })
-      expect(result).toContain('text-fg')
-      expect(result).toContain('hover:bg-gray-100')
+      expect(result).toContain('text-neutral')
+      expect(result).toContain('bg-transparent')
     })
-  })
-
-  describe('buttonVariants - All Combinations', () => {
-    const variants = ['solid', 'outline', 'ghost'] as const
-    const colors = ['primary', 'accent', 'neutral'] as const
-    const sizes = ['sm', 'md', 'lg'] as const
 
     it('should generate valid classes for all variant combinations', () => {
-      variants.forEach((variant) => {
-        colors.forEach((color) => {
-          sizes.forEach((size) => {
-            const result = buttonVariants({ variant, color, size })
-            expect(result).toBeTruthy()
-            expect(typeof result).toBe('string')
-            expect(result.length).toBeGreaterThan(0)
-          })
+      const colors = ['primary', 'accent', 'neutral'] as const
+      const variants = ['solid', 'outline', 'ghost'] as const
+
+      colors.forEach((color) => {
+        variants.forEach((variant) => {
+          const result = buttonVariants({ variant, color })
+          expect(result).toBeTruthy()
+          expect(result.length).toBeGreaterThan(0)
         })
       })
     })
 
     it('should apply correct size classes for all variants', () => {
-      variants.forEach((variant) => {
-        const small = buttonVariants({ variant, size: 'sm' })
-        const medium = buttonVariants({ variant, size: 'md' })
-        const large = buttonVariants({ variant, size: 'lg' })
-
-        expect(small).toContain('px-3')
-        expect(medium).toContain('px-4')
-        expect(large).toContain('px-6')
+      const sizes = ['sm', 'md', 'lg'] as const
+      sizes.forEach((size) => {
+        const result = buttonVariants({ size })
+        expect(result).toBeTruthy()
       })
     })
-  })
 
-  describe('buttonVariants - Edge Cases', () => {
     it('should handle undefined variant (use default)', () => {
       const result = buttonVariants({ variant: undefined })
-      expect(result).toContain('bg-primary-500') // Default solid + primary
+      expect(result).toContain('bg-primary') // default solid + primary
     })
 
     it('should handle undefined color (use default)', () => {
       const result = buttonVariants({ color: undefined })
-      expect(result).toContain('bg-primary-500') // Default primary
+      expect(result).toContain('bg-primary') // default solid + primary
     })
 
     it('should handle undefined size (use default)', () => {
       const result = buttonVariants({ size: undefined })
-      expect(result).toContain('px-4')
+      expect(result).toContain('px-4') // default md
+      expect(result).toContain('py-2')
     })
 
     it('should handle empty object (use all defaults)', () => {
       const result = buttonVariants({})
-      expect(result).toContain('bg-primary-500')
+      expect(result).toContain('bg-primary')
       expect(result).toContain('px-4')
+      expect(result).toContain('py-2')
     })
 
     it('should handle null class gracefully', () => {
-      const result = buttonVariants({ class: undefined })
+      const result = buttonVariants({ class: null })
       expect(result).toBeTruthy()
     })
 

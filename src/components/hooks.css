@@ -1,8 +1,0 @@
-/**
- * Component Hook Styles Orchestrator
- * Central import point for all component Tailwind directives
- * Mirrors the hooks.ts structure
- */
-
-@import './ui/hooks.css';
-@import './features/hooks.css';

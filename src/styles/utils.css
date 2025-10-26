@@ -1,0 +1,183 @@
+/* -----------------------------
+   CUSTOM UTILITIES
+   Tint/shade utilities for dynamic color mixing
+   Source: https://github.com/tailwindlabs/tailwindcss/discussions/14827
+   ----------------------------- */
+
+/* Text color utilities */
+@utility text-tint-* {
+  color: color-mix(in oklab, --value(--color-*, [*]), white calc(--modifier(integer) * 1%));
+  color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility text-shade-* {
+  color: color-mix(in oklab, --value(--color-*, [*]), black calc(--modifier(integer) * 1%));
+  color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Background color utilities */
+@utility bg-tint-* {
+  background-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    white calc(--modifier(integer) * 1%)
+  );
+  background-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility bg-shade-* {
+  background-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    black calc(--modifier(integer) * 1%)
+  );
+  background-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Border color utilities */
+@utility border-tint-* {
+  border-color: color-mix(in oklab, --value(--color-*, [*]), white calc(--modifier(integer) * 1%));
+  border-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility border-shade-* {
+  border-color: color-mix(in oklab, --value(--color-*, [*]), black calc(--modifier(integer) * 1%));
+  border-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Text decoration color utilities */
+@utility decoration-tint-* {
+  text-decoration-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    white calc(--modifier(integer) * 1%)
+  );
+  text-decoration-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility decoration-shade-* {
+  text-decoration-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    black calc(--modifier(integer) * 1%)
+  );
+  text-decoration-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Outline color utilities */
+@utility outline-tint-* {
+  outline-color: color-mix(in oklab, --value(--color-*, [*]), white calc(--modifier(integer) * 1%));
+  outline-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility outline-shade-* {
+  outline-color: color-mix(in oklab, --value(--color-*, [*]), black calc(--modifier(integer) * 1%));
+  outline-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Shadow color utilities */
+@utility shadow-tint-* {
+  --tw-shadow-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    white calc(--modifier(integer) * 1%)
+  );
+  --tw-shadow-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility shadow-shade-* {
+  --tw-shadow-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    black calc(--modifier(integer) * 1%)
+  );
+  --tw-shadow-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Inset shadow color utilities */
+@utility inset-shadow-tint-* {
+  --tw-inset-shadow-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    white calc(--modifier(integer) * 1%)
+  );
+  --tw-inset-shadow-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility inset-shadow-shade-* {
+  --tw-inset-shadow-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    black calc(--modifier(integer) * 1%)
+  );
+  --tw-inset-shadow-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Ring color utilities */
+@utility ring-tint-* {
+  --tw-ring-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    white calc(--modifier(integer) * 1%)
+  );
+  --tw-ring-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility ring-shade-* {
+  --tw-ring-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    black calc(--modifier(integer) * 1%)
+  );
+  --tw-ring-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Inset ring color utilities */
+@utility inset-ring-tint-* {
+  --tw-inset-ring-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    white calc(--modifier(integer) * 1%)
+  );
+  --tw-inset-ring-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility inset-ring-shade-* {
+  --tw-inset-ring-color: color-mix(
+    in oklab,
+    --value(--color-*, [*]),
+    black calc(--modifier(integer) * 1%)
+  );
+  --tw-inset-ring-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Accent color utilities */
+@utility accent-tint-* {
+  accent-color: color-mix(in oklab, --value(--color-*, [*]), white calc(--modifier(integer) * 1%));
+  accent-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility accent-shade-* {
+  accent-color: color-mix(in oklab, --value(--color-*, [*]), black calc(--modifier(integer) * 1%));
+  accent-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* Caret color utilities */
+@utility caret-tint-* {
+  caret-color: color-mix(in oklab, --value(--color-*, [*]), white calc(--modifier(integer) * 1%));
+  caret-color: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility caret-shade-* {
+  caret-color: color-mix(in oklab, --value(--color-*, [*]), black calc(--modifier(integer) * 1%));
+  caret-color: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* SVG fill utilities */
+@utility fill-tint-* {
+  fill: color-mix(in oklab, --value(--color-*, [*]), white calc(--modifier(integer) * 1%));
+  fill: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility fill-shade-* {
+  fill: color-mix(in oklab, --value(--color-*, [*]), black calc(--modifier(integer) * 1%));
+  fill: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}
+
+/* SVG stroke utilities */
+@utility stroke-tint-* {
+  stroke: color-mix(in oklab, --value(--color-*, [*]), white calc(--modifier(integer) * 1%));
+  stroke: color-mix(in oklab, black, white calc(--value(integer) * 1%));
+}
+@utility stroke-shade-* {
+  stroke: color-mix(in oklab, --value(--color-*, [*]), black calc(--modifier(integer) * 1%));
+  stroke: color-mix(in oklab, white, black calc(--value(integer) * 1%));
+}

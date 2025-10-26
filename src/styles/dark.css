@@ -16,12 +16,23 @@
 
   /* Brand colors */
   --color-primary-dark: var(--color-cyan-400);
+  --color-primary-content-dark: var(--color-gray-950);
   --color-accent-dark: var(--color-gold-400);
+  --color-accent-content-dark: var(--color-gray-950);
   --color-secondary-dark: var(--color-purple-400);
+  --color-secondary-content-dark: var(--color-gray-950);
+
+  /* Neutral */
+  --color-neutral-dark: var(--color-gray-200);
+  --color-neutral-content-dark: var(--color-gray-950);
 
   /* Status colors */
   --color-danger-dark: var(--color-red-400);
+  --color-danger-content-dark: var(--color-gray-950);
   --color-success-dark: var(--color-green-400);
+  --color-success-content-dark: var(--color-gray-950);
   --color-warning-dark: var(--color-orange-400);
+  --color-warning-content-dark: var(--color-gray-950);
   --color-info-dark: var(--color-indigo-400);
+  --color-info-content-dark: var(--color-gray-950);
 }

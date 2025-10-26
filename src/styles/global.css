@@ -1,56 +1,14 @@
-/* Tailwind v4 entry + plugin */
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
 /* Enable `.dark` class variant for Tailwind v4 */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* -----------------------------
-   DESIGN SYSTEM LAYERS
-   Layered token architecture for clarity and maintainability
-   ----------------------------- */
-/* Layer 0: Font declarations and font family tokens */
 @import './fonts.css';
-
-/* Layer 1: Color palette (concrete names: cyan, gold, gray) */
 @import './colors.css';
-
-/* Layer 2a: Light theme semantic tokens (-light suffix) */
 @import './light.css';
-
-/* Layer 2b: Dark theme semantic tokens (-dark suffix) */
 @import './dark.css';
-
-/* Layer 3: Theme-integrated semantic tokens (exposed to Tailwind) */
 @import './tokens.css';
-
-/* -----------------------------
-   COMPONENT HOOK STYLES
-   Import component hook CSS files (Tailwind directives)
-   ----------------------------- */
-@import '../components/hooks.css';
-
-/* -----------------------------
-   Global transitions (optional)
-   ----------------------------- */
-html {
-  scroll-behavior: smooth;
-  transition:
-    background-color 300ms ease-in-out,
-    color 300ms ease-in-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-*,
-*::before,
-*::after {
-  transition:
-    background-color 300ms ease-in-out,
-    color 300ms ease-in-out,
-    border-color 300ms ease-in-out;
-}
+@import './utils.css';
+@import './components.css';
+@import './base.css';

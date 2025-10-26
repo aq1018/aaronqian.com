@@ -16,12 +16,23 @@
 
   /* Brand colors */
   --color-primary-light: var(--color-cyan-600);
+  --color-primary-content-light: var(--color-gray-50);
   --color-accent-light: var(--color-gold-600);
+  --color-accent-content-light: var(--color-gray-950);
   --color-secondary-light: var(--color-purple-600);
+  --color-secondary-content-light: var(--color-gray-50);
+
+  /* Neutral */
+  --color-neutral-light: var(--color-gray-800);
+  --color-neutral-content-light: var(--color-gray-50);
 
   /* Status colors */
   --color-danger-light: var(--color-red-600);
+  --color-danger-content-light: var(--color-gray-50);
   --color-success-light: var(--color-green-600);
+  --color-success-content-light: var(--color-gray-50);
   --color-warning-light: var(--color-orange-600);
+  --color-warning-content-light: var(--color-gray-950);
   --color-info-light: var(--color-indigo-600);
+  --color-info-content-light: var(--color-gray-50);
 }

@@ -16,14 +16,25 @@
 
   /* Brand colors */
   --color-primary: var(--color-primary-light);
+  --color-primary-content: var(--color-primary-content-light);
   --color-accent: var(--color-accent-light);
+  --color-accent-content: var(--color-accent-content-light);
   --color-secondary: var(--color-secondary-light);
+  --color-secondary-content: var(--color-secondary-content-light);
+
+  /* Neutral */
+  --color-neutral: var(--color-neutral-light);
+  --color-neutral-content: var(--color-neutral-content-light);
 
   /* Status colors */
   --color-danger: var(--color-danger-light);
+  --color-danger-content: var(--color-danger-content-light);
   --color-success: var(--color-success-light);
+  --color-success-content: var(--color-success-content-light);
   --color-warning: var(--color-warning-light);
+  --color-warning-content: var(--color-warning-content-light);
   --color-info: var(--color-info-light);
+  --color-info-content: var(--color-info-content-light);
 }
 
 /* -----------------------------
@@ -44,13 +55,24 @@
 
     /* Brand colors */
     --color-primary: var(--color-primary-dark);
+    --color-primary-content: var(--color-primary-content-dark);
     --color-accent: var(--color-accent-dark);
+    --color-accent-content: var(--color-accent-content-dark);
     --color-secondary: var(--color-secondary-dark);
+    --color-secondary-content: var(--color-secondary-content-dark);
+
+    /* Neutral */
+    --color-neutral: var(--color-neutral-dark);
+    --color-neutral-content: var(--color-neutral-content-dark);
 
     /* Status colors */
     --color-danger: var(--color-danger-dark);
+    --color-danger-content: var(--color-danger-content-dark);
     --color-success: var(--color-success-dark);
+    --color-success-content: var(--color-success-content-dark);
     --color-warning: var(--color-warning-dark);
+    --color-warning-content: var(--color-warning-content-dark);
     --color-info: var(--color-info-dark);
+    --color-info-content: var(--color-info-content-dark);
   }
 }

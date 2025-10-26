@@ -36,10 +36,11 @@ export const pillToggleSliderVariants = cva(
     'h-8',
     'w-8',
     'rounded-full',
-    'bg-primary-500',
+    'bg-primary',
     'shadow-md',
     'opacity-0',
-    'dark:bg-primary-600',
+    'transition-all',
+    'duration-200',
   ],
   {
     variants: {},
