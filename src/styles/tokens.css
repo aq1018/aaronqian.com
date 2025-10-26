@@ -17,6 +17,15 @@
 
   /* Accent alias for convenience (bg-accent / text-accent) */
   --color-accent: var(--color-accent-light);
+
+  /* Secondary (purple) */
+  --color-secondary: var(--color-secondary-light);
+
+  /* Status colors */
+  --color-danger: var(--color-danger-light);
+  --color-success: var(--color-success-light);
+  --color-warning: var(--color-warning-light);
+  --color-info: var(--color-info-light);
 }
 
 /* -----------------------------
@@ -37,5 +46,14 @@
 
     /* Accent remains gold in dark mode */
     --color-accent: var(--color-accent-dark);
+
+    /* Secondary (purple) in dark mode */
+    --color-secondary: var(--color-secondary-dark);
+
+    /* Status colors in dark mode */
+    --color-danger: var(--color-danger-dark);
+    --color-success: var(--color-success-dark);
+    --color-warning: var(--color-warning-dark);
+    --color-info: var(--color-info-dark);
   }
 }

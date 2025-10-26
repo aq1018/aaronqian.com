@@ -15,4 +15,13 @@
 
   /* Accent alias for convenience */
   --color-accent-light: var(--color-gold-600);
+
+  /* Secondary (purple) */
+  --color-secondary-light: var(--color-purple-600);
+
+  /* Status colors */
+  --color-danger-light: var(--color-red-600);
+  --color-success-light: var(--color-green-600);
+  --color-warning-light: var(--color-orange-500);
+  --color-info-light: var(--color-indigo-600);
 }

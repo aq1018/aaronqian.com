@@ -15,4 +15,13 @@
 
   /* Accent alias for convenience */
   --color-accent-dark: var(--color-gold-400);
+
+  /* Secondary (purple) */
+  --color-secondary-dark: var(--color-purple-400);
+
+  /* Status colors */
+  --color-danger-dark: var(--color-red-400);
+  --color-success-dark: var(--color-green-400);
+  --color-warning-dark: var(--color-orange-400);
+  --color-info-dark: var(--color-indigo-400);
 }
