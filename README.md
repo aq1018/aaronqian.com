@@ -39,7 +39,7 @@ component architecture, and comprehensive testing.
 │   ├── styling.md           # Styling philosophy and design tokens
 │   ├── testing.md           # Testing guidelines and TDD
 │   ├── git-workflow.md      # Git workflow and CI/CD
-│   ├── references.md        # Reference implementations
+│   ├── finding-examples.md  # How to find examples in codebase
 │   └── troubleshooting.md   # Common issues and solutions
 └── AGENTS.md                # Core rules for AI agents
 ```
@@ -118,14 +118,14 @@ Component.types.ts       # Type definitions (if 3+)
 - **ThemeToggle** - View Transitions lifecycle, state management
 - **PillToggle** - Toggle UI with animated slider
 
-See `docs/references.md` for complete reference implementations.
+See `docs/finding-examples.md` to learn how to search for examples in the
+codebase.
 
 ## 🎨 Styling Philosophy
 
 1. **Tailwind inline classes** - Primary styling method
 2. **`<style>` blocks** - Component-specific CSS and animations
-3. **`.hook.css` files** - Only for Tailwind directives (`@theme`,
-   `@custom-variant`)
+3. **`Component.css` files** - Rare, for shared CSS across component family
 
 ### Layout Primitives
 
@@ -234,7 +234,7 @@ See `docs/git-workflow.md` for complete workflow.
 - **docs/styling.md** - Styling philosophy and design tokens
 - **docs/testing.md** - Testing requirements and best practices
 - **docs/git-workflow.md** - Git workflow and CI/CD
-- **docs/references.md** - Reference implementation catalog
+- **docs/finding-examples.md** - Guide to finding examples in codebase
 - **docs/troubleshooting.md** - Common issues and solutions
 
 ## 📄 License

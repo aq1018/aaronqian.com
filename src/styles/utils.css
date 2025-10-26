@@ -1,6 +1,27 @@
 /* -----------------------------
-   CUSTOM UTILITIES
-   Tint/shade utilities for dynamic color mixing
+   CUSTOM UTILITIES - Color Mixing Variations
+   Tint/shade utilities for controlled color variations using color-mix()
+
+   Purpose:
+   - Create color variations with increments of 10 only
+   - Maintain consistency (similar to DaisyUI's 7% black approach)
+   - Works with semantic tokens from design system
+
+   Syntax: {property}-{tint|shade}-{color?}/{percentage}
+
+   Examples:
+   - bg-tint-primary/10     → primary color mixed with 10% white (lighter)
+   - bg-shade-primary/10    → primary color mixed with 10% black (darker)
+   - bg-tint/10             → fallback: black mixed with 10% white
+   - text-shade-accent/20   → accent color mixed with 20% black
+
+   Available properties (14 types):
+   - Text, Background, Border, Decoration, Outline
+   - Shadow, Inset Shadow, Ring, Inset Ring
+   - Accent, Caret, Fill, Stroke
+
+   Rule: Use increments of 10 only (/10, /20, /30, etc.)
+
    Source: https://github.com/tailwindlabs/tailwindcss/discussions/14827
    ----------------------------- */
 

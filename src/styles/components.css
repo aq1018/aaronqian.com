@@ -1,1 +1,13 @@
-/* import component styles here */
+/* -----------------------------
+   COMPONENT STYLES ORCHESTRATOR
+   Imports colocated Component.css files from components/
+
+   Most components don't need Component.css files.
+   Only create when component needs styles that don't fit in <style> blocks.
+
+   Import pattern:
+   @import '../components/ui/Button.css';
+   @import '../components/ui/Badge.css';
+
+   Currently: Mostly empty (expected - most components use inline styles or CVA)
+   ----------------------------- */
