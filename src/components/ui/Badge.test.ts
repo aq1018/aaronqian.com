@@ -6,46 +6,157 @@ describe('Badge Component', () => {
   describe('badgeVariants - Base Classes', () => {
     it('should include base classes in all variants', () => {
       const result = badgeVariants()
+      expect(result).toContain('inline-flex')
+      expect(result).toContain('items-center')
       expect(result).toContain('rounded')
-      expect(result).toContain('px-2')
-      expect(result).toContain('py-0.5')
-      expect(result).toContain('text-xs')
-      expect(result).toContain('font-bold')
+      expect(result).toContain('font-mono')
+      expect(result).toContain('font-semibold')
+      expect(result).toContain('whitespace-nowrap')
     })
   })
 
   describe('badgeVariants - Default Variants', () => {
-    it('should apply default variant (status) and pulse (false)', () => {
+    it('should apply default variants (size: sm, color: neutral, variant: solid)', () => {
       const result = badgeVariants()
-      expect(result).toContain('bg-primary')
-      expect(result).toContain('text-gray-950')
+      // Size sm
+      expect(result).toContain('text-xs')
+      expect(result).toContain('px-2')
+      expect(result).toContain('py-1')
+      // Color neutral + style solid
+      expect(result).toContain('bg-neutral')
+      expect(result).toContain('text-neutral-content')
+      // No pulse or uppercase
       expect(result).not.toContain('animate-pulse-subtle')
+      expect(result).not.toContain('uppercase')
     })
   })
 
-  describe('badgeVariants - Variant Prop', () => {
-    it('should render status variant correctly', () => {
-      const result = badgeVariants({ variant: 'status' })
-      expect(result).toContain('bg-primary')
-      expect(result).toContain('text-gray-950')
+  describe('badgeVariants - Size Variants', () => {
+    it('should render xs size correctly', () => {
+      const result = badgeVariants({ size: 'xs' })
+      expect(result).toContain('text-xs')
+      expect(result).toContain('px-1.5')
+      expect(result).toContain('py-0.5')
     })
 
-    it('should render tag variant correctly', () => {
-      const result = badgeVariants({ variant: 'tag' })
-      expect(result).toContain('bg-highlight')
+    it('should render sm size correctly', () => {
+      const result = badgeVariants({ size: 'sm' })
+      expect(result).toContain('text-xs')
+      expect(result).toContain('px-2')
+      expect(result).toContain('py-1')
+    })
+
+    it('should render md size correctly', () => {
+      const result = badgeVariants({ size: 'md' })
+      expect(result).toContain('text-sm')
+      expect(result).toContain('px-2.5')
+      expect(result).toContain('py-1')
+    })
+  })
+
+  describe('badgeVariants - Color Variants with Solid Variant', () => {
+    it('should render primary color correctly', () => {
+      const result = badgeVariants({ color: 'primary', variant: 'solid' })
+      expect(result).toContain('bg-primary')
+      expect(result).toContain('text-primary-content')
+    })
+
+    it('should render accent color correctly', () => {
+      const result = badgeVariants({ color: 'accent', variant: 'solid' })
+      expect(result).toContain('bg-accent')
+      expect(result).toContain('text-accent-content')
+    })
+
+    it('should render secondary color correctly', () => {
+      const result = badgeVariants({ color: 'secondary', variant: 'solid' })
+      expect(result).toContain('bg-secondary')
+      expect(result).toContain('text-secondary-content')
+    })
+
+    it('should render success color correctly', () => {
+      const result = badgeVariants({ color: 'success', variant: 'solid' })
+      expect(result).toContain('bg-success')
+      expect(result).toContain('text-success-content')
+    })
+
+    it('should render warning color correctly', () => {
+      const result = badgeVariants({ color: 'warning', variant: 'solid' })
+      expect(result).toContain('bg-warning')
+      expect(result).toContain('text-warning-content')
+    })
+
+    it('should render danger color correctly', () => {
+      const result = badgeVariants({ color: 'danger', variant: 'solid' })
+      expect(result).toContain('bg-danger')
+      expect(result).toContain('text-danger-content')
+    })
+
+    it('should render info color correctly', () => {
+      const result = badgeVariants({ color: 'info', variant: 'solid' })
+      expect(result).toContain('bg-info')
+      expect(result).toContain('text-info-content')
+    })
+
+    it('should render neutral color correctly', () => {
+      const result = badgeVariants({ color: 'neutral', variant: 'solid' })
+      expect(result).toContain('bg-neutral')
+      expect(result).toContain('text-neutral-content')
+    })
+
+    it('should render muted color correctly', () => {
+      const result = badgeVariants({ color: 'muted', variant: 'solid' })
+      expect(result).toContain('bg-muted/20')
       expect(result).toContain('text-muted')
     })
+  })
 
-    it('should render outline variant correctly', () => {
-      const result = badgeVariants({ variant: 'outline' })
+  describe('badgeVariants - Color Variants with Outline Variant', () => {
+    it('should render primary outline correctly', () => {
+      const result = badgeVariants({ color: 'primary', variant: 'outline' })
       expect(result).toContain('border-2')
       expect(result).toContain('border-primary')
       expect(result).toContain('text-primary')
       expect(result).toContain('bg-transparent')
     })
+
+    it('should render danger outline correctly', () => {
+      const result = badgeVariants({ color: 'danger', variant: 'outline' })
+      expect(result).toContain('border-2')
+      expect(result).toContain('border-danger')
+      expect(result).toContain('text-danger')
+      expect(result).toContain('bg-transparent')
+    })
+
+    it('should render muted outline correctly', () => {
+      const result = badgeVariants({ color: 'muted', variant: 'outline' })
+      expect(result).toContain('border-2')
+      expect(result).toContain('border-muted')
+      expect(result).toContain('text-muted')
+      expect(result).toContain('bg-transparent')
+    })
   })
 
-  describe('badgeVariants - Pulse Prop', () => {
+  describe('badgeVariants - Color Variants with Soft Variant', () => {
+    it('should render primary soft correctly', () => {
+      const result = badgeVariants({ color: 'primary', variant: 'soft' })
+      expect(result).toContain('bg-primary/20')
+      expect(result).toContain('text-primary')
+    })
+
+    it('should render success soft correctly', () => {
+      const result = badgeVariants({ color: 'success', variant: 'soft' })
+      expect(result).toContain('bg-success/20')
+      expect(result).toContain('text-success')
+    })
+
+    it('should render muted soft correctly', () => {
+      const result = badgeVariants({ color: 'muted', variant: 'soft' })
+      expect(result).toContain('bg-muted/10')
+      expect(result).toContain('text-muted')
+    })
+  })
+
+  describe('badgeVariants - Pulse Modifier', () => {
     it('should not apply pulse animation by default', () => {
       const result = badgeVariants()
       expect(result).not.toContain('animate-pulse-subtle')
@@ -61,22 +172,29 @@ describe('Badge Component', () => {
       expect(result).not.toContain('animate-pulse-subtle')
     })
 
-    it('should work with pulse on status variant', () => {
-      const result = badgeVariants({ variant: 'status', pulse: true })
+    it('should work with pulse on primary color', () => {
+      const result = badgeVariants({ color: 'primary', pulse: true })
       expect(result).toContain('bg-primary')
       expect(result).toContain('animate-pulse-subtle')
     })
+  })
 
-    it('should work with pulse on tag variant', () => {
-      const result = badgeVariants({ variant: 'tag', pulse: true })
-      expect(result).toContain('bg-highlight')
-      expect(result).toContain('animate-pulse-subtle')
+  describe('badgeVariants - Uppercase Modifier', () => {
+    it('should not apply uppercase by default', () => {
+      const result = badgeVariants()
+      expect(result).not.toContain('uppercase')
+      expect(result).not.toContain('tracking-wider')
     })
 
-    it('should work with pulse on outline variant', () => {
-      const result = badgeVariants({ variant: 'outline', pulse: true })
-      expect(result).toContain('border-primary')
-      expect(result).toContain('animate-pulse-subtle')
+    it('should apply uppercase when true', () => {
+      const result = badgeVariants({ uppercase: true })
+      expect(result).toContain('uppercase')
+      expect(result).toContain('tracking-wider')
+    })
+
+    it('should not apply uppercase when false', () => {
+      const result = badgeVariants({ uppercase: false })
+      expect(result).not.toContain('uppercase')
     })
   })
 
@@ -84,7 +202,7 @@ describe('Badge Component', () => {
     it('should merge custom classes with variant classes', () => {
       const result = badgeVariants({ class: 'custom-class' })
       expect(result).toContain('custom-class')
-      expect(result).toContain('bg-primary') // Default status variant still applied
+      expect(result).toContain('bg-neutral') // Default color still applied
     })
 
     it('should support multiple custom classes', () => {
@@ -94,27 +212,60 @@ describe('Badge Component', () => {
       expect(result).toContain('custom-3')
     })
 
-    it('should merge custom classes with tag variant', () => {
-      const result = badgeVariants({ variant: 'tag', class: 'custom-tag' })
-      expect(result).toContain('custom-tag')
-      expect(result).toContain('bg-highlight')
-    })
-
-    it('should merge custom classes with outline variant', () => {
-      const result = badgeVariants({ variant: 'outline', class: 'custom-outline' })
-      expect(result).toContain('custom-outline')
-      expect(result).toContain('border-primary')
+    it('should merge custom classes with specific variants', () => {
+      const result = badgeVariants({ color: 'primary', size: 'md', class: 'custom-badge' })
+      expect(result).toContain('custom-badge')
+      expect(result).toContain('bg-primary')
+      expect(result).toContain('text-sm')
     })
   })
 
-  describe('badgeVariants - All Variant Combinations', () => {
-    const variants = ['status', 'tag', 'outline'] as const
-    const pulseStates = [true, false] as const
+  describe('badgeVariants - Variant Combinations', () => {
+    const sizes = ['xs', 'sm', 'md'] as const
+    const colors = [
+      'primary',
+      'accent',
+      'secondary',
+      'success',
+      'warning',
+      'danger',
+      'info',
+      'neutral',
+      'muted',
+    ] as const
+    const variants = ['solid', 'outline', 'soft'] as const
+
+    it('should generate valid classes for all size combinations', () => {
+      sizes.forEach((size) => {
+        const result = badgeVariants({ size })
+        expect(result).toBeTruthy()
+        expect(typeof result).toBe('string')
+        expect(result.length).toBeGreaterThan(0)
+      })
+    })
+
+    it('should generate valid classes for all color combinations', () => {
+      colors.forEach((color) => {
+        const result = badgeVariants({ color })
+        expect(result).toBeTruthy()
+        expect(typeof result).toBe('string')
+        expect(result.length).toBeGreaterThan(0)
+      })
+    })
 
     it('should generate valid classes for all variant combinations', () => {
       variants.forEach((variant) => {
-        pulseStates.forEach((pulse) => {
-          const result = badgeVariants({ variant, pulse })
+        const result = badgeVariants({ variant })
+        expect(result).toBeTruthy()
+        expect(typeof result).toBe('string')
+        expect(result.length).toBeGreaterThan(0)
+      })
+    })
+
+    it('should generate valid classes for color × variant combinations', () => {
+      colors.forEach((color) => {
+        variants.forEach((variant) => {
+          const result = badgeVariants({ color, variant })
           expect(result).toBeTruthy()
           expect(typeof result).toBe('string')
           expect(result.length).toBeGreaterThan(0)
@@ -122,32 +273,43 @@ describe('Badge Component', () => {
       })
     })
 
-    it('should apply pulse correctly across all variants', () => {
-      variants.forEach((variant) => {
-        const withPulse = badgeVariants({ variant, pulse: true })
-        const withoutPulse = badgeVariants({ variant, pulse: false })
-
-        expect(withPulse).toContain('animate-pulse-subtle')
-        expect(withoutPulse).not.toContain('animate-pulse-subtle')
+    it('should handle all modifiers together', () => {
+      const result = badgeVariants({
+        size: 'md',
+        color: 'primary',
+        variant: 'solid',
+        pulse: true,
+        uppercase: true,
       })
+      expect(result).toContain('text-sm')
+      expect(result).toContain('bg-primary')
+      expect(result).toContain('animate-pulse-subtle')
+      expect(result).toContain('uppercase')
     })
   })
 
   describe('badgeVariants - Edge Cases', () => {
-    it('should handle undefined variant (use default)', () => {
-      const result = badgeVariants({ variant: undefined })
-      expect(result).toContain('bg-primary')
-      expect(result).toContain('text-gray-950')
+    it('should handle undefined size (use default)', () => {
+      const result = badgeVariants({ size: undefined })
+      expect(result).toContain('text-xs')
+      expect(result).toContain('px-2')
     })
 
-    it('should handle undefined pulse (use default false)', () => {
-      const result = badgeVariants({ pulse: undefined })
-      expect(result).not.toContain('animate-pulse-subtle')
+    it('should handle undefined color (use default)', () => {
+      const result = badgeVariants({ color: undefined })
+      expect(result).toContain('bg-neutral')
+    })
+
+    it('should handle undefined variant (use default)', () => {
+      const result = badgeVariants({ variant: undefined })
+      expect(result).toContain('bg-neutral')
+      expect(result).not.toContain('bg-transparent')
     })
 
     it('should handle empty object (use all defaults)', () => {
       const result = badgeVariants({})
-      expect(result).toContain('bg-primary')
+      expect(result).toContain('bg-neutral')
+      expect(result).toContain('text-xs')
       expect(result).not.toContain('animate-pulse-subtle')
     })
 
@@ -163,96 +325,140 @@ describe('Badge Component', () => {
   })
 
   describe('badgeVariants - Semantic Usage', () => {
-    it('should provide appropriate styles for status badges (e.g., LIVE)', () => {
-      const result = badgeVariants({ variant: 'status' })
+    it('should provide appropriate styles for LIVE status badges', () => {
+      const result = badgeVariants({ color: 'primary', pulse: true })
       expect(result).toContain('bg-primary')
-      expect(result).toContain('text-gray-950')
-      // Status badges should be visually prominent
-      expect(result).toContain('font-bold')
+      expect(result).toContain('text-primary-content')
+      expect(result).toContain('animate-pulse-subtle')
+    })
+
+    it('should provide appropriate styles for status labels', () => {
+      const result = badgeVariants({ color: 'primary', variant: 'outline', uppercase: true })
+      expect(result).toContain('border-primary')
+      expect(result).toContain('uppercase')
+      expect(result).toContain('tracking-wider')
     })
 
     it('should provide appropriate styles for content tags', () => {
-      const result = badgeVariants({ variant: 'tag' })
-      expect(result).toContain('bg-highlight')
+      const result = badgeVariants({ color: 'muted', variant: 'soft' })
+      expect(result).toContain('bg-muted/10')
       expect(result).toContain('text-muted')
-      // Tags should be more subtle
     })
 
-    it('should provide appropriate styles for outlined badges', () => {
-      const result = badgeVariants({ variant: 'outline' })
-      expect(result).toContain('border-2')
-      expect(result).toContain('bg-transparent')
-      // Outline should be lightweight and non-intrusive
+    it('should provide appropriate styles for keyboard shortcuts', () => {
+      const result = badgeVariants({ color: 'neutral', size: 'xs' })
+      expect(result).toContain('bg-neutral')
+      expect(result).toContain('px-1.5')
+      expect(result).toContain('py-0.5')
     })
 
-    it('should support pulsing status indicators', () => {
-      const result = badgeVariants({ variant: 'status', pulse: true })
-      expect(result).toContain('bg-primary')
-      expect(result).toContain('animate-pulse-subtle')
-      // Useful for "LIVE" or active status indicators
+    it('should provide appropriate styles for log entry tags', () => {
+      const result = badgeVariants({ color: 'danger', variant: 'outline', size: 'xs' })
+      expect(result).toContain('border-danger')
+      expect(result).toContain('text-danger')
+      expect(result).toContain('px-1.5')
     })
   })
 
   describe('badgeVariants - Consistency', () => {
-    it('should maintain consistent base sizing across all variants', () => {
-      const status = badgeVariants({ variant: 'status' })
-      const tag = badgeVariants({ variant: 'tag' })
-      const outline = badgeVariants({ variant: 'outline' })
+    it('should maintain consistent base classes across all variants', () => {
+      const primary = badgeVariants({ color: 'primary' })
+      const muted = badgeVariants({ color: 'muted' })
+      const success = badgeVariants({ color: 'success' })
 
-      // All should have same base size classes
-      expect(status).toContain('text-xs')
-      expect(tag).toContain('text-xs')
-      expect(outline).toContain('text-xs')
-
-      expect(status).toContain('px-2')
-      expect(tag).toContain('px-2')
-      expect(outline).toContain('px-2')
-
-      expect(status).toContain('py-0.5')
-      expect(tag).toContain('py-0.5')
-      expect(outline).toContain('py-0.5')
+      // All should have same base classes
+      ;[primary, muted, success].forEach((result) => {
+        expect(result).toContain('inline-flex')
+        expect(result).toContain('items-center')
+        expect(result).toContain('rounded')
+        expect(result).toContain('font-mono')
+        expect(result).toContain('font-semibold')
+      })
     })
 
-    it('should maintain consistent font weight across all variants', () => {
-      const status = badgeVariants({ variant: 'status' })
-      const tag = badgeVariants({ variant: 'tag' })
-      const outline = badgeVariants({ variant: 'outline' })
+    it('should maintain consistent size classes across color variants', () => {
+      const primarySm = badgeVariants({ color: 'primary', size: 'sm' })
+      const mutedSm = badgeVariants({ color: 'muted', size: 'sm' })
 
-      expect(status).toContain('font-bold')
-      expect(tag).toContain('font-bold')
-      expect(outline).toContain('font-bold')
-    })
-
-    it('should maintain consistent border radius across all variants', () => {
-      const status = badgeVariants({ variant: 'status' })
-      const tag = badgeVariants({ variant: 'tag' })
-      const outline = badgeVariants({ variant: 'outline' })
-
-      expect(status).toContain('rounded')
-      expect(tag).toContain('rounded')
-      expect(outline).toContain('rounded')
+      expect(primarySm).toContain('text-xs')
+      expect(mutedSm).toContain('text-xs')
+      expect(primarySm).toContain('px-2')
+      expect(mutedSm).toContain('px-2')
     })
   })
 
   describe('badgeVariants - Visual Hierarchy', () => {
     it('should have clear visual distinction between variants', () => {
-      const status = badgeVariants({ variant: 'status' })
-      const tag = badgeVariants({ variant: 'tag' })
-      const outline = badgeVariants({ variant: 'outline' })
+      const solid = badgeVariants({ color: 'primary', variant: 'solid' })
+      const outline = badgeVariants({ color: 'primary', variant: 'outline' })
+      const soft = badgeVariants({ color: 'primary', variant: 'soft' })
 
-      // Status is most prominent (solid primary)
-      expect(status).toContain('bg-primary')
+      // Solid: filled background
+      expect(solid).toContain('bg-primary')
+      expect(solid).not.toContain('bg-transparent')
 
-      // Tag is subtle (muted colors)
-      expect(tag).toContain('text-muted')
-
-      // Outline is lightweight (transparent background)
+      // Outline: transparent background with border
       expect(outline).toContain('bg-transparent')
+      expect(outline).toContain('border-2')
+
+      // Soft: subtle background
+      expect(soft).toContain('bg-primary/20')
+      expect(soft).not.toContain('bg-transparent')
 
       // All three should produce different class strings
-      expect(status).not.toBe(tag)
-      expect(tag).not.toBe(outline)
-      expect(status).not.toBe(outline)
+      expect(solid).not.toBe(outline)
+      expect(outline).not.toBe(soft)
+      expect(solid).not.toBe(soft)
+    })
+
+    it('should have clear visual distinction between semantic colors', () => {
+      const success = badgeVariants({ color: 'success' })
+      const danger = badgeVariants({ color: 'danger' })
+      const warning = badgeVariants({ color: 'warning' })
+
+      expect(success).toContain('bg-success')
+      expect(danger).toContain('bg-danger')
+      expect(warning).toContain('bg-warning')
+
+      // All should produce different class strings
+      expect(success).not.toBe(danger)
+      expect(danger).not.toBe(warning)
+      expect(success).not.toBe(warning)
+    })
+  })
+
+  describe('badgeVariants - Design Token Integration', () => {
+    it('should use semantic color tokens for brand colors', () => {
+      const primary = badgeVariants({ color: 'primary' })
+      const accent = badgeVariants({ color: 'accent' })
+      const secondary = badgeVariants({ color: 'secondary' })
+
+      expect(primary).toContain('bg-primary')
+      expect(primary).toContain('text-primary-content')
+      expect(accent).toContain('bg-accent')
+      expect(accent).toContain('text-accent-content')
+      expect(secondary).toContain('bg-secondary')
+      expect(secondary).toContain('text-secondary-content')
+    })
+
+    it('should use semantic color tokens for status colors', () => {
+      const success = badgeVariants({ color: 'success' })
+      const warning = badgeVariants({ color: 'warning' })
+      const danger = badgeVariants({ color: 'danger' })
+      const info = badgeVariants({ color: 'info' })
+
+      expect(success).toContain('bg-success')
+      expect(warning).toContain('bg-warning')
+      expect(danger).toContain('bg-danger')
+      expect(info).toContain('bg-info')
+    })
+
+    it('should use content pairing for accessible contrast', () => {
+      const primary = badgeVariants({ color: 'primary', variant: 'solid' })
+      const success = badgeVariants({ color: 'success', variant: 'solid' })
+
+      expect(primary).toContain('text-primary-content')
+      expect(success).toContain('text-success-content')
     })
   })
 })

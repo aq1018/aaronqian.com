@@ -1,6 +1,7 @@
 ---
 // ProjectLogEntry - Terminal-style log entry component
 import type { CollectionEntry } from 'astro:content'
+import Badge from '@/components/ui/Badge.astro'
 import Stack from '@/components/ui/Stack.astro'
 import Heading from '@/components/ui/Heading.astro'
 import Text from '@/components/ui/Text.astro'
@@ -22,17 +23,19 @@ const formatTimestamp = (date: Date) => {
   return `${year}-${month}-${day} ${hours}:${minutes}`
 }
 
-// Tag colors (terminal aesthetic)
-const tagColors: Record<string, string> = {
-  milestone: 'bg-primary/20 text-primary border-primary/40',
-  bug: 'bg-red-500/20 text-red-400 border-red-500/40',
-  experiment: 'bg-primary-500/20 text-primary-400 border-primary-500/40',
-  ux: 'bg-purple-500/20 text-purple-400 border-purple-500/40',
-  default: 'bg-muted/20 text-muted border-border',
+// Tag color mappings for Badge component
+const tagColorMap: Record<
+  string,
+  { color: 'primary' | 'danger' | 'info' | 'muted'; customClass?: string }
+> = {
+  milestone: { color: 'primary' },
+  bug: { color: 'danger' },
+  experiment: { color: 'info' },
+  ux: { color: 'info' },
 }
 
-const getTagColor = (tag: string) => {
-  return tagColors[tag.toLowerCase()] || tagColors.default
+const getTagProps = (tag: string) => {
+  return tagColorMap[tag.toLowerCase()] || { color: 'muted' }
 }
 ---
 
@@ -57,13 +60,19 @@ const getTagColor = (tag: string) => {
   {
     log.data.tags.length > 0 && (
       <Stack direction="horizontal" gap="tight" class="mb-4 flex-wrap">
-        {log.data.tags.map((tag) => (
-          <span
-            class={`rounded border px-2 py-0.5 font-mono text-xs font-medium ${getTagColor(tag)}`}
-          >
-            {tag}
-          </span>
-        ))}
+        {log.data.tags.map((tag) => {
+          const tagProps = getTagProps(tag)
+          return (
+            <Badge
+              color={tagProps.color}
+              variant="outline"
+              size="xs"
+              class={`px-2 ${tagProps.customClass || ''}`}
+            >
+              {tag}
+            </Badge>
+          )
+        })}
       </Stack>
     )
   }

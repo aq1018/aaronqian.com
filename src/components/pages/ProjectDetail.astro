@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content'
+import Badge from '@/components/ui/Badge.astro'
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
 import Section from '@/components/ui/Section.astro'
 import Container from '@/components/ui/Container.astro'
@@ -42,18 +43,16 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         <Heading level="h1" font="mono" class="text-3xl sm:text-4xl">
           {project.data.title}
         </Heading>
-        <span
-          class={`rounded border px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
-        >
+        <Badge size="md" variant="outline" uppercase class={statusStyles[project.data.status]}>
           {statusLabels[project.data.status]}
           {
             project.data.live && (
-              <span class="ml-2 rounded bg-primary px-2 py-0.5 text-xs font-bold text-gray-950">
+              <Badge color="primary" class="ml-2">
                 LIVE
-              </span>
+              </Badge>
             )
           }
-        </span>
+        </Badge>
       </Stack>
 
       <!-- Description -->

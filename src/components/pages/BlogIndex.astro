@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
+import Badge from '@/components/ui/Badge.astro'
 import Section from '@/components/ui/Section.astro'
 import Container from '@/components/ui/Container.astro'
 import Stack from '@/components/ui/Stack.astro'
@@ -55,7 +56,9 @@ const { posts } = Astro.props
               {post.data.tags && (
                 <Stack direction="horizontal" gap="tight" class="mt-3 flex-wrap">
                   {post.data.tags.map((tag) => (
-                    <span class="rounded bg-highlight px-2 py-1 text-sm text-muted">{tag}</span>
+                    <Badge color="muted" variant="soft" size="md">
+                      {tag}
+                    </Badge>
                   ))}
                 </Stack>
               )}

@@ -39,6 +39,7 @@ export const buttonVariants = cva(
       variant: {
         solid: solidHover,
         outline: `border-2 bg-transparent ${translucentHover}`,
+        soft: translucentHover,
         ghost: `bg-transparent ${translucentHover}`,
         link: 'bg-transparent underline-offset-4 hover:underline',
       },
@@ -74,6 +75,13 @@ export const buttonVariants = cva(
         variant: 'outline' as const,
         color,
         class: `border-${color} text-${color} hover:bg-${color}/10`,
+      })),
+
+      // Soft: subtle background + text + translucent hover
+      ...colors.map((color) => ({
+        variant: 'soft' as const,
+        color,
+        class: `bg-${color}/20 text-${color} hover:bg-${color}/30`,
       })),
 
       // Ghost: text + translucent hover background

@@ -54,6 +54,13 @@ describe('Button Component', () => {
       expect(result).toContain('hover:bg-primary/10')
     })
 
+    it('should render soft variant correctly', () => {
+      const result = buttonVariants({ variant: 'soft', color: 'primary' })
+      expect(result).toContain('bg-primary/20')
+      expect(result).toContain('text-primary')
+      expect(result).toContain('hover:bg-primary/30')
+    })
+
     it('should render ghost variant correctly', () => {
       const result = buttonVariants({ variant: 'ghost', color: 'primary' })
       expect(result).toContain('bg-transparent')
@@ -79,6 +86,14 @@ describe('Button Component', () => {
         expect(result).toContain('text-primary')
         expect(result).toContain('focus-visible:outline-primary')
         expect(result).toContain('hover:bg-primary/10')
+      })
+
+      it('should apply primary soft styles', () => {
+        const result = buttonVariants({ variant: 'soft', color: 'primary' })
+        expect(result).toContain('bg-primary/20')
+        expect(result).toContain('text-primary')
+        expect(result).toContain('focus-visible:outline-primary')
+        expect(result).toContain('hover:bg-primary/30')
       })
 
       it('should apply primary ghost styles', () => {
@@ -107,6 +122,14 @@ describe('Button Component', () => {
         expect(result).toContain('hover:bg-accent/10')
       })
 
+      it('should apply accent soft styles', () => {
+        const result = buttonVariants({ variant: 'soft', color: 'accent' })
+        expect(result).toContain('bg-accent/20')
+        expect(result).toContain('text-accent')
+        expect(result).toContain('focus-visible:outline-accent')
+        expect(result).toContain('hover:bg-accent/30')
+      })
+
       it('should apply accent ghost styles', () => {
         const result = buttonVariants({ variant: 'ghost', color: 'accent' })
         expect(result).toContain('text-accent')
@@ -131,6 +154,14 @@ describe('Button Component', () => {
         expect(result).toContain('text-neutral')
         expect(result).toContain('focus-visible:outline-neutral')
         expect(result).toContain('hover:bg-neutral/10')
+      })
+
+      it('should apply neutral soft styles', () => {
+        const result = buttonVariants({ variant: 'soft', color: 'neutral' })
+        expect(result).toContain('bg-neutral/20')
+        expect(result).toContain('text-neutral')
+        expect(result).toContain('focus-visible:outline-neutral')
+        expect(result).toContain('hover:bg-neutral/30')
       })
 
       it('should apply neutral ghost styles', () => {
@@ -213,7 +244,7 @@ describe('Button Component', () => {
 
     it('should generate valid classes for all variant combinations', () => {
       const colors = ['primary', 'accent', 'neutral'] as const
-      const variants = ['solid', 'outline', 'ghost'] as const
+      const variants = ['solid', 'outline', 'soft', 'ghost'] as const
 
       colors.forEach((color) => {
         variants.forEach((variant) => {

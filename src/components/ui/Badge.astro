@@ -7,10 +7,10 @@ interface Props extends BadgeVariants {
   [key: string]: any
 }
 
-const { variant, pulse, class: className, ...rest } = Astro.props
+const { size, color, variant, pulse, uppercase, class: className, ...rest } = Astro.props
 ---
 
-<span class={cn(badgeVariants({ variant, pulse }), className)} {...rest}>
+<span class={cn(badgeVariants({ size, color, variant, pulse, uppercase }), className)} {...rest}>
   <slot />
 </span>
 

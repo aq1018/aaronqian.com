@@ -2,6 +2,7 @@
 // Hero Section - Tech Lab meets Meditation Space
 // Features: Digital analyzer with animated signal traces
 import { Icon } from 'astro-icon/components'
+import Badge from '@/components/ui/Badge.astro'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 import HeroContent from '@/components/ui/HeroContent.astro'
 import Collapsible from '@/components/ui/Collapsible.astro'
@@ -116,9 +117,10 @@ import Stack from '@/components/ui/Stack.astro'
     >
       <Stack direction="horizontal" gap="tight" class="inline-flex items-center justify-center">
         <span
-          >Decoder controls: Click/Tap ⚡ or press <kbd
-            id="keyboard-shortcut"
-            class="rounded bg-muted/10 px-1.5 py-0.5 font-semibold text-muted">⌘K</kbd
+          >Decoder controls: Click/Tap ⚡ or press <Badge
+            color="neutral"
+            size="xs"
+            id="keyboard-shortcut">⌘K</Badge
           > to toggle.</span
         >
       </Stack>
