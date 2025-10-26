@@ -9,24 +9,27 @@ let cleanup: CleanupFunction | null = null
 
 /**
  * Get current theme from document
+ * Exported for testing
  */
-function getCurrentTheme(): 'light' | 'dark' {
+export function getCurrentTheme(): 'light' | 'dark' {
   if (typeof window === 'undefined') return 'light'
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
 }
 
 /**
  * Get the Giscus theme URL for the current theme
+ * Exported for testing
  */
-function getGiscusThemeUrl(theme: 'light' | 'dark'): string {
+export function getGiscusThemeUrl(theme: 'light' | 'dark'): string {
   const origin = typeof window === 'undefined' ? '' : window.location.origin
   return `${origin}/giscus-${theme}.generated.css`
 }
 
 /**
  * Send theme change message to Giscus iframe
+ * Exported for testing
  */
-function syncGiscusTheme(theme: 'light' | 'dark'): void {
+export function syncGiscusTheme(theme: 'light' | 'dark'): void {
   const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
   if (iframe?.contentWindow == null) return
 

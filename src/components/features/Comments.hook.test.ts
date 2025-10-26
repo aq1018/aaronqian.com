@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { initializeComments, setupComments } from './Comments.hook'
+import {
+  getCurrentTheme,
+  getGiscusThemeUrl,
+  initializeComments,
+  setupComments,
+  syncGiscusTheme,
+} from './Comments.hook'
 
 describe('Comments System', () => {
   beforeEach(() => {
@@ -16,6 +22,114 @@ describe('Comments System', () => {
     document.body.innerHTML = ''
     vi.clearAllTimers()
     vi.useRealTimers()
+  })
+
+  describe('getCurrentTheme', () => {
+    it('should return "light" when dark class is not present', () => {
+      document.documentElement.classList.remove('dark')
+      expect(getCurrentTheme()).toBe('light')
+    })
+
+    it('should return "dark" when dark class is present', () => {
+      document.documentElement.classList.add('dark')
+      expect(getCurrentTheme()).toBe('dark')
+    })
+  })
+
+  describe('getGiscusThemeUrl', () => {
+    it('should return light theme URL', () => {
+      const url = getGiscusThemeUrl('light')
+      expect(url).toMatch(/\/giscus-light\.generated\.css$/)
+    })
+
+    it('should return dark theme URL', () => {
+      const url = getGiscusThemeUrl('dark')
+      expect(url).toMatch(/\/giscus-dark\.generated\.css$/)
+    })
+
+    it('should include current origin', () => {
+      const url = getGiscusThemeUrl('light')
+      expect(url).toContain(window.location.origin)
+    })
+  })
+
+  describe('syncGiscusTheme', () => {
+    it('should send theme change message to giscus iframe', () => {
+      document.body.innerHTML = `
+        <iframe class="giscus-frame"></iframe>
+      `
+
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
+      expect(iframe).not.toBeNull()
+      if (iframe === null) return
+
+      const postMessageSpy = vi.fn()
+      Object.defineProperty(iframe, 'contentWindow', {
+        value: {
+          postMessage: postMessageSpy,
+        },
+        writable: true,
+      })
+
+      syncGiscusTheme('dark')
+
+      expect(postMessageSpy).toHaveBeenCalledWith(
+        {
+          giscus: {
+            setConfig: {
+              theme: expect.stringContaining('giscus-dark.generated.css') as string,
+            },
+          },
+        },
+        '*',
+      )
+    })
+
+    it('should handle missing iframe gracefully', () => {
+      document.body.innerHTML = `<div>No iframe here</div>`
+
+      // Should not throw
+      expect(() => syncGiscusTheme('light')).not.toThrow()
+    })
+
+    it('should handle iframe without contentWindow gracefully', () => {
+      document.body.innerHTML = `
+        <iframe class="giscus-frame"></iframe>
+      `
+
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
+      if (iframe === null) return
+
+      Object.defineProperty(iframe, 'contentWindow', {
+        value: null,
+        writable: true,
+      })
+
+      // Should not throw
+      expect(() => syncGiscusTheme('dark')).not.toThrow()
+    })
+
+    it('should use wildcard origin in development', () => {
+      document.body.innerHTML = `
+        <iframe class="giscus-frame"></iframe>
+      `
+
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
+      if (iframe === null) return
+
+      const postMessageSpy = vi.fn()
+      Object.defineProperty(iframe, 'contentWindow', {
+        value: {
+          postMessage: postMessageSpy,
+        },
+        writable: true,
+      })
+
+      syncGiscusTheme('light')
+
+      // In test environment (localhost), should use '*' for CORS flexibility
+      expect(postMessageSpy).toHaveBeenCalledWith(expect.any(Object), '*')
+    })
   })
 
   describe('initializeComments', () => {
@@ -46,12 +160,19 @@ describe('Comments System', () => {
       cleanup()
     })
 
-    // Note: JSDOM's MutationObserver doesn't reliably trigger for classList.add() in test environment
-    // The "light" theme test below proves the MutationObserver works for classList.remove()
-    // This functionality works correctly in production browsers
-    it.skip('should sync theme to giscus iframe when theme changes to dark', async () => {
+    it('should sync theme to giscus iframe when theme changes to dark', () => {
       // Start with light theme (no dark class)
       document.documentElement.classList.remove('dark')
+
+      // Capture the MutationObserver callback
+      let observerCallback: MutationCallback | undefined
+      const OriginalMutationObserver = window.MutationObserver
+      window.MutationObserver = class MockMutationObserver extends OriginalMutationObserver {
+        constructor(callback: MutationCallback) {
+          super(callback)
+          observerCallback = callback
+        }
+      }
 
       // Setup DOM with comments container and giscus iframe
       document.body.innerHTML = `
@@ -85,31 +206,50 @@ describe('Comments System', () => {
       // Simulate theme change to dark
       document.documentElement.classList.add('dark')
 
-      // Wait for MutationObserver to fire (flush microtasks and advance timers)
-      await Promise.resolve()
-      await vi.advanceTimersByTimeAsync(1)
-      await Promise.resolve()
+      // Manually trigger the MutationObserver callback
+      expect(observerCallback).toBeDefined()
+      if (observerCallback !== undefined) {
+        const mockMutations: Array<Partial<MutationRecord>> = [
+          {
+            type: 'attributes',
+            attributeName: 'class',
+            target: document.documentElement,
+          },
+        ]
+        observerCallback(mockMutations as MutationRecord[], new OriginalMutationObserver(() => {}))
+      }
 
       // Should have sent message to set dark theme
       expect(postMessageSpy).toHaveBeenCalledWith(
         {
           giscus: {
             setConfig: {
-              theme: 'dark',
+              theme: expect.stringContaining('giscus-dark.generated.css') as string,
             },
           },
         },
-        'https://giscus.app',
+        '*',
       )
+
+      // Restore original MutationObserver
+      window.MutationObserver = OriginalMutationObserver
 
       cleanup()
     })
 
-    // Note: JSDOM's MutationObserver doesn't reliably trigger for classList changes in test environment
-    // The "cleanup" and "initialization" tests verify the core functionality works
-    it.skip('should sync theme to giscus iframe when theme changes to light', async () => {
+    it('should sync theme to giscus iframe when theme changes to light', () => {
       // Start with dark theme
       document.documentElement.classList.add('dark')
+
+      // Capture the MutationObserver callback
+      let observerCallback: MutationCallback | undefined
+      const OriginalMutationObserver = window.MutationObserver
+      window.MutationObserver = class MockMutationObserver extends OriginalMutationObserver {
+        constructor(callback: MutationCallback) {
+          super(callback)
+          observerCallback = callback
+        }
+      }
 
       document.body.innerHTML = `
         <div data-comments>
@@ -141,21 +281,33 @@ describe('Comments System', () => {
       // Simulate theme change to light
       document.documentElement.classList.remove('dark')
 
-      // Wait for MutationObserver to fire (flush microtasks)
-      await Promise.resolve()
-      await vi.runAllTimersAsync()
+      // Manually trigger the MutationObserver callback
+      expect(observerCallback).toBeDefined()
+      if (observerCallback !== undefined) {
+        const mockMutations: Array<Partial<MutationRecord>> = [
+          {
+            type: 'attributes',
+            attributeName: 'class',
+            target: document.documentElement,
+          },
+        ]
+        observerCallback(mockMutations as MutationRecord[], new OriginalMutationObserver(() => {}))
+      }
 
       // Should have sent message to set light theme
       expect(postMessageSpy).toHaveBeenCalledWith(
         {
           giscus: {
             setConfig: {
-              theme: 'light',
+              theme: expect.stringContaining('giscus-light.generated.css') as string,
             },
           },
         },
-        'https://giscus.app',
+        '*',
       )
+
+      // Restore original MutationObserver
+      window.MutationObserver = OriginalMutationObserver
 
       cleanup()
     })
@@ -220,6 +372,39 @@ describe('Comments System', () => {
       cleanup()
     })
 
+    it('should configure MutationObserver to watch documentElement classList changes', () => {
+      // Mock MutationObserver to capture configuration
+      let observedElement: Node | null = null
+      let observerOptions: MutationObserverInit | null = null
+
+      const OriginalMutationObserver = window.MutationObserver
+      window.MutationObserver = class MockMutationObserver extends OriginalMutationObserver {
+        observe(target: Node, options?: MutationObserverInit): void {
+          observedElement = target
+          observerOptions = options ?? null
+          super.observe(target, options)
+        }
+      }
+
+      document.body.innerHTML = `
+        <div data-comments></div>
+      `
+
+      const cleanup = initializeComments()
+
+      // Verify observer is configured correctly
+      expect(observedElement).toBe(document.documentElement)
+      expect(observerOptions).toEqual({
+        attributes: true,
+        attributeFilter: ['class'],
+      })
+
+      // Restore original MutationObserver
+      window.MutationObserver = OriginalMutationObserver
+
+      cleanup()
+    })
+
     it('should clean up MutationObserver when cleanup is called', () => {
       document.body.innerHTML = `
         <div data-comments>
@@ -261,8 +446,27 @@ describe('Comments System', () => {
       expect(postMessageSpy).not.toHaveBeenCalled()
     })
 
-    // Note: Same JSDOM MutationObserver issue - skipping for now
-    it.skip('should clean up previous initialization when called multiple times', async () => {
+    it('should clean up previous initialization when called multiple times', () => {
+      // Track observer disconnect calls
+      const disconnectCalls: number[] = []
+      let observerIndex = 0
+
+      const OriginalMutationObserver = window.MutationObserver
+      window.MutationObserver = class MockMutationObserver extends OriginalMutationObserver {
+        private readonly myIndex: number
+
+        constructor(callback: MutationCallback) {
+          super(callback)
+          this.myIndex = observerIndex
+          observerIndex += 1
+        }
+
+        disconnect(): void {
+          disconnectCalls.push(this.myIndex)
+          super.disconnect()
+        }
+      }
+
       document.body.innerHTML = `
         <div data-comments>
           <iframe class="giscus-frame"></iframe>
@@ -282,31 +486,29 @@ describe('Comments System', () => {
         writable: true,
       })
 
-      // First initialization
+      // First initialization - creates observer index 0
       const cleanup1 = initializeComments()
 
       // Fast-forward to allow iframe detection
       vi.advanceTimersByTime(200)
 
-      // Second initialization (should clean up first)
+      // Verify first observer was created (index 0)
+      expect(observerIndex).toBe(1)
+
+      // Second initialization (should clean up first) - creates observer index 1
       const cleanup2 = initializeComments()
 
       // Fast-forward to allow iframe detection
       vi.advanceTimersByTime(200)
 
-      // Clear initial theme sync calls
-      postMessageSpy.mockClear()
+      // Verify:
+      // 1. Second observer was created (index 1)
+      // 2. First observer was disconnected during second initialization
+      expect(observerIndex).toBe(2)
+      expect(disconnectCalls).toContain(0) // First observer should be disconnected
 
-      // Trigger theme change
-      document.documentElement.classList.add('dark')
-
-      // Wait for MutationObserver (flush microtasks)
-      await Promise.resolve()
-      await vi.runAllTimersAsync()
-
-      // Should only have one observer active (from second initialization)
-      // If both were active, postMessage would be called twice
-      expect(postMessageSpy).toHaveBeenCalledTimes(1)
+      // Restore original MutationObserver
+      window.MutationObserver = OriginalMutationObserver
 
       cleanup1()
       cleanup2()
