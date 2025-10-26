@@ -1,0 +1,13 @@
+---
+import { dividerCva, type DividerStyle } from './Divider.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends DividerStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { orientation, weight, class: className = '', ...rest } = Astro.props
+---
+
+<div class={cn(dividerCva({ orientation, weight }), className)} {...rest}></div>

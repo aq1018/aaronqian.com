@@ -5,10 +5,10 @@
  * Used by both home page and projects index page
  */
 import type { CollectionEntry } from 'astro:content'
-import Link from '@/components/ui/Link.astro'
-import Badge from '@/components/ui/Badge.astro'
-import Stack from '@/components/ui/Stack.astro'
-import Text from '@/components/ui/Text.astro'
+import Link from '@/components/primitives/Link.astro'
+import Badge from '@/components/primitives/Badge.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Text from '@/components/primitives/Text.astro'
 
 interface Props {
   projects: CollectionEntry<'projects'>[]
@@ -44,7 +44,6 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
               <td class="py-4 pr-6 align-top">
                 <Link
                   href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-                  variant="content"
                   class="font-semibold"
                 >
                   {project.data.title}
@@ -63,9 +62,7 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
                 </span>
               </td>
               <td class="py-4 pl-6 align-top">
-                <Text variant="muted" class="mb-2 leading-relaxed">
-                  {project.data.description}
-                </Text>
+                <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
                 <Text size="xs" class="italic text-muted/60">
                   {project.data.aside}
                 </Text>
@@ -78,14 +75,13 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
   </div>
 
   <!-- Projects list - mobile -->
-  <Stack gap="small" class="md:hidden">
+  <Stack space="sm" class="md:hidden">
     {
       projects.map((project) => (
         <div class="border-l-2 border-primary/30 pl-4 transition-colors hover:border-primary">
           <div class="mb-2 flex items-baseline justify-between gap-3">
             <Link
               href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-              variant="content"
               class="font-mono text-base font-semibold"
             >
               {project.data.title}
@@ -103,10 +99,10 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
               )}
             </span>
           </div>
-          <Text size="sm" variant="muted" class="mb-2 leading-relaxed">
+          <Text size="sm" class="mb-2 leading-relaxed">
             {project.data.description}
           </Text>
-          <Text font="mono" size="xs" class="italic text-muted/60">
+          <Text size="xs" class="italic text-muted/60">
             {project.data.aside}
           </Text>
         </div>
@@ -118,9 +114,7 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
   {
     showFooter && (
       <div class="mt-8">
-        <Text variant="caption" font="mono" class="text-muted/70">
-          Updates monthly. Expect context switches.
-        </Text>
+        <Text class="text-muted/70">Updates monthly. Expect context switches.</Text>
       </div>
     )
   }

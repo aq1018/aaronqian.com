@@ -1,13 +1,14 @@
 ---
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
-import Badge from '@/components/ui/Badge.astro'
-import Section from '@/components/ui/Section.astro'
-import Container from '@/components/ui/Container.astro'
-import Stack from '@/components/ui/Stack.astro'
-import Link from '@/components/ui/Link.astro'
-import Heading from '@/components/ui/Heading.astro'
-import Text from '@/components/ui/Text.astro'
+import Badge from '@/components/primitives/Badge.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Container from '@/components/primitives/Container.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Inline from '@/components/primitives/Inline.astro'
+import Link from '@/components/primitives/Link.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Text from '@/components/primitives/Text.astro'
 
 interface Props {
   posts: CollectionEntry<'blog'>[]
@@ -17,16 +18,16 @@ const { posts } = Astro.props
 ---
 
 <main class="flex-1">
-  <Section variant="subsection">
+  <Surface>
     <Container>
-      <Heading level="h1">Blog Posts</Heading>
+      <Heading size="h1">Blog Posts</Heading>
 
-      <Stack gap="medium" class="mt-8">
+      <Stack space="md" class="mt-8">
         {
           posts.map((post) => (
             <article class="border-b border-border pb-8">
               {post.data.hero && (
-                <Link href={`/blog/${post.slug}`} variant="content" class="block">
+                <Link href={`/blog/${post.slug}`} class="block">
                   <Image
                     src={post.data.hero}
                     alt={post.data.title}
@@ -36,16 +37,12 @@ const { posts } = Astro.props
                   />
                 </Link>
               )}
-              <Heading level="h2" weight="semibold">
-                <Link
-                  href={`/blog/${post.slug}`}
-                  variant="content"
-                  class="no-underline hover:underline"
-                >
+              <Heading size="h2">
+                <Link href={`/blog/${post.slug}`} class="no-underline hover:underline">
                   {post.data.title}
                 </Link>
               </Heading>
-              <Text variant="caption" class="mt-2">
+              <Text class="mt-2">
                 {post.data.date.toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
@@ -54,18 +51,18 @@ const { posts } = Astro.props
               </Text>
               {post.data.description && <Text class="mt-3">{post.data.description}</Text>}
               {post.data.tags && (
-                <Stack direction="horizontal" gap="tight" class="mt-3 flex-wrap">
+                <Inline space="xs" class="mt-3 flex-wrap">
                   {post.data.tags.map((tag) => (
-                    <Badge color="muted" variant="soft" size="md">
+                    <Badge color="muted" size="md">
                       {tag}
                     </Badge>
                   ))}
-                </Stack>
+                </Inline>
               )}
             </article>
           ))
         }
       </Stack>
     </Container>
-  </Section>
+  </Surface>
 </main>

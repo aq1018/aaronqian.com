@@ -1,12 +1,12 @@
 /**
- * UI component lifecycle hooks
- * Initialize all UI component hooks
+ * Primitive component lifecycle hooks
+ * Initialize all primitive component hooks
  */
 
 import { setupCollapsibles } from './Collapsible.hook'
 import { setupToggles } from './PillToggle.hook'
 
-export function initUiHooks(): void {
+export function initPrimitiveHooks(): void {
   setupToggles()
   setupCollapsibles()
 }

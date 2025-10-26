@@ -1,14 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import Badge from '@/components/ui/Badge.astro'
+import Badge from '@/components/primitives/Badge.astro'
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
-import Section from '@/components/ui/Section.astro'
-import Container from '@/components/ui/Container.astro'
-import Stack from '@/components/ui/Stack.astro'
-import Link from '@/components/ui/Link.astro'
-import Button from '@/components/ui/Button.astro'
-import Heading from '@/components/ui/Heading.astro'
-import Text from '@/components/ui/Text.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Container from '@/components/primitives/Container.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Inline from '@/components/primitives/Inline.astro'
+import Link from '@/components/primitives/Link.astro'
+import Button from '@/components/primitives/Button.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Text from '@/components/primitives/Text.astro'
 
 interface Props {
   project: CollectionEntry<'projects'>
@@ -22,10 +23,10 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
 
 <!-- Project Header -->
 <header>
-  <Section variant="subsection" background="surface" class="border-b border-border">
+  <Surface class="border-b border-border">
     <Container>
       <!-- Back link -->
-      <Link href="/projects" variant="back" class="mb-6">
+      <Link href="/projects" class="mb-6">
         <svg
           class="h-4 w-4 transition-transform group-hover:-translate-x-1"
           fill="none"
@@ -39,11 +40,11 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
       </Link>
 
       <!-- Title and status -->
-      <Stack direction="horizontal" gap="small" class="mb-4 flex-wrap items-baseline">
-        <Heading level="h1" font="mono" class="text-3xl sm:text-4xl">
+      <Inline space="sm" class="mb-4 flex-wrap items-baseline">
+        <Heading size="h1" class="text-3xl sm:text-4xl">
           {project.data.title}
         </Heading>
-        <Badge size="md" variant="outline" uppercase class={statusStyles[project.data.status]}>
+        <Badge size="md" uppercase class={statusStyles[project.data.status]}>
           {statusLabels[project.data.status]}
           {
             project.data.live && (
@@ -53,15 +54,15 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
             )
           }
         </Badge>
-      </Stack>
+      </Inline>
 
       <!-- Description -->
-      <Text variant="lead" class="mb-4">
+      <Text class="mb-4">
         {project.data.description}
       </Text>
 
       <!-- Aside (witty comment) -->
-      <Text font="mono" size="sm" class="italic text-muted/70">
+      <Text size="sm" class="italic text-muted/70">
         {project.data.aside}
       </Text>
 
@@ -72,7 +73,6 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
             <Button
               href={project.data.url}
               external
-              variant="outline"
               color="primary"
               class="font-mono text-sm tracking-wider"
             >
@@ -90,17 +90,17 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         )
       }
     </Container>
-  </Section>
+  </Surface>
 </header>
 
 <!-- Build Log -->
 <main>
-  <Section variant="subsection" background="surface">
+  <Surface>
     <Container>
       <!-- Log header -->
       <div class="mb-8 border-b border-border/30 pb-4">
-        <Heading level="h2" font="mono">Build Log</Heading>
-        <Text variant="caption" font="mono" class="mt-2 text-muted/70">
+        <Heading size="h2">Build Log</Heading>
+        <Text class="mt-2 text-muted/70">
           {projectLogs.length}
           {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
         </Text>
@@ -109,19 +109,17 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
       <!-- Log entries -->
       {
         projectLogs.length > 0 ? (
-          <Stack gap="medium">
+          <Stack space="md">
             {projectLogs.map((log) => (
               <ProjectLogEntry log={log} />
             ))}
           </Stack>
         ) : (
           <div class="rounded border border-border/30 bg-muted/10 p-8 text-center">
-            <Text variant="caption" font="mono" class="text-muted/70">
-              No log entries yet. Check back soon.
-            </Text>
+            <Text class="text-muted/70">No log entries yet. Check back soon.</Text>
           </div>
         )
       }
     </Container>
-  </Section>
+  </Surface>
 </main>

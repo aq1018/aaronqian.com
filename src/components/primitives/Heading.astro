@@ -1,0 +1,83 @@
+---
+import { headingVariants, type HeadingStyle } from './typography.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends HeadingStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const {
+  size = 'h2',
+  align,
+  tone,
+  whitespace,
+  truncate,
+  break: breakProp,
+  class: className = '',
+  ...rest
+} = Astro.props
+
+const classes = cn(
+  headingVariants({
+    size,
+    align,
+    tone,
+    whitespace,
+    truncate,
+    break: breakProp,
+  }),
+  className,
+)
+
+// Map size to semantic HTML element
+const isH1 = size === 'display-2' || size === 'display-1' || size === 'h1'
+const isH2 = size === 'h2'
+const isH3 = size === 'h3'
+const isH4 = size === 'h4'
+const isH5 = size === 'h5'
+const isH6 = size === 'h6'
+---
+
+{
+  isH1 && (
+    <h1 class={classes} {...rest}>
+      <slot />
+    </h1>
+  )
+}
+{
+  isH2 && (
+    <h2 class={classes} {...rest}>
+      <slot />
+    </h2>
+  )
+}
+{
+  isH3 && (
+    <h3 class={classes} {...rest}>
+      <slot />
+    </h3>
+  )
+}
+{
+  isH4 && (
+    <h4 class={classes} {...rest}>
+      <slot />
+    </h4>
+  )
+}
+{
+  isH5 && (
+    <h5 class={classes} {...rest}>
+      <slot />
+    </h5>
+  )
+}
+{
+  isH6 && (
+    <h6 class={classes} {...rest}>
+      <slot />
+    </h6>
+  )
+}

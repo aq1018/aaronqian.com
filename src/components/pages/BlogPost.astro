@@ -1,12 +1,12 @@
 ---
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
-import Badge from '@/components/ui/Badge.astro'
-import Section from '@/components/ui/Section.astro'
-import Container from '@/components/ui/Container.astro'
-import Stack from '@/components/ui/Stack.astro'
-import Heading from '@/components/ui/Heading.astro'
-import Text from '@/components/ui/Text.astro'
+import Badge from '@/components/primitives/Badge.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Container from '@/components/primitives/Container.astro'
+import Inline from '@/components/primitives/Inline.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Text from '@/components/primitives/Text.astro'
 import Comments from '@/components/features/Comments.astro'
 
 interface Props {
@@ -18,7 +18,7 @@ const { Content } = await post.render()
 ---
 
 <main class="flex-1">
-  <Section variant="subsection">
+  <Surface>
     <Container>
       <a
         href="/blog"
@@ -27,7 +27,7 @@ const { Content } = await post.render()
         ← Back to blog
       </a>
 
-      <Heading level="h1" class="mt-6 leading-tight sm:text-5xl">
+      <Heading size="h1" class="mt-6 leading-tight sm:text-5xl">
         {post.data.title}
       </Heading>
 
@@ -42,7 +42,7 @@ const { Content } = await post.render()
       }
 
       <div class="mb-8 border-b border-border pb-4">
-        <Text variant="muted" class="mt-4">
+        <Text class="mt-4">
           {
             post.data.date.toLocaleDateString('en-US', {
               year: 'numeric',
@@ -53,13 +53,13 @@ const { Content } = await post.render()
         </Text>
         {
           post.data.tags && (
-            <Stack direction="horizontal" gap="tight" class="mt-4 flex-wrap">
+            <Inline space="xs" class="mt-4 flex-wrap">
               {post.data.tags.map((tag) => (
-                <Badge color="muted" variant="soft" size="md">
+                <Badge color="muted" size="md">
                   {tag}
                 </Badge>
               ))}
-            </Stack>
+            </Inline>
           )
         }
       </div>
@@ -70,5 +70,5 @@ const { Content } = await post.render()
 
       <Comments class="mt-16" />
     </Container>
-  </Section>
+  </Surface>
 </main>

@@ -1,0 +1,15 @@
+---
+import { containerCva, type ContainerStyle } from './Container.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends ContainerStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { width, padX, fluidUntil, center, class: className = '', ...rest } = Astro.props
+---
+
+<div class={cn(containerCva({ width, padX, fluidUntil, center }), className)} {...rest}>
+  <slot />
+</div>

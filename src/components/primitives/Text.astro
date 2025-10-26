@@ -1,0 +1,46 @@
+---
+import { textVariants, type TextStyle } from './typography.cva'
+import { cn } from '@/lib/utils'
+
+export interface Props extends TextStyle {
+  class?: string
+  as?: 'p' | 'span' | 'div' | 'label' // Allow element override
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const {
+  size,
+  align,
+  tone,
+  uppercase,
+  strong,
+  italic,
+  strike,
+  whitespace,
+  truncate,
+  break: breakProp,
+  as: Element = 'p',
+  class: className = '',
+  ...rest
+} = Astro.props
+
+const classes = cn(
+  textVariants({
+    size,
+    align,
+    tone,
+    uppercase,
+    strong,
+    italic,
+    strike,
+    whitespace,
+    truncate,
+    break: breakProp,
+  }),
+  className,
+)
+---
+
+<Element class={classes} {...rest}>
+  <slot />
+</Element>

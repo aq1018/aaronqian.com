@@ -1,10 +1,10 @@
 ---
 // ProjectLogEntry - Terminal-style log entry component
 import type { CollectionEntry } from 'astro:content'
-import Badge from '@/components/ui/Badge.astro'
-import Stack from '@/components/ui/Stack.astro'
-import Heading from '@/components/ui/Heading.astro'
-import Text from '@/components/ui/Text.astro'
+import Badge from '@/components/primitives/Badge.astro'
+import Inline from '@/components/primitives/Inline.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Text from '@/components/primitives/Text.astro'
 
 interface Props {
   log: CollectionEntry<'projectLogs'>
@@ -42,16 +42,10 @@ const getTagProps = (tag: string) => {
 <article class="group border-l-2 border-border/30 pl-6 transition-colors hover:border-primary/50">
   <!-- Timestamp and title -->
   <header class="mb-3">
-    <Text
-      as="time"
-      variant="caption"
-      font="mono"
-      class="text-muted/70"
-      datetime={log.data.date.toISOString()}
-    >
+    <Text as="time" class="text-muted/70" datetime={log.data.date.toISOString()}>
       [{formatTimestamp(log.data.date)}]
     </Text>
-    <Heading level="h3" font="mono" class="mt-1 text-lg">
+    <Heading size="h3" class="mt-1 text-lg">
       {log.data.title}
     </Heading>
   </header>
@@ -59,21 +53,16 @@ const getTagProps = (tag: string) => {
   <!-- Tags -->
   {
     log.data.tags.length > 0 && (
-      <Stack direction="horizontal" gap="tight" class="mb-4 flex-wrap">
+      <Inline space="xs" class="mb-4 flex-wrap">
         {log.data.tags.map((tag) => {
           const tagProps = getTagProps(tag)
           return (
-            <Badge
-              color={tagProps.color}
-              variant="outline"
-              size="xs"
-              class={`px-2 ${tagProps.customClass || ''}`}
-            >
+            <Badge color={tagProps.color} size="xs" class={`px-2 ${tagProps.customClass || ''}`}>
               {tag}
             </Badge>
           )
         })}
-      </Stack>
+      </Inline>
     )
   }
 

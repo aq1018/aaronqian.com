@@ -1,0 +1,15 @@
+---
+import { clusterCva, type ClusterStyle } from './Cluster.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends ClusterStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { space, align, class: className = '', ...rest } = Astro.props
+---
+
+<span class={cn(clusterCva({ space, align }), className)} {...rest}>
+  <slot />
+</span>

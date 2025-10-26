@@ -4,9 +4,11 @@
  */
 
 import { initFeatureHooks } from './features/hooks'
-import { initUiHooks } from './ui/hooks'
+import { initPatternHooks } from './patterns/hooks'
+import { initPrimitiveHooks } from './primitives/hooks'
 
 export function initComponentHooks(): void {
-  initUiHooks()
+  initPrimitiveHooks()
+  initPatternHooks()
   initFeatureHooks()
 }

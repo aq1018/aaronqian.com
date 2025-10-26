@@ -1,0 +1,15 @@
+---
+import { insetCva, type InsetStyle } from './Inset.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends InsetStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { space, squish, class: className = '', ...rest } = Astro.props
+---
+
+<div class={cn(insetCva({ space, squish }), className)} {...rest}>
+  <slot />
+</div>

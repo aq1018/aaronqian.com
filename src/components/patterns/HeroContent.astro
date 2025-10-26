@@ -5,9 +5,9 @@
  * Supports both props (simple) and slots (complex) for maximum flexibility
  */
 import { cn } from '@/lib/utils'
-import Container from './Container.astro'
-import Text from './Text.astro'
-import Heading from './Heading.astro'
+import Container from '@/components/primitives/Container.astro'
+import Text from '@/components/primitives/Text.astro'
+import Heading from '@/components/primitives/Heading.astro'
 
 interface Props {
   eyebrow?: string
@@ -43,12 +43,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
       (hasEyebrowSlot ? (
         <slot name="eyebrow" />
       ) : (
-        <Text
-          variant="label"
-          color="primary"
-          align={centered ? 'center' : undefined}
-          class="mb-4 opacity-85"
-        >
+        <Text color="primary" align={centered ? 'center' : undefined} class="mb-4 opacity-85">
           {eyebrow}
         </Text>
       ))
@@ -60,7 +55,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
       (hasTitleSlot ? (
         <slot name="title" />
       ) : (
-        <Heading level="h1" font="mono" align={centered ? 'center' : undefined}>
+        <Heading size="h1" align={centered ? 'center' : undefined}>
           {title}
         </Heading>
       ))
@@ -72,7 +67,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
       (hasDescriptionSlot ? (
         <slot name="description" />
       ) : (
-        <Text variant="lead" align={centered ? 'center' : undefined} class="mx-auto mt-8 max-w-2xl">
+        <Text align={centered ? 'center' : undefined} class="mx-auto mt-8 max-w-2xl">
           {description}
         </Text>
       ))
@@ -88,12 +83,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
       (hasMicroLineSlot ? (
         <slot name="microLine" />
       ) : (
-        <Text
-          variant="caption"
-          font="mono"
-          align={centered ? 'center' : undefined}
-          class="mt-4 text-muted/70"
-        >
+        <Text align={centered ? 'center' : undefined} class="mt-4 text-muted/70">
           {microLine}
         </Text>
       ))

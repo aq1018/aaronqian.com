@@ -1,0 +1,15 @@
+---
+import { stackCva, type StackStyle } from './Stack.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends StackStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { space, align, class: className = '', ...rest } = Astro.props
+---
+
+<div class={cn(stackCva({ space, align }), className)} {...rest}>
+  <slot />
+</div>

@@ -1,0 +1,13 @@
+---
+import { overlayCva, type OverlayStyle } from './Overlay.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends OverlayStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { preset, blur, class: className = '', ...rest } = Astro.props
+---
+
+<div aria-hidden="true" class={cn(overlayCva({ preset, blur }), className)} {...rest}></div>

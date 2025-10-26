@@ -1,13 +1,14 @@
 ---
 // Projects Section - Terminal-style status board
 import { getCollection } from 'astro:content'
-import Link from '@/components/ui/Link.astro'
-import Badge from '@/components/ui/Badge.astro'
-import Heading from '@/components/ui/Heading.astro'
-import Text from '@/components/ui/Text.astro'
-import Section from '@/components/ui/Section.astro'
-import Container from '@/components/ui/Container.astro'
-import Stack from '@/components/ui/Stack.astro'
+import Link from '@/components/primitives/Link.astro'
+import Badge from '@/components/primitives/Badge.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Text from '@/components/primitives/Text.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Container from '@/components/primitives/Container.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Inline from '@/components/primitives/Inline.astro'
 
 const projects = await getCollection('projects')
 const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order)
@@ -26,11 +27,11 @@ const statusLabels = {
 }
 ---
 
-<Section variant="content" background="surface" class="relative" id="projects">
+<Surface class="relative" id="projects">
   <Container>
     <!-- Section header -->
     <div class="mb-12">
-      <Heading level="h2" font="mono" class="sm:text-3xl">Now / Currently Building</Heading>
+      <Heading size="h2" class="sm:text-3xl">Now / Currently Building</Heading>
     </div>
 
     <!-- Projects table - desktop -->
@@ -56,7 +57,6 @@ const statusLabels = {
                 <td class="py-4 pr-6 align-top">
                   <Link
                     href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-                    variant="content"
                     class="font-semibold"
                   >
                     {project.data.title}
@@ -75,9 +75,7 @@ const statusLabels = {
                   </span>
                 </td>
                 <td class="py-4 pl-6 align-top">
-                  <Text variant="muted" class="mb-2 leading-relaxed">
-                    {project.data.description}
-                  </Text>
+                  <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
                   <Text size="xs" class="italic text-muted/60">
                     {project.data.aside}
                   </Text>
@@ -90,19 +88,18 @@ const statusLabels = {
     </div>
 
     <!-- Projects list - mobile -->
-    <Stack gap="small" class="md:hidden">
+    <Stack space="sm" class="md:hidden">
       {
         sortedProjects.map((project) => (
           <div class="border-l-2 border-primary/30 pl-4 transition-colors hover:border-primary">
-            <Stack direction="horizontal" gap="tight" class="mb-2 items-baseline justify-between">
+            <Inline space="xs" class="mb-2 items-baseline justify-between">
               <Link
                 href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-                variant="content"
                 class="font-mono text-base font-semibold"
               >
                 {project.data.title}
               </Link>
-            </Stack>
+            </Inline>
             <div class="mb-3">
               <span
                 class={`font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
@@ -115,10 +112,10 @@ const statusLabels = {
                 )}
               </span>
             </div>
-            <Text size="sm" variant="muted" class="mb-2 leading-relaxed">
+            <Text size="sm" class="mb-2 leading-relaxed">
               {project.data.description}
             </Text>
-            <Text font="mono" size="xs" class="italic text-muted/60">
+            <Text size="xs" class="italic text-muted/60">
               {project.data.aside}
             </Text>
           </div>
@@ -128,9 +125,7 @@ const statusLabels = {
 
     <!-- Footer -->
     <div class="mt-8">
-      <Text variant="caption" font="mono" class="text-muted/70"
-        >Updates monthly. Expect context switches.</Text
-      >
+      <Text class="text-muted/70">Updates monthly. Expect context switches.</Text>
     </div>
   </Container>
-</Section>
+</Surface>

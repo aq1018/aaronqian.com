@@ -1,11 +1,11 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import CuttingMat from '@/components/features/CuttingMat.astro'
-import HeroContent from '@/components/ui/HeroContent.astro'
+import HeroContent from '@/components/patterns/HeroContent.astro'
 import ProjectList from '@/components/features/ProjectList.astro'
-import Section from '@/components/ui/Section.astro'
-import Container from '@/components/ui/Container.astro'
-import Text from '@/components/ui/Text.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Container from '@/components/primitives/Container.astro'
+import Text from '@/components/primitives/Text.astro'
 
 interface Props {
   projects: CollectionEntry<'projects'>[]
@@ -24,7 +24,7 @@ const { projects, statusStyles, statusLabels } = Astro.props
     description="My digital workshop — half experiments, half excuses to learn new tools."
   >
     <!-- Micro-line in named slot - mt-4 since no CTAs -->
-    <Text slot="microLine" variant="caption" font="mono" align="center" class="mt-4 text-muted/70">
+    <Text slot="microLine" align="center" class="mt-4 text-muted/70">
       <span class="text-primary">⚠️</span> Some projects are still in beta. Including me.
     </Text>
   </HeroContent>
@@ -32,9 +32,9 @@ const { projects, statusStyles, statusLabels } = Astro.props
 
 <!-- Projects Content -->
 <main>
-  <Section variant="content" background="surface">
+  <Surface>
     <Container>
       <ProjectList {projects} {statusStyles} {statusLabels} />
     </Container>
-  </Section>
+  </Surface>
 </main>

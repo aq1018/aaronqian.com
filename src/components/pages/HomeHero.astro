@@ -2,27 +2,21 @@
 // Hero Section - Tech Lab meets Meditation Space
 // Features: Digital analyzer with animated signal traces
 import { Icon } from 'astro-icon/components'
-import Badge from '@/components/ui/Badge.astro'
+import Badge from '@/components/primitives/Badge.astro'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
-import HeroContent from '@/components/ui/HeroContent.astro'
-import Collapsible from '@/components/ui/Collapsible.astro'
-import Button from '@/components/ui/Button.astro'
-import Heading from '@/components/ui/Heading.astro'
-import Text from '@/components/ui/Text.astro'
-import Stack from '@/components/ui/Stack.astro'
+import HeroContent from '@/components/patterns/HeroContent.astro'
+import Collapsible from '@/components/primitives/Collapsible.astro'
+import Button from '@/components/primitives/Button.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Text from '@/components/primitives/Text.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Inline from '@/components/primitives/Inline.astro'
 ---
 
 <DigitalAnalyzer class="flex min-h-[85vh] items-center justify-center">
   <HeroContent eyebrow="Aaron Qian">
     <!-- Custom title with lightning bolt -->
-    <Heading
-      slot="title"
-      level="h1"
-      font="mono"
-      weight="semibold"
-      align="center"
-      class="mb-8 whitespace-nowrap leading-tight"
-    >
+    <Heading slot="title" level="h1" align="center" class="mb-8 whitespace-nowrap leading-tight">
       Input coffee <button
         id="lightning-bolt"
         data-lightning-bolt
@@ -43,7 +37,7 @@ import Stack from '@/components/ui/Stack.astro'
 
     <!-- Custom interactive content in default slot -->
     <Collapsible id="secret-message" class="mx-auto max-w-3xl">
-      <Stack gap="tight">
+      <Stack space="xs">
         <div
           id="ascii-display"
           class="text-center font-mono text-lg text-primary"
@@ -63,21 +57,21 @@ import Stack from '@/components/ui/Stack.astro'
       </Stack>
     </Collapsible>
 
-    <Stack gap="tight" class="mt-8 mx-auto max-w-3xl">
-      <Text variant="lead" align="center" class="sm:text-xl md:text-2xl">
+    <Stack space="xs" class="mt-8 mx-auto max-w-3xl">
+      <Text align="center" class="sm:text-xl md:text-2xl">
         Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
       </Text>
-      <Text variant="lead" align="center" class="sm:text-xl md:text-2xl">
+      <Text align="center" class="sm:text-xl md:text-2xl">
         Safety goggles recommended. Coffee mandatory.
       </Text>
     </Stack>
 
     <Stack
       direction="horizontal"
-      gap="small"
+      space="sm"
       class="mt-12 flex-col items-center justify-center sm:flex-row"
     >
-      <Button href="/blog" variant="solid" color="primary" size="lg">
+      <Button href="/blog" color="primary" size="lg">
         <span>Read My Notes</span>
         <svg
           class="h-4 w-4"
@@ -96,7 +90,6 @@ import Stack from '@/components/ui/Stack.astro'
 
       <Button
         href="https://launchpath.com"
-        variant="outline"
         color="primary"
         size="lg"
         external
@@ -107,15 +100,8 @@ import Stack from '@/components/ui/Stack.astro'
     </Stack>
 
     <!-- Micro-line in named slot - mt-8 since there are CTAs above -->
-    <Text
-      slot="microLine"
-      as="div"
-      variant="caption"
-      font="mono"
-      align="center"
-      class="mt-8 text-muted/70"
-    >
-      <Stack direction="horizontal" gap="tight" class="inline-flex items-center justify-center">
+    <Text slot="microLine" as="div" align="center" class="mt-8 text-muted/70">
+      <Inline space="xs" class="inline-flex items-center justify-center">
         <span
           >Decoder controls: Click/Tap ⚡ or press <Badge
             color="neutral"
@@ -123,7 +109,7 @@ import Stack from '@/components/ui/Stack.astro'
             id="keyboard-shortcut">⌘K</Badge
           > to toggle.</span
         >
-      </Stack>
+      </Inline>
     </Text>
   </HeroContent>
 </DigitalAnalyzer>
