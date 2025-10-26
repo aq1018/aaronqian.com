@@ -4,21 +4,19 @@
    Default to light theme, override with .dark class
    ----------------------------- */
 @theme {
-  /* Semantic tokens (LIGHT defaults) */
+  /* Base utility colors */
   --color-background: var(--color-background-light);
   --color-content: var(--color-content-light);
   --color-border: var(--color-border-light);
   --color-muted: var(--color-muted-light);
+
+  /* Legacy tokens (to be moved to component-specific tokens) */
   --color-link: var(--color-link-light);
   --color-highlight: var(--color-highlight-light);
 
-  /* Primary alias for convenience (bg-primary / text-primary) */
+  /* Brand colors */
   --color-primary: var(--color-primary-light);
-
-  /* Accent alias for convenience (bg-accent / text-accent) */
   --color-accent: var(--color-accent-light);
-
-  /* Secondary (purple) */
   --color-secondary: var(--color-secondary-light);
 
   /* Status colors */
@@ -34,23 +32,22 @@
    ----------------------------- */
 @layer theme {
   .dark {
+    /* Base utility colors */
     --color-background: var(--color-background-dark);
     --color-content: var(--color-content-dark);
     --color-border: var(--color-border-dark);
     --color-muted: var(--color-muted-dark);
+
+    /* Legacy tokens (to be moved to component-specific tokens) */
     --color-link: var(--color-link-dark);
     --color-highlight: var(--color-highlight-dark);
 
-    /* Primary remains cyan in dark mode */
+    /* Brand colors */
     --color-primary: var(--color-primary-dark);
-
-    /* Accent remains gold in dark mode */
     --color-accent: var(--color-accent-dark);
-
-    /* Secondary (purple) in dark mode */
     --color-secondary: var(--color-secondary-dark);
 
-    /* Status colors in dark mode */
+    /* Status colors */
     --color-danger: var(--color-danger-dark);
     --color-success: var(--color-success-dark);
     --color-warning: var(--color-warning-dark);

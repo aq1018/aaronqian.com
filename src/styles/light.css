@@ -1,27 +1,27 @@
 /* -----------------------------
    LIGHT THEME SEMANTIC TOKENS (LAYER 2a)
    Theme-specific tokens with -light suffix
+   Uses 600 as the optimized anchor shade for light backgrounds
    ----------------------------- */
 :root {
+  /* Base utility colors */
   --color-background-light: var(--color-gray-300);
   --color-content-light: var(--color-gray-900);
   --color-border-light: var(--color-gray-400);
   --color-muted-light: var(--color-gray-500);
-  --color-link-light: var(--color-cyan-500);
+
+  /* Legacy tokens (to be moved to component-specific tokens) */
+  --color-link-light: var(--color-cyan-600);
   --color-highlight-light: var(--color-cyan-100);
 
-  /* Primary alias for convenience */
-  --color-primary-light: var(--color-cyan-500);
-
-  /* Accent alias for convenience */
+  /* Brand colors */
+  --color-primary-light: var(--color-cyan-600);
   --color-accent-light: var(--color-gold-600);
-
-  /* Secondary (purple) */
   --color-secondary-light: var(--color-purple-600);
 
   /* Status colors */
   --color-danger-light: var(--color-red-600);
   --color-success-light: var(--color-green-600);
-  --color-warning-light: var(--color-orange-500);
+  --color-warning-light: var(--color-orange-600);
   --color-info-light: var(--color-indigo-600);
 }

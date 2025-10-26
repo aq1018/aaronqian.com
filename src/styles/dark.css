@@ -1,22 +1,22 @@
 /* -----------------------------
    DARK THEME SEMANTIC TOKENS (LAYER 2b)
    Theme-specific tokens with -dark suffix
+   Uses 400 as the optimized anchor shade for dark backgrounds
    ----------------------------- */
 :root {
+  /* Base utility colors */
   --color-background-dark: var(--color-gray-950);
   --color-content-dark: var(--color-gray-300);
   --color-border-dark: var(--color-gray-800);
   --color-muted-dark: var(--color-gray-400);
+
+  /* Legacy tokens (to be moved to component-specific tokens) */
   --color-link-dark: var(--color-cyan-400);
   --color-highlight-dark: var(--color-cyan-900);
 
-  /* Primary alias for convenience */
+  /* Brand colors */
   --color-primary-dark: var(--color-cyan-400);
-
-  /* Accent alias for convenience */
   --color-accent-dark: var(--color-gold-400);
-
-  /* Secondary (purple) */
   --color-secondary-dark: var(--color-purple-400);
 
   /* Status colors */
