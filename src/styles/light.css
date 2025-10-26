@@ -1,0 +1,18 @@
+/* -----------------------------
+   LIGHT THEME SEMANTIC TOKENS (LAYER 2a)
+   Theme-specific tokens with -light suffix
+   ----------------------------- */
+:root {
+  --color-background-light: var(--color-gray-300);
+  --color-content-light: var(--color-gray-900);
+  --color-border-light: var(--color-gray-400);
+  --color-muted-light: var(--color-gray-500);
+  --color-link-light: var(--color-cyan-500);
+  --color-highlight-light: var(--color-cyan-100);
+
+  /* Primary alias for convenience */
+  --color-primary-light: var(--color-cyan-500);
+
+  /* Accent alias for convenience */
+  --color-accent-light: var(--color-gold-600);
+}

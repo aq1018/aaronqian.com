@@ -6,120 +6,29 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* -----------------------------
-   FONT FACE DECLARATIONS
+   DESIGN SYSTEM LAYERS
+   Layered token architecture for clarity and maintainability
    ----------------------------- */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('/fonts/inter-latin-wght-normal.woff2') format('woff2');
-}
+/* Layer 0: Font declarations and font family tokens */
+@import './fonts.css';
 
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('/fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2');
-}
+/* Layer 1: Color palette (concrete names: cyan, gold, gray) */
+@import './colors.css';
 
-/* -----------------------------
-   THEME TOKENS (GLOBAL)
-   ----------------------------- */
-@theme {
-  /* Color Palettes (OKLCH) */
-  /* Primary: Cyan (reduced brightness) */
-  --color-primary-50: oklch(0.87 0.02 210);
-  --color-primary-100: oklch(0.82 0.05 210);
-  --color-primary-200: oklch(0.75 0.09 210);
-  --color-primary-300: oklch(0.68 0.13 210);
-  --color-primary-400: oklch(0.62 0.15 210);
-  --color-primary-500: oklch(0.58 0.17 210);
-  --color-primary-600: oklch(0.52 0.15 210);
-  --color-primary-700: oklch(0.46 0.13 210);
-  --color-primary-800: oklch(0.38 0.1 210);
-  --color-primary-900: oklch(0.3 0.07 210);
-  --color-primary-950: oklch(0.22 0.04 210);
+/* Layer 2a: Light theme semantic tokens (-light suffix) */
+@import './light.css';
 
-  /* Accent: Harvest Gold */
-  --color-accent-50: oklch(0.97 0.02 85);
-  --color-accent-100: oklch(0.94 0.05 85);
-  --color-accent-200: oklch(0.89 0.09 85);
-  --color-accent-300: oklch(0.84 0.13 85);
-  --color-accent-400: oklch(0.79 0.15 85);
-  --color-accent-500: oklch(0.74 0.17 85);
-  --color-accent-600: oklch(0.64 0.15 85);
-  --color-accent-700: oklch(0.54 0.13 85);
-  --color-accent-800: oklch(0.44 0.1 85);
-  --color-accent-900: oklch(0.34 0.07 85);
-  --color-accent-950: oklch(0.24 0.04 85);
+/* Layer 2b: Dark theme semantic tokens (-dark suffix) */
+@import './dark.css';
 
-  /* Grays (warm beige/cream tint for softer light mode) */
-  --color-gray-50: oklch(0.99 0.01 85);
-  --color-gray-100: oklch(0.97 0.012 85);
-  --color-gray-200: oklch(0.93 0.015 85);
-  --color-gray-300: oklch(0.89 0.018 85);
-  --color-gray-400: oklch(0.7 0.015 85);
-  --color-gray-500: oklch(0.55 0.01 85);
-  --color-gray-600: oklch(0.45 0.012 75);
-  --color-gray-700: oklch(0.38 0.012 75);
-  --color-gray-800: oklch(0.32 0.012 75);
-  --color-gray-900: oklch(0.35 0.01 75);
-  --color-gray-950: oklch(0.12 0.015 75);
-
-  /* Fonts */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
-
-  /* Z-index utilities for Tailwind v4 */
-  --z-index-dropdown: 50;
-
-  /* -----------------------------
-     Semantic tokens (LIGHT defaults)
-     These map to Tailwind classes:
-     bg-background, text-content, border-border, text-muted, text-link, etc.
-     ----------------------------- */
-  --color-background: var(--color-gray-300);
-  --color-content: var(--color-gray-900);
-  --color-border: var(--color-gray-400);
-  --color-muted: var(--color-gray-500); /* Improved contrast from gray-600 */
-  --color-link: var(--color-primary-500);
-  --color-highlight: var(--color-primary-100);
-
-  /* Primary alias for convenience (bg-primary / text-primary) */
-  --color-primary: var(--color-primary-500);
-
-  /* Accent alias for convenience (bg-accent / text-accent) */
-  --color-accent: var(--color-accent-600);
-}
+/* Layer 3: Theme-integrated semantic tokens (exposed to Tailwind) */
+@import './tokens.css';
 
 /* -----------------------------
    COMPONENT HOOK STYLES
    Import component hook CSS files (Tailwind directives)
    ----------------------------- */
 @import '../components/hooks.css';
-
-/* -----------------------------
-   THEME OVERRIDES (DARK)
-   Keep overrides in the theme layer for correct order.
-   ----------------------------- */
-@layer theme {
-  .dark {
-    --color-background: var(--color-gray-950);
-    --color-content: var(--color-gray-300); /* Slightly brighter - was gray-400 */
-    --color-border: var(--color-gray-800);
-    --color-muted: var(--color-gray-400); /* Slightly brighter - was gray-500 */
-    --color-link: var(--color-primary-400);
-    --color-highlight: var(--color-primary-900);
-
-    /* Primary remains cyan in dark mode */
-    --color-primary: var(--color-primary-400);
-
-    /* Accent remains harvest gold in dark mode */
-    --color-accent: var(--color-accent-400);
-  }
-}
 
 /* -----------------------------
    Global transitions (optional)

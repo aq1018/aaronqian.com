@@ -1,0 +1,41 @@
+/* -----------------------------
+   THEME-INTEGRATED SEMANTIC TOKENS (LAYER 3)
+   Tokens exposed to Tailwind utilities
+   Default to light theme, override with .dark class
+   ----------------------------- */
+@theme {
+  /* Semantic tokens (LIGHT defaults) */
+  --color-background: var(--color-background-light);
+  --color-content: var(--color-content-light);
+  --color-border: var(--color-border-light);
+  --color-muted: var(--color-muted-light);
+  --color-link: var(--color-link-light);
+  --color-highlight: var(--color-highlight-light);
+
+  /* Primary alias for convenience (bg-primary / text-primary) */
+  --color-primary: var(--color-primary-light);
+
+  /* Accent alias for convenience (bg-accent / text-accent) */
+  --color-accent: var(--color-accent-light);
+}
+
+/* -----------------------------
+   THEME OVERRIDES (DARK)
+   Keep overrides in the theme layer for correct order.
+   ----------------------------- */
+@layer theme {
+  .dark {
+    --color-background: var(--color-background-dark);
+    --color-content: var(--color-content-dark);
+    --color-border: var(--color-border-dark);
+    --color-muted: var(--color-muted-dark);
+    --color-link: var(--color-link-dark);
+    --color-highlight: var(--color-highlight-dark);
+
+    /* Primary remains cyan in dark mode */
+    --color-primary: var(--color-primary-dark);
+
+    /* Accent remains gold in dark mode */
+    --color-accent: var(--color-accent-dark);
+  }
+}

@@ -1,0 +1,44 @@
+/* -----------------------------
+   COLOR PALETTE (LAYER 1)
+   Concrete color names using OKLCH
+   ----------------------------- */
+:root {
+  /* Cyan (was primary) */
+  --color-cyan-50: oklch(0.87 0.02 210);
+  --color-cyan-100: oklch(0.82 0.05 210);
+  --color-cyan-200: oklch(0.75 0.09 210);
+  --color-cyan-300: oklch(0.68 0.13 210);
+  --color-cyan-400: oklch(0.62 0.15 210);
+  --color-cyan-500: oklch(0.58 0.17 210);
+  --color-cyan-600: oklch(0.52 0.15 210);
+  --color-cyan-700: oklch(0.46 0.13 210);
+  --color-cyan-800: oklch(0.38 0.1 210);
+  --color-cyan-900: oklch(0.3 0.07 210);
+  --color-cyan-950: oklch(0.22 0.04 210);
+
+  /* Gold (was accent) */
+  --color-gold-50: oklch(0.97 0.02 85);
+  --color-gold-100: oklch(0.94 0.05 85);
+  --color-gold-200: oklch(0.89 0.09 85);
+  --color-gold-300: oklch(0.84 0.13 85);
+  --color-gold-400: oklch(0.79 0.15 85);
+  --color-gold-500: oklch(0.74 0.17 85);
+  --color-gold-600: oklch(0.64 0.15 85);
+  --color-gold-700: oklch(0.54 0.13 85);
+  --color-gold-800: oklch(0.44 0.1 85);
+  --color-gold-900: oklch(0.34 0.07 85);
+  --color-gold-950: oklch(0.24 0.04 85);
+
+  /* Grays (warm beige/cream tint) */
+  --color-gray-50: oklch(0.99 0.01 85);
+  --color-gray-100: oklch(0.97 0.012 85);
+  --color-gray-200: oklch(0.93 0.015 85);
+  --color-gray-300: oklch(0.89 0.018 85);
+  --color-gray-400: oklch(0.7 0.015 85);
+  --color-gray-500: oklch(0.55 0.01 85);
+  --color-gray-600: oklch(0.45 0.012 75);
+  --color-gray-700: oklch(0.38 0.012 75);
+  --color-gray-800: oklch(0.32 0.012 75);
+  --color-gray-900: oklch(0.35 0.01 75);
+  --color-gray-950: oklch(0.12 0.015 75);
+}
