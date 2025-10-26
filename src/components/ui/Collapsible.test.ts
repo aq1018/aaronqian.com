@@ -7,14 +7,85 @@ describe('Collapsible Component', () => {
     it('should use CSS Grid for smooth height transitions', () => {
       const result = collapsibleVariants()
       expect(result).toContain('grid')
-      expect(result).toContain('transition-[grid-template-rows]')
-      expect(result).toContain('duration-300')
-      expect(result).toContain('ease-out')
+      expect(result).toContain('collapsible-wrapper')
     })
 
     it('should include collapsible-wrapper class for CSS selectors', () => {
       const result = collapsibleVariants()
       expect(result).toContain('collapsible-wrapper')
+    })
+
+    it('should apply default variants (normal speed, not bordered)', () => {
+      const result = collapsibleVariants()
+      expect(result).toContain('transition-[grid-template-rows]')
+      expect(result).toContain('ease-out')
+      expect(result).toContain('duration-300')
+      expect(result).not.toContain('border')
+    })
+  })
+
+  describe('collapsibleVariants - Speed Variant', () => {
+    it('should apply fast speed (150ms)', () => {
+      const result = collapsibleVariants({ speed: 'fast' })
+      expect(result).toContain('transition-[grid-template-rows]')
+      expect(result).toContain('ease-out')
+      expect(result).toContain('duration-150')
+      expect(result).not.toContain('duration-300')
+    })
+
+    it('should apply normal speed (300ms)', () => {
+      const result = collapsibleVariants({ speed: 'normal' })
+      expect(result).toContain('transition-[grid-template-rows]')
+      expect(result).toContain('ease-out')
+      expect(result).toContain('duration-300')
+    })
+
+    it('should apply slow speed (500ms)', () => {
+      const result = collapsibleVariants({ speed: 'slow' })
+      expect(result).toContain('transition-[grid-template-rows]')
+      expect(result).toContain('ease-out')
+      expect(result).toContain('duration-500')
+      expect(result).not.toContain('duration-300')
+    })
+  })
+
+  describe('collapsibleVariants - Bordered Variant', () => {
+    it('should apply border styles when bordered is true', () => {
+      const result = collapsibleVariants({ bordered: true })
+      expect(result).toContain('rounded-lg')
+      expect(result).toContain('border')
+      expect(result).toContain('border-border')
+    })
+
+    it('should not apply border styles when bordered is false', () => {
+      const result = collapsibleVariants({ bordered: false })
+      expect(result).not.toContain('border')
+      expect(result).not.toContain('rounded-lg')
+    })
+
+    it('should not apply border styles by default', () => {
+      const result = collapsibleVariants()
+      expect(result).not.toContain('border')
+    })
+  })
+
+  describe('collapsibleVariants - Variant Combinations', () => {
+    it('should combine speed and bordered variants', () => {
+      const result = collapsibleVariants({ speed: 'fast', bordered: true })
+      expect(result).toContain('duration-150')
+      expect(result).toContain('border')
+      expect(result).toContain('rounded-lg')
+    })
+
+    it('should handle all speed options with bordered', () => {
+      const speeds = ['fast', 'normal', 'slow'] as const
+      const durations = ['duration-150', 'duration-300', 'duration-500']
+
+      speeds.forEach((speed, index) => {
+        const result = collapsibleVariants({ speed, bordered: true })
+        expect(result).toContain(durations[index])
+        expect(result).toContain('border')
+      })
     })
   })
 
@@ -74,11 +145,6 @@ describe('Collapsible Component', () => {
       expect(result).toContain('transition-[grid-template-rows]')
     })
 
-    it('should use 300ms duration for smooth animations', () => {
-      const wrapper = collapsibleVariants()
-      expect(wrapper).toContain('duration-300')
-    })
-
     it('should use ease-out timing function for natural motion', () => {
       const wrapper = collapsibleVariants()
       expect(wrapper).toContain('ease-out')
@@ -87,6 +153,16 @@ describe('Collapsible Component', () => {
     it('should use grid display mode', () => {
       const result = collapsibleVariants()
       expect(result).toContain('grid')
+    })
+
+    it('should support configurable animation duration via speed variant', () => {
+      const fast = collapsibleVariants({ speed: 'fast' })
+      const normal = collapsibleVariants({ speed: 'normal' })
+      const slow = collapsibleVariants({ speed: 'slow' })
+
+      expect(fast).toContain('duration-150')
+      expect(normal).toContain('duration-300')
+      expect(slow).toContain('duration-500')
     })
   })
 

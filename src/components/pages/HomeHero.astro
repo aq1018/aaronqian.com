@@ -152,3 +152,77 @@ import Stack from '@/components/ui/Stack.astro'
     letter-spacing: 0.05em;
   }
 </style>
+
+<script>
+  /**
+   * Keyboard shortcut handler for collapsible secret message
+   * Listens for Cmd/Ctrl+K to toggle the secret message display
+   */
+
+  type CleanupFunction = () => void
+
+  let cleanup: CleanupFunction | null = null
+
+  function initializeKeyboardShortcut(): CleanupFunction {
+    // Clean up previous initialization if it exists
+    if (cleanup !== null) {
+      cleanup()
+    }
+
+    // Detect OS for correct modifier key display
+    const isMac = navigator.userAgent.toUpperCase().includes('MAC')
+
+    // Update keyboard shortcut display
+    const shortcutDisplay = document.getElementById('keyboard-shortcut')
+    if (shortcutDisplay !== null) {
+      shortcutDisplay.textContent = isMac ? '⌘K' : 'Ctrl+K'
+    }
+
+    // Set up keyboard shortcut listener (Cmd/Ctrl+K)
+    const keyboardHandler = (e: KeyboardEvent) => {
+      const modifierKey = isMac ? e.metaKey : e.ctrlKey
+      if (modifierKey && e.key === 'k') {
+        e.preventDefault()
+
+        // Toggle the secret message collapsible
+        const collapsible = document.getElementById('secret-message')
+        if (collapsible !== null) {
+          const isOpen = collapsible.getAttribute('data-open') === 'true'
+          const newState = !isOpen
+
+          collapsible.setAttribute('data-open', String(newState))
+          collapsible.setAttribute('aria-expanded', String(newState))
+
+          // Update trigger state
+          const trigger = document.querySelector('[data-collapsible-trigger="secret-message"]')
+          if (trigger !== null) {
+            trigger.setAttribute('aria-expanded', String(newState))
+          }
+        }
+      }
+    }
+
+    document.addEventListener('keydown', keyboardHandler)
+
+    // Return cleanup function
+    cleanup = () => {
+      document.removeEventListener('keydown', keyboardHandler)
+      cleanup = null
+    }
+
+    return cleanup
+  }
+
+  // Initial setup on first page load
+  initializeKeyboardShortcut()
+
+  // Re-initialize after View Transitions navigation
+  document.addEventListener('astro:page-load', initializeKeyboardShortcut)
+
+  // Cleanup before page swap to prevent memory leaks
+  document.addEventListener('astro:before-preparation', () => {
+    if (cleanup !== null) {
+      cleanup()
+    }
+  })
+</script>

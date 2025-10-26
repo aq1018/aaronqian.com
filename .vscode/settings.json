@@ -11,6 +11,7 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "astro"],
   "cSpell.words": [
     "aaronqian",
+    "Collapsibles",
     "giscus",
     "gridline",
     "heroicons",
