@@ -142,7 +142,10 @@ components.**
 
 **Direction:** `vertical` (flex-col, default) \| `horizontal` (flex-row)
 
-**Props:** `direction`, `gap`, `class`
+**Justify:** `start` \| `center` \| `end` \| `between` - Controls alignment
+along the main axis
+
+**Props:** `direction`, `gap`, `justify`, `class`
 
 ### Composition Pattern
 
@@ -175,6 +178,87 @@ components.**
 
 **Search for examples:** `Glob: **/Section.astro`, `**/Container.astro`,
 `**/Stack.astro`
+
+## Container & Content Primitives (P1)
+
+**ALWAYS use these primitives for containers and content. Avoid ad-hoc
+styling.**
+
+### Sheet - Base Container Primitive
+
+Base container component with Button-like variant system. Use for cards, panels,
+list items, and alerts.
+
+| Variant   | Visual Style                                | Use Case                     |
+| --------- | ------------------------------------------- | ---------------------------- |
+| `outline` | 2px border, hover background tint           | Cards, emphasized containers |
+| `soft`    | Background tint, darker on hover            | Subtle containers, panels    |
+| `bar`     | Transparent bg, left border (opacity shift) | List items, project entries  |
+
+**Colors:** `primary` \| `accent` \| `secondary` \| `neutral` \| `danger` \|
+`success` \| `warning` \| `info`
+
+**Padding:** `none` (p-0) \| `sm` (p-4) \| `md` (p-6) \| `lg` (p-8)
+
+**Hover:** `true` \| `false` - Controls transition effects for interactive vs
+static content
+
+**Props:** `variant`, `color`, `padding`, `hover`, `as` (div \| article \|
+section), `class`
+
+**Examples:**
+
+```astro
+<!-- Project list item with bar variant -->
+<Sheet variant="bar" color="neutral" padding="sm" hover>
+  <h3>Project Title</h3>
+  <p>Description</p>
+</Sheet>
+
+<!-- Empty state with soft variant -->
+<Sheet variant="soft" color="neutral" padding="lg">
+  <Text tone="muted">No entries found.</Text>
+</Sheet>
+
+<!-- Alert-style container -->
+<Sheet variant="outline" color="danger" padding="md">
+  <p>Error message</p>
+</Sheet>
+```
+
+**Search for examples:** `Glob: **/Sheet.astro`, `Grep: variant="bar"`
+
+### Prose - Terminal-Styled Content
+
+Markdown content wrapper with terminal aesthetic (monospace, muted base color).
+
+**Size:** `sm` (text-sm, default) \| `base` (text-base)
+
+**Props:** `size`, `class`
+
+**Features:**
+
+- Monospace font family
+- Terminal-friendly prose classes
+- Muted text with primary-colored code
+- Consistent spacing for headings, lists, tables
+- Inline code with subtle background
+
+**Examples:**
+
+```astro
+<!-- Blog post content -->
+<Prose size="base">
+  <Content />
+</Prose>
+
+<!-- Project log entry -->
+<Prose>
+  <Content />
+</Prose>
+```
+
+**Search for examples:** `Glob: **/Prose.astro`, `Grep: prose prose-invert`
 
 ## Responsive Design
 

@@ -1,11 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content'
+import Sheet from '@/components/primitives/Sheet.astro'
 import Badge from '@/components/primitives/Badge.astro'
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
 import Surface from '@/components/primitives/Surface.astro'
 import Container from '@/components/primitives/Container.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Inline from '@/components/primitives/Inline.astro'
+import Divider from '@/components/primitives/Divider.astro'
 import Link from '@/components/primitives/Link.astro'
 import Button from '@/components/primitives/Button.astro'
 import Heading from '@/components/primitives/Heading.astro'
@@ -23,72 +25,79 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
 
 <!-- Project Header -->
 <header>
-  <Surface class="border-b border-border">
+  <Surface>
     <Container>
-      <!-- Back link -->
-      <Link href="/projects" class="mb-6">
-        <svg
-          class="h-4 w-4 transition-transform group-hover:-translate-x-1"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
-          ></path>
-        </svg>
-        All Projects
-      </Link>
+      <Stack space="sm">
+        <!-- Back link -->
+        <Link href="/projects" class="mb-6">
+          <svg
+            class="h-4 w-4 transition-transform group-hover:-translate-x-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"></path>
+          </svg>
+          All Projects
+        </Link>
 
-      <!-- Title and status -->
-      <Inline space="sm" class="mb-4 flex-wrap items-baseline">
-        <Heading size="h1" class="text-3xl sm:text-4xl">
-          {project.data.title}
-        </Heading>
-        <Badge size="md" uppercase class={statusStyles[project.data.status]}>
-          {statusLabels[project.data.status]}
-          {
-            project.data.live && (
-              <Badge color="primary" class="ml-2">
-                LIVE
-              </Badge>
-            )
-          }
-        </Badge>
-      </Inline>
+        <!-- Title and status -->
+        <Inline space="sm" wrap align="baseline">
+          <Heading size="h1" class="text-3xl sm:text-4xl">
+            {project.data.title}
+          </Heading>
+          <Badge size="md" uppercase class={statusStyles[project.data.status]}>
+            {statusLabels[project.data.status]}
+            {
+              project.data.live && (
+                <Badge color="primary" class="ml-2">
+                  LIVE
+                </Badge>
+              )
+            }
+          </Badge>
+        </Inline>
 
-      <!-- Description -->
-      <Text class="mb-4">
-        {project.data.description}
-      </Text>
+        <!-- Description -->
+        <Text>
+          {project.data.description}
+        </Text>
 
-      <!-- Aside (witty comment) -->
-      <Text size="sm" class="italic text-muted/70">
-        {project.data.aside}
-      </Text>
+        <!-- Aside (witty comment) -->
+        <Text size="sm" tone="muted" class="italic">
+          {project.data.aside}
+        </Text>
 
-      <!-- External link if available -->
-      {
-        project.data.url && (
-          <div class="mt-6">
-            <Button
-              href={project.data.url}
-              external
-              color="primary"
-              class="font-mono text-sm tracking-wider"
-            >
-              <span>Visit Site</span>
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </Button>
-          </div>
-        )
-      }
+        <!-- External link if available -->
+        {
+          project.data.url && (
+            <div class="mt-6">
+              <Button
+                href={project.data.url}
+                external
+                color="primary"
+                class="font-mono text-sm tracking-wider"
+              >
+                <span>Visit Site</span>
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+              </Button>
+            </div>
+          )
+        }
+
+        <Divider />
+      </Stack>
     </Container>
   </Surface>
 </header>
@@ -97,29 +106,33 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
 <main>
   <Surface>
     <Container>
-      <!-- Log header -->
-      <div class="mb-8 border-b border-border/30 pb-4">
-        <Heading size="h2">Build Log</Heading>
-        <Text class="mt-2 text-muted/70">
-          {projectLogs.length}
-          {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
-        </Text>
-      </div>
+      <Stack space="md">
+        <!-- Log header -->
+        <div>
+          <Heading size="h2">Build Log</Heading>
+          <Text class="mt-2" tone="muted">
+            {projectLogs.length}
+            {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
+          </Text>
+        </div>
 
-      <!-- Log entries -->
-      {
-        projectLogs.length > 0 ? (
-          <Stack space="md">
-            {projectLogs.map((log) => (
-              <ProjectLogEntry log={log} />
-            ))}
-          </Stack>
-        ) : (
-          <div class="rounded border border-border/30 bg-muted/10 p-8 text-center">
-            <Text class="text-muted/70">No log entries yet. Check back soon.</Text>
-          </div>
-        )
-      }
+        <Divider />
+
+        <!-- Log entries -->
+        {
+          projectLogs.length > 0 ? (
+            <Stack space="md">
+              {projectLogs.map((log) => (
+                <ProjectLogEntry log={log} />
+              ))}
+            </Stack>
+          ) : (
+            <Sheet variant="soft" color="neutral" padding="lg" class="text-center">
+              <Text tone="muted">No log entries yet. Check back soon.</Text>
+            </Sheet>
+          )
+        }
+      </Stack>
     </Container>
   </Surface>
 </main>

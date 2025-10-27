@@ -7,9 +7,9 @@ interface Props extends StackStyle {
   [key: string]: any // Allow any additional HTML attributes
 }
 
-const { space, align, class: className = '', ...rest } = Astro.props
+const { space, align, justify, class: className = '', ...rest } = Astro.props
 ---
 
-<div class={cn(stackCva({ space, align }), className)} {...rest}>
+<div class={cn(stackCva({ space, align, justify }), className)} {...rest}>
   <slot />
 </div>

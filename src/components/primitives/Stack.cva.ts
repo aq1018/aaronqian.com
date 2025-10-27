@@ -19,10 +19,17 @@ export const stackCva = cva('flex flex-col', {
       end: 'items-end',
       stretch: 'items-stretch',
     },
+    justify: {
+      start: 'justify-start',
+      center: 'justify-center',
+      end: 'justify-end',
+      between: 'justify-between',
+    },
   },
   defaultVariants: {
     space: 'md',
     align: 'stretch',
+    justify: 'start',
   },
 })
 

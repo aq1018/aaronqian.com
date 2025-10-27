@@ -1,10 +1,12 @@
 ---
 // ProjectLogEntry - Terminal-style log entry component
 import type { CollectionEntry } from 'astro:content'
+import Sheet from '@/components/primitives/Sheet.astro'
 import Badge from '@/components/primitives/Badge.astro'
 import Inline from '@/components/primitives/Inline.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Text from '@/components/primitives/Text.astro'
+import Prose from '@/components/primitives/Prose.astro'
 
 interface Props {
   log: CollectionEntry<'projectLogs'>
@@ -39,10 +41,10 @@ const getTagProps = (tag: string) => {
 }
 ---
 
-<article class="group border-l-2 border-border/30 pl-6 transition-colors hover:border-primary/50">
+<Sheet as="article" variant="bar" color="neutral" padding="none" hover class="pl-6">
   <!-- Timestamp and title -->
   <header class="mb-3">
-    <Text as="time" class="text-muted/70" datetime={log.data.date.toISOString()}>
+    <Text as="time" tone="muted" datetime={log.data.date.toISOString()}>
       [{formatTimestamp(log.data.date)}]
     </Text>
     <Heading size="h3" class="mt-1 text-lg">
@@ -53,7 +55,7 @@ const getTagProps = (tag: string) => {
   <!-- Tags -->
   {
     log.data.tags.length > 0 && (
-      <Inline space="xs" class="mb-4 flex-wrap">
+      <Inline space="xs" wrap class="mb-4">
         {log.data.tags.map((tag) => {
           const tagProps = getTagProps(tag)
           return (
@@ -67,9 +69,7 @@ const getTagProps = (tag: string) => {
   }
 
   <!-- Log content (markdown) -->
-  <div
-    class="prose prose-sm prose-invert max-w-none font-mono text-sm leading-relaxed text-muted prose-headings:font-mono prose-headings:text-content prose-p:text-muted prose-a:text-link prose-a:underline prose-a:decoration-transparent prose-a:transition-colors hover:prose-a:decoration-link prose-strong:text-content prose-code:rounded prose-code:bg-muted/10 prose-code:px-1 prose-code:py-0.5 prose-code:font-mono prose-code:text-primary prose-pre:bg-muted/10 prose-pre:text-content prose-ul:text-muted prose-ol:text-muted"
-  >
+  <Prose>
     <Content />
-  </div>
-</article>
+  </Prose>
+</Sheet>

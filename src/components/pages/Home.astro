@@ -5,6 +5,7 @@ import HomeHero from './HomeHero.astro'
 import ProjectList from '@/components/features/ProjectList.astro'
 import Surface from '@/components/primitives/Surface.astro'
 import Container from '@/components/primitives/Container.astro'
+import Stack from '@/components/primitives/Stack.astro'
 import Heading from '@/components/primitives/Heading.astro'
 
 // Fetch and sort projects by latest log
@@ -37,12 +38,12 @@ const statusLabels = {
 <!-- Projects Section -->
 <Surface id="projects" class="relative">
   <Container>
-    <!-- Section header -->
-    <div class="mb-12">
+    <Stack space="lg">
+      <!-- Section header -->
       <Heading size="h2" class="sm:text-3xl">Now / Currently Building</Heading>
-    </div>
 
-    <!-- Project List -->
-    <ProjectList projects={featuredProjects} {statusStyles} {statusLabels} showFooter={true} />
+      <!-- Project List -->
+      <ProjectList projects={featuredProjects} {statusStyles} {statusLabels} showFooter={true} />
+    </Stack>
   </Container>
 </Surface>

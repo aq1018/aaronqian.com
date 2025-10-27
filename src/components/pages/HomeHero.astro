@@ -6,6 +6,7 @@ import Badge from '@/components/primitives/Badge.astro'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 import HeroContent from '@/components/patterns/HeroContent.astro'
 import Collapsible from '@/components/primitives/Collapsible.astro'
+import Container from '@/components/primitives/Container.astro'
 import Button from '@/components/primitives/Button.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Text from '@/components/primitives/Text.astro'
@@ -36,41 +37,41 @@ import Inline from '@/components/primitives/Inline.astro'
     </Heading>
 
     <!-- Custom interactive content in default slot -->
-    <Collapsible id="secret-message" class="mx-auto max-w-3xl">
-      <Stack space="xs">
-        <div
-          id="ascii-display"
-          class="text-center font-mono text-lg text-primary"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          <span id="ascii-text"></span><span id="ascii-cursor" class="animate-cursor-blink">▊</span>
-        </div>
-        <div
-          id="binary-display"
-          class="text-center font-mono text-sm text-muted/70"
-          aria-live="polite"
-          aria-atomic="false"
-        >
-          <span id="binary-buffer"></span>
-        </div>
+    <Container width="narrow">
+      <Collapsible id="secret-message">
+        <Stack space="xs">
+          <div
+            id="ascii-display"
+            class="text-center font-mono text-lg text-primary"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <span id="ascii-text"></span><span id="ascii-cursor" class="animate-cursor-blink"
+              >▊</span
+            >
+          </div>
+          <div
+            id="binary-display"
+            class="text-center font-mono text-sm text-muted/70"
+            aria-live="polite"
+            aria-atomic="false"
+          >
+            <span id="binary-buffer"></span>
+          </div>
+        </Stack>
+      </Collapsible>
+    </Container>
+
+    <Container width="narrow">
+      <Stack space="xs" class="mt-8">
+        <Text align="center" size="xl">
+          Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
+        </Text>
+        <Text align="center" size="xl"> Safety goggles recommended. Coffee mandatory. </Text>
       </Stack>
-    </Collapsible>
+    </Container>
 
-    <Stack space="xs" class="mt-8 mx-auto max-w-3xl">
-      <Text align="center" class="sm:text-xl md:text-2xl">
-        Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
-      </Text>
-      <Text align="center" class="sm:text-xl md:text-2xl">
-        Safety goggles recommended. Coffee mandatory.
-      </Text>
-    </Stack>
-
-    <Stack
-      direction="horizontal"
-      space="sm"
-      class="mt-12 flex-col items-center justify-center sm:flex-row"
-    >
+    <Stack space="sm" justify="center" class="mt-12 flex-col items-center sm:flex-row">
       <Button href="/blog" color="primary" size="lg">
         <span>Read My Notes</span>
         <svg

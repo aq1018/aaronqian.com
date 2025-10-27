@@ -1,10 +1,11 @@
 ---
 /**
  * ProjectList - Reusable project listing component
- * Renders projects in a table (desktop) and list (mobile) layout
+ * Unified Sheet-based layout for all screen sizes
  * Used by both home page and projects index page
  */
 import type { CollectionEntry } from 'astro:content'
+import Sheet from '@/components/primitives/Sheet.astro'
 import Link from '@/components/primitives/Link.astro'
 import Badge from '@/components/primitives/Badge.astro'
 import Stack from '@/components/primitives/Stack.astro'
@@ -21,91 +22,44 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
 ---
 
 <div>
-  <!-- Projects table - desktop -->
-  <div class="hidden overflow-x-auto md:block">
-    <table class="w-full border-collapse font-mono text-sm">
-      <thead>
-        <tr class="border-b border-border/30">
-          <th class="pb-3 pr-6 text-left font-semibold uppercase tracking-wide text-muted/70"
-            >Project</th
-          >
-          <th class="pb-3 px-6 text-right font-semibold uppercase tracking-wide text-muted/70"
-            >Status</th
-          >
-          <th class="pb-3 pl-6 text-left font-semibold uppercase tracking-wide text-muted/70"
-            >Notes</th
-          >
-        </tr>
-      </thead>
-      <tbody>
-        {
-          projects.map((project) => (
-            <tr class="group border-b border-border/20 transition-colors hover:bg-muted/10">
-              <td class="py-4 pr-6 align-top">
-                <Link
-                  href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-                  class="font-semibold"
-                >
-                  {project.data.title}
-                </Link>
-              </td>
-              <td class="py-4 px-6 align-top text-right">
-                <span
-                  class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
-                >
-                  {statusLabels[project.data.status]}
-                  {project.data.live && (
-                    <Badge color="primary" pulse={true} class="ml-2">
-                      LIVE
-                    </Badge>
-                  )}
-                </span>
-              </td>
-              <td class="py-4 pl-6 align-top">
-                <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
-                <Text size="xs" class="italic text-muted/60">
-                  {project.data.aside}
-                </Text>
-              </td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Projects list - mobile -->
-  <Stack space="sm" class="md:hidden">
+  <!-- Projects list - unified layout -->
+  <Stack space="sm">
     {
       projects.map((project) => (
-        <div class="border-l-2 border-primary/30 pl-4 transition-colors hover:border-primary">
-          <div class="mb-2 flex items-baseline justify-between gap-3">
+        <Sheet
+          variant="bar"
+          color="neutral"
+          padding="sm"
+          hover
+          class="grid gap-3 md:grid-cols-[2fr_auto_3fr] md:gap-6"
+        >
+          <div>
             <Link
               href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-              class="font-mono text-base font-semibold"
+              class="font-semibold"
             >
               {project.data.title}
             </Link>
           </div>
-          <div class="mb-3">
-            <span
-              class={`font-mono text-xs font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
-            >
+
+          <div class="md:text-right">
+            <span class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}>
               {statusLabels[project.data.status]}
-              {project.data.live && (
-                <Badge color="primary" pulse={true} class="ml-2">
-                  LIVE
-                </Badge>
-              )}
             </span>
+            {project.data.live && (
+              <Badge color="primary" pulse={true} class="ml-2">
+                LIVE
+              </Badge>
+            )}
           </div>
-          <Text size="sm" class="mb-2 leading-relaxed">
-            {project.data.description}
-          </Text>
-          <Text size="xs" class="italic text-muted/60">
-            {project.data.aside}
-          </Text>
-        </div>
+
+          <div>
+            <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
+            <Text size="xs" tone="muted" class="italic">
+              {project.data.aside}
+            </Text>
+          </div>
+        </Sheet>
       ))
     }
   </Stack>
@@ -114,7 +68,7 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
   {
     showFooter && (
       <div class="mt-8">
-        <Text class="text-muted/70">Updates monthly. Expect context switches.</Text>
+        <Text tone="muted">Updates monthly. Expect context switches.</Text>
       </div>
     )
   }

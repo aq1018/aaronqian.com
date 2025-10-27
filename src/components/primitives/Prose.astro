@@ -1,0 +1,15 @@
+---
+import { proseCva, type ProseStyle } from './Prose.cva'
+import { cn } from '@/lib/utils'
+
+export interface Props extends ProseStyle {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { size, class: className = '', ...rest } = Astro.props
+---
+
+<div class={cn('prose prose-invert', proseCva({ size }), className)} {...rest}>
+  <slot />
+</div>

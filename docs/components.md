@@ -71,6 +71,137 @@ src/components/
 
 **Hierarchy:** `ui/` → `features/` → `pages/`
 
+## Primitive Components Catalog
+
+### Layout Primitives
+
+**Surface** - Page section background wrapper
+
+- Props: `class`
+- Use: Wraps major page sections with consistent background
+- Example: `<Surface><Container>...</Container></Surface>`
+
+**Container** - Max-width & horizontal padding wrapper
+
+- Props: `width` (narrow \| default \| wide), `class`
+- Use: Controls content max-width and horizontal padding
+- Example: `<Container width="narrow">...</Container>`
+
+**Stack** - Vertical/horizontal flex container with spacing
+
+- Props: `space` (xs \| sm \| md \| lg \| xl), `justify` (start \| center \| end
+  \| between), `class`
+- Use: Spacing between sibling elements
+- Example: `<Stack space="md" justify="center">...</Stack>`
+
+**Inline** - Horizontal inline-flex container with wrapping
+
+- Props: `space` (xs \| sm \| md \| lg), `wrap` (boolean), `align` (start \|
+  center \| end \| baseline), `class`
+- Use: Inline elements that can wrap (tags, badges)
+- Example: `<Inline space="sm" wrap>...</Inline>`
+
+**Cluster** - Flex container with wrapping and centered alignment
+
+- Props: `space` (xs \| sm \| md \| lg), `class`
+- Use: Multiple items that flow and wrap naturally
+- Example: `<Cluster space="sm">...</Cluster>`
+
+**Inset** - Adds internal padding to children
+
+- Props: `space` (xs \| sm \| md \| lg \| xl), `class`
+- Use: Padding around content
+- Example: `<Inset space="md">...</Inset>`
+
+**Bleed** - Negative margin to break out of parent padding
+
+- Props: `space` (xs \| sm \| md \| lg \| xl), `class`
+- Use: Full-width content within padded container
+- Example: `<Bleed space="md">...</Bleed>`
+
+**Divider** - Horizontal or vertical separator line
+
+- Props: `orientation` (horizontal \| vertical), `spacing` (xs \| sm \| md \| lg
+  \| xl \| none), `class`
+- Use: Visual separation between sections
+- Example: `<Divider spacing="md" />`
+
+### Container Primitives
+
+**Sheet** - Base container with variants (similar to Button for containers)
+
+- Props: `variant` (outline \| soft \| bar), `color` (primary \| accent \|
+  secondary \| neutral \| danger \| success \| warning \| info), `padding` (none
+  \| sm \| md \| lg), `hover` (boolean), `as` (div \| article \| section),
+  `class`
+- Use: Cards, panels, list items, alerts, any styled container
+- Example: `<Sheet variant="bar" color="neutral" padding="sm" hover>...</Sheet>`
+
+### Content Primitives
+
+**Text** - Styled paragraph/span/div with typography variants
+
+- Props: `size` (xs \| sm \| base \| lg \| xl \| 2xl), `align` (left \| center
+  \| right), `tone` (content \| muted), `uppercase` (boolean), `strong`
+  (boolean), `italic` (boolean), `strike` (boolean), `whitespace` (normal \|
+  nowrap \| pre \| pre-line \| pre-wrap \| break-spaces), `truncate` (boolean),
+  `break` (normal \| words \| all \| keep), `as` (p \| span \| div \| label),
+  `class`
+- Use: Body text, descriptions, labels
+- Example: `<Text size="lg" tone="muted">...</Text>`
+
+**Heading** - Semantic heading with size variants
+
+- Props: `level` (h1 \| h2 \| h3 \| h4 \| h5 \| h6), `size` (h1 \| h2 \| h3 \|
+  h4 \| h5 \| h6), `align` (left \| center \| right), `class`
+- Use: Section headings (level for semantics, size for visual hierarchy)
+- Example: `<Heading level="h2" size="h1">...</Heading>`
+
+**Prose** - Terminal-styled markdown content wrapper
+
+- Props: `size` (sm \| base), `class`
+- Use: Blog posts, project logs, markdown content
+- Example: `<Prose size="base"><Content /></Prose>`
+
+### Interactive Primitives
+
+**Button** - Styled button/link with variants
+
+- Props: `variant` (solid \| outline \| ghost), `color` (primary \| accent \|
+  secondary \| neutral \| danger \| success \| warning \| info), `size` (sm \|
+  md \| lg), `fullWidth` (boolean), `href` (string), `external` (boolean),
+  `type` (button \| submit \| reset), `disabled` (boolean), `class`
+- Use: Actions, CTAs, navigation links
+- Example: `<Button variant="solid" color="primary" size="lg">...</Button>`
+
+**Link** - Styled anchor with underline variants
+
+- Props: `href` (required), `underline` (always \| hover \| none), `external`
+  (boolean), `class`
+- Use: Inline text links, navigation
+- Example: `<Link href="/blog" underline="hover">...</Link>`
+
+**Badge** - Inline label with color variants
+
+- Props: `color` (primary \| accent \| secondary \| neutral \| danger \| success
+  \| warning \| info), `size` (xs \| sm \| md), `uppercase` (boolean), `pulse`
+  (boolean), `class`
+- Use: Status indicators, tags, labels
+- Example: `<Badge color="primary" pulse>LIVE</Badge>`
+
+**Collapsible** - Expandable content container with CSS transitions
+
+- Props: `id` (required), `speed` (fast \| normal \| slow), `bordered`
+  (boolean), `class`
+- Use: Expandable panels, accordions, progressive disclosure
+- Example: `<Collapsible id="details" speed="normal">...</Collapsible>`
+
+**Overlay** - Modal backdrop with opacity variants
+
+- Props: `opacity` (light \| medium \| heavy), `class`
+- Use: Modal backgrounds, image lightboxes
+- Example: `<Overlay opacity="heavy" />`
+
 ## Component Patterns
 
 **Props:** Always support custom `class` prop. Extend CVA variant types.

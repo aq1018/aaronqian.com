@@ -79,6 +79,8 @@ export const textVariants = cva('', {
       'label-lg': 'text-base leading-6 tracking-wide',
       label: 'text-sm leading-5 tracking-wide',
       'label-sm': 'text-xs leading-4 tracking-wider',
+      xl: 'text-xl md:text-2xl leading-8',
+      '2xl': 'text-2xl md:text-3xl leading-9',
     },
     align: {
       start: 'text-start',

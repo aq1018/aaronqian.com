@@ -4,9 +4,13 @@ import type { CollectionEntry } from 'astro:content'
 import Badge from '@/components/primitives/Badge.astro'
 import Surface from '@/components/primitives/Surface.astro'
 import Container from '@/components/primitives/Container.astro'
+import Stack from '@/components/primitives/Stack.astro'
 import Inline from '@/components/primitives/Inline.astro'
+import Cluster from '@/components/primitives/Cluster.astro'
+import Divider from '@/components/primitives/Divider.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Text from '@/components/primitives/Text.astro'
+import Prose from '@/components/primitives/Prose.astro'
 import Comments from '@/components/features/Comments.astro'
 
 interface Props {
@@ -20,12 +24,14 @@ const { Content } = await post.render()
 <main class="flex-1">
   <Surface>
     <Container>
-      <a
-        href="/blog"
-        class="inline-flex items-center text-link transition-colors hover:[color:color-mix(in_oklab,var(--color-link),black_10%)]"
-      >
-        ← Back to blog
-      </a>
+      <Cluster space="sm">
+        <a
+          href="/blog"
+          class="text-link transition-colors hover:[color:color-mix(in_oklab,var(--color-link),black_10%)]"
+        >
+          ← Back to blog
+        </a>
+      </Cluster>
 
       <Heading size="h1" class="mt-6 leading-tight sm:text-5xl">
         {post.data.title}
@@ -41,7 +47,7 @@ const { Content } = await post.render()
         )
       }
 
-      <div class="mb-8 border-b border-border pb-4">
+      <Stack space="sm" class="mb-8">
         <Text class="mt-4">
           {
             post.data.date.toLocaleDateString('en-US', {
@@ -53,7 +59,7 @@ const { Content } = await post.render()
         </Text>
         {
           post.data.tags && (
-            <Inline space="xs" class="mt-4 flex-wrap">
+            <Inline space="xs" wrap>
               {post.data.tags.map((tag) => (
                 <Badge color="muted" size="md">
                   {tag}
@@ -62,11 +68,12 @@ const { Content } = await post.render()
             </Inline>
           )
         }
-      </div>
+        <Divider />
+      </Stack>
 
-      <div class="prose prose-lg dark:prose-invert max-w-none">
+      <Prose size="base">
         <Content />
-      </div>
+      </Prose>
 
       <Comments class="mt-16" />
     </Container>

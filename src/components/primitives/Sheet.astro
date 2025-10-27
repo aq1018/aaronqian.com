@@ -1,0 +1,24 @@
+---
+import { sheetCva, type SheetStyle } from './Sheet.cva'
+import { cn } from '@/lib/utils'
+
+export interface Props extends SheetStyle {
+  as?: 'div' | 'article' | 'section'
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const {
+  variant,
+  color,
+  padding,
+  hover,
+  as: Element = 'div',
+  class: className = '',
+  ...rest
+} = Astro.props
+---
+
+<Element class={cn(sheetCva({ variant, color, padding, hover }), className)} {...rest}>
+  <slot />
+</Element>

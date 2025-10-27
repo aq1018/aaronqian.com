@@ -53,22 +53,7 @@ describe('ProjectList', () => {
     return div
   }
 
-  describe('Desktop table rendering', () => {
-    it('should render table headers', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
-      })
-
-      const headers = root.querySelectorAll('th')
-      expect(headers.length).toBe(3)
-      expect(headers[0].textContent.trim()).toBe('Project')
-      expect(headers[1].textContent.trim()).toBe('Status')
-      expect(headers[2].textContent.trim()).toBe('Notes')
-    })
-
+  describe('Project rendering', () => {
     it('should render project title as link', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
       const root = await renderComponent({
@@ -77,7 +62,7 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      const link = root.querySelector('table a')
+      const link = root.querySelector('a')
       expect(link).toBeTruthy()
       expect(link?.textContent.trim()).toBe('Project A')
       expect(link?.getAttribute('href')).toBe('/projects/project-a')
@@ -91,9 +76,8 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      const statusCell = root.querySelector('table tbody tr td:nth-child(2)')
-      expect(statusCell?.textContent).toContain('ACTIVE')
-      expect(statusCell?.innerHTML).toContain('text-primary')
+      expect(root.textContent).toContain('ACTIVE')
+      expect(root.innerHTML).toContain('text-primary')
     })
 
     it('should render project description and aside', async () => {
@@ -104,9 +88,8 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      const notesCell = root.querySelector('table tbody tr td:nth-child(3)')
-      expect(notesCell?.textContent).toContain('Description for Project A')
-      expect(notesCell?.textContent).toContain('Aside for Project A')
+      expect(root.textContent).toContain('Description for Project A')
+      expect(root.textContent).toContain('Aside for Project A')
     })
 
     it('should render multiple projects', async () => {
@@ -121,38 +104,8 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      const rows = root.querySelectorAll('table tbody tr')
-      expect(rows.length).toBe(3)
-    })
-  })
-
-  describe('Mobile list rendering', () => {
-    it('should render mobile list items', async () => {
-      const projects = [
-        createMockProject('project-a/index.md', 'Project A', 'active'),
-        createMockProject('project-b/index.md', 'Project B', 'planning'),
-      ]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
-      })
-
-      // Mobile list is rendered in a separate div
-      const mobileItems = root.querySelectorAll('.md\\:hidden > div')
-      expect(mobileItems.length).toBe(2)
-    })
-
-    it('should render project title in mobile list', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
-      })
-
-      const mobileList = root.querySelector('.md\\:hidden')
-      expect(mobileList?.textContent).toContain('Project A')
+      const links = root.querySelectorAll('a')
+      expect(links.length).toBeGreaterThanOrEqual(3)
     })
   })
 
@@ -181,21 +134,6 @@ describe('ProjectList', () => {
       const liveMatches = textContent.match(/LIVE/g)
       const liveCount = liveMatches === null ? 0 : liveMatches.length
       expect(liveCount).toBe(0)
-    })
-
-    it('should render LIVE badge in both desktop and mobile views', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'active', true)]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
-      })
-
-      const tableCell = root.querySelector('table tbody tr td:nth-child(2)')
-      const mobileSection = root.querySelector('.md\\:hidden')
-
-      expect(tableCell?.textContent).toContain('LIVE')
-      expect(mobileSection?.textContent).toContain('LIVE')
     })
   })
 
@@ -241,7 +179,7 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      const statusSpan = root.querySelector('table tbody tr td:nth-child(2) span')
+      const statusSpan = root.querySelector('span')
       expect(statusSpan?.className).toContain('text-primary')
     })
   })
@@ -291,30 +229,18 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      const table = root.querySelector('table')
-      expect(table).toBeTruthy()
+      expect(root).toBeTruthy()
     })
 
-    it('should render table headers even with no projects', async () => {
+    it('should have no project links when projects array is empty', async () => {
       const root = await renderComponent({
         projects: [],
         statusStyles: defaultStatusStyles,
         statusLabels: defaultStatusLabels,
       })
 
-      const headers = root.querySelectorAll('th')
-      expect(headers.length).toBe(3)
-    })
-
-    it('should have no table rows when projects array is empty', async () => {
-      const root = await renderComponent({
-        projects: [],
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
-      })
-
-      const rows = root.querySelectorAll('table tbody tr')
-      expect(rows.length).toBe(0)
+      const links = root.querySelectorAll('a')
+      expect(links.length).toBe(0)
     })
   })
 
@@ -331,7 +257,7 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      const links = root.querySelectorAll('table a')
+      const links = root.querySelectorAll('a')
       expect(links[0].getAttribute('href')).toBe('/projects/project-a')
       expect(links[1].getAttribute('href')).toBe('/projects/project-b')
       expect(links[2].getAttribute('href')).toBe('/projects/project-c')

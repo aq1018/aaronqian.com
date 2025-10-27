@@ -6,6 +6,7 @@ import Surface from '@/components/primitives/Surface.astro'
 import Container from '@/components/primitives/Container.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Inline from '@/components/primitives/Inline.astro'
+import Divider from '@/components/primitives/Divider.astro'
 import Link from '@/components/primitives/Link.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Text from '@/components/primitives/Text.astro'
@@ -24,41 +25,44 @@ const { posts } = Astro.props
 
       <Stack space="md" class="mt-8">
         {
-          posts.map((post) => (
-            <article class="border-b border-border pb-8">
-              {post.data.hero && (
-                <Link href={`/blog/${post.slug}`} class="block">
-                  <Image
-                    src={post.data.hero}
-                    alt={post.data.title}
-                    width={800}
-                    height={200}
-                    class="mb-4 h-48 w-full rounded-lg object-cover"
-                  />
-                </Link>
-              )}
-              <Heading size="h2">
-                <Link href={`/blog/${post.slug}`} class="no-underline hover:underline">
-                  {post.data.title}
-                </Link>
-              </Heading>
-              <Text class="mt-2">
-                {post.data.date.toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </Text>
-              {post.data.description && <Text class="mt-3">{post.data.description}</Text>}
-              {post.data.tags && (
-                <Inline space="xs" class="mt-3 flex-wrap">
-                  {post.data.tags.map((tag) => (
-                    <Badge color="muted" size="md">
-                      {tag}
-                    </Badge>
-                  ))}
-                </Inline>
-              )}
+          posts.map((post, index) => (
+            <article>
+              <Stack space="sm">
+                {post.data.hero && (
+                  <Link href={`/blog/${post.slug}`} class="block">
+                    <Image
+                      src={post.data.hero}
+                      alt={post.data.title}
+                      width={800}
+                      height={200}
+                      class="h-48 w-full rounded-lg object-cover"
+                    />
+                  </Link>
+                )}
+                <Heading size="h2">
+                  <Link href={`/blog/${post.slug}`} class="no-underline hover:underline">
+                    {post.data.title}
+                  </Link>
+                </Heading>
+                <Text>
+                  {post.data.date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </Text>
+                {post.data.description && <Text>{post.data.description}</Text>}
+                {post.data.tags && (
+                  <Inline space="xs" wrap>
+                    {post.data.tags.map((tag) => (
+                      <Badge color="muted" size="md">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </Inline>
+                )}
+                {index < posts.length - 1 && <Divider />}
+              </Stack>
             </article>
           ))
         }
