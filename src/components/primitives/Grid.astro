@@ -5,24 +5,13 @@ import {
   type GridContainerStyle,
   type GridItemStyle,
 } from './Grid.cva'
+import {
+  getSizeClasses,
+  getOffsetClasses,
+  type ResponsiveValue,
+  type ResponsiveOffset,
+} from './Grid.utils'
 import { cn } from '@/lib/utils'
-
-// Responsive size/offset type
-type ResponsiveValue = {
-  xs?: number | 'auto' | 'grow'
-  sm?: number | 'auto' | 'grow'
-  md?: number | 'auto' | 'grow'
-  lg?: number | 'auto' | 'grow'
-  xl?: number | 'auto' | 'grow'
-}
-
-type ResponsiveOffset = {
-  xs?: number
-  sm?: number
-  md?: number
-  lg?: number
-  xl?: number
-}
 
 interface BaseProps {
   class?: string
@@ -56,119 +45,6 @@ const props = Astro.props
 
 // Determine if this is a container or item
 const isItem = 'size' in props && props.size !== undefined
-
-/**
- * Generate column span classes from size value
- */
-function getSizeClasses(size: number | 'auto' | 'grow' | ResponsiveValue | undefined): string {
-  if (!size) return ''
-
-  if (typeof size === 'object') {
-    // Handle responsive object
-    const classes: string[] = []
-    const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl'] as const
-
-    breakpoints.forEach((bp) => {
-      const value = size[bp]
-      if (value !== undefined) {
-        const sizeClass = getSingleSizeClass(value)
-        if (bp === 'xs') {
-          // xs is the default (no prefix)
-          classes.push(sizeClass)
-        } else {
-          // Add breakpoint prefix
-          classes.push(`${bp}:${sizeClass}`)
-        }
-      }
-    })
-
-    return classes.join(' ')
-  }
-
-  // Handle simple value
-  return getSingleSizeClass(size)
-}
-
-/**
- * Convert a single size value to Tailwind class
- * Uses lookup object instead of string interpolation so Tailwind JIT can detect the classes
- */
-function getSingleSizeClass(value: number | 'auto' | 'grow'): string {
-  if (value === 'auto') return 'col-auto'
-  if (value === 'grow') return 'col-span-full'
-
-  // Hardcoded class names so Tailwind's scanner can find them
-  const sizeMap: Record<number, string> = {
-    1: 'col-span-1',
-    2: 'col-span-2',
-    3: 'col-span-3',
-    4: 'col-span-4',
-    5: 'col-span-5',
-    6: 'col-span-6',
-    7: 'col-span-7',
-    8: 'col-span-8',
-    9: 'col-span-9',
-    10: 'col-span-10',
-    11: 'col-span-11',
-    12: 'col-span-12',
-  }
-
-  return sizeMap[value as number] || ''
-}
-
-/**
- * Generate offset classes from offset value
- */
-function getOffsetClasses(offset: number | ResponsiveOffset | undefined): string {
-  if (!offset) return ''
-
-  if (typeof offset === 'object') {
-    // Handle responsive object
-    const classes: string[] = []
-    const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl'] as const
-
-    breakpoints.forEach((bp) => {
-      const value = offset[bp]
-      if (value !== undefined) {
-        const offsetClass = getSingleOffsetClass(value)
-        if (bp === 'xs') {
-          classes.push(offsetClass)
-        } else {
-          classes.push(`${bp}:${offsetClass}`)
-        }
-      }
-    })
-
-    return classes.join(' ')
-  }
-
-  // Handle simple value
-  return getSingleOffsetClass(offset)
-}
-
-/**
- * Convert a single offset value to Tailwind class
- * Uses lookup object instead of string interpolation so Tailwind JIT can detect the classes
- */
-function getSingleOffsetClass(value: number): string {
-  // Hardcoded class names so Tailwind's scanner can find them
-  const offsetMap: Record<number, string> = {
-    1: 'col-start-2',
-    2: 'col-start-3',
-    3: 'col-start-4',
-    4: 'col-start-5',
-    5: 'col-start-6',
-    6: 'col-start-7',
-    7: 'col-start-8',
-    8: 'col-start-9',
-    9: 'col-start-10',
-    10: 'col-start-11',
-    11: 'col-start-12',
-    12: 'col-start-13',
-  }
-
-  return offsetMap[value] || ''
-}
 
 // Build classes based on mode
 let classes = ''

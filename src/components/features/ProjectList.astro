@@ -6,11 +6,10 @@
  */
 import type { CollectionEntry } from 'astro:content'
 import Grid from '@/components/primitives/Grid.astro'
-import Sheet from '@/components/primitives/Sheet.astro'
-import Link from '@/components/primitives/Link.astro'
-import Badge from '@/components/primitives/Badge.astro'
 import Text from '@/components/primitives/Text.astro'
 import Heading from '@/components/primitives/Heading.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import ProjectListItem from './ProjectListItem.astro'
 
 interface Props {
   projects: CollectionEntry<'projects'>[]
@@ -22,72 +21,32 @@ interface Props {
 const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
 ---
 
-<div>
-  <!-- Column headers - desktop only -->
-  <div class="mb-4 hidden md:block">
-    <Grid spacing="md" columns={12}>
-      <Grid size={4}>
-        <Heading level="h3" size="h6" class="uppercase tracking-wider"> Project </Heading>
-      </Grid>
-      <Grid size={2}>
-        <Heading level="h3" size="h6" class="text-right uppercase tracking-wider"> Status </Heading>
-      </Grid>
-      <Grid size={6}>
-        <Heading level="h3" size="h6" class="uppercase tracking-wider"> Description </Heading>
-      </Grid>
+<Stack>
+  <Grid spacing="md" class="hidden md:grid">
+    <Grid size={4}>
+      <Heading level="h3" size="h6" class="uppercase tracking-wider"> Project </Heading>
     </Grid>
-  </div>
+    <Grid size={2}>
+      <Heading level="h3" size="h6" class="text-right uppercase tracking-wider"> Status </Heading>
+    </Grid>
+    <Grid size={6}>
+      <Heading level="h3" size="h6" class="uppercase tracking-wider"> Description </Heading>
+    </Grid>
+  </Grid>
 
   <!-- Projects list -->
   <ul class="flex flex-col gap-3">
     {
       projects.map((project) => (
-        <Sheet as="li" variant="bar" color="neutral" padding="sm" hover>
-          <Grid spacing="md">
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Link
-                href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-                class="font-semibold"
-              >
-                {project.data.title}
-              </Link>
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 2 }} justifySelf={{ xs: 'start', md: 'end' }}>
-              <div>
-                <span
-                  class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
-                >
-                  {statusLabels[project.data.status]}
-                </span>
-                {project.data.live && (
-                  <Badge color="primary" pulse={true} class="ml-2">
-                    LIVE
-                  </Badge>
-                )}
-              </div>
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 6 }}>
-              <div>
-                <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
-                <Text size="xs" tone="muted" class="italic">
-                  {project.data.aside}
-                </Text>
-              </div>
-            </Grid>
-          </Grid>
-        </Sheet>
+        <ProjectListItem
+          project={project}
+          statusStyle={statusStyles[project.data.status]}
+          statusLabel={statusLabels[project.data.status]}
+        />
       ))
     }
   </ul>
 
   <!-- Footer -->
-  {
-    showFooter && (
-      <div class="mt-8">
-        <Text tone="muted">Updates monthly. Expect context switches.</Text>
-      </div>
-    )
-  }
-</div>
+  {showFooter && <Text tone="muted">Updates monthly. Expect context switches.</Text>}
+</Stack>

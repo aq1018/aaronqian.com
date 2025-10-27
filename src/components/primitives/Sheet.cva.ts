@@ -26,10 +26,10 @@ const colors = [
  * - soft: Subtle background with hover
  * - bar: Left border with opacity shift on hover
  */
-export const sheetCva = cva(['overflow-hidden', 'rounded'], {
+export const sheetCva = cva(['overflow-hidden'], {
   variants: {
     variant: {
-      outline: 'border-2',
+      outline: 'border-2 rounded',
       soft: '',
       bar: 'bg-transparent border-l-2',
     },

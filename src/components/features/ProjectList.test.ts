@@ -307,8 +307,8 @@ describe('ProjectList', () => {
         statusLabels: defaultStatusLabels,
       })
 
-      // Check for hidden container with md:block class
-      expect(root.innerHTML).toContain('hidden md:block')
+      // Check for hidden container with md:grid class
+      expect(root.innerHTML).toContain('hidden md:grid')
     })
   })
 

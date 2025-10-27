@@ -62,6 +62,14 @@ failures, memory leaks, failed CI/CD, and blocked merges.
 - Import aliases (use `@/*` instead of relative paths from `src/`)
 - Layout primitives for spacing (Section, Container, Stack)
 - Type guards over type assertions (use `src/utils/typeGuards.ts`)
+- 3-layer architecture: primitives (domain-free) → features (domain-specific) →
+  pages
+- Primitives interface with Tailwind; features/pages interface with primitives
+  only
+- Ad-hoc classes in features/pages indicate missing primitives - refactor
+  required
+- Component props must be semantic, never Tailwind pass-through (e.g.,
+  columns="3" not "2fr 140px 3fr")
 
 ### P2 Rules (USE JUDGMENT)
 

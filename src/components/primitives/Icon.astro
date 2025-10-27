@@ -1,0 +1,15 @@
+---
+import { Icon as AstroIcon } from 'astro-icon/components'
+import { iconVariants, type IconVariants } from './Icon.cva'
+import { cn } from '@/lib/utils'
+
+interface Props extends IconVariants {
+  name: string
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { name, size, class: className = '', ...rest } = Astro.props
+---
+
+<AstroIcon {name} class={cn(iconVariants({ size }), className)} {...rest} />

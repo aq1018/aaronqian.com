@@ -1,7 +1,7 @@
 ---
 // Hero Section - Tech Lab meets Meditation Space
 // Features: Digital analyzer with animated signal traces
-import { Icon } from 'astro-icon/components'
+import Icon from '@/components/primitives/Icon.astro'
 import Badge from '@/components/primitives/Badge.astro'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 import HeroContent from '@/components/patterns/HeroContent.astro'
@@ -29,10 +29,7 @@ import Inline from '@/components/primitives/Inline.astro'
         data-collapsible-trigger="secret-message"
         type="button"
       >
-        <Icon
-          name="heroicons:bolt-solid"
-          class="inline-block h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14"
-        />
+        <Icon name="heroicons:bolt-solid" size="xl" />
       </button> Output code
     </Heading>
 

@@ -1,18 +1,17 @@
 ---
-import { Icon } from 'astro-icon/components'
-
+import Icon from '@/components/primitives/Icon.astro'
 import PillToggle from '@/components/primitives/PillToggle.astro'
 import PillToggleButton from '@/components/primitives/PillToggleButton.astro'
 ---
 
 <PillToggle id="theme-toggle" ariaLabel="Choose theme">
   <PillToggleButton data-value="light" aria-label="Light theme">
-    <Icon name="heroicons:sun-20-solid" class="h-4 w-4" />
+    <Icon name="heroicons:sun-20-solid" />
   </PillToggleButton>
   <PillToggleButton data-value="dark" aria-label="Dark theme">
-    <Icon name="heroicons:moon-20-solid" class="h-4 w-4" />
+    <Icon name="heroicons:moon-20-solid" />
   </PillToggleButton>
   <PillToggleButton data-value="system" aria-label="System theme">
-    <Icon name="heroicons:computer-desktop-20-solid" class="h-4 w-4" />
+    <Icon name="heroicons:computer-desktop-20-solid" />
   </PillToggleButton>
 </PillToggle>
