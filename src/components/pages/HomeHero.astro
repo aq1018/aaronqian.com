@@ -2,8 +2,9 @@
 // Hero Section - Tech Lab meets Meditation Space
 // Features: Digital analyzer with animated signal traces
 import Icon from '@/components/primitives/Icon.astro'
-import Badge from '@/components/primitives/Badge.astro'
+import Kbd from '@/components/primitives/Kbd.astro'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
+import DigitalAnalyzerBuffer from '@/components/features/DigitalAnalyzerBuffer.astro'
 import DigitalAnalyzerDecoderToggle from '@/components/features/DigitalAnalyzerDecoderToggle.astro'
 import HeroContent from '@/components/patterns/HeroContent.astro'
 import Collapsible from '@/components/primitives/Collapsible.astro'
@@ -16,7 +17,7 @@ import Overlay from '@/components/primitives/Overlay.astro'
 ---
 
 <Surface class="flex min-h-[85vh] items-center justify-center" padY="none">
-  <DigitalAnalyzer slot="background" />
+  <DigitalAnalyzer name="hero-display" slot="background" />
   <Overlay slot="background" preset="radial-fade" />
 
   <HeroContent eyebrow="Aaron Qian">
@@ -45,23 +46,26 @@ import Overlay from '@/components/primitives/Overlay.astro'
 
       <Collapsible data-collapsible-id="secret-message">
         <Stack space="xs">
-          <div
-            id="ascii-display"
-            class="text-center font-mono text-lg text-primary"
+          <Text
+            size="lg"
+            color="primary"
+            align="center"
+            family="mono"
             aria-live="polite"
             aria-atomic="true"
           >
-            <span id="ascii-text"></span>
-            <span id="ascii-cursor" class="animate-cursor-blink">▊</span>
-          </div>
-          <div
-            id="binary-display"
-            class="text-center font-mono text-sm text-muted/70"
+            <DigitalAnalyzerBuffer target="hero-display" type="ascii" />
+          </Text>
+          <Text
+            size="sm"
+            color="muted"
+            align="center"
+            family="mono"
             aria-live="polite"
             aria-atomic="false"
           >
-            <span id="binary-buffer"></span>
-          </div>
+            <DigitalAnalyzerBuffer target="hero-display" type="binary" />
+          </Text>
         </Stack>
       </Collapsible>
     </Stack>
@@ -90,60 +94,12 @@ import Overlay from '@/components/primitives/Overlay.astro'
       </Button>
     </Stack>
 
-    <!-- Micro-line in named slot - mt-8 since there are CTAs above -->
     <Text slot="microLine" as="div" align="center" class="text-muted/70">
-      <span
-        >Decoder controls: Click/Tap ⚡ or press <Badge
-          color="neutral"
-          size="xs"
-          id="keyboard-shortcut">⌘K</Badge
-        > to toggle.</span
-      >
+      <span>
+        Decoder controls: Click/Tap ⚡ or press
+        <Kbd keys="k" modifier="cmd|ctrl" color="neutral" size="xs" />
+        to toggle.
+      </span>
     </Text>
   </HeroContent>
 </Surface>
-
-<style>
-  /* Cursor blink for ASCII display at 0.8 Hz (1.25s period) */
-  @keyframes cursorBlink {
-    0%,
-    50% {
-      opacity: 1;
-    }
-    51%,
-    100% {
-      opacity: 0;
-    }
-  }
-
-  .animate-cursor-blink {
-    animation: cursorBlink 1.25s ease-in-out infinite;
-  }
-
-  /* Mono uppercase utility for CTAs */
-  .text-mono-upper {
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-</style>
-
-<script>
-  /**
-   * Update keyboard shortcut badge display based on OS
-   * Shows ⌘K on Mac, Ctrl+K on Windows/Linux
-   */
-  function updateKeyboardShortcutDisplay(): void {
-    const isMac = navigator.userAgent.toUpperCase().includes('MAC')
-    const shortcutDisplay = document.getElementById('keyboard-shortcut')
-    if (shortcutDisplay !== null) {
-      shortcutDisplay.textContent = isMac ? '⌘K' : 'Ctrl+K'
-    }
-  }
-
-  // Initial setup
-  updateKeyboardShortcutDisplay()
-
-  // Update after View Transitions navigation
-  document.addEventListener('astro:page-load', updateKeyboardShortcutDisplay)
-</script>

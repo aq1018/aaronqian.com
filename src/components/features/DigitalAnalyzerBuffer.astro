@@ -1,0 +1,72 @@
+---
+import Cluster from '../primitives/Cluster.astro'
+
+/**
+ * DigitalAnalyzerBuffer - Terminal-style ascii/binary buffer with optional cursor
+ *
+ * Unopinionated span wrapper for displaying buffer text with an optional blinking cursor.
+ * Used by DigitalAnalyzer's DisplayManager to show decoded messages.
+ * Targets a specific DigitalAnalyzer instance via data-buffer-target attribute.
+ *
+ * @example ASCII buffer targeting "hero-display" analyzer
+ * <DigitalAnalyzerBuffer target="hero-display" type="ascii" />
+ *
+ * @example Binary buffer without cursor
+ * <DigitalAnalyzerBuffer target="hero-display" type="binary" cursorHidden />
+ *
+ * @example ASCII buffer with line cursor
+ * <DigitalAnalyzerBuffer target="hero-display" type="ascii" cursorType="line" />
+ */
+
+interface Props {
+  /** Target DigitalAnalyzer instance name */
+  target: string
+  /** Buffer type (ascii or binary) */
+  type: 'ascii' | 'binary'
+  /** Cursor type (block, line, or underline) */
+  cursorType?: 'block' | 'line' | 'underline'
+  /** Enable cursor blink animation */
+  cursorBlink?: boolean
+  /** Hide cursor completely */
+  cursorHidden?: boolean
+}
+
+const { target, type, cursorType = 'block', cursorBlink = true, cursorHidden = false } = Astro.props
+
+// Map cursor type to character
+const cursorChars = {
+  block: '▊',
+  line: '|',
+  underline: '_',
+} as const
+
+const cursorChar = cursorChars[cursorType]
+---
+
+<Cluster align="baseline" space="none">
+  <span data-buffer-target={target} data-buffer-type={type}></span>{
+    !cursorHidden && (
+      <span data-buffer-cursor class={cursorBlink ? 'animate-cursor-blink' : ''}>
+        {cursorChar}
+      </span>
+    )
+  }
+</Cluster>
+
+<style>
+  /* Cursor blink animation at 0.8 Hz (1.25s period) */
+  @keyframes cursorBlink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-cursor-blink {
+    animation: cursorBlink 1.25s ease-in-out infinite;
+  }
+</style>

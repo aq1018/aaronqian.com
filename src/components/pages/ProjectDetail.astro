@@ -75,12 +75,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         {
           project.data.url && (
             <div class="mt-6">
-              <Button
-                href={project.data.url}
-                external
-                color="primary"
-                class="font-mono text-sm tracking-wider"
-              >
+              <Button href={project.data.url} external color="primary" class="text-sm">
                 <span>Visit Site</span>
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path

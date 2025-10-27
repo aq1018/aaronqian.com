@@ -40,10 +40,16 @@ const transformVariants = {
   lowercase: 'lowercase',
 } as const
 
+const familyVariants = {
+  inherit: '',
+  sans: 'font-sans',
+  mono: 'font-mono',
+} as const
+
 /**
  * Heading variants - semantic heading styles with responsive typography
  */
-export const headingVariants = cva('font-sans tracking-tight', {
+export const headingVariants = cva('', {
   variants: {
     size: {
       'display-2': 'text-6xl md:text-7xl font-bold leading-[0.95]',
@@ -61,14 +67,26 @@ export const headingVariants = cva('font-sans tracking-tight', {
       end: 'text-end',
     },
     color: colorVariants,
+    family: familyVariants,
     whitespace: whitespaceVariants,
     truncate: truncateVariants,
     break: breakVariants,
     transform: transformVariants,
   },
+  compoundVariants: [
+    {
+      family: 'mono',
+      class: 'tracking-wider',
+    },
+    {
+      family: 'sans',
+      class: 'tracking-tight',
+    },
+  ],
   defaultVariants: {
     size: 'h2',
     color: 'inherit',
+    family: 'mono',
     whitespace: 'normal',
     truncate: false,
     break: 'normal',
@@ -102,6 +120,7 @@ export const textVariants = cva('', {
       justify: 'text-justify',
     },
     color: colorVariants,
+    family: familyVariants,
     uppercase: {
       true: 'uppercase',
       false: '',
@@ -126,6 +145,7 @@ export const textVariants = cva('', {
   defaultVariants: {
     size: 'body',
     color: 'inherit',
+    family: 'inherit',
     uppercase: false,
     strong: false,
     italic: false,

@@ -8,13 +8,15 @@
 import type { DigitalAnalyzerOptions } from './DigitalAnalyzer.types'
 
 interface Props extends Partial<DigitalAnalyzerOptions> {
+  /** Unique name for this analyzer instance (used to target buffers) */
+  name: string
   class?: string
 }
 
-const { class: className } = Astro.props
+const { name, class: className } = Astro.props
 ---
 
-<div class={`digital-analyzer h-full w-full ${className ?? ''}`} data-digital-analyzer>
+<div class={`digital-analyzer h-full w-full ${className ?? ''}`} data-digital-analyzer={name}>
   <div class="relative h-full w-full">
     <!-- Static grid lines layer (viewBox set dynamically by JS) -->
     <svg

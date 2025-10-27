@@ -8,52 +8,59 @@
 /**
  * Manages display updates for binary buffer and ASCII text displays
  * Provides methods for revealing, fading, and clearing display elements
+ * Uses data-buffer-target + data-buffer-type selectors for scoped updates
  */
 export class DisplayManager {
-  private readonly binaryBufferElement: HTMLElement | null
-  private readonly asciiDisplayElement: HTMLElement | null
+  private readonly binaryBufferElements: NodeListOf<HTMLElement>
+  private readonly asciiDisplayElements: NodeListOf<HTMLElement>
   private accumulatedText = ''
 
   /**
    * Create a new DisplayManager instance
+   * Targets elements with matching data-buffer-target and data-buffer-type attributes
    *
-   * @param binaryBufferId - DOM element ID for binary buffer display
-   * @param asciiDisplayId - DOM element ID for ASCII text display
+   * @param analyzerName - Name of the DigitalAnalyzer instance to target
    */
-  constructor(binaryBufferId: string, asciiDisplayId: string) {
-    this.binaryBufferElement = document.getElementById(binaryBufferId)
-    this.asciiDisplayElement = document.getElementById(asciiDisplayId)
+  constructor(analyzerName: string) {
+    this.binaryBufferElements = document.querySelectorAll<HTMLElement>(
+      `[data-buffer-target="${analyzerName}"][data-buffer-type="binary"]`,
+    )
+    this.asciiDisplayElements = document.querySelectorAll<HTMLElement>(
+      `[data-buffer-target="${analyzerName}"][data-buffer-type="ascii"]`,
+    )
   }
 
   /**
    * Clear binary buffer and set to non-breaking space placeholder
    * Resets opacity and transitions to default state
+   * Updates all binary buffer elements on the page
    */
   clearBinaryBuffer(): void {
-    if (this.binaryBufferElement !== null) {
-      this.binaryBufferElement.textContent = '\u00A0'
-      this.binaryBufferElement.style.opacity = '1'
-      this.binaryBufferElement.style.transition = ''
+    for (const element of this.binaryBufferElements) {
+      element.textContent = '\u00A0'
+      element.style.opacity = '1'
+      element.style.transition = ''
     }
   }
 
   /**
    * Reveal a single bit in the binary buffer
    * Adds spacing after every 8 bits (byte boundaries)
+   * Updates all binary buffer elements on the page
    *
    * @param bit - The bit value ('0' or '1')
    * @param index - Current bit index (0-based)
    */
   revealBit(bit: string, index: number): void {
-    if (this.binaryBufferElement !== null) {
+    for (const element of this.binaryBufferElements) {
       if (index === 0) {
         // Replace placeholder with first bit
-        this.binaryBufferElement.textContent = bit
+        element.textContent = bit
       } else if (index % 8 === 0) {
         // Add space after every 8 bits (byte boundary)
-        this.binaryBufferElement.textContent += ' ' + bit
+        element.textContent += ' ' + bit
       } else {
-        this.binaryBufferElement.textContent += bit
+        element.textContent += bit
       }
     }
   }
@@ -61,70 +68,76 @@ export class DisplayManager {
   /**
    * Apply fade transition to binary buffer
    * Sets opacity to 0 with a smooth transition
+   * Updates all binary buffer elements on the page
    */
   fadeBinaryBuffer(): void {
-    if (this.binaryBufferElement !== null) {
-      this.binaryBufferElement.style.transition = 'opacity 200ms ease-out'
-      this.binaryBufferElement.style.opacity = '0'
+    for (const element of this.binaryBufferElements) {
+      element.style.transition = 'opacity 200ms ease-out'
+      element.style.opacity = '0'
     }
   }
 
   /**
    * Reset binary buffer to placeholder after fade
    * Should be called after fadeBinaryBuffer() completes
+   * Updates all binary buffer elements on the page
    */
   resetBinaryBuffer(): void {
-    if (this.binaryBufferElement !== null) {
-      this.binaryBufferElement.textContent = '\u00A0'
-      this.binaryBufferElement.style.opacity = '1'
+    for (const element of this.binaryBufferElements) {
+      element.textContent = '\u00A0'
+      element.style.opacity = '1'
     }
   }
 
   /**
    * Append a character to the accumulated ASCII text
    * Updates both internal state and DOM
+   * Updates all ASCII buffer elements on the page
    *
    * @param char - Character to append
    */
   appendCharacter(char: string): void {
     this.accumulatedText += char
-    if (this.asciiDisplayElement !== null) {
-      this.asciiDisplayElement.textContent = this.accumulatedText
+    for (const element of this.asciiDisplayElements) {
+      element.textContent = this.accumulatedText
     }
   }
 
   /**
    * Set ASCII display text directly
    * Does NOT update accumulated text (for non-accumulating modes like hex)
+   * Updates all ASCII buffer elements on the page
    *
    * @param text - Text to display
    */
   setAsciiText(text: string): void {
-    if (this.asciiDisplayElement !== null) {
-      this.asciiDisplayElement.textContent = text
+    for (const element of this.asciiDisplayElements) {
+      element.textContent = text
     }
   }
 
   /**
    * Apply fade transition to ASCII display
    * Sets opacity to 0 with a smooth transition
+   * Updates all ASCII buffer elements on the page
    */
   fadeAsciiDisplay(): void {
-    if (this.asciiDisplayElement !== null) {
-      this.asciiDisplayElement.style.transition = 'opacity 200ms ease-out'
-      this.asciiDisplayElement.style.opacity = '0'
+    for (const element of this.asciiDisplayElements) {
+      element.style.transition = 'opacity 200ms ease-out'
+      element.style.opacity = '0'
     }
   }
 
   /**
    * Clear ASCII display and reset accumulated text
    * Should be called after fadeAsciiDisplay() completes
+   * Updates all ASCII buffer elements on the page
    */
   clearAsciiDisplay(): void {
     this.accumulatedText = ''
-    if (this.asciiDisplayElement !== null) {
-      this.asciiDisplayElement.textContent = ''
-      this.asciiDisplayElement.style.opacity = '1'
+    for (const element of this.asciiDisplayElements) {
+      element.textContent = ''
+      element.style.opacity = '1'
     }
   }
 

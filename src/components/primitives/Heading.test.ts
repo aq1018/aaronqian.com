@@ -3,10 +3,14 @@ import { describe, expect, it } from 'vitest'
 import { headingVariants } from './typography.cva'
 
 describe('Heading Component', () => {
-  describe('headingVariants - Base Classes', () => {
-    it('should include font-sans and tracking-tight in all variants', () => {
+  describe('headingVariants - Default Tracking', () => {
+    it('should include tracking-wider for default mono family', () => {
       const result = headingVariants()
-      expect(result).toContain('font-sans')
+      expect(result).toContain('tracking-wider')
+    })
+
+    it('should include tracking-tight for sans family', () => {
+      const result = headingVariants({ family: 'sans' })
       expect(result).toContain('tracking-tight')
     })
   })
@@ -22,6 +26,11 @@ describe('Heading Component', () => {
     it('should apply default tone (inherit)', () => {
       const result = headingVariants()
       expect(result).toContain('text-inherit')
+    })
+
+    it('should apply default family (mono)', () => {
+      const result = headingVariants()
+      expect(result).toContain('font-mono')
     })
 
     it('should apply default whitespace (normal)', () => {
@@ -145,6 +154,26 @@ describe('Heading Component', () => {
     })
   })
 
+  describe('headingVariants - Family Prop', () => {
+    it('should apply mono family (default)', () => {
+      const result = headingVariants({ family: 'mono' })
+      expect(result).toContain('font-mono')
+      expect(result).toContain('tracking-wider')
+    })
+
+    it('should apply sans family', () => {
+      const result = headingVariants({ family: 'sans' })
+      expect(result).toContain('font-sans')
+      expect(result).toContain('tracking-tight')
+    })
+
+    it('should apply inherit family', () => {
+      const result = headingVariants({ family: 'inherit' })
+      expect(result).not.toContain('font-sans')
+      expect(result).not.toContain('font-mono')
+    })
+  })
+
   describe('headingVariants - Whitespace Prop', () => {
     it('should apply normal whitespace (default)', () => {
       const result = headingVariants({ whitespace: 'normal' })
@@ -209,8 +238,8 @@ describe('Heading Component', () => {
 
     it('should handle empty object (use all defaults)', () => {
       const result = headingVariants({})
-      expect(result).toContain('font-sans')
-      expect(result).toContain('tracking-tight')
+      expect(result).toContain('font-mono')
+      expect(result).toContain('tracking-wider')
       expect(result).toContain('text-3xl') // h2
       expect(result).toContain('text-inherit')
     })

@@ -5,9 +5,11 @@ import { describe, expect, it } from 'vitest'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 
 describe('DigitalAnalyzer', () => {
-  const renderComponent = async (props?: { class?: string }) => {
+  const renderComponent = async (props?: { name?: string; class?: string }) => {
     const container = await AstroContainer.create()
-    const result = await container.renderToString(DigitalAnalyzer, { props: props ?? {} })
+    const result = await container.renderToString(DigitalAnalyzer, {
+      props: { name: 'test-analyzer', ...props },
+    })
     const div = document.createElement('div')
     div.innerHTML = result
     return div

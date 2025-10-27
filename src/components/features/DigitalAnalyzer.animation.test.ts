@@ -18,8 +18,8 @@ describe('TraceAnimationManager', () => {
   beforeEach(() => {
     // Setup DOM
     document.body.innerHTML = `
-      <div id="binary-buffer"></div>
-      <div id="ascii-text"></div>
+      <span data-buffer-target="test-analyzer" data-buffer-type="binary"></span>
+      <span data-buffer-target="test-analyzer" data-buffer-type="ascii"></span>
     `
 
     // Create mock SVG path element
@@ -33,7 +33,7 @@ describe('TraceAnimationManager', () => {
     mockLightningBolt.dataset.lightningBolt = ''
 
     // Create display manager
-    displayManager = new DisplayManager('binary-buffer', 'ascii-text')
+    displayManager = new DisplayManager('test-analyzer')
 
     // Add dark class to test light theme initially
     document.documentElement.classList.remove('dark')

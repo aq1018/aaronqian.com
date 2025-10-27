@@ -42,6 +42,9 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
   const svg: SVGSVGElement = svgResult
   const staticSvg: SVGSVGElement = staticSvgResult
 
+  // Get analyzer name from data attribute
+  const analyzerName = container.getAttribute('data-digital-analyzer') ?? 'default'
+
   const config: DigitalAnalyzerConfig = defaultOptions
   const bitCount = config.byteCount * config.bitsPerByte
   let currentTimeline: gsap.core.Timeline | null = null
@@ -58,7 +61,7 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
     dataSource: config.dataSource,
   })
 
-  const displayManager = new DisplayManager('binary-buffer', 'ascii-text')
+  const displayManager = new DisplayManager(analyzerName)
 
   const gridManager = new GridManager(staticSvg, svg, {
     byteCount: config.byteCount,

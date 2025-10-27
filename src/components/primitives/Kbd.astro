@@ -1,0 +1,30 @@
+---
+/**
+ * Kbd - Keyboard shortcut display component
+ *
+ * Extends Badge with OS-aware keyboard shortcut formatting.
+ * - Mac: Uses symbols (⌘ ⌥ ⇧ ⌃)
+ * - Windows/Linux: Uses text (Ctrl Alt Shift)
+ *
+ * @example
+ * <Kbd keys="k" modifier="cmd|ctrl" color="neutral" size="xs" />
+ * // Mac: ⌘K
+ * // Windows: Ctrl+K
+ */
+import Badge from './Badge.astro'
+import type { BadgeVariants } from './Badge.cva'
+
+interface Props extends BadgeVariants {
+  /** The key(s) to display (e.g., "k", "enter") */
+  keys: string
+  /** Optional modifier key(s) - use pipe for platform-specific (e.g., "cmd|ctrl") */
+  modifier?: string
+  class?: string
+}
+
+const { keys, modifier, ...badgeProps } = Astro.props
+---
+
+<Badge data-kbd data-keys={keys} data-modifier={modifier} {...badgeProps}>
+  <slot />
+</Badge>

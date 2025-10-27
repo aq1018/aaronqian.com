@@ -13,18 +13,22 @@ describe('DisplayManager', () => {
   let displayManager!: DisplayManager
 
   beforeEach(() => {
-    // Create test DOM
+    // Create test DOM with data-buffer-target and data-buffer-type attributes
     document.body.innerHTML = `
-      <div id="test-binary-buffer"></div>
-      <div id="test-ascii-display"></div>
+      <span data-buffer-target="test-analyzer" data-buffer-type="binary"></span>
+      <span data-buffer-target="test-analyzer" data-buffer-type="ascii"></span>
     `
 
     // Get element references
-    binaryBuffer = document.getElementById('test-binary-buffer') as HTMLElement
-    asciiDisplay = document.getElementById('test-ascii-display') as HTMLElement
+    binaryBuffer = document.querySelector(
+      '[data-buffer-target="test-analyzer"][data-buffer-type="binary"]',
+    ) as HTMLElement
+    asciiDisplay = document.querySelector(
+      '[data-buffer-target="test-analyzer"][data-buffer-type="ascii"]',
+    ) as HTMLElement
 
     // Create display manager instance
-    displayManager = new DisplayManager('test-binary-buffer', 'test-ascii-display')
+    displayManager = new DisplayManager('test-analyzer')
   })
 
   afterEach(() => {
@@ -34,28 +38,28 @@ describe('DisplayManager', () => {
   describe('constructor', () => {
     it('should find and store binary buffer element', () => {
       expect(binaryBuffer).toBeTruthy()
-      expect(binaryBuffer.id).toBe('test-binary-buffer')
+      expect(binaryBuffer.getAttribute('data-buffer-type')).toBe('binary')
     })
 
     it('should find and store ASCII display element', () => {
       expect(asciiDisplay).toBeTruthy()
-      expect(asciiDisplay.id).toBe('test-ascii-display')
+      expect(asciiDisplay.getAttribute('data-buffer-type')).toBe('ascii')
     })
 
     it('should handle missing binary buffer element', () => {
-      const manager = new DisplayManager('nonexistent-binary', 'test-ascii-display')
-      // Should not throw, just store null reference
+      const manager = new DisplayManager('nonexistent-analyzer')
+      // Should not throw when no elements match
       expect(() => manager.clearBinaryBuffer()).not.toThrow()
     })
 
     it('should handle missing ASCII display element', () => {
-      const manager = new DisplayManager('test-binary-buffer', 'nonexistent-ascii')
-      // Should not throw, just store null reference
+      const manager = new DisplayManager('nonexistent-analyzer')
+      // Should not throw when no elements match
       expect(() => manager.setAsciiText('test')).not.toThrow()
     })
 
     it('should handle both elements missing', () => {
-      const manager = new DisplayManager('nonexistent-binary', 'nonexistent-ascii')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => {
         manager.clearBinaryBuffer()
         manager.setAsciiText('test')
@@ -83,7 +87,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('nonexistent', 'test-ascii-display')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.clearBinaryBuffer()).not.toThrow()
     })
   })
@@ -144,7 +148,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('nonexistent', 'test-ascii-display')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.revealBit('1', 0)).not.toThrow()
     })
   })
@@ -162,7 +166,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('nonexistent', 'test-ascii-display')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.fadeBinaryBuffer()).not.toThrow()
     })
   })
@@ -181,7 +185,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('nonexistent', 'test-ascii-display')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.resetBinaryBuffer()).not.toThrow()
     })
   })
@@ -222,7 +226,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('test-binary-buffer', 'nonexistent')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.appendCharacter('A')).not.toThrow()
     })
   })
@@ -253,7 +257,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('test-binary-buffer', 'nonexistent')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.setAsciiText('test')).not.toThrow()
     })
   })
@@ -271,7 +275,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('test-binary-buffer', 'nonexistent')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.fadeAsciiDisplay()).not.toThrow()
     })
   })
@@ -297,7 +301,7 @@ describe('DisplayManager', () => {
     })
 
     it('should handle missing element gracefully', () => {
-      const manager = new DisplayManager('test-binary-buffer', 'nonexistent')
+      const manager = new DisplayManager('nonexistent-analyzer')
       expect(() => manager.clearAsciiDisplay()).not.toThrow()
     })
   })

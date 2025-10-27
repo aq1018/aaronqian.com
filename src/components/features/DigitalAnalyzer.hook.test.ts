@@ -274,18 +274,22 @@ describe('Digital Analyzer Hook', () => {
 
     it('should clear display managers on cleanup', () => {
       document.body.innerHTML = `
-        <div data-digital-analyzer style="width: 800px; height: 600px;">
+        <div data-digital-analyzer="test-analyzer" style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
-          <div id="binary-buffer">01010101</div>
-          <div id="ascii-text">Test</div>
+          <span data-buffer-target="test-analyzer" data-buffer-type="binary">01010101</span>
+          <span data-buffer-target="test-analyzer" data-buffer-type="ascii">Test</span>
         </div>
       `
 
       const cleanup = initializeDigitalAnalyzer()
 
-      const binaryBuffer = document.getElementById('binary-buffer')
-      const asciiText = document.getElementById('ascii-text')
+      const binaryBuffer = document.querySelector<HTMLElement>(
+        '[data-buffer-target="test-analyzer"][data-buffer-type="binary"]',
+      )
+      const asciiText = document.querySelector<HTMLElement>(
+        '[data-buffer-target="test-analyzer"][data-buffer-type="ascii"]',
+      )
 
       // Set some content
       if (binaryBuffer !== null) binaryBuffer.textContent = '11110000'

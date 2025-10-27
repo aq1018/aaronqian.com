@@ -144,6 +144,24 @@ describe('Text Component', () => {
     })
   })
 
+  describe('textVariants - Family Prop', () => {
+    it('should apply inherit family (default)', () => {
+      const result = textVariants({ family: 'inherit' })
+      expect(result).not.toContain('font-sans')
+      expect(result).not.toContain('font-mono')
+    })
+
+    it('should apply sans family', () => {
+      const result = textVariants({ family: 'sans' })
+      expect(result).toContain('font-sans')
+    })
+
+    it('should apply mono family', () => {
+      const result = textVariants({ family: 'mono' })
+      expect(result).toContain('font-mono')
+    })
+  })
+
   describe('textVariants - Boolean Style Props', () => {
     it('should apply uppercase when true', () => {
       const result = textVariants({ uppercase: true })
