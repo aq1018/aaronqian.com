@@ -4,38 +4,41 @@
 import Icon from '@/components/primitives/Icon.astro'
 import Badge from '@/components/primitives/Badge.astro'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
+import DigitalAnalyzerDecoderToggle from '@/components/features/DigitalAnalyzerDecoderToggle.astro'
 import HeroContent from '@/components/patterns/HeroContent.astro'
 import Collapsible from '@/components/primitives/Collapsible.astro'
-import Container from '@/components/primitives/Container.astro'
 import Button from '@/components/primitives/Button.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Text from '@/components/primitives/Text.astro'
 import Stack from '@/components/primitives/Stack.astro'
-import Inline from '@/components/primitives/Inline.astro'
 ---
 
 <DigitalAnalyzer class="flex min-h-[85vh] items-center justify-center">
   <HeroContent eyebrow="Aaron Qian">
-    <!-- Custom title with lightning bolt -->
-    <Heading slot="title" level="h1" align="center" class="mb-8 whitespace-nowrap leading-tight">
-      Input coffee <button
-        id="lightning-bolt"
-        data-lightning-bolt
-        class="inline-block cursor-pointer text-primary transition-all duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none"
-        style="filter: brightness(0.7);"
-        aria-label="Toggle secret message"
-        aria-controls="secret-message"
-        aria-expanded="false"
-        data-collapsible-trigger="secret-message"
-        type="button"
-      >
-        <Icon name="heroicons:bolt-solid" size="xl" />
-      </button> Output code
-    </Heading>
+    <Stack slot="title">
+      <Heading size="display-1" align="center" whitespace="nowrap">
+        <Stack direction="row" align="center" justify="center" space="none">
+          <span>Input coffee</span>
+          <DigitalAnalyzerDecoderToggle
+            target="secret-message"
+            keyboardKey="k"
+            keyboardModifier="cmd|ctrl"
+          >
+            <Button
+              variant="link"
+              color="primary"
+              style="filter: brightness(0.7);"
+              aria-label="Toggle secret message"
+              type="button"
+            >
+              <Icon name="heroicons:bolt-solid" size="xl" />
+            </Button>
+          </DigitalAnalyzerDecoderToggle>
+          <span>Output code</span>
+        </Stack>
+      </Heading>
 
-    <!-- Custom interactive content in default slot -->
-    <Container width="narrow">
-      <Collapsible id="secret-message">
+      <Collapsible data-collapsible-id="secret-message">
         <Stack space="xs">
           <div
             id="ascii-display"
@@ -43,9 +46,8 @@ import Inline from '@/components/primitives/Inline.astro'
             aria-live="polite"
             aria-atomic="true"
           >
-            <span id="ascii-text"></span><span id="ascii-cursor" class="animate-cursor-blink"
-              >▊</span
-            >
+            <span id="ascii-text"></span>
+            <span id="ascii-cursor" class="animate-cursor-blink">▊</span>
           </div>
           <div
             id="binary-display"
@@ -57,38 +59,24 @@ import Inline from '@/components/primitives/Inline.astro'
           </div>
         </Stack>
       </Collapsible>
-    </Container>
+    </Stack>
 
-    <Container width="narrow">
-      <Stack space="xs" class="mt-8">
-        <Text align="center" size="xl">
-          Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
-        </Text>
-        <Text align="center" size="xl"> Safety goggles recommended. Coffee mandatory. </Text>
-      </Stack>
-    </Container>
+    <Stack slot="description" space="sm">
+      <Text align="center" size="xl">
+        Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
+      </Text>
+      <Text align="center" size="xl"> Safety goggles recommended. Coffee mandatory. </Text>
+    </Stack>
 
-    <Stack space="sm" justify="center" class="mt-12 flex-col items-center sm:flex-row">
-      <Button href="/blog" color="primary" size="lg">
-        <span>Read My Notes</span>
-        <svg
-          class="h-4 w-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-        </svg>
+    <Stack direction="row" space="sm" justify="center">
+      <Button href="/blog" variant="solid" color="primary" size="lg">
+        <span>Read My Notes →</span>
       </Button>
 
       <Button
         href="https://launchpath.com"
-        color="primary"
+        color="accent"
+        variant="outline"
         size="lg"
         external
         aria-label="Open LaunchPath (new tab)"
@@ -98,16 +86,14 @@ import Inline from '@/components/primitives/Inline.astro'
     </Stack>
 
     <!-- Micro-line in named slot - mt-8 since there are CTAs above -->
-    <Text slot="microLine" as="div" align="center" class="mt-8 text-muted/70">
-      <Inline space="xs" class="inline-flex items-center justify-center">
-        <span
-          >Decoder controls: Click/Tap ⚡ or press <Badge
-            color="neutral"
-            size="xs"
-            id="keyboard-shortcut">⌘K</Badge
-          > to toggle.</span
-        >
-      </Inline>
+    <Text slot="microLine" as="div" align="center" class="text-muted/70">
+      <span
+        >Decoder controls: Click/Tap ⚡ or press <Badge
+          color="neutral"
+          size="xs"
+          id="keyboard-shortcut">⌘K</Badge
+        > to toggle.</span
+      >
     </Text>
   </HeroContent>
 </DigitalAnalyzer>
@@ -139,74 +125,20 @@ import Inline from '@/components/primitives/Inline.astro'
 
 <script>
   /**
-   * Keyboard shortcut handler for collapsible secret message
-   * Listens for Cmd/Ctrl+K to toggle the secret message display
+   * Update keyboard shortcut badge display based on OS
+   * Shows ⌘K on Mac, Ctrl+K on Windows/Linux
    */
-
-  type CleanupFunction = () => void
-
-  let cleanup: CleanupFunction | null = null
-
-  function initializeKeyboardShortcut(): CleanupFunction {
-    // Clean up previous initialization if it exists
-    if (cleanup !== null) {
-      cleanup()
-    }
-
-    // Detect OS for correct modifier key display
+  function updateKeyboardShortcutDisplay(): void {
     const isMac = navigator.userAgent.toUpperCase().includes('MAC')
-
-    // Update keyboard shortcut display
     const shortcutDisplay = document.getElementById('keyboard-shortcut')
     if (shortcutDisplay !== null) {
       shortcutDisplay.textContent = isMac ? '⌘K' : 'Ctrl+K'
     }
-
-    // Set up keyboard shortcut listener (Cmd/Ctrl+K)
-    const keyboardHandler = (e: KeyboardEvent) => {
-      const modifierKey = isMac ? e.metaKey : e.ctrlKey
-      if (modifierKey && e.key === 'k') {
-        e.preventDefault()
-
-        // Toggle the secret message collapsible
-        const collapsible = document.getElementById('secret-message')
-        if (collapsible !== null) {
-          const isOpen = collapsible.getAttribute('data-open') === 'true'
-          const newState = !isOpen
-
-          collapsible.setAttribute('data-open', String(newState))
-          collapsible.setAttribute('aria-expanded', String(newState))
-
-          // Update trigger state
-          const trigger = document.querySelector('[data-collapsible-trigger="secret-message"]')
-          if (trigger !== null) {
-            trigger.setAttribute('aria-expanded', String(newState))
-          }
-        }
-      }
-    }
-
-    document.addEventListener('keydown', keyboardHandler)
-
-    // Return cleanup function
-    cleanup = () => {
-      document.removeEventListener('keydown', keyboardHandler)
-      cleanup = null
-    }
-
-    return cleanup
   }
 
-  // Initial setup on first page load
-  initializeKeyboardShortcut()
+  // Initial setup
+  updateKeyboardShortcutDisplay()
 
-  // Re-initialize after View Transitions navigation
-  document.addEventListener('astro:page-load', initializeKeyboardShortcut)
-
-  // Cleanup before page swap to prevent memory leaks
-  document.addEventListener('astro:before-preparation', () => {
-    if (cleanup !== null) {
-      cleanup()
-    }
-  })
+  // Update after View Transitions navigation
+  document.addEventListener('astro:page-load', updateKeyboardShortcutDisplay)
 </script>

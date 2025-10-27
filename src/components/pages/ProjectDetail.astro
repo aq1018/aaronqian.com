@@ -6,7 +6,6 @@ import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
 import Surface from '@/components/primitives/Surface.astro'
 import Container from '@/components/primitives/Container.astro'
 import Stack from '@/components/primitives/Stack.astro'
-import Inline from '@/components/primitives/Inline.astro'
 import Divider from '@/components/primitives/Divider.astro'
 import Link from '@/components/primitives/Link.astro'
 import Button from '@/components/primitives/Button.astro'
@@ -46,7 +45,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         </Link>
 
         <!-- Title and status -->
-        <Inline space="sm" wrap align="baseline">
+        <Stack direction="row" space="sm" wrap align="baseline">
           <Heading size="h1" class="text-3xl sm:text-4xl">
             {project.data.title}
           </Heading>
@@ -60,7 +59,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
               )
             }
           </Badge>
-        </Inline>
+        </Stack>
 
         <!-- Description -->
         <Text>
@@ -68,7 +67,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         </Text>
 
         <!-- Aside (witty comment) -->
-        <Text size="sm" tone="muted" class="italic">
+        <Text size="sm" color="muted" class="italic">
           {project.data.aside}
         </Text>
 
@@ -110,7 +109,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         <!-- Log header -->
         <div>
           <Heading size="h2">Build Log</Heading>
-          <Text class="mt-2" tone="muted">
+          <Text class="mt-2" color="muted">
             {projectLogs.length}
             {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
           </Text>
@@ -128,7 +127,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
             </Stack>
           ) : (
             <Sheet variant="soft" color="neutral" padding="lg" class="text-center">
-              <Text tone="muted">No log entries yet. Check back soon.</Text>
+              <Text color="muted">No log entries yet. Check back soon.</Text>
             </Sheet>
           )
         }

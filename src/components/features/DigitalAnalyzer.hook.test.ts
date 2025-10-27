@@ -180,34 +180,34 @@ describe('Digital Analyzer Hook', () => {
       expect(svg.innerHTML).toBe('')
     })
 
-    it('should reset lightning bolt styles on cleanup', () => {
+    it('should reset decoder toggle styles on cleanup', () => {
       document.body.innerHTML = `
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
-          <div data-lightning-bolt style="opacity: 0.5; transform: scale(1.2); filter: blur(2px);"></div>
+          <div data-decoder-toggle style="opacity: 0.5; transform: scale(1.2); filter: blur(2px);"></div>
         </div>
       `
 
       const cleanup = initializeDigitalAnalyzer()
 
-      const lightningBolt = document.querySelector<HTMLElement>('[data-lightning-bolt]')
+      const decoderToggle = document.querySelector<HTMLElement>('[data-decoder-toggle]')
 
-      // Modify lightning bolt styles
-      if (lightningBolt !== null) {
-        lightningBolt.style.opacity = '0.8'
-        lightningBolt.style.transform = 'scale(1.5)'
-        lightningBolt.style.filter = 'blur(5px)'
+      // Modify decoder toggle styles
+      if (decoderToggle !== null) {
+        decoderToggle.style.opacity = '0.8'
+        decoderToggle.style.transform = 'scale(1.5)'
+        decoderToggle.style.filter = 'blur(5px)'
       }
 
       // Cleanup should reset styles
       cleanup()
 
-      expect(lightningBolt?.style.transform).toBe('')
-      expect(lightningBolt?.style.filter).toBe('brightness(0.7)')
+      expect(decoderToggle?.style.transform).toBe('')
+      expect(decoderToggle?.style.filter).toBe('brightness(0.7)')
     })
 
-    it('should handle missing lightning bolt gracefully', () => {
+    it('should handle missing decoder toggle gracefully', () => {
       document.body.innerHTML = `
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>

@@ -10,9 +10,10 @@ interface Props extends HeadingStyle {
 const {
   size = 'h2',
   align,
-  tone,
+  color,
   whitespace,
   truncate,
+  transform,
   break: breakProp,
   class: className = '',
   ...rest
@@ -22,7 +23,8 @@ const classes = cn(
   headingVariants({
     size,
     align,
-    tone,
+    color,
+    transform,
     whitespace,
     truncate,
     break: breakProp,

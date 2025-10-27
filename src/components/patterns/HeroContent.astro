@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import Container from '@/components/primitives/Container.astro'
 import Text from '@/components/primitives/Text.astro'
 import Heading from '@/components/primitives/Heading.astro'
+import Stack from '../primitives/Stack.astro'
 
 interface Props {
   eyebrow?: string
@@ -37,55 +38,62 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
 ---
 
 <Container {size} class={cn('relative z-10 py-16', centered && 'text-center', className)}>
-  <!-- Eyebrow: slot takes precedence over prop -->
-  {
-    (hasEyebrowSlot || eyebrow) &&
-      (hasEyebrowSlot ? (
-        <slot name="eyebrow" />
-      ) : (
-        <Text color="primary" align={centered ? 'center' : undefined} class="mb-4 opacity-85">
-          {eyebrow}
-        </Text>
-      ))
-  }
+  <Stack space="lg">
+    <!-- Eyebrow: slot takes precedence over prop -->
+    {
+      (hasEyebrowSlot || eyebrow) &&
+        (hasEyebrowSlot ? (
+          <slot name="eyebrow" />
+        ) : (
+          <Heading
+            size="h6"
+            color="primary"
+            align={centered ? 'center' : undefined}
+            transform="uppercase"
+          >
+            {eyebrow}
+          </Heading>
+        ))
+    }
 
-  <!-- Title: slot takes precedence over prop -->
-  {
-    (hasTitleSlot || title) &&
-      (hasTitleSlot ? (
-        <slot name="title" />
-      ) : (
-        <Heading size="h1" align={centered ? 'center' : undefined}>
-          {title}
-        </Heading>
-      ))
-  }
+    <!-- Title: slot takes precedence over prop -->
+    {
+      (hasTitleSlot || title) &&
+        (hasTitleSlot ? (
+          <slot name="title" />
+        ) : (
+          <Heading size="h1" align={centered ? 'center' : undefined}>
+            {title}
+          </Heading>
+        ))
+    }
 
-  <!-- Description: slot takes precedence over prop -->
-  {
-    (hasDescriptionSlot || description) &&
-      (hasDescriptionSlot ? (
-        <slot name="description" />
-      ) : (
-        <Text align={centered ? 'center' : undefined} class="mx-auto mt-8 max-w-2xl">
-          {description}
-        </Text>
-      ))
-  }
+    <!-- Description: slot takes precedence over prop -->
+    {
+      (hasDescriptionSlot || description) &&
+        (hasDescriptionSlot ? (
+          <slot name="description" />
+        ) : (
+          <Text align={centered ? 'center' : undefined}>{description}</Text>
+        ))
+    }
 
-  <!-- Default slot for custom content (buttons, collapsibles, etc.) -->
-  <slot />
+    <!-- Default slot for custom content (buttons, collapsibles, etc.) -->
+    <div>
+      <slot />
+    </div>
 
-  <!-- Micro-line: slot takes precedence over prop - appears AFTER default slot -->
-  <!-- Note: Use mt-4 when no default slot content, mt-8 when there are CTAs -->
-  {
-    (hasMicroLineSlot || microLine) &&
-      (hasMicroLineSlot ? (
-        <slot name="microLine" />
-      ) : (
-        <Text align={centered ? 'center' : undefined} class="mt-4 text-muted/70">
-          {microLine}
-        </Text>
-      ))
-  }
+    <!-- Micro-line: slot takes precedence over prop - appears AFTER default slot -->
+    <!-- Note: Use mt-4 when no default slot content, mt-8 when there are CTAs -->
+    {
+      (hasMicroLineSlot || microLine) &&
+        (hasMicroLineSlot ? (
+          <slot name="microLine" />
+        ) : (
+          <Text align={centered ? 'center' : undefined} class="text-muted/70">
+            {microLine}
+          </Text>
+        ))
+    }
+  </Stack>
 </Container>

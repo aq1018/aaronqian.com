@@ -49,11 +49,11 @@ export function initializeCollapsibles(): CleanupFunction {
 }
 
 /**
- * Toggle a collapsible by ID
+ * Toggle a collapsible by data-collapsible-id
  * Pure CSS handles animation via data-open attribute
  */
 function toggleCollapsible(id: string): void {
-  const collapsible = document.getElementById(id)
+  const collapsible = document.querySelector(`[data-collapsible-id="${id}"]`)
   if (collapsible === null) return
 
   const isOpen = collapsible.getAttribute('data-open') === 'true'

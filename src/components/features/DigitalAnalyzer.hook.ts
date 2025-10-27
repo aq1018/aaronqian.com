@@ -31,7 +31,7 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
   const container = queryElement<HTMLElement>('[data-digital-analyzer]')
   const svgResult = querySVGElement('#digital-analyzer-svg')
   const staticSvgResult = querySVGElement('.digital-analyzer-static')
-  const lightningBolt = queryElement<HTMLElement>('[data-lightning-bolt]')
+  const decoderToggle = queryElement<HTMLElement>('[data-decoder-toggle]')
 
   if (svgResult === null || container === null || staticSvgResult === null) {
     cleanup = () => {}
@@ -45,6 +45,10 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
   const config: DigitalAnalyzerConfig = defaultOptions
   const bitCount = config.byteCount * config.bitsPerByte
   let currentTimeline: gsap.core.Timeline | null = null
+  let decoderToggleListeners: {
+    handleMouseEnter: EventListener
+    handleMouseLeave: EventListener
+  } | null = null
 
   // Initialize managers
   const dataSourceManager = new DataSourceManager({
@@ -76,6 +80,30 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
     gridLines = gridManager.getGridLines()
   })
   resizeObserver.observe(container)
+
+  // Setup hover effect for decoder toggle (only applies when not being animated by GSAP)
+  if (decoderToggle !== null) {
+    const handleMouseEnter = () => {
+      // Only apply hover effect if timeline is not actively animating
+      const isAnimating = currentTimeline?.isActive() === true
+      if (!isAnimating) {
+        decoderToggle.style.filter = 'brightness(0.85)'
+      }
+    }
+
+    const handleMouseLeave = () => {
+      // Restore to dimmed state when not actively animating
+      const isAnimating = currentTimeline?.isActive() === true
+      if (!isAnimating) {
+        decoderToggle.style.filter = 'brightness(0.7)'
+      }
+    }
+
+    decoderToggle.addEventListener('mouseenter', handleMouseEnter)
+    decoderToggle.addEventListener('mouseleave', handleMouseLeave)
+
+    decoderToggleListeners = { handleMouseEnter, handleMouseLeave }
+  }
 
   function triggerTrace(): void {
     // Select random grid line for this trace
@@ -135,7 +163,7 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
       currentChunk,
       shouldClear,
       displayManager,
-      lightningBolt,
+      decoderToggle,
       config: {
         traceDrawDuration: config.traceDrawDuration,
         traceFadeDelay: config.traceFadeDelay,
@@ -186,10 +214,17 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
     // Clear SVG traces
     svg.innerHTML = ''
 
-    // Reset lightning bolt to initial state
-    if (lightningBolt !== null) {
-      lightningBolt.style.transform = ''
-      lightningBolt.style.filter = 'brightness(0.7)'
+    // Remove decoder toggle hover listeners
+    if (decoderToggle !== null && decoderToggleListeners !== null) {
+      decoderToggle.removeEventListener('mouseenter', decoderToggleListeners.handleMouseEnter)
+      decoderToggle.removeEventListener('mouseleave', decoderToggleListeners.handleMouseLeave)
+      decoderToggleListeners = null
+    }
+
+    // Reset decoder toggle to initial state
+    if (decoderToggle !== null) {
+      decoderToggle.style.transform = ''
+      decoderToggle.style.filter = 'brightness(0.7)'
     }
 
     // Clear display managers

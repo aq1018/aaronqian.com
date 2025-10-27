@@ -2,7 +2,7 @@
 import ThemeToggle from './ThemeToggle.astro'
 import Link from '@/components/primitives/Link.astro'
 import Container from '@/components/primitives/Container.astro'
-import Inline from '@/components/primitives/Inline.astro'
+import Stack from '@/components/primitives/Stack.astro'
 import Icon from '@/components/primitives/Icon.astro'
 
 const currentPath = Astro.url.pathname
@@ -13,27 +13,32 @@ const currentPath = Astro.url.pathname
     <div class="flex h-16 items-center justify-between">
       <!-- Home Icon (Left) -->
       <div class="flex items-center">
-        <Link href="/" active={currentPath === '/'} aria-label="Home">
+        <Link variant="nav" href="/" active={currentPath === '/'} aria-label="Home">
           <Icon name="heroicons:home-solid" size="md" />
         </Link>
       </div>
 
       <!-- Nav Links (Right) -->
-      <Inline space="sm">
+      <Stack direction="row" space="sm">
         <Link
+          variant="nav"
           href="/projects"
           active={currentPath === '/projects' || currentPath.startsWith('/projects/')}
         >
           Projects
         </Link>
 
-        <Link href="/blog" active={currentPath === '/blog' || currentPath.startsWith('/blog/')}>
+        <Link
+          variant="nav"
+          href="/blog"
+          active={currentPath === '/blog' || currentPath.startsWith('/blog/')}
+        >
           Blog
         </Link>
 
         <!-- Theme Toggle -->
         <ThemeToggle />
-      </Inline>
+      </Stack>
     </div>
   </Container>
 </nav>

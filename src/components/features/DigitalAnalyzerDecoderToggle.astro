@@ -1,0 +1,43 @@
+---
+/**
+ * DigitalAnalyzerDecoderToggle
+ * Adds keyboard shortcut behavior to a collapsible trigger element
+ *
+ * This component wraps a single trigger element (Button, link, etc.) and:
+ * 1. Injects data-collapsible-trigger attribute at runtime (via hook)
+ * 2. Wires up keyboard shortcuts to toggle the target collapsible
+ *
+ * @slot default - MUST contain a single trigger element (Button, link, etc.)
+ *                 The first child element will receive toggle behavior
+ *
+ * @example
+ * <DigitalAnalyzerDecoderToggle target="my-collapse">
+ *   <Button variant="link">Toggle</Button>
+ * </DigitalAnalyzerDecoderToggle>
+ *
+ * <Collapsible data-collapsible-id="my-collapse">
+ *   Content here
+ * </Collapsible>
+ */
+
+interface Props {
+  /** Target collapsible data-collapsible-id (single source of truth) */
+  target: string
+  /** Keyboard key for shortcut (default: 'k') */
+  keyboardKey?: string
+  /** Keyboard modifier key (default: 'cmd|ctrl' - auto-detects OS) */
+  keyboardModifier?: string
+}
+
+const { target, keyboardKey = 'k', keyboardModifier = 'cmd|ctrl' } = Astro.props
+---
+
+<div
+  data-decoder-wrapper
+  data-decoder-target={target}
+  data-keyboard-key={keyboardKey}
+  data-keyboard-modifier={keyboardModifier}
+  style="display: contents;"
+>
+  <slot />
+</div>

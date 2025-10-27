@@ -1,15 +1,20 @@
 ---
 import { stackCva, type StackStyle } from './Stack.cva'
+import { getDirectionClasses, type ResponsiveDirection } from './Stack.utils'
 import { cn } from '@/lib/utils'
 
 interface Props extends StackStyle {
+  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse' | ResponsiveDirection
   class?: string
   [key: string]: any // Allow any additional HTML attributes
 }
 
-const { space, align, justify, class: className = '', ...rest } = Astro.props
+const { space, align, justify, direction = 'column', class: className = '', ...rest } = Astro.props
 ---
 
-<div class={cn(stackCva({ space, align, justify }), className)} {...rest}>
+<div
+  class={cn(stackCva({ space, align, justify }), getDirectionClasses(direction), className)}
+  {...rest}
+>
   <slot />
 </div>

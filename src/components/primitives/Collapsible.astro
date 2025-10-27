@@ -12,16 +12,14 @@ import {
 import { cn } from '@/lib/utils'
 
 interface Props extends CollapsibleVariants {
-  id: string
   open?: boolean
   class?: string
 }
 
-const { id, open = false, speed, bordered, class: className, ...rest } = Astro.props
+const { open = false, speed, bordered, class: className, ...rest } = Astro.props
 ---
 
 <div
-  {id}
   class={cn(collapsibleVariants({ speed, bordered }), className)}
   data-collapsible
   data-open={String(open)}

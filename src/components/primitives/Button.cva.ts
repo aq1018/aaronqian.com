@@ -28,6 +28,7 @@ export const buttonVariants = cva(
     'uppercase',
     'tracking-wider',
     'transition-colors',
+    'motion-reduce:transition-none',
     'focus-visible:outline',
     'focus-visible:outline-2',
     'focus-visible:outline-offset-2',
@@ -41,7 +42,7 @@ export const buttonVariants = cva(
         outline: `border-2 bg-transparent ${translucentHover}`,
         soft: translucentHover,
         ghost: `bg-transparent ${translucentHover}`,
-        link: 'bg-transparent underline-offset-4 hover:underline',
+        link: 'bg-transparent underline-offset-4 hover:underline hover:brightness-110 cursor-pointer',
       },
       color: {
         primary: 'focus-visible:outline-primary',

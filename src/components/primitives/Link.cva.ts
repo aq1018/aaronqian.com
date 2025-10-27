@@ -18,7 +18,7 @@ export const linkVariants = cva(['transition-colors'], {
     {
       variant: 'nav',
       active: true,
-      class: 'font-semibold text-primary',
+      class: 'text-primary',
     },
     {
       variant: 'nav',

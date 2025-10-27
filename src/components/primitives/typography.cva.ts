@@ -1,15 +1,20 @@
 import { type VariantProps, cva } from 'class-variance-authority'
 
 /**
- * Shared tone variants for typography components
+ * Shared color variants for typography components
  * Simplified for terminal aesthetic - no fancy brand/status colors
  */
-const toneVariants = {
+const colorVariants = {
   inherit: 'text-inherit',
-  default: 'text-fg',
+  default: 'text-content',
   muted: 'text-muted',
   primary: 'text-primary',
+  secondary: 'text-secondary',
   accent: 'text-accent',
+  success: 'text-success',
+  warning: 'text-warning',
+  danger: 'text-danger',
+  info: 'text-info',
 } as const
 
 const whitespaceVariants = {
@@ -26,6 +31,13 @@ const breakVariants = {
   normal: 'break-normal',
   words: 'break-words',
   all: 'break-all',
+} as const
+
+const transformVariants = {
+  none: '',
+  capitalize: 'capitalize',
+  uppercase: 'uppercase',
+  lowercase: 'lowercase',
 } as const
 
 /**
@@ -48,14 +60,15 @@ export const headingVariants = cva('font-sans tracking-tight', {
       center: 'text-center',
       end: 'text-end',
     },
-    tone: toneVariants,
+    color: colorVariants,
     whitespace: whitespaceVariants,
     truncate: truncateVariants,
     break: breakVariants,
+    transform: transformVariants,
   },
   defaultVariants: {
     size: 'h2',
-    tone: 'inherit',
+    color: 'inherit',
     whitespace: 'normal',
     truncate: false,
     break: 'normal',
@@ -88,7 +101,7 @@ export const textVariants = cva('', {
       end: 'text-end',
       justify: 'text-justify',
     },
-    tone: toneVariants,
+    color: colorVariants,
     uppercase: {
       true: 'uppercase',
       false: '',
@@ -108,10 +121,11 @@ export const textVariants = cva('', {
     whitespace: whitespaceVariants,
     truncate: truncateVariants,
     break: breakVariants,
+    transform: transformVariants,
   },
   defaultVariants: {
     size: 'body',
-    tone: 'inherit',
+    color: 'inherit',
     uppercase: false,
     strong: false,
     italic: false,

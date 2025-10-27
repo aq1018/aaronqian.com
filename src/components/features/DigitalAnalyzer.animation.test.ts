@@ -54,7 +54,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: 'A',
         shouldClear: false,
         displayManager,
-        lightningBolt: mockLightningBolt,
+        decoderToggle: mockLightningBolt,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -77,7 +77,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: mockLightningBolt,
+        decoderToggle: mockLightningBolt,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -101,7 +101,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: mockLightningBolt,
+        decoderToggle: mockLightningBolt,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -126,7 +126,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -153,7 +153,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -188,7 +188,7 @@ describe('TraceAnimationManager', () => {
         currentChunk,
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -219,7 +219,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '', // Empty chunk for random mode
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -247,7 +247,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -275,7 +275,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: true, // Should trigger ASCII fade/clear
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -303,7 +303,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false, // Should NOT trigger ASCII fade/clear
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -328,7 +328,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: null, // No lightning bolt element
+        decoderToggle: null, // No lightning bolt element
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -351,7 +351,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -378,7 +378,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '', // Empty chunk
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -403,7 +403,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: mockLightningBolt,
+        decoderToggle: mockLightningBolt,
         config: {
           traceDrawDuration: 1000,
           traceFadeDelay: 200,
@@ -429,7 +429,7 @@ describe('TraceAnimationManager', () => {
         currentChunk: '',
         shouldClear: false,
         displayManager,
-        lightningBolt: null,
+        decoderToggle: null,
         config: {
           traceDrawDuration: 2000, // 2000ms = 2s
           traceFadeDelay: 500, // 500ms = 0.5s

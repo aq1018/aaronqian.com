@@ -7,9 +7,9 @@ import { gsap } from 'gsap'
 
 import type { DisplayManager } from './DigitalAnalyzer.display'
 
-/** Lightning bolt brightness levels */
-const LIGHTNING_BRIGHTNESS_DIM = 0.7 // Dimmed state (70% brightness)
-const LIGHTNING_BRIGHTNESS_BRIGHT = 1.3 // Energized state (130% brightness)
+/** Decoder toggle brightness levels */
+const DECODER_TOGGLE_BRIGHTNESS_DIM = 0.7 // Dimmed state (70% brightness)
+const DECODER_TOGGLE_BRIGHTNESS_BRIGHT = 1.3 // Energized state (130% brightness)
 
 /** Configuration for trace animation timing and behavior */
 export interface TraceAnimationConfig {
@@ -27,13 +27,13 @@ export interface TraceAnimationOptions {
   currentChunk: string
   shouldClear: boolean
   displayManager: DisplayManager
-  lightningBolt: HTMLElement | null
+  decoderToggle: HTMLElement | null
   config: TraceAnimationConfig
 }
 
 /**
  * Create GSAP timeline for trace animation with synchronized display updates
- * Orchestrates: lightning glow, path drawing, bit/character reveal, fades, clears
+ * Orchestrates: decoder toggle glow, path drawing, bit/character reveal, fades, clears
  * @param options - Configuration and elements for animation
  * @returns GSAP timeline (call .kill() for cleanup)
  */
@@ -44,21 +44,21 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
     currentChunk,
     shouldClear,
     displayManager,
-    lightningBolt,
+    decoderToggle,
     config,
   } = options
 
   const timeline = gsap.timeline()
   const bitCount = binaryData.length
 
-  // 1. Lightning bolt energize (immediate, at position 0)
-  if (lightningBolt !== null) {
+  // 1. Decoder toggle energize (immediate, at position 0)
+  if (decoderToggle !== null) {
     // Use brightness filter instead of opacity for consistent "bright" effect in both modes
     timeline.to(
-      lightningBolt,
+      decoderToggle,
       {
         scale: 1.1,
-        filter: `brightness(${LIGHTNING_BRIGHTNESS_BRIGHT})`,
+        filter: `brightness(${DECODER_TOGGLE_BRIGHTNESS_BRIGHT})`,
         duration: 0.2,
         ease: 'power2.out',
       },
@@ -112,14 +112,14 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
     }
   }
 
-  // 5. Lightning bolt reset (after draw completes)
-  if (lightningBolt !== null) {
+  // 5. Decoder toggle reset (after draw completes)
+  if (decoderToggle !== null) {
     const resetTime = config.traceDrawDuration / 1000
     timeline.to(
-      lightningBolt,
+      decoderToggle,
       {
         scale: 1,
-        filter: `brightness(${LIGHTNING_BRIGHTNESS_DIM})`,
+        filter: `brightness(${DECODER_TOGGLE_BRIGHTNESS_DIM})`,
         duration: 0.3,
         ease: 'power2.out',
       },

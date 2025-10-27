@@ -118,29 +118,29 @@ describe('Heading Component', () => {
     })
   })
 
-  describe('headingVariants - Tone Prop', () => {
-    it('should apply inherit tone (default)', () => {
-      const result = headingVariants({ tone: 'inherit' })
+  describe('headingVariants - Color Prop', () => {
+    it('should apply inherit color (default)', () => {
+      const result = headingVariants({ color: 'inherit' })
       expect(result).toContain('text-inherit')
     })
 
-    it('should apply default tone', () => {
-      const result = headingVariants({ tone: 'default' })
-      expect(result).toContain('text-fg')
+    it('should apply default color', () => {
+      const result = headingVariants({ color: 'default' })
+      expect(result).toContain('text-content')
     })
 
-    it('should apply muted tone', () => {
-      const result = headingVariants({ tone: 'muted' })
+    it('should apply muted color', () => {
+      const result = headingVariants({ color: 'muted' })
       expect(result).toContain('text-muted')
     })
 
-    it('should apply primary tone', () => {
-      const result = headingVariants({ tone: 'primary' })
+    it('should apply primary color', () => {
+      const result = headingVariants({ color: 'primary' })
       expect(result).toContain('text-primary')
     })
 
-    it('should apply accent tone', () => {
-      const result = headingVariants({ tone: 'accent' })
+    it('should apply accent color', () => {
+      const result = headingVariants({ color: 'accent' })
       expect(result).toContain('text-accent')
     })
   })
@@ -191,7 +191,7 @@ describe('Heading Component', () => {
       const result = headingVariants({
         size: 'h1',
         align: 'center',
-        tone: 'primary',
+        color: 'primary',
         truncate: true,
       })
       expect(result).toContain('text-4xl')

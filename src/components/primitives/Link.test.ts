@@ -44,7 +44,6 @@ describe('Link Component', () => {
     it('should render nav variant correctly (active)', () => {
       const result = linkVariants({ variant: 'nav', active: true })
       expect(result).toContain('hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]')
-      expect(result).toContain('font-semibold')
       expect(result).toContain('text-primary')
     })
 
@@ -68,11 +67,9 @@ describe('Link Component', () => {
 
       // Inactive nav link
       expect(inactive).toContain('text-muted')
-      expect(inactive).not.toContain('font-semibold')
 
       // Active nav link
       expect(active).toContain('text-primary')
-      expect(active).toContain('font-semibold')
       expect(active).not.toContain('text-muted')
     })
 
@@ -121,14 +118,12 @@ describe('Link Component', () => {
   describe('linkVariants - Compound Variants', () => {
     it('should apply nav active compound variant correctly', () => {
       const result = linkVariants({ variant: 'nav', active: true })
-      expect(result).toContain('font-semibold')
       expect(result).toContain('text-primary')
     })
 
     it('should apply nav inactive compound variant correctly', () => {
       const result = linkVariants({ variant: 'nav', active: false })
       expect(result).toContain('text-muted')
-      expect(result).not.toContain('font-semibold')
     })
 
     it('should not have compound variants for content variant', () => {
@@ -216,7 +211,6 @@ describe('Link Component', () => {
       const inactive = linkVariants({ variant: 'nav', active: false })
 
       // Active should be visually distinct
-      expect(active).toContain('font-semibold')
       expect(active).toContain('text-primary')
 
       // Inactive should be muted

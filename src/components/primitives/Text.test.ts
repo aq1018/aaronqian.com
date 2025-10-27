@@ -117,29 +117,29 @@ describe('Text Component', () => {
     })
   })
 
-  describe('textVariants - Tone Prop', () => {
-    it('should apply inherit tone (default)', () => {
-      const result = textVariants({ tone: 'inherit' })
+  describe('textVariants - Color Prop', () => {
+    it('should apply inherit color (default)', () => {
+      const result = textVariants({ color: 'inherit' })
       expect(result).toContain('text-inherit')
     })
 
-    it('should apply default tone', () => {
-      const result = textVariants({ tone: 'default' })
-      expect(result).toContain('text-fg')
+    it('should apply default color', () => {
+      const result = textVariants({ color: 'default' })
+      expect(result).toContain('text-content')
     })
 
-    it('should apply muted tone', () => {
-      const result = textVariants({ tone: 'muted' })
+    it('should apply muted color', () => {
+      const result = textVariants({ color: 'muted' })
       expect(result).toContain('text-muted')
     })
 
-    it('should apply primary tone', () => {
-      const result = textVariants({ tone: 'primary' })
+    it('should apply primary color', () => {
+      const result = textVariants({ color: 'primary' })
       expect(result).toContain('text-primary')
     })
 
-    it('should apply accent tone', () => {
-      const result = textVariants({ tone: 'accent' })
+    it('should apply accent color', () => {
+      const result = textVariants({ color: 'accent' })
       expect(result).toContain('text-accent')
     })
   })
@@ -231,7 +231,7 @@ describe('Text Component', () => {
     it('should work with multiple props combined', () => {
       const result = textVariants({
         size: 'small',
-        tone: 'muted',
+        color: 'muted',
         strong: true,
         uppercase: true,
         align: 'center',

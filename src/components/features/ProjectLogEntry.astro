@@ -3,7 +3,7 @@
 import type { CollectionEntry } from 'astro:content'
 import Sheet from '@/components/primitives/Sheet.astro'
 import Badge from '@/components/primitives/Badge.astro'
-import Inline from '@/components/primitives/Inline.astro'
+import Stack from '@/components/primitives/Stack.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Text from '@/components/primitives/Text.astro'
 import Prose from '@/components/primitives/Prose.astro'
@@ -44,7 +44,7 @@ const getTagProps = (tag: string) => {
 <Sheet as="article" variant="bar" color="neutral" padding="none" hover class="pl-6">
   <!-- Timestamp and title -->
   <header class="mb-3">
-    <Text as="time" tone="muted" datetime={log.data.date.toISOString()}>
+    <Text as="time" color="muted" datetime={log.data.date.toISOString()}>
       [{formatTimestamp(log.data.date)}]
     </Text>
     <Heading size="h3" class="mt-1 text-lg">
@@ -55,7 +55,7 @@ const getTagProps = (tag: string) => {
   <!-- Tags -->
   {
     log.data.tags.length > 0 && (
-      <Inline space="xs" wrap class="mb-4">
+      <Stack direction="row" space="xs" wrap class="mb-4">
         {log.data.tags.map((tag) => {
           const tagProps = getTagProps(tag)
           return (
@@ -64,7 +64,7 @@ const getTagProps = (tag: string) => {
             </Badge>
           )
         })}
-      </Inline>
+      </Stack>
     )
   }
 
