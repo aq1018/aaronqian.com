@@ -27,12 +27,22 @@ export function isDark(theme: Theme): boolean {
 export function applyTheme(theme: Theme): void {
   if (typeof window === 'undefined') return
 
-  const dark = isDark(theme)
+  const updateDOM = () => {
+    const dark = isDark(theme)
 
-  if (dark) {
-    document.documentElement.classList.add('dark')
+    if (dark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
+
+  // Use View Transitions API if supported for smooth theme changes
+  // Falls back to immediate update if not supported
+  if ('startViewTransition' in document) {
+    document.startViewTransition(updateDOM)
   } else {
-    document.documentElement.classList.remove('dark')
+    updateDOM()
   }
 }
 

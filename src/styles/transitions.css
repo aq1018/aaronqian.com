@@ -1,0 +1,15 @@
+/* CSS transitions for isolated contexts (Giscus iframe ONLY)
+ * NOT imported in global.css to avoid overriding component transitions
+ * Uses tokens from tokens.css which are inherited into iframe
+ *
+ * This file provides smooth theme transitions for contexts where
+ * the View Transitions API cannot be used (e.g., cross-origin iframes) */
+
+*,
+*::before,
+*::after {
+  transition:
+    background-color var(--duration-theme-transition) var(--easing-theme-transition),
+    color var(--duration-theme-transition) var(--easing-theme-transition),
+    border-color var(--duration-theme-transition) var(--easing-theme-transition);
+}

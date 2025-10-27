@@ -2,6 +2,7 @@
 /* Source file - compiled to public/giscus-dark.css via PostCSS */
 
 @import './base.css';
+@import './transitions.css';
 @import './colors.css';
 @import './dark.css';
 

@@ -35,6 +35,10 @@
   --color-warning-content: var(--color-warning-content-light);
   --color-info: var(--color-info-light);
   --color-info-content: var(--color-info-content-light);
+
+  /* Motion/transition tokens */
+  --duration-theme-transition: 300ms;
+  --easing-theme-transition: ease-in-out;
 }
 
 /* -----------------------------

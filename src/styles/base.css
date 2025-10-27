@@ -11,11 +11,11 @@ html {
   }
 }
 
-*,
-*::before,
-*::after {
-  transition:
-    background-color 300ms ease-in-out,
-    color 300ms ease-in-out,
-    border-color 300ms ease-in-out;
+/* View Transitions customization for theme changes
+ * Uses tokens from tokens.css for consistent timing with Giscus iframe
+ * Applied when document.startViewTransition() is used */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-theme-transition);
+  animation-timing-function: var(--easing-theme-transition);
 }
