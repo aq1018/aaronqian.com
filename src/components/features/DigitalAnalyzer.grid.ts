@@ -82,9 +82,6 @@ export class GridManager {
     this.staticSvg.setAttribute('viewBox', `0 0 ${this.width} ${this.height}`)
     this.dynamicSvg.setAttribute('viewBox', `0 0 ${this.width} ${this.height}`)
 
-    // Update mask size (cheap operation)
-    this.updateMaskSize()
-
     // Only regenerate if width changed significantly
     if (this.shouldRegenerateGrid(this.width)) {
       this.regenerateGridLines()
@@ -142,15 +139,6 @@ export class GridManager {
       line.setAttribute('y2', String(this.height))
       line.setAttribute('opacity', String(this.config.gridOpacity))
       gridGroup.appendChild(line)
-    }
-  }
-
-  /** Update mask rectangle size for clipping */
-  private updateMaskSize(): void {
-    const maskRect = this.staticSvg.querySelector('#digital-analyzer-mask rect')
-    if (maskRect !== null) {
-      maskRect.setAttribute('width', String(this.width))
-      maskRect.setAttribute('height', String(this.height))
     }
   }
 

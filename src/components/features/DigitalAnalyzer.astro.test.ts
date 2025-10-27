@@ -71,34 +71,6 @@ describe('DigitalAnalyzer', () => {
     })
   })
 
-  it('should have radial gradient mask definition', async () => {
-    const root = await renderComponent()
-    const gradient = root.querySelector('#digital-analyzer-fade')
-
-    expect(gradient).toBeDefined()
-    expect(gradient?.tagName).toBe('radialGradient')
-  })
-
-  it('should have mask definition', async () => {
-    const root = await renderComponent()
-    const mask = root.querySelector('#digital-analyzer-mask')
-
-    expect(mask).toBeDefined()
-    expect(mask?.tagName).toBe('mask')
-  })
-
-  it('should apply mask to grid lines group', async () => {
-    const root = await renderComponent()
-    const groups = root.querySelectorAll('g')
-
-    // Find the group with mask attribute
-    const maskedGroup = Array.from(groups).find(
-      (g) => g.getAttribute('mask') === 'url(#digital-analyzer-mask)',
-    )
-
-    expect(maskedGroup).toBeDefined()
-  })
-
   it('should have empty grid group (populated dynamically by JS)', async () => {
     const root = await renderComponent()
     const staticSvg = root.querySelector('.digital-analyzer-static')

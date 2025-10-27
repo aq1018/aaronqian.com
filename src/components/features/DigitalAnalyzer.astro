@@ -14,40 +14,26 @@ interface Props extends Partial<DigitalAnalyzerOptions> {
 const { class: className } = Astro.props
 ---
 
-<div class={`digital-analyzer relative ${className ?? ''}`} data-digital-analyzer>
-  <slot />
+<div class={`digital-analyzer h-full w-full ${className ?? ''}`} data-digital-analyzer>
+  <div class="relative h-full w-full">
+    <!-- Static grid lines layer (viewBox set dynamically by JS) -->
+    <svg
+      class="digital-analyzer-static absolute inset-0 h-full w-full"
+      preserveAspectRatio="none"
+      style="pointer-events: none;"
+    >
+      <!-- Grid lines populated dynamically by JS -->
+      <g stroke="currentColor" class="text-primary" fill="none"></g>
+    </svg>
 
-  <!-- Static grid lines layer (viewBox set dynamically by JS) -->
-  <svg
-    class="digital-analyzer-static absolute inset-0 h-full w-full"
-    preserveAspectRatio="none"
-    style="pointer-events: none;"
-  >
-    <!-- Radial gradient mask for fading at edges -->
-    <defs>
-      <radialGradient id="digital-analyzer-fade">
-        <stop offset="0%" stop-color="white" stop-opacity="0.8"></stop>
-        <stop offset="70%" stop-color="white" stop-opacity="0.4"></stop>
-        <stop offset="100%" stop-color="white" stop-opacity="0.1"></stop>
-      </radialGradient>
-      <mask id="digital-analyzer-mask">
-        <!-- Rect dimensions set dynamically by JS -->
-        <rect x="0" y="0" fill="url(#digital-analyzer-fade)"></rect>
-      </mask>
-    </defs>
-
-    <!-- Grid lines populated dynamically by JS -->
-    <g stroke="currentColor" class="text-primary" fill="none" mask="url(#digital-analyzer-mask)"
-    ></g>
-  </svg>
-
-  <!-- Animated signal traces layer (viewBox and traces set dynamically by JS) -->
-  <svg
-    id="digital-analyzer-svg"
-    class="digital-analyzer-traces absolute inset-0 h-full w-full"
-    preserveAspectRatio="none"
-    style="pointer-events: none;"
-  >
-    <!-- Traces added dynamically via hook -->
-  </svg>
+    <!-- Animated signal traces layer (viewBox and traces set dynamically by JS) -->
+    <svg
+      id="digital-analyzer-svg"
+      class="digital-analyzer-traces absolute inset-0 h-full w-full"
+      preserveAspectRatio="none"
+      style="pointer-events: none;"
+    >
+      <!-- Traces added dynamically via hook -->
+    </svg>
+  </div>
 </div>

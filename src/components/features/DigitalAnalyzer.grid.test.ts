@@ -10,7 +10,6 @@ describe('GridManager', () => {
   let staticSvg!: SVGSVGElement
   let dynamicSvg!: SVGSVGElement
   let gridGroup!: SVGGElement
-  let maskRect!: SVGRectElement
   let config!: GridConfig
 
   beforeEach(() => {
@@ -21,15 +20,6 @@ describe('GridManager', () => {
     // Create grid group for static SVG
     gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     staticSvg.appendChild(gridGroup)
-
-    // Create mask structure
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs')
-    const mask = document.createElementNS('http://www.w3.org/2000/svg', 'mask')
-    mask.setAttribute('id', 'digital-analyzer-mask')
-    maskRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-    mask.appendChild(maskRect)
-    defs.appendChild(mask)
-    staticSvg.appendChild(defs)
 
     // Standard config
     config = {
@@ -100,16 +90,6 @@ describe('GridManager', () => {
 
       expect(staticSvg.getAttribute('viewBox')).toBe('0 0 1600 800')
       expect(dynamicSvg.getAttribute('viewBox')).toBe('0 0 1600 800')
-    })
-
-    it('should update mask rect size', () => {
-      const gridManager = new GridManager(staticSvg, dynamicSvg, config)
-      const rect = new DOMRect(0, 0, 1600, 800)
-
-      gridManager.updateDimensions(rect)
-
-      expect(maskRect.getAttribute('width')).toBe('1600')
-      expect(maskRect.getAttribute('height')).toBe('800')
     })
 
     it('should regenerate grid on first update', () => {
@@ -298,18 +278,6 @@ describe('GridManager', () => {
       expect(staticSvg.getAttribute('viewBox')).toBe('0 0 1605 805')
       expect(dynamicSvg.getAttribute('viewBox')).toBe('0 0 1605 805')
     })
-
-    it('should update mask rect even when not regenerating grid', () => {
-      const gridManager = new GridManager(staticSvg, dynamicSvg, config)
-
-      gridManager.updateDimensions(new DOMRect(0, 0, 1600, 800))
-
-      // Small width change - should update mask but not regenerate
-      gridManager.updateDimensions(new DOMRect(0, 0, 1605, 805))
-
-      expect(maskRect.getAttribute('width')).toBe('1605')
-      expect(maskRect.getAttribute('height')).toBe('805')
-    })
   })
 
   describe('getGridLines', () => {
@@ -392,18 +360,6 @@ describe('GridManager', () => {
     it('should handle missing grid group gracefully', () => {
       // Remove grid group
       gridGroup.remove()
-
-      const gridManager = new GridManager(staticSvg, dynamicSvg, config)
-
-      // Should not throw
-      expect(() => {
-        gridManager.updateDimensions(new DOMRect(0, 0, 1600, 800))
-      }).not.toThrow()
-    })
-
-    it('should handle missing mask rect gracefully', () => {
-      // Remove mask rect
-      maskRect.remove()
 
       const gridManager = new GridManager(staticSvg, dynamicSvg, config)
 

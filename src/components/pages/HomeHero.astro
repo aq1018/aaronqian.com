@@ -11,9 +11,14 @@ import Button from '@/components/primitives/Button.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Text from '@/components/primitives/Text.astro'
 import Stack from '@/components/primitives/Stack.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Overlay from '@/components/primitives/Overlay.astro'
 ---
 
-<DigitalAnalyzer class="flex min-h-[85vh] items-center justify-center">
+<Surface class="flex min-h-[85vh] items-center justify-center" padY="none">
+  <DigitalAnalyzer slot="background" />
+  <Overlay slot="background" preset="radial-fade" />
+
   <HeroContent eyebrow="Aaron Qian">
     <Stack slot="title">
       <Heading size="display-1" align="center" whitespace="nowrap">
@@ -96,7 +101,7 @@ import Stack from '@/components/primitives/Stack.astro'
       >
     </Text>
   </HeroContent>
-</DigitalAnalyzer>
+</Surface>
 
 <style>
   /* Cursor blink for ASCII display at 0.8 Hz (1.25s period) */
