@@ -19,7 +19,7 @@ interface Props {
 const { project, statusStyle, statusLabel } = Astro.props
 ---
 
-<Sheet as="li" variant="bar" color="neutral" padding="sm" hover>
+<Sheet as="li" variant="bar" color="primary" padding="sm" hover>
   <Grid spacing="md">
     <Grid size={{ xs: 12, md: 4 }}>
       <Link href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`} class="font-semibold">

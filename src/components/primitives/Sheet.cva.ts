@@ -93,7 +93,7 @@ export const sheetCva = cva(['overflow-hidden'], {
         variant: 'bar' as const,
         color,
         hover: true,
-        class: `border-l-${color}/30 hover:border-l-${color}`,
+        class: `border-l-neutral/30 hover:border-l-${color}`,
       },
       {
         variant: 'bar' as const,

@@ -146,7 +146,7 @@ describe('Sheet Component', () => {
       const result = sheetCva({ variant: 'bar', color: 'primary', hover: true })
       expect(result).toContain('bg-transparent')
       expect(result).toContain('border-l-2')
-      expect(result).toContain('border-l-primary/30')
+      expect(result).toContain('border-l-neutral/30')
       expect(result).toContain('hover:border-l-primary')
       expect(result).toContain('transition-colors')
     })
@@ -184,7 +184,7 @@ describe('Sheet Component', () => {
       colors.forEach((color) => {
         const result = sheetCva({ variant: 'bar', color, hover: true })
         expect(result).toContain('bg-transparent')
-        expect(result).toContain(`border-l-${color}/30`)
+        expect(result).toContain('border-l-neutral/30')
         expect(result).toContain(`hover:border-l-${color}`)
       })
     })
@@ -411,7 +411,7 @@ describe('Sheet Component', () => {
       // Bar: left border with opacity shift
       expect(bar).toContain('bg-transparent')
       expect(bar).toContain('border-l-2')
-      expect(bar).toContain('border-l-primary/30')
+      expect(bar).toContain('border-l-neutral/30')
       expect(bar).toContain('hover:border-l-primary')
 
       // All three should produce different class strings
