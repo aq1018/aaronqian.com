@@ -3,7 +3,7 @@ import { sheetCva, type SheetStyle } from './Sheet.cva'
 import { cn } from '@/lib/utils'
 
 export interface Props extends SheetStyle {
-  as?: 'div' | 'article' | 'section'
+  as?: 'div' | 'article' | 'section' | 'li'
   class?: string
   [key: string]: any // Allow any additional HTML attributes
 }

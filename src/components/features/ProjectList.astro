@@ -1,15 +1,16 @@
 ---
 /**
  * ProjectList - Reusable project listing component
- * Unified Sheet-based layout for all screen sizes
- * Used by both home page and projects index page
+ * Grid-based layout with column headers on desktop
+ * Semantic ul/li markup with Sheet styling
  */
 import type { CollectionEntry } from 'astro:content'
+import Grid from '@/components/primitives/Grid.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
 import Link from '@/components/primitives/Link.astro'
 import Badge from '@/components/primitives/Badge.astro'
-import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
+import Heading from '@/components/primitives/Heading.astro'
 
 interface Props {
   projects: CollectionEntry<'projects'>[]
@@ -22,47 +23,64 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
 ---
 
 <div>
-  <!-- Projects list - unified layout -->
-  <Stack space="sm">
+  <!-- Column headers - desktop only -->
+  <div class="mb-4 hidden md:block">
+    <Grid spacing="md" columns={12}>
+      <Grid size={4}>
+        <Heading level="h3" size="h6" class="uppercase tracking-wider"> Project </Heading>
+      </Grid>
+      <Grid size={2}>
+        <Heading level="h3" size="h6" class="text-right uppercase tracking-wider"> Status </Heading>
+      </Grid>
+      <Grid size={6}>
+        <Heading level="h3" size="h6" class="uppercase tracking-wider"> Description </Heading>
+      </Grid>
+    </Grid>
+  </div>
+
+  <!-- Projects list -->
+  <ul class="flex flex-col gap-3">
     {
       projects.map((project) => (
-        <Sheet
-          variant="bar"
-          color="neutral"
-          padding="sm"
-          hover
-          class="grid gap-3 md:grid-cols-[2fr_auto_3fr] md:gap-6"
-        >
-          <div>
-            <Link
-              href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
-              class="font-semibold"
-            >
-              {project.data.title}
-            </Link>
-          </div>
+        <Sheet as="li" variant="bar" color="neutral" padding="sm" hover>
+          <Grid spacing="md">
+            <Grid size={{ xs: 12, md: 4 }}>
+              <Link
+                href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`}
+                class="font-semibold"
+              >
+                {project.data.title}
+              </Link>
+            </Grid>
 
-          <div class="md:text-right">
-            <span class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}>
-              {statusLabels[project.data.status]}
-            </span>
-            {project.data.live && (
-              <Badge color="primary" pulse={true} class="ml-2">
-                LIVE
-              </Badge>
-            )}
-          </div>
+            <Grid size={{ xs: 12, md: 2 }} justifySelf={{ xs: 'start', md: 'end' }}>
+              <div>
+                <span
+                  class={`font-bold uppercase tracking-wider ${statusStyles[project.data.status]}`}
+                >
+                  {statusLabels[project.data.status]}
+                </span>
+                {project.data.live && (
+                  <Badge color="primary" pulse={true} class="ml-2">
+                    LIVE
+                  </Badge>
+                )}
+              </div>
+            </Grid>
 
-          <div>
-            <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
-            <Text size="xs" tone="muted" class="italic">
-              {project.data.aside}
-            </Text>
-          </div>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <div>
+                <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
+                <Text size="xs" tone="muted" class="italic">
+                  {project.data.aside}
+                </Text>
+              </div>
+            </Grid>
+          </Grid>
         </Sheet>
       ))
     }
-  </Stack>
+  </ul>
 
   <!-- Footer -->
   {

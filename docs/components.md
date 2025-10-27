@@ -170,7 +170,7 @@ pages/** - Page sections, uses primitives + features
 
 - Props: `variant` (outline \| soft \| bar), `color` (primary \| accent \|
   secondary \| neutral \| danger \| success \| warning \| info), `padding` (none
-  \| sm \| md \| lg), `hover` (boolean), `as` (div \| article \| section),
+  \| sm \| md \| lg), `hover` (boolean), `as` (div \| article \| section \| li),
   `class`
 - Use: Cards, panels, list items, alerts, any styled container
 - Example: `<Sheet variant="bar" color="neutral" padding="sm" hover>...</Sheet>`

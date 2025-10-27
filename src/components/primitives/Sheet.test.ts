@@ -370,10 +370,15 @@ describe('Sheet Component', () => {
       const soft = sheetCva({ variant: 'soft' })
       const bar = sheetCva({ variant: 'bar' })
 
+      // All variants should have overflow-hidden
       ;[outline, soft, bar].forEach((result) => {
         expect(result).toContain('overflow-hidden')
-        expect(result).toContain('rounded')
       })
+
+      // Only outline variant should have rounded
+      expect(outline).toContain('rounded')
+      expect(soft).not.toContain('rounded')
+      expect(bar).not.toContain('rounded')
     })
 
     it('should maintain consistent padding classes across variant types', () => {
