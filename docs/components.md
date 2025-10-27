@@ -61,15 +61,36 @@ import { Button } from '../../../components/ui/Button.astro'
 
 ```txt
 src/components/
-├── ui/              # Generic, reusable UI components
-│   └── hooks.ts     # UI hooks orchestrator
+├── primitives/      # Domain-agnostic primitives
+├── patterns/        # Domain-agnostic patterns (complex primitives)
 ├── features/        # Feature-specific components
 │   └── hooks.ts     # Feature hooks orchestrator
 ├── pages/           # Page-level components
 └── hooks.ts         # Main hooks orchestrator
 ```
 
-**Hierarchy:** `ui/` → `features/` → `pages/`
+**Hierarchy:** `primitives/` → `patterns/` → `features/` → `pages/`
+
+## 3-Layer Architecture (P1)
+
+**Layer 1: primitives/** - Domain-agnostic, interfaces with Tailwind
+
+- Simple: Button, Text, Badge, Stack, Inline
+- Complex: Grid, List, Card, Sheet
+
+**Layer 2: features/** - Domain-specific, uses primitives only **Layer 3:
+pages/** - Page sections, uses primitives + features
+
+**Rules:**
+
+- Primitives → Tailwind allowed
+- Features/Pages → Primitives only, semantic props
+- Ad-hoc classes in features/pages = missing primitive
+
+❌ `<Grid columns="2fr 140px 3fr">` (Tailwind pass-through) ✅
+`<Grid columns="3" gap="md">` (semantic)
+
+**Search:** `Grep: class=".*md:` in `features/pages/` for violations
 
 ## Primitive Components Catalog
 
@@ -125,6 +146,23 @@ src/components/
   \| xl \| none), `class`
 - Use: Visual separation between sections
 - Example: `<Divider spacing="md" />`
+
+**Grid** - CSS Grid layout with 12-column system and responsive sizing
+
+- Container Props: `columns` (1-12, default 12), `spacing` (none \| xs \| sm \|
+  md \| lg \| xl), `direction` (row \| column \| dense), `justify` (start \|
+  center \| end \| stretch), `align` (start \| center \| end \| stretch),
+  `class`
+- Item Props: `size` (1-12 \| auto \| grow \| responsive object), `offset` (1-12
+  \| responsive object), `justifySelf` (auto \| start \| center \| end \|
+  stretch), `alignSelf` (auto \| start \| center \| end \| stretch), `class`
+- Use: Grid layouts, card grids, responsive columns
+- Auto-detects: Container (no size) vs Item (has size)
+- Examples:
+  - Container: `<Grid spacing="md" columns={12}>...</Grid>`
+  - Simple item: `<Grid size={6}>Half width</Grid>`
+  - Responsive: `<Grid size={{ xs: 12, md: 6, lg: 4 }}>...</Grid>`
+  - With offset: `<Grid size={6} offset={3}>Centered</Grid>`
 
 ### Container Primitives
 

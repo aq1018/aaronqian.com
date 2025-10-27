@@ -1,0 +1,193 @@
+---
+import {
+  gridContainerCva,
+  gridItemCva,
+  type GridContainerStyle,
+  type GridItemStyle,
+} from './Grid.cva'
+import { cn } from '@/lib/utils'
+
+// Responsive size/offset type
+type ResponsiveValue = {
+  xs?: number | 'auto' | 'grow'
+  sm?: number | 'auto' | 'grow'
+  md?: number | 'auto' | 'grow'
+  lg?: number | 'auto' | 'grow'
+  xl?: number | 'auto' | 'grow'
+}
+
+type ResponsiveOffset = {
+  xs?: number
+  sm?: number
+  md?: number
+  lg?: number
+  xl?: number
+}
+
+interface BaseProps {
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+// Container props
+interface ContainerProps extends GridContainerStyle, BaseProps {
+  // Size props must not be present for container
+  size?: never
+  offset?: never
+  justifySelf?: never
+  alignSelf?: never
+}
+
+// Item props
+interface ItemProps extends GridItemStyle, BaseProps {
+  size?: number | 'auto' | 'grow' | ResponsiveValue
+  offset?: number | ResponsiveOffset
+  // Container props must not be present for item
+  columns?: never
+  spacing?: never
+  direction?: never
+  justify?: never
+  align?: never
+}
+
+export type Props = ContainerProps | ItemProps
+
+const props = Astro.props
+
+// Determine if this is a container or item
+const isItem = 'size' in props && props.size !== undefined
+
+/**
+ * Generate column span classes from size value
+ */
+function getSizeClasses(size: number | 'auto' | 'grow' | ResponsiveValue | undefined): string {
+  if (!size) return ''
+
+  if (typeof size === 'object') {
+    // Handle responsive object
+    const classes: string[] = []
+    const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+
+    breakpoints.forEach((bp) => {
+      const value = size[bp]
+      if (value !== undefined) {
+        const sizeClass = getSingleSizeClass(value)
+        if (bp === 'xs') {
+          // xs is the default (no prefix)
+          classes.push(sizeClass)
+        } else {
+          // Add breakpoint prefix
+          classes.push(`${bp}:${sizeClass}`)
+        }
+      }
+    })
+
+    return classes.join(' ')
+  }
+
+  // Handle simple value
+  return getSingleSizeClass(size)
+}
+
+/**
+ * Convert a single size value to Tailwind class
+ */
+function getSingleSizeClass(value: number | 'auto' | 'grow'): string {
+  if (value === 'auto') return 'col-auto'
+  if (value === 'grow') return 'col-span-full'
+  if (typeof value === 'number' && value >= 1 && value <= 12) {
+    return `col-span-${value}`
+  }
+  return ''
+}
+
+/**
+ * Generate offset classes from offset value
+ */
+function getOffsetClasses(offset: number | ResponsiveOffset | undefined): string {
+  if (!offset) return ''
+
+  if (typeof offset === 'object') {
+    // Handle responsive object
+    const classes: string[] = []
+    const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+
+    breakpoints.forEach((bp) => {
+      const value = offset[bp]
+      if (value !== undefined) {
+        const offsetClass = getSingleOffsetClass(value)
+        if (bp === 'xs') {
+          classes.push(offsetClass)
+        } else {
+          classes.push(`${bp}:${offsetClass}`)
+        }
+      }
+    })
+
+    return classes.join(' ')
+  }
+
+  // Handle simple value
+  return getSingleOffsetClass(offset)
+}
+
+/**
+ * Convert a single offset value to Tailwind class
+ */
+function getSingleOffsetClass(value: number): string {
+  if (typeof value === 'number' && value >= 1 && value <= 12) {
+    return `col-start-${value + 1}`
+  }
+  return ''
+}
+
+// Build classes based on mode
+let classes = ''
+
+let restProps = {}
+
+if (isItem) {
+  // Item mode
+  const {
+    size,
+    offset,
+    justifySelf,
+    alignSelf,
+    class: className = '',
+    ...rest
+  } = props as ItemProps
+
+  const sizeClasses = getSizeClasses(size)
+  const offsetClasses = getOffsetClasses(offset)
+  const itemVariantClasses = gridItemCva({ justifySelf, alignSelf })
+
+  classes = cn(itemVariantClasses, sizeClasses, offsetClasses, className)
+  restProps = rest
+} else {
+  // Container mode
+  const {
+    columns,
+    spacing,
+    direction,
+    justify,
+    align,
+    class: className = '',
+    ...rest
+  } = props as ContainerProps
+
+  const containerVariantClasses = gridContainerCva({
+    columns,
+    spacing,
+    direction,
+    justify,
+    align,
+  })
+
+  classes = cn(containerVariantClasses, className)
+  restProps = rest
+}
+---
+
+<div class={classes} {...restProps}>
+  <slot />
+</div>
