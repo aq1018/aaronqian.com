@@ -91,14 +91,29 @@ function getSizeClasses(size: number | 'auto' | 'grow' | ResponsiveValue | undef
 
 /**
  * Convert a single size value to Tailwind class
+ * Uses lookup object instead of string interpolation so Tailwind JIT can detect the classes
  */
 function getSingleSizeClass(value: number | 'auto' | 'grow'): string {
   if (value === 'auto') return 'col-auto'
   if (value === 'grow') return 'col-span-full'
-  if (typeof value === 'number' && value >= 1 && value <= 12) {
-    return `col-span-${value}`
+
+  // Hardcoded class names so Tailwind's scanner can find them
+  const sizeMap: Record<number, string> = {
+    1: 'col-span-1',
+    2: 'col-span-2',
+    3: 'col-span-3',
+    4: 'col-span-4',
+    5: 'col-span-5',
+    6: 'col-span-6',
+    7: 'col-span-7',
+    8: 'col-span-8',
+    9: 'col-span-9',
+    10: 'col-span-10',
+    11: 'col-span-11',
+    12: 'col-span-12',
   }
-  return ''
+
+  return sizeMap[value as number] || ''
 }
 
 /**
@@ -133,12 +148,26 @@ function getOffsetClasses(offset: number | ResponsiveOffset | undefined): string
 
 /**
  * Convert a single offset value to Tailwind class
+ * Uses lookup object instead of string interpolation so Tailwind JIT can detect the classes
  */
 function getSingleOffsetClass(value: number): string {
-  if (typeof value === 'number' && value >= 1 && value <= 12) {
-    return `col-start-${value + 1}`
+  // Hardcoded class names so Tailwind's scanner can find them
+  const offsetMap: Record<number, string> = {
+    1: 'col-start-2',
+    2: 'col-start-3',
+    3: 'col-start-4',
+    4: 'col-start-5',
+    5: 'col-start-6',
+    6: 'col-start-7',
+    7: 'col-start-8',
+    8: 'col-start-9',
+    9: 'col-start-10',
+    10: 'col-start-11',
+    11: 'col-start-12',
+    12: 'col-start-13',
   }
-  return ''
+
+  return offsetMap[value] || ''
 }
 
 // Build classes based on mode
