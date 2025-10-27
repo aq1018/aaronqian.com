@@ -1,0 +1,24 @@
+---
+import { navBarCva, type NavBarStyle } from './NavBar.cva'
+import { cn } from '@/lib/utils'
+
+export interface Props extends NavBarStyle {
+  as?: 'nav' | 'div' | 'header'
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const {
+  position,
+  placement,
+  border,
+  backdrop,
+  as: Element = 'nav',
+  class: className = '',
+  ...rest
+} = Astro.props
+---
+
+<Element class={cn(navBarCva({ position, placement, border, backdrop }), className)} {...rest}>
+  <slot />
+</Element>

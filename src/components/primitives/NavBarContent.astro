@@ -1,0 +1,16 @@
+---
+import { navBarContentCva, type NavBarContentStyle } from './NavBarContent.cva'
+import { cn } from '@/lib/utils'
+
+export interface Props extends NavBarContentStyle {
+  as?: 'div'
+  class?: string
+  [key: string]: any // Allow any additional HTML attributes
+}
+
+const { height, as: Element = 'div', class: className = '', ...rest } = Astro.props
+---
+
+<Element class={cn(navBarContentCva({ height }), className)} {...rest}>
+  <slot />
+</Element>

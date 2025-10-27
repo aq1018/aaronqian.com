@@ -1,5 +1,7 @@
 ---
 import ThemeToggle from './ThemeToggle.astro'
+import NavBar from '@/components/primitives/NavBar.astro'
+import NavBarContent from '@/components/primitives/NavBarContent.astro'
 import Link from '@/components/primitives/Link.astro'
 import Container from '@/components/primitives/Container.astro'
 import Stack from '@/components/primitives/Stack.astro'
@@ -8,18 +10,16 @@ import Icon from '@/components/primitives/Icon.astro'
 const currentPath = Astro.url.pathname
 ---
 
-<nav class="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
+<NavBar position="sticky" border="bottom" backdrop>
   <Container size="wide">
-    <div class="flex h-16 items-center justify-between">
+    <NavBarContent>
       <!-- Home Icon (Left) -->
-      <div class="flex items-center">
-        <Link variant="nav" href="/" active={currentPath === '/'} aria-label="Home">
-          <Icon name="heroicons:home-solid" size="md" />
-        </Link>
-      </div>
+      <Link variant="nav" href="/" active={currentPath === '/'} aria-label="Home">
+        <Icon name="heroicons:home-solid" size="md" />
+      </Link>
 
       <!-- Nav Links (Right) -->
-      <Stack direction="row" space="sm">
+      <Stack direction="row" space="sm" align="center">
         <Link
           variant="nav"
           href="/projects"
@@ -39,6 +39,6 @@ const currentPath = Astro.url.pathname
         <!-- Theme Toggle -->
         <ThemeToggle />
       </Stack>
-    </div>
+    </NavBarContent>
   </Container>
-</nav>
+</NavBar>
