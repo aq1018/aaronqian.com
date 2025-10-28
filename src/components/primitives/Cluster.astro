@@ -1,10 +1,12 @@
 ---
-import { clusterCva, type ClusterStyle } from './Cluster.cva'
+import type { HTMLAttributes } from 'astro/types'
+
+import { type ClusterStyle, clusterCva } from './Cluster.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends ClusterStyle {
+export interface Props extends HTMLAttributes<'span'>, ClusterStyle {
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
 const { space, align, class: className = '', ...rest } = Astro.props

@@ -1,10 +1,14 @@
 ---
-import { headingVariants, type HeadingStyle } from './typography.cva'
+import type { HTMLAttributes } from 'astro/types'
+
+import { type HeadingStyle, headingVariants } from './typography.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends HeadingStyle {
+// h1-h6 have identical HTML attributes, so we use h1 as the base
+// HTMLAttributes first, then HeadingStyle overrides (including 'color')
+export interface Props extends Omit<HTMLAttributes<'h1'>, 'color'>, HeadingStyle {
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
 const {

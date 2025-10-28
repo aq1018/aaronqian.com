@@ -1,15 +1,21 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
 import { Icon as AstroIcon } from 'astro-icon/components'
-import { iconVariants, type IconVariants } from './Icon.cva'
+
+import { type IconVariants, iconVariants } from './Icon.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends IconVariants {
+// HTMLAttributes first, then IconVariants overrides
+export interface Props extends HTMLAttributes<'svg'>, IconVariants {
   name: string
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
 const { name, size, class: className = '', ...rest } = Astro.props
+
+// Filter out null values from rest props (AstroIcon doesn't accept null)
+const filteredRest = Object.fromEntries(Object.entries(rest).filter((entry) => entry[1] !== null))
 ---
 
-<AstroIcon {name} class={cn(iconVariants({ size }), className)} {...rest} />
+<AstroIcon {name} class={cn(iconVariants({ size }), className)} {...filteredRest} />

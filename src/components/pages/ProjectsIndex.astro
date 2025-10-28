@@ -1,14 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content'
+
 import CuttingMat from '@/components/features/CuttingMat.astro'
-import HeroContent from '@/components/patterns/HeroContent.astro'
 import ProjectList from '@/components/features/ProjectList.astro'
-import Surface from '@/components/primitives/Surface.astro'
+import HeroContent from '@/components/patterns/HeroContent.astro'
 import Container from '@/components/primitives/Container.astro'
+import Surface from '@/components/primitives/Surface.astro'
 import Text from '@/components/primitives/Text.astro'
 
-interface Props {
-  projects: CollectionEntry<'projects'>[]
+export interface Props {
+  projects: Array<CollectionEntry<'projects'>>
   statusStyles: Record<string, string>
   statusLabels: Record<string, string>
 }

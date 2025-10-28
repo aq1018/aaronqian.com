@@ -1,36 +1,38 @@
 ---
+import type { HTMLAttributes } from 'astro/types'
+
 import {
-  gridContainerCva,
-  gridItemCva,
   type GridContainerStyle,
   type GridItemStyle,
+  gridContainerCva,
+  gridItemCva,
 } from './Grid.cva'
-import {
-  getSizeClasses,
-  getOffsetClasses,
-  type ResponsiveValue,
-  type ResponsiveOffset,
-} from './Grid.utils'
+
 import { cn } from '@/lib/utils'
 
-interface BaseProps {
+interface BaseProps extends HTMLAttributes<'div'> {
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
-// Container props
-interface ContainerProps extends GridContainerStyle, BaseProps {
+// Container props - HTMLAttributes first, then GridContainerStyle overrides
+interface ContainerProps extends BaseProps, GridContainerStyle {
   // Size props must not be present for container
   size?: never
+  'size-sm'?: never
+  'size-md'?: never
+  'size-lg'?: never
+  'size-xl'?: never
   offset?: never
+  'offset-sm'?: never
+  'offset-md'?: never
+  'offset-lg'?: never
+  'offset-xl'?: never
   justifySelf?: never
   alignSelf?: never
 }
 
-// Item props
-interface ItemProps extends GridItemStyle, BaseProps {
-  size?: number | 'auto' | 'grow' | ResponsiveValue
-  offset?: number | ResponsiveOffset
+// Item props - HTMLAttributes first, then GridItemStyle overrides
+interface ItemProps extends BaseProps, GridItemStyle {
   // Container props must not be present for item
   columns?: never
   spacing?: never
@@ -43,42 +45,54 @@ export type Props = ContainerProps | ItemProps
 
 const props = Astro.props
 
-// Determine if this is a container or item
-const isItem = 'size' in props && props.size !== undefined
+// Type guard to check if props are ItemProps
+function isItemProps(p: ContainerProps | ItemProps): p is ItemProps {
+  return 'size' in p && p.size !== undefined
+}
 
 // Build classes based on mode
 let classes = ''
-
 let restProps = {}
 
-if (isItem) {
+if (isItemProps(props)) {
   // Item mode
   const {
     size,
+    'size-sm': sizeSm,
+    'size-md': sizeMd,
+    'size-lg': sizeLg,
+    'size-xl': sizeXl,
     offset,
+    'offset-sm': offsetSm,
+    'offset-md': offsetMd,
+    'offset-lg': offsetLg,
+    'offset-xl': offsetXl,
     justifySelf,
     alignSelf,
     class: className = '',
     ...rest
-  } = props as ItemProps
+  } = props
 
-  const sizeClasses = getSizeClasses(size)
-  const offsetClasses = getOffsetClasses(offset)
-  const itemVariantClasses = gridItemCva({ justifySelf, alignSelf })
+  const itemVariantClasses = gridItemCva({
+    size,
+    'size-sm': sizeSm,
+    'size-md': sizeMd,
+    'size-lg': sizeLg,
+    'size-xl': sizeXl,
+    offset,
+    'offset-sm': offsetSm,
+    'offset-md': offsetMd,
+    'offset-lg': offsetLg,
+    'offset-xl': offsetXl,
+    justifySelf,
+    alignSelf,
+  })
 
-  classes = cn(itemVariantClasses, sizeClasses, offsetClasses, className)
+  classes = cn(itemVariantClasses, className)
   restProps = rest
 } else {
-  // Container mode
-  const {
-    columns,
-    spacing,
-    direction,
-    justify,
-    align,
-    class: className = '',
-    ...rest
-  } = props as ContainerProps
+  // Container mode - TypeScript now knows props is ContainerProps
+  const { columns, spacing, direction, justify, align, class: className = '', ...rest } = props
 
   const containerVariantClasses = gridContainerCva({
     columns,

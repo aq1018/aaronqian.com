@@ -1,20 +1,21 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import Sheet from '@/components/primitives/Sheet.astro'
-import Badge from '@/components/primitives/Badge.astro'
+
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
-import Surface from '@/components/primitives/Surface.astro'
+import Badge from '@/components/primitives/Badge.astro'
+import ButtonLink from '@/components/primitives/ButtonLink.astro'
 import Container from '@/components/primitives/Container.astro'
-import Stack from '@/components/primitives/Stack.astro'
 import Divider from '@/components/primitives/Divider.astro'
-import Link from '@/components/primitives/Link.astro'
-import Button from '@/components/primitives/Button.astro'
 import Heading from '@/components/primitives/Heading.astro'
+import Link from '@/components/primitives/Link.astro'
+import Sheet from '@/components/primitives/Sheet.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Surface from '@/components/primitives/Surface.astro'
 import Text from '@/components/primitives/Text.astro'
 
-interface Props {
+export interface Props {
   project: CollectionEntry<'projects'>
-  projectLogs: CollectionEntry<'projectLogs'>[]
+  projectLogs: Array<CollectionEntry<'projectLogs'>>
   statusStyles: Record<string, string>
   statusLabels: Record<string, string>
 }
@@ -45,7 +46,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         </Link>
 
         <!-- Title and status -->
-        <Stack direction="row" space="sm" wrap align="baseline">
+        <Stack direction="row" space="sm" class="flex-wrap" align="baseline">
           <Heading size="h1" class="text-3xl sm:text-4xl">
             {project.data.title}
           </Heading>
@@ -67,15 +68,15 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
         </Text>
 
         <!-- Aside (witty comment) -->
-        <Text size="sm" color="muted" class="italic">
+        <Text size="small" color="muted" class="italic">
           {project.data.aside}
         </Text>
 
         <!-- External link if available -->
         {
-          project.data.url && (
+          project.data.url !== undefined && project.data.url !== '' && (
             <div class="mt-6">
-              <Button href={project.data.url} external color="primary" class="text-sm">
+              <ButtonLink href={project.data.url} external color="primary" class="text-sm">
                 <span>Visit Site</span>
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -85,7 +86,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
                     d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                   />
                 </svg>
-              </Button>
+              </ButtonLink>
             </div>
           )
         }

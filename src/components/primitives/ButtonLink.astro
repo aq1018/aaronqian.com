@@ -1,11 +1,11 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-import { type LinkVariants, linkVariants } from './Link.cva'
+import { type ButtonVariants, buttonVariants } from './Button.cva'
 
 import { cn } from '@/lib/utils'
 
-export interface Props extends HTMLAttributes<'a'>, LinkVariants {
+export interface Props extends Omit<HTMLAttributes<'a'>, 'color'>, ButtonVariants {
   href: string
   external?: boolean
   target?: string
@@ -13,7 +13,18 @@ export interface Props extends HTMLAttributes<'a'>, LinkVariants {
   class?: string
 }
 
-const { variant, active, href, external, target, rel, class: className, ...rest } = Astro.props
+const {
+  variant,
+  color,
+  size,
+  fullWidth,
+  class: className = '',
+  href,
+  external,
+  target,
+  rel,
+  ...rest
+} = Astro.props
 
 // Auto-detect external links
 const isExternal =
@@ -28,7 +39,7 @@ const linkRel = rel ?? (isExternal ? 'noopener noreferrer' : undefined)
   {href}
   target={linkTarget}
   rel={linkRel}
-  class={cn(linkVariants({ variant, active }), className)}
+  class={cn(buttonVariants({ variant, color, size, fullWidth }), className)}
   {...rest}
 >
   <slot />

@@ -4,19 +4,20 @@
  * Provides standardized styling for hero sections across the site
  * Supports both props (simple) and slots (complex) for maximum flexibility
  */
-import { cn } from '@/lib/utils'
-import Container from '@/components/primitives/Container.astro'
-import Text from '@/components/primitives/Text.astro'
-import Heading from '@/components/primitives/Heading.astro'
 import Stack from '../primitives/Stack.astro'
 
-interface Props {
+import Container from '@/components/primitives/Container.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Text from '@/components/primitives/Text.astro'
+import { cn } from '@/lib/utils'
+
+export interface Props {
   eyebrow?: string
   title?: string
   description?: string
   microLine?: string
   centered?: boolean
-  size?: 'narrow' | 'default' | 'wide'
+  width?: 'narrow' | 'default' | 'wide'
   class?: string
 }
 
@@ -26,7 +27,7 @@ const {
   description,
   microLine,
   centered = true,
-  size = 'default',
+  width = 'default',
   class: className,
 } = Astro.props
 
@@ -37,11 +38,11 @@ const hasDescriptionSlot = Astro.slots.has('description')
 const hasMicroLineSlot = Astro.slots.has('microLine')
 ---
 
-<Container {size} class={cn('relative z-10 py-16', centered && 'text-center', className)}>
+<Container {width} class={cn('relative z-10 py-16', centered && 'text-center', className)}>
   <Stack space="lg">
     <!-- Eyebrow: slot takes precedence over prop -->
     {
-      (hasEyebrowSlot || eyebrow) &&
+      (hasEyebrowSlot || (eyebrow !== undefined && eyebrow !== '')) &&
         (hasEyebrowSlot ? (
           <slot name="eyebrow" />
         ) : (
@@ -58,7 +59,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
 
     <!-- Title: slot takes precedence over prop -->
     {
-      (hasTitleSlot || title) &&
+      (hasTitleSlot || (title !== undefined && title !== '')) &&
         (hasTitleSlot ? (
           <slot name="title" />
         ) : (
@@ -70,7 +71,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
 
     <!-- Description: slot takes precedence over prop -->
     {
-      (hasDescriptionSlot || description) &&
+      (hasDescriptionSlot || (description !== undefined && description !== '')) &&
         (hasDescriptionSlot ? (
           <slot name="description" />
         ) : (
@@ -86,7 +87,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
     <!-- Micro-line: slot takes precedence over prop - appears AFTER default slot -->
     <!-- Note: Use mt-4 when no default slot content, mt-8 when there are CTAs -->
     {
-      (hasMicroLineSlot || microLine) &&
+      (hasMicroLineSlot || (microLine !== undefined && microLine !== '')) &&
         (hasMicroLineSlot ? (
           <slot name="microLine" />
         ) : (

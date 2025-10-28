@@ -1,8 +1,9 @@
-import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it } from 'vitest'
 
 import ProjectListItem from './ProjectListItem.astro'
+
+import { renderAstroComponent } from '@test/testHelpers'
 
 describe('ProjectListItem Component', () => {
   const mockProject: CollectionEntry<'projects'> = {
@@ -21,8 +22,7 @@ describe('ProjectListItem Component', () => {
 
   describe('Rendering', () => {
     it('should render as a list item (li)', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -30,12 +30,11 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('<li')
+      expect(root.innerHTML).toContain('<li')
     })
 
     it('should render project title as a link', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -43,13 +42,12 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('Test Project')
-      expect(result).toContain('/projects/test-project')
+      expect(root.innerHTML).toContain('Test Project')
+      expect(root.innerHTML).toContain('/projects/test-project')
     })
 
     it('should strip /index.md from project URL', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: { ...mockProject, id: 'another-project/index.md' },
           statusStyle: 'text-green-500',
@@ -57,13 +55,12 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('/projects/another-project')
-      expect(result).not.toContain('/projects/another-project/index')
+      expect(root.innerHTML).toContain('/projects/another-project')
+      expect(root.innerHTML).not.toContain('/projects/another-project/index')
     })
 
     it('should render status with correct style', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-blue-500',
@@ -71,13 +68,12 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('In Progress')
-      expect(result).toContain('text-blue-500')
+      expect(root.innerHTML).toContain('In Progress')
+      expect(root.innerHTML).toContain('text-blue-500')
     })
 
     it('should render project description', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -85,12 +81,11 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('A test project description')
+      expect(root.innerHTML).toContain('A test project description')
     })
 
     it('should render aside text', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -98,19 +93,18 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('Additional context')
+      expect(root.innerHTML).toContain('Additional context')
     })
   })
 
   describe('Live Badge', () => {
     it('should render LIVE badge when project is live', async () => {
-      const container = await AstroContainer.create()
       const liveProject = {
         ...mockProject,
         data: { ...mockProject.data, live: true },
       }
 
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: liveProject,
           statusStyle: 'text-green-500',
@@ -118,12 +112,11 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('LIVE')
+      expect(root.innerHTML).toContain('LIVE')
     })
 
     it('should not render LIVE badge when project is not live', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -131,14 +124,13 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).not.toContain('LIVE')
+      expect(root.innerHTML).not.toContain('LIVE')
     })
   })
 
   describe('Layout', () => {
     it('should use Sheet with bar variant', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -147,13 +139,12 @@ describe('ProjectListItem Component', () => {
       })
 
       // Sheet with bar variant has border-l-2 and bg-transparent
-      expect(result).toContain('border-l-2')
-      expect(result).toContain('bg-transparent')
+      expect(root.innerHTML).toContain('border-l-2')
+      expect(root.innerHTML).toContain('bg-transparent')
     })
 
     it('should have hover effect on Sheet', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -161,12 +152,11 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('transition-colors')
+      expect(root.innerHTML).toContain('transition-colors')
     })
 
     it('should use Grid layout with 12-column system', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -175,15 +165,14 @@ describe('ProjectListItem Component', () => {
       })
 
       // Should have grid container
-      expect(result).toContain('grid')
+      expect(root.innerHTML).toContain('grid')
       // Should have responsive column spans
-      expect(result).toContain('col-span-12')
-      expect(result).toContain('md:col-span-4')
+      expect(root.innerHTML).toContain('col-span-12')
+      expect(root.innerHTML).toContain('md:col-span-4')
     })
 
     it('should align status column to the right on desktop', async () => {
-      const container = await AstroContainer.create()
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
           statusStyle: 'text-green-500',
@@ -191,20 +180,19 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('md:justify-self-end')
-      expect(result).toContain('md:items-end')
+      expect(root.innerHTML).toContain('md:justify-self-end')
+      expect(root.innerHTML).toContain('md:items-end')
     })
   })
 
   describe('Different Project Statuses', () => {
     it('should render completed status', async () => {
-      const container = await AstroContainer.create()
       const completedProject = {
         ...mockProject,
         data: { ...mockProject.data, status: 'completed' },
       }
 
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: completedProject,
           statusStyle: 'text-gray-500',
@@ -212,18 +200,17 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('Completed')
-      expect(result).toContain('text-gray-500')
+      expect(root.innerHTML).toContain('Completed')
+      expect(root.innerHTML).toContain('text-gray-500')
     })
 
     it('should render paused status', async () => {
-      const container = await AstroContainer.create()
       const pausedProject = {
         ...mockProject,
         data: { ...mockProject.data, status: 'paused' },
       }
 
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: pausedProject,
           statusStyle: 'text-yellow-500',
@@ -231,18 +218,17 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('Paused')
-      expect(result).toContain('text-yellow-500')
+      expect(root.innerHTML).toContain('Paused')
+      expect(root.innerHTML).toContain('text-yellow-500')
     })
 
     it('should render archived status', async () => {
-      const container = await AstroContainer.create()
       const archivedProject = {
         ...mockProject,
         data: { ...mockProject.data, status: 'archived' },
       }
 
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: archivedProject,
           statusStyle: 'text-gray-400',
@@ -250,20 +236,19 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('Archived')
-      expect(result).toContain('text-gray-400')
+      expect(root.innerHTML).toContain('Archived')
+      expect(root.innerHTML).toContain('text-gray-400')
     })
   })
 
   describe('Edge Cases', () => {
     it('should handle project with empty aside', async () => {
-      const container = await AstroContainer.create()
       const projectWithoutAside = {
         ...mockProject,
         data: { ...mockProject.data, aside: '' },
       }
 
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: projectWithoutAside,
           statusStyle: 'text-green-500',
@@ -271,12 +256,11 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain('Test Project')
-      expect(result).not.toContain('Additional context')
+      expect(root.innerHTML).toContain('Test Project')
+      expect(root.innerHTML).not.toContain('Additional context')
     })
 
     it('should handle long project titles', async () => {
-      const container = await AstroContainer.create()
       const longTitleProject = {
         ...mockProject,
         data: {
@@ -285,7 +269,7 @@ describe('ProjectListItem Component', () => {
         },
       }
 
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: longTitleProject,
           statusStyle: 'text-green-500',
@@ -293,13 +277,12 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain(
+      expect(root.innerHTML).toContain(
         'This is a Very Long Project Title That Should Still Render Correctly',
       )
     })
 
     it('should handle long descriptions', async () => {
-      const container = await AstroContainer.create()
       const longDescProject = {
         ...mockProject,
         data: {
@@ -309,7 +292,7 @@ describe('ProjectListItem Component', () => {
         },
       }
 
-      const result = await container.renderToString(ProjectListItem, {
+      const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: longDescProject,
           statusStyle: 'text-green-500',
@@ -317,7 +300,7 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(result).toContain(
+      expect(root.innerHTML).toContain(
         'This is a very long description that goes into great detail about all the features',
       )
     })

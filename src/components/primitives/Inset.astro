@@ -1,10 +1,12 @@
 ---
-import { insetCva, type InsetStyle } from './Inset.cva'
+import type { HTMLAttributes } from 'astro/types'
+
+import { type InsetStyle, insetCva } from './Inset.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends InsetStyle {
+export interface Props extends HTMLAttributes<'div'>, InsetStyle {
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
 const { space, squish, class: className = '', ...rest } = Astro.props

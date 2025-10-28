@@ -1,10 +1,12 @@
 ---
-import { dividerCva, type DividerStyle } from './Divider.cva'
+import type { HTMLAttributes } from 'astro/types'
+
+import { type DividerStyle, dividerCva } from './Divider.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends DividerStyle {
+export interface Props extends HTMLAttributes<'div'>, DividerStyle {
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
 const { orientation, weight, class: className = '', ...rest } = Astro.props

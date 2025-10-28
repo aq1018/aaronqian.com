@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom/vitest'
-import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it } from 'vitest'
 
 import ProjectList from './ProjectList.astro'
+
+import { renderAstroComponent } from '@test/testHelpers'
 
 // Mock project data
 const createMockProject = (
@@ -40,26 +41,15 @@ const defaultStatusLabels = {
 }
 
 describe('ProjectList', () => {
-  const renderComponent = async (props: {
-    projects: Array<CollectionEntry<'projects'>>
-    statusStyles: Record<string, string>
-    statusLabels: Record<string, string>
-    showFooter?: boolean
-  }) => {
-    const container = await AstroContainer.create()
-    const result = await container.renderToString(ProjectList, { props })
-    const div = document.createElement('div')
-    div.innerHTML = result
-    return div
-  }
-
   describe('Project rendering', () => {
     it('should render project title as link', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       // Find the project link (skip header links)
@@ -73,10 +63,12 @@ describe('ProjectList', () => {
 
     it('should render project status with correct style', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('ACTIVE')
@@ -85,10 +77,12 @@ describe('ProjectList', () => {
 
     it('should render project description and aside', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('Description for Project A')
@@ -101,10 +95,12 @@ describe('ProjectList', () => {
         createMockProject('project-b/index.md', 'Project B', 'planning'),
         createMockProject('project-c/index.md', 'Project C', 'done'),
       ]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       // Check for ul element
@@ -120,10 +116,12 @@ describe('ProjectList', () => {
   describe('Live badge', () => {
     it('should render LIVE badge for live projects', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active', true)]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('LIVE')
@@ -131,10 +129,12 @@ describe('ProjectList', () => {
 
     it('should not render LIVE badge for non-live projects', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active', false)]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       // Count occurrences of 'LIVE' - should only appear in status if at all
@@ -148,10 +148,12 @@ describe('ProjectList', () => {
   describe('Status labels and styles', () => {
     it('should apply correct status label for active projects', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('ACTIVE')
@@ -159,10 +161,12 @@ describe('ProjectList', () => {
 
     it('should apply correct status label for planning projects', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'planning')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('PLANNING')
@@ -170,10 +174,12 @@ describe('ProjectList', () => {
 
     it('should apply correct status label for done projects', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'done')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('DONE')
@@ -181,10 +187,12 @@ describe('ProjectList', () => {
 
     it('should apply correct status style class', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       const statusSpan = root.querySelector('span')
@@ -195,10 +203,12 @@ describe('ProjectList', () => {
   describe('Footer', () => {
     it('should render footer by default', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('Updates monthly. Expect context switches.')
@@ -206,11 +216,13 @@ describe('ProjectList', () => {
 
     it('should render footer when showFooter=true', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
-        showFooter: true,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+          showFooter: true,
+        },
       })
 
       expect(root.textContent).toContain('Updates monthly. Expect context switches.')
@@ -218,11 +230,13 @@ describe('ProjectList', () => {
 
     it('should not render footer when showFooter=false', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
-        showFooter: false,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+          showFooter: false,
+        },
       })
 
       expect(root.textContent).not.toContain('Updates monthly. Expect context switches.')
@@ -231,20 +245,24 @@ describe('ProjectList', () => {
 
   describe('Empty state', () => {
     it('should render without projects', async () => {
-      const root = await renderComponent({
-        projects: [],
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects: [],
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root).toBeTruthy()
     })
 
     it('should have no project links when projects array is empty', async () => {
-      const root = await renderComponent({
-        projects: [],
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects: [],
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       const links = root.querySelectorAll('a')
@@ -259,10 +277,12 @@ describe('ProjectList', () => {
         createMockProject('project-b/index', 'Project B', 'planning'),
         createMockProject('project-c', 'Project C', 'done'),
       ]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       // Find project links by title text
@@ -288,10 +308,12 @@ describe('ProjectList', () => {
   describe('Column headers', () => {
     it('should render column headers', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       expect(root.textContent).toContain('Project')
@@ -301,10 +323,12 @@ describe('ProjectList', () => {
 
     it('should render column headers in a hidden container on mobile', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       // Check for hidden container with md:grid class
@@ -315,10 +339,12 @@ describe('ProjectList', () => {
   describe('Semantic markup', () => {
     it('should use ul element for project list', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       const ul = root.querySelector('ul')
@@ -330,10 +356,12 @@ describe('ProjectList', () => {
         createMockProject('project-a/index.md', 'Project A', 'active'),
         createMockProject('project-b/index.md', 'Project B', 'planning'),
       ]
-      const root = await renderComponent({
-        projects,
-        statusStyles: defaultStatusStyles,
-        statusLabels: defaultStatusLabels,
+      const root = await renderAstroComponent(ProjectList, {
+        props: {
+          projects,
+          statusStyles: defaultStatusStyles,
+          statusLabels: defaultStatusLabels,
+        },
       })
 
       const listItems = root.querySelectorAll('li')

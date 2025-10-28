@@ -1,10 +1,12 @@
 ---
-import { bleedCva, type BleedStyle } from './Bleed.cva'
+import type { HTMLAttributes } from 'astro/types'
+
+import { type BleedStyle, bleedCva } from './Bleed.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends BleedStyle {
+export interface Props extends HTMLAttributes<'div'>, BleedStyle {
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
 const { size, class: className = '', ...rest } = Astro.props

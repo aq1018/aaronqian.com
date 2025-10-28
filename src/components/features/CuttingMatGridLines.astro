@@ -3,7 +3,7 @@
  * Creates horizontal and vertical grid lines
  */
 
-interface Props {
+export interface Props {
   width: number
   height: number
   majorLineInterval: number
@@ -50,8 +50,7 @@ for (let offset = minorInterval; offset < height; offset += minorInterval) {
 }
 ---
 
-{
-  /* Vertical lines */
+<!-- Vertical lines -->{
   verticalLines.map(({ x, isMajor }) => (
     <line
       x1={x}
@@ -64,8 +63,8 @@ for (let offset = minorInterval; offset < height; offset += minorInterval) {
   ))
 }
 
+<!-- Horizontal lines -->
 {
-  /* Horizontal lines */
   horizontalLines.map(({ y, isMajor }) => (
     <line
       x1="0"

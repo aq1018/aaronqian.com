@@ -5,14 +5,16 @@
  * Semantic ul/li markup with Sheet styling
  */
 import type { CollectionEntry } from 'astro:content'
-import Grid from '@/components/primitives/Grid.astro'
-import Text from '@/components/primitives/Text.astro'
-import Heading from '@/components/primitives/Heading.astro'
-import Stack from '@/components/primitives/Stack.astro'
+
 import ProjectListItem from './ProjectListItem.astro'
 
-interface Props {
-  projects: CollectionEntry<'projects'>[]
+import Grid from '@/components/primitives/Grid.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Text from '@/components/primitives/Text.astro'
+
+export interface Props {
+  projects: Array<CollectionEntry<'projects'>>
   statusStyles: Record<string, string>
   statusLabels: Record<string, string>
   showFooter?: boolean
@@ -24,13 +26,13 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
 <Stack>
   <Grid spacing="md" class="hidden md:grid">
     <Grid size={4}>
-      <Heading level="h3" size="h6" class="uppercase tracking-wider"> Project </Heading>
+      <Heading size="h6" class="tracking-wider uppercase"> Project </Heading>
     </Grid>
     <Grid size={2}>
-      <Heading level="h3" size="h6" class="text-right uppercase tracking-wider"> Status </Heading>
+      <Heading size="h6" class="text-right tracking-wider uppercase"> Status </Heading>
     </Grid>
     <Grid size={6}>
-      <Heading level="h3" size="h6" class="uppercase tracking-wider"> Description </Heading>
+      <Heading size="h6" class="tracking-wider uppercase"> Description </Heading>
     </Grid>
   </Grid>
 

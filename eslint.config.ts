@@ -5,8 +5,6 @@ import vitest from '@vitest/eslint-plugin'
 import type { Linter } from 'eslint'
 import love from 'eslint-config-love'
 import eslintPluginAstro from 'eslint-plugin-astro'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
-import react from 'eslint-plugin-react'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
@@ -14,7 +12,6 @@ import tseslint from 'typescript-eslint'
 // File Pattern Constants
 // ============================================================================
 const TS_JS_FILES = ['**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}']
-const REACT_FILES = ['**/*.{jsx,tsx}']
 const ASTRO_FILES = ['**/*.astro']
 const TEST_FILES = ['**/*.{test,spec}.{ts,tsx}']
 const CSS_FILES = ['**/*.css']
@@ -36,6 +33,52 @@ const scopeConfigs = (configs: Linter.Config[], files: string[]): Linter.Config[
   }))
 
 // ============================================================================
+// Shared TypeScript Configuration
+// Used for both .ts/.tsx and .astro files
+// ============================================================================
+
+const sharedTypeScriptPlugins = {
+  ...love.plugins,
+  '@typescript-eslint': tseslint.plugin,
+}
+
+const sharedTypeScriptSettings = {
+  'import/resolver': {
+    typescript: {
+      alwaysTryTypes: true,
+      project: '.',
+    },
+  },
+}
+
+const sharedImportRules = {
+  'sort-imports': ['error', { ignoreDeclarationSort: true }],
+  'import/no-unresolved': ['error', { ignore: ['^astro:'] }],
+  'import/no-cycle': 'error',
+  'import/order': [
+    'error',
+    {
+      'newlines-between': 'always',
+      alphabetize: {
+        order: 'asc',
+      },
+    },
+  ],
+} satisfies Linter.Config['rules']
+
+const sharedTypeScriptOverrides = {
+  'max-lines': ['error', { max: 200, skipComments: true, skipBlankLines: true }],
+  'no-console': 'off',
+  complexity: 'off',
+  '@typescript-eslint/explicit-function-return-type': 'off',
+  '@typescript-eslint/no-magic-numbers': 'off',
+  '@typescript-eslint/no-empty-function': 'off',
+  '@typescript-eslint/prefer-destructuring': 'off',
+  'no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
+  '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
+} satisfies Linter.Config['rules']
+
+// ============================================================================
 // ESLint Configuration
 // ============================================================================
 
@@ -52,7 +95,6 @@ export default [
       'coverage/',
       '.claude/',
       '.vscode/',
-      '.prettierrc.mjs',
       'package-lock.json',
       'src/styles/global.css', // Exception: Contains Tailwind v4 @custom-variant syntax that CSS parser cannot handle
       '*.generated.*', // Ignore all generated files
@@ -76,83 +118,49 @@ export default [
     // Base config from eslint-config-love (strict TypeScript standards)
     ...love,
     files: TS_JS_FILES,
-    plugins: {
-      ...love.plugins,
-      '@typescript-eslint': tseslint.plugin,
-    },
+    plugins: sharedTypeScriptPlugins,
   },
   {
     // Import settings and rules
     files: TS_JS_FILES,
-    settings: {
-      'import/resolver': {
-        typescript: {
-          alwaysTryTypes: true,
-          project: '.',
-        },
-      },
-    },
-    rules: {
-      'sort-imports': ['error', { ignoreDeclarationSort: true }],
-      'import/no-unresolved': ['error', { ignore: ['^astro:'] }],
-      'import/no-cycle': 'error',
-      'import/order': [
-        'error',
-        {
-          'newlines-between': 'always',
-          alphabetize: {
-            order: 'asc',
-          },
-        },
-      ],
-    },
+    settings: sharedTypeScriptSettings,
+    rules: sharedImportRules,
   },
   {
     // Custom rule overrides for all TS/JS files
     files: TS_JS_FILES,
-    rules: {
-      'max-lines': ['error', { max: 200, skipComments: true, skipBlankLines: true }],
-      'no-console': 'off',
-      complexity: 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/no-magic-numbers': 'off',
-      '@typescript-eslint/no-empty-function': 'off',
-      '@typescript-eslint/prefer-destructuring': 'off',
-      'no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
-      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
-    },
+    rules: sharedTypeScriptOverrides,
   },
 
   // ==========================================================================
-  // React Components (JSX/TSX)
-  // Applies to: .jsx, .tsx files
+  // Astro Files - Base Configuration
+  // Applies to: .astro files
+  // Includes base Astro linting rules + accessibility checking
   // ==========================================================================
+  ...scopeConfigs(eslintPluginAstro.configs['flat/recommended'], ASTRO_FILES),
+  ...scopeConfigs(eslintPluginAstro.configs['flat/jsx-a11y-recommended'], ASTRO_FILES),
   {
-    files: REACT_FILES,
-    plugins: {
-      react,
-      'jsx-a11y': jsxA11y,
-    },
-    settings: {
-      react: {
-        version: 'detect',
+    // TypeScript support for Astro frontmatter - Apply SAME rules as TS_JS_FILES
+    files: ASTRO_FILES,
+    languageOptions: {
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        extraFileExtensions: ['.astro'],
+        sourceType: 'module',
+        project: './tsconfig.json',
       },
     },
+    plugins: sharedTypeScriptPlugins,
+    settings: sharedTypeScriptSettings,
     rules: {
-      ...react.configs.recommended.rules,
-      ...jsxA11y.configs.recommended.rules,
-      // Override specific React rules as needed
-      'react/no-unescaped-entities': 'off',
-      'react/react-in-jsx-scope': 'off', // Not needed in modern React/Astro
+      // Apply ALL the same rules as regular .ts files
+      ...love.rules,
+      ...sharedImportRules,
+      ...sharedTypeScriptOverrides,
+      // Astro-specific overrides: Astro components return `any`, disable unsafe return check
+      '@typescript-eslint/no-unsafe-return': 'off',
     },
   },
-
-  // ==========================================================================
-  // Astro Files
-  // Applies to: .astro files
-  // Includes jsx-a11y for accessibility checking in Astro templates
-  // ==========================================================================
-  ...scopeConfigs(eslintPluginAstro.configs['jsx-a11y-recommended'], ASTRO_FILES),
 
   // ==========================================================================
   // Test Files

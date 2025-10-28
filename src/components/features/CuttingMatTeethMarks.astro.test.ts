@@ -1,24 +1,10 @@
 import '@testing-library/jest-dom/vitest'
-import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
 
 import TeethMarks from '@/components/features/CuttingMatTeethMarks.astro'
+import { renderAstroComponent } from '@test/testHelpers'
 
 describe('TeethMarks', () => {
-  const renderComponent = async (props: {
-    width: number
-    height: number
-    minorInterval: number
-    opacity: number
-    strokeWidth: number
-  }) => {
-    const container = await AstroContainer.create()
-    const result = await container.renderToString(TeethMarks, { props })
-    const div = document.createElement('div')
-    div.innerHTML = result
-    return div
-  }
-
   const width = 4000
   const height = 4000
   const minorInterval = 40
@@ -27,14 +13,18 @@ describe('TeethMarks', () => {
   const strokeWidth = 1
 
   it('should create array of line elements', async () => {
-    const root = await renderComponent({ width, height, minorInterval, opacity, strokeWidth })
+    const root = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval, opacity, strokeWidth },
+    })
     const teeth = root.querySelectorAll('line')
 
     expect(teeth.length).toBeGreaterThan(0)
   })
 
   it('should create vertical tick marks on x-axis', async () => {
-    const root = await renderComponent({ width, height, minorInterval, opacity, strokeWidth })
+    const root = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval, opacity, strokeWidth },
+    })
     const teeth = root.querySelectorAll('line')
 
     teeth.forEach((tooth) => {
@@ -48,7 +38,9 @@ describe('TeethMarks', () => {
   })
 
   it('should apply correct opacity', async () => {
-    const root = await renderComponent({ width, height, minorInterval, opacity, strokeWidth })
+    const root = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval, opacity, strokeWidth },
+    })
     const teeth = root.querySelectorAll('line')
 
     teeth.forEach((tooth) => {
@@ -57,7 +49,9 @@ describe('TeethMarks', () => {
   })
 
   it('should apply correct stroke width', async () => {
-    const root = await renderComponent({ width, height, minorInterval, opacity, strokeWidth })
+    const root = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval, opacity, strokeWidth },
+    })
     const teeth = root.querySelectorAll('line')
 
     teeth.forEach((tooth) => {
@@ -66,7 +60,9 @@ describe('TeethMarks', () => {
   })
 
   it('should space teeth at half the minor interval', async () => {
-    const root = await renderComponent({ width, height, minorInterval, opacity, strokeWidth })
+    const root = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval, opacity, strokeWidth },
+    })
     const teeth = root.querySelectorAll('line')
 
     // Get x positions
@@ -82,7 +78,9 @@ describe('TeethMarks', () => {
   })
 
   it('should span the full width of canvas', async () => {
-    const root = await renderComponent({ width, height, minorInterval, opacity, strokeWidth })
+    const root = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval, opacity, strokeWidth },
+    })
     const teeth = root.querySelectorAll('line')
 
     const xPositions = Array.from(teeth).map((tooth) =>
@@ -97,8 +95,12 @@ describe('TeethMarks', () => {
   })
 
   it('should handle different minor intervals', async () => {
-    const root1 = await renderComponent({ width, height, minorInterval: 40, opacity, strokeWidth })
-    const root2 = await renderComponent({ width, height, minorInterval: 80, opacity, strokeWidth })
+    const root1 = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval: 40, opacity, strokeWidth },
+    })
+    const root2 = await renderAstroComponent(TeethMarks, {
+      props: { width, height, minorInterval: 80, opacity, strokeWidth },
+    })
 
     const teeth1 = root1.querySelectorAll('line')
     const teeth2 = root2.querySelectorAll('line')

@@ -4,13 +4,14 @@
  * Grid-based layout matching column headers
  */
 import type { CollectionEntry } from 'astro:content'
-import Grid from '@/components/primitives/Grid.astro'
-import Sheet from '@/components/primitives/Sheet.astro'
-import Link from '@/components/primitives/Link.astro'
+
 import Badge from '@/components/primitives/Badge.astro'
+import Grid from '@/components/primitives/Grid.astro'
+import Link from '@/components/primitives/Link.astro'
+import Sheet from '@/components/primitives/Sheet.astro'
 import Text from '@/components/primitives/Text.astro'
 
-interface Props {
+export interface Props {
   project: CollectionEntry<'projects'>
   statusStyle: string
   statusLabel: string
@@ -21,13 +22,13 @@ const { project, statusStyle, statusLabel } = Astro.props
 
 <Sheet as="li" variant="bar" color="primary" padding="sm" hover>
   <Grid spacing="md">
-    <Grid size={{ xs: 12, md: 4 }}>
+    <Grid size={12} size-md={4}>
       <Link href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`} class="font-semibold">
         {project.data.title}
       </Link>
     </Grid>
 
-    <Grid size={{ xs: 12, md: 2 }} class="justify-self-start md:justify-self-end">
+    <Grid size={12} size-md={2} class="justify-self-start md:justify-self-end">
       <div class="flex flex-col items-start md:items-end">
         <span class={`font-bold uppercase tracking-wider ${statusStyle}`}>
           {statusLabel}
@@ -42,10 +43,10 @@ const { project, statusStyle, statusLabel } = Astro.props
       </div>
     </Grid>
 
-    <Grid size={{ xs: 12, md: 6 }}>
+    <Grid size={12} size-md={6}>
       <div>
         <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
-        <Text size="xs" color="muted" class="italic">
+        <Text size="micro" color="muted" class="italic">
           {project.data.aside}
         </Text>
       </div>

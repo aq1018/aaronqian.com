@@ -1,19 +1,20 @@
 ---
 // Hero Section - Tech Lab meets Meditation Space
 // Features: Digital analyzer with animated signal traces
-import Icon from '@/components/primitives/Icon.astro'
-import Kbd from '@/components/primitives/Kbd.astro'
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 import DigitalAnalyzerBuffer from '@/components/features/DigitalAnalyzerBuffer.astro'
 import DigitalAnalyzerDecoderToggle from '@/components/features/DigitalAnalyzerDecoderToggle.astro'
 import HeroContent from '@/components/patterns/HeroContent.astro'
-import Collapsible from '@/components/primitives/Collapsible.astro'
 import Button from '@/components/primitives/Button.astro'
+import ButtonLink from '@/components/primitives/ButtonLink.astro'
+import Collapsible from '@/components/primitives/Collapsible.astro'
 import Heading from '@/components/primitives/Heading.astro'
-import Text from '@/components/primitives/Text.astro'
+import Icon from '@/components/primitives/Icon.astro'
+import Kbd from '@/components/primitives/Kbd.astro'
+import Overlay from '@/components/primitives/Overlay.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Surface from '@/components/primitives/Surface.astro'
-import Overlay from '@/components/primitives/Overlay.astro'
+import Text from '@/components/primitives/Text.astro'
 ---
 
 <Surface class="flex min-h-[85vh] items-center justify-center" padY="none">
@@ -22,8 +23,14 @@ import Overlay from '@/components/primitives/Overlay.astro'
 
   <HeroContent eyebrow="Aaron Qian">
     <Stack slot="title">
-      <Heading size="display-1" align="center" whitespace="nowrap">
-        <Stack direction="row" align="center" justify="center" space="none">
+      <Heading size="display-1" align="center">
+        <Stack
+          direction-lg="column"
+          direction-xl="row"
+          align="center"
+          justify="center"
+          space="none"
+        >
           <span>Input coffee</span>
           <DigitalAnalyzerDecoderToggle
             target="secret-message"
@@ -47,7 +54,7 @@ import Overlay from '@/components/primitives/Overlay.astro'
       <Collapsible data-collapsible-id="secret-message">
         <Stack space="xs">
           <Text
-            size="lg"
+            size="xl"
             color="primary"
             align="center"
             family="mono"
@@ -57,7 +64,7 @@ import Overlay from '@/components/primitives/Overlay.astro'
             <DigitalAnalyzerBuffer target="hero-display" type="ascii" />
           </Text>
           <Text
-            size="sm"
+            size="small"
             color="muted"
             align="center"
             family="mono"
@@ -78,11 +85,11 @@ import Overlay from '@/components/primitives/Overlay.astro'
     </Stack>
 
     <Stack direction="row" space="sm" justify="center">
-      <Button href="/blog" variant="solid" color="primary" size="lg">
+      <ButtonLink href="/blog" variant="solid" color="primary" size="lg">
         <span>Read My Notes →</span>
-      </Button>
+      </ButtonLink>
 
-      <Button
+      <ButtonLink
         href="https://launchpath.com"
         color="accent"
         variant="outline"
@@ -91,10 +98,10 @@ import Overlay from '@/components/primitives/Overlay.astro'
         aria-label="Open LaunchPath (new tab)"
       >
         <span>LaunchPath →</span>
-      </Button>
+      </ButtonLink>
     </Stack>
 
-    <Text slot="microLine" as="div" align="center" class="text-muted/70">
+    <Text slot="microLine" align="center" color="muted">
       <span>
         Decoder controls: Click/Tap ⚡ or press
         <Kbd keys="k" modifier="cmd|ctrl" color="neutral" size="xs" />

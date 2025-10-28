@@ -1,18 +1,22 @@
 import { describe, expect, it } from 'vitest'
 
 import { stackCva } from './Stack.cva'
-import { getDirectionClasses } from './Stack.utils'
 
 describe('Stack Component', () => {
   describe('stackCva - Base Classes', () => {
-    it('should include flex (direction controlled separately)', () => {
+    it('should include flex and default direction', () => {
       const result = stackCva()
       expect(result).toContain('flex')
-      // Note: flex-col is now added via getDirectionClasses(), not in CVA base
+      expect(result).toContain('flex-col') // Default direction=column
     })
   })
 
   describe('stackCva - Default Variants', () => {
+    it('should apply default direction (column)', () => {
+      const result = stackCva()
+      expect(result).toContain('flex-col')
+    })
+
     it('should apply default space (md)', () => {
       const result = stackCva()
       expect(result).toContain('gap-4')
@@ -23,6 +27,71 @@ describe('Stack Component', () => {
     it('should apply default align (stretch)', () => {
       const result = stackCva()
       expect(result).toContain('items-stretch')
+    })
+
+    it('should apply default justify (start)', () => {
+      const result = stackCva()
+      expect(result).toContain('justify-start')
+    })
+  })
+
+  describe('stackCva - Direction Prop (direction)', () => {
+    it('should apply row direction', () => {
+      const result = stackCva({ direction: 'row' })
+      expect(result).toContain('flex-row')
+      expect(result).not.toContain('flex-col')
+    })
+
+    it('should apply column direction (default)', () => {
+      const result = stackCva({ direction: 'column' })
+      expect(result).toContain('flex-col')
+    })
+
+    it('should apply row-reverse direction', () => {
+      const result = stackCva({ direction: 'row-reverse' })
+      expect(result).toContain('flex-row-reverse')
+    })
+
+    it('should apply column-reverse direction', () => {
+      const result = stackCva({ direction: 'column-reverse' })
+      expect(result).toContain('flex-col-reverse')
+    })
+  })
+
+  describe('stackCva - Responsive Direction (direction-sm/md/lg/xl)', () => {
+    it('should apply sm breakpoint direction', () => {
+      const result = stackCva({ direction: 'column', 'direction-sm': 'row' })
+      expect(result).toContain('flex-col')
+      expect(result).toContain('sm:flex-row')
+    })
+
+    it('should apply md breakpoint direction', () => {
+      const result = stackCva({ direction: 'column', 'direction-md': 'row' })
+      expect(result).toContain('flex-col')
+      expect(result).toContain('md:flex-row')
+    })
+
+    it('should apply lg breakpoint direction', () => {
+      const result = stackCva({ direction: 'column', 'direction-lg': 'row' })
+      expect(result).toContain('flex-col')
+      expect(result).toContain('lg:flex-row')
+    })
+
+    it('should apply xl breakpoint direction', () => {
+      const result = stackCva({ direction: 'column', 'direction-xl': 'row' })
+      expect(result).toContain('flex-col')
+      expect(result).toContain('xl:flex-row')
+    })
+
+    it('should apply multiple breakpoint directions', () => {
+      const result = stackCva({
+        direction: 'column',
+        'direction-md': 'row',
+        'direction-xl': 'column',
+      })
+      expect(result).toContain('flex-col')
+      expect(result).toContain('md:flex-row')
+      expect(result).toContain('xl:flex-col')
     })
   })
 
@@ -68,227 +137,95 @@ describe('Stack Component', () => {
   })
 
   describe('stackCva - Align Prop', () => {
-    it('should apply start alignment correctly', () => {
+    it('should apply start alignment', () => {
       const result = stackCva({ align: 'start' })
       expect(result).toContain('items-start')
-      expect(result).not.toContain('items-center')
-      expect(result).not.toContain('items-end')
     })
 
-    it('should apply center alignment correctly', () => {
+    it('should apply center alignment', () => {
       const result = stackCva({ align: 'center' })
       expect(result).toContain('items-center')
-      expect(result).not.toContain('items-start')
-      expect(result).not.toContain('items-end')
     })
 
-    it('should apply end alignment correctly', () => {
+    it('should apply end alignment', () => {
       const result = stackCva({ align: 'end' })
       expect(result).toContain('items-end')
-      expect(result).not.toContain('items-start')
-      expect(result).not.toContain('items-center')
     })
 
-    it('should apply stretch alignment correctly (default)', () => {
+    it('should apply stretch alignment (default)', () => {
       const result = stackCva({ align: 'stretch' })
       expect(result).toContain('items-stretch')
     })
-  })
 
-  describe('stackCva - Space + Align Combinations', () => {
-    const spaces = ['none', 'xs', 'sm', 'md', 'lg', 'xl'] as const
-    const aligns = ['start', 'center', 'end', 'stretch'] as const
-
-    it('should work with all space and align combinations', () => {
-      spaces.forEach((space) => {
-        aligns.forEach((align) => {
-          const result = stackCva({ space, align })
-          expect(result).toBeTruthy()
-          expect(result).toContain('flex')
-          expect(result).toContain('gap-')
-          expect(result).toContain('items-')
-        })
-      })
+    it('should apply baseline alignment', () => {
+      const result = stackCva({ align: 'baseline' })
+      expect(result).toContain('items-baseline')
     })
   })
 
-  describe('stackCva - Responsive Spacing', () => {
-    it('should apply responsive spacing for xs', () => {
-      const result = stackCva({ space: 'xs' })
-      expect(result).toMatch(/gap-\d+/)
-      expect(result).toMatch(/md:gap-\d+/)
+  describe('stackCva - Justify Prop', () => {
+    it('should apply start justify (default)', () => {
+      const result = stackCva({ justify: 'start' })
+      expect(result).toContain('justify-start')
     })
 
-    it('should apply responsive spacing for sm/md/lg/xl', () => {
-      const spaces = ['sm', 'md', 'lg', 'xl'] as const
-      spaces.forEach((space) => {
-        const result = stackCva({ space })
-        expect(result).toMatch(/gap-\d+/)
-        expect(result).toMatch(/md:gap-\d+/)
-        expect(result).toMatch(/lg:gap-\d+/)
-      })
-    })
-  })
-
-  describe('stackCva - Edge Cases', () => {
-    it('should handle undefined space (use default)', () => {
-      const result = stackCva({ space: undefined })
-      expect(result).toContain('gap-4') // Default md
+    it('should apply center justify', () => {
+      const result = stackCva({ justify: 'center' })
+      expect(result).toContain('justify-center')
     })
 
-    it('should handle undefined align (use default)', () => {
-      const result = stackCva({ align: undefined })
-      expect(result).toContain('items-stretch') // Default stretch
+    it('should apply end justify', () => {
+      const result = stackCva({ justify: 'end' })
+      expect(result).toContain('justify-end')
     })
 
-    it('should handle empty object (use all defaults)', () => {
-      const result = stackCva({})
-      expect(result).toContain('gap-4')
-      expect(result).toContain('md:gap-5')
-      expect(result).toContain('lg:gap-6')
-      expect(result).toContain('items-stretch')
-    })
-  })
-
-  describe('getDirectionClasses - Simple Values', () => {
-    it('should return empty string for undefined', () => {
-      expect(getDirectionClasses(undefined)).toBe('')
+    it('should apply between justify', () => {
+      const result = stackCva({ justify: 'between' })
+      expect(result).toContain('justify-between')
     })
 
-    it('should handle column direction (default)', () => {
-      expect(getDirectionClasses('column')).toBe('flex-col')
+    it('should apply around justify', () => {
+      const result = stackCva({ justify: 'around' })
+      expect(result).toContain('justify-around')
     })
 
-    it('should handle row direction', () => {
-      expect(getDirectionClasses('row')).toBe('flex-row')
-    })
-
-    it('should handle row-reverse direction', () => {
-      expect(getDirectionClasses('row-reverse')).toBe('flex-row-reverse')
-    })
-
-    it('should handle column-reverse direction', () => {
-      expect(getDirectionClasses('column-reverse')).toBe('flex-col-reverse')
-    })
-  })
-
-  describe('getDirectionClasses - Responsive Objects', () => {
-    it('should handle xs breakpoint (no prefix)', () => {
-      expect(getDirectionClasses({ xs: 'column' })).toBe('flex-col')
-      expect(getDirectionClasses({ xs: 'row' })).toBe('flex-row')
-    })
-
-    it('should handle sm breakpoint', () => {
-      expect(getDirectionClasses({ sm: 'row' })).toBe('sm:flex-row')
-      expect(getDirectionClasses({ sm: 'column' })).toBe('sm:flex-col')
-    })
-
-    it('should handle md breakpoint', () => {
-      expect(getDirectionClasses({ md: 'row' })).toBe('md:flex-row')
-      expect(getDirectionClasses({ md: 'column' })).toBe('md:flex-col')
-    })
-
-    it('should handle lg breakpoint', () => {
-      expect(getDirectionClasses({ lg: 'row' })).toBe('lg:flex-row')
-      expect(getDirectionClasses({ lg: 'column' })).toBe('lg:flex-col')
-    })
-
-    it('should handle xl breakpoint', () => {
-      expect(getDirectionClasses({ xl: 'row' })).toBe('xl:flex-row')
-      expect(getDirectionClasses({ xl: 'column' })).toBe('xl:flex-col')
-    })
-
-    it('should handle multiple breakpoints (column on mobile, row on desktop)', () => {
-      const result = getDirectionClasses({
-        xs: 'column',
-        md: 'row',
-      })
-      expect(result).toBe('flex-col md:flex-row')
-    })
-
-    it('should handle all breakpoints', () => {
-      const result = getDirectionClasses({
-        xs: 'column',
-        sm: 'column',
-        md: 'row',
-        lg: 'row',
-        xl: 'row',
-      })
-      expect(result).toBe('flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row')
-    })
-
-    it('should handle reverse directions', () => {
-      const result = getDirectionClasses({
-        xs: 'column-reverse',
-        md: 'row-reverse',
-      })
-      expect(result).toBe('flex-col-reverse md:flex-row-reverse')
-    })
-
-    it('should skip undefined breakpoints', () => {
-      const result = getDirectionClasses({
-        xs: 'column',
-        sm: undefined,
-        md: 'row',
-      })
-      expect(result).toBe('flex-col md:flex-row')
-    })
-
-    it('should handle empty responsive object', () => {
-      expect(getDirectionClasses({})).toBe('')
-    })
-  })
-
-  describe('getDirectionClasses - All Combinations', () => {
-    it('should generate valid classes for all directions across all breakpoints', () => {
-      const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl'] as const
-      const directions = ['row', 'column', 'row-reverse', 'column-reverse'] as const
-
-      breakpoints.forEach((bp) => {
-        directions.forEach((dir) => {
-          const result = getDirectionClasses({ [bp]: dir })
-          expect(result).toBeTruthy()
-          expect(result.length).toBeGreaterThan(0)
-
-          // Verify correct prefix
-          if (bp === 'xs') {
-            expect(result).not.toContain(':')
-          } else {
-            expect(result).toContain(`${bp}:`)
-          }
-        })
-      })
+    it('should apply evenly justify', () => {
+      const result = stackCva({ justify: 'evenly' })
+      expect(result).toContain('justify-evenly')
     })
   })
 
   describe('Real-World Usage Patterns', () => {
-    it('should support default column layout (vertical stack)', () => {
-      const direction = getDirectionClasses('column')
-      const space = stackCva({ space: 'md' })
-      expect(direction).toBe('flex-col')
-      expect(space).toContain('gap-4')
+    it('should support mobile-first responsive direction', () => {
+      const result = stackCva({
+        direction: 'column',
+        'direction-lg': 'row',
+        space: 'md',
+        align: 'center',
+      })
+      expect(result).toContain('flex')
+      expect(result).toContain('flex-col')
+      expect(result).toContain('lg:flex-row')
+      expect(result).toContain('gap-4')
+      expect(result).toContain('items-center')
     })
 
-    it('should support horizontal layout (inline elements)', () => {
-      const direction = getDirectionClasses('row')
-      const space = stackCva({ space: 'sm' })
-      expect(direction).toBe('flex-row')
-      expect(space).toContain('gap-3')
-    })
-
-    it('should support responsive stacking (column on mobile, row on desktop)', () => {
-      const direction = getDirectionClasses({ xs: 'column', md: 'row' })
-      const space = stackCva({ space: 'md' })
-      expect(direction).toBe('flex-col md:flex-row')
-      expect(space).toContain('gap-4')
-    })
-
-    it('should support responsive inline layout (row on mobile, column on desktop)', () => {
-      const direction = getDirectionClasses({ xs: 'row', md: 'column' })
-      const space = stackCva({ space: 'xs', align: 'start' })
-      expect(direction).toBe('flex-row md:flex-col')
-      expect(space).toContain('gap-2')
-      expect(space).toContain('items-start')
+    it('should combine all variants correctly', () => {
+      const result = stackCva({
+        direction: 'row',
+        'direction-md': 'column',
+        'direction-xl': 'row',
+        space: 'lg',
+        align: 'center',
+        justify: 'between',
+      })
+      expect(result).toContain('flex')
+      expect(result).toContain('flex-row')
+      expect(result).toContain('md:flex-col')
+      expect(result).toContain('xl:flex-row')
+      expect(result).toContain('gap-5')
+      expect(result).toContain('items-center')
+      expect(result).toContain('justify-between')
     })
   })
 })

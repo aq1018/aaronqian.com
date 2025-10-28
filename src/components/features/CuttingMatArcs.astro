@@ -3,7 +3,7 @@
  * Creates half circles (semicircles) at bottom center origin
  */
 
-interface Props {
+export interface Props {
   width: number
   height: number
   arcCount: number
@@ -27,9 +27,12 @@ const circleRadii = Array.from(
 ---
 
 {
-  circleRadii.map((radius) => {
+  circleRadii.map((radius) => (
     // SVG path for semicircle (top half): start at left, arc to right
-    const d = `M ${centerX - radius} ${bottomY} A ${radius} ${radius} 0 0 1 ${centerX + radius} ${bottomY}`
-    return <path d={d} opacity={opacity} stroke-width={strokeWidth} />
-  })
+    <path
+      d={`M ${centerX - radius} ${bottomY} A ${radius} ${radius} 0 0 1 ${centerX + radius} ${bottomY}`}
+      opacity={opacity}
+      stroke-width={strokeWidth}
+    />
+  ))
 }

@@ -1,12 +1,14 @@
 ---
-import { textVariants, type TextStyle } from './typography.cva'
+import type { HTMLTag, Polymorphic } from 'astro/types'
+
+import { type TextStyle, textVariants } from './typography.cva'
+
 import { cn } from '@/lib/utils'
 
-export interface Props extends TextStyle {
-  class?: string
-  as?: 'p' | 'span' | 'div' | 'label' // Allow element override
-  [key: string]: any // Allow any additional HTML attributes
-}
+export type Props<Tag extends HTMLTag = 'p'> = Polymorphic<{ as: Tag }> &
+  TextStyle & {
+    class?: string
+  }
 
 const {
   size,

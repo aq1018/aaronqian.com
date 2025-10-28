@@ -3,7 +3,7 @@
  * Creates small angle mark arcs at origin (geometric angle notation)
  */
 
-interface Props {
+export interface Props {
   width: number
   height: number
   angleLineCount: number
@@ -54,5 +54,5 @@ if (angles.length > 0) {
 }
 ---
 
-{rightArc && <path d={rightArc.d} opacity={opacity} stroke-width={strokeWidth} />}
-{leftArc && <path d={leftArc.d} opacity={opacity} stroke-width={strokeWidth} />}
+{rightArc !== null && <path d={rightArc.d} opacity={opacity} stroke-width={strokeWidth} />}
+{leftArc !== null && <path d={leftArc.d} opacity={opacity} stroke-width={strokeWidth} />}

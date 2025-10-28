@@ -1,10 +1,13 @@
 ---
-import { badgeVariants, type BadgeVariants } from './Badge.cva'
+import type { HTMLAttributes } from 'astro/types'
+
+import { type BadgeVariants, badgeVariants } from './Badge.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends BadgeVariants {
+// HTMLAttributes first, then BadgeVariants overrides (including 'color')
+export interface Props extends Omit<HTMLAttributes<'span'>, 'color'>, BadgeVariants {
   class?: string
-  [key: string]: any
 }
 
 const { size, color, variant, pulse, uppercase, class: className, ...rest } = Astro.props

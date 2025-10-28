@@ -1,16 +1,14 @@
 ---
-import { buttonVariants, type ButtonVariants } from './Button.cva'
+import type { HTMLAttributes } from 'astro/types'
+
+import { type ButtonVariants, buttonVariants } from './Button.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends ButtonVariants {
-  href?: string
-  external?: boolean
+export interface Props extends Omit<HTMLAttributes<'button'>, 'color'>, ButtonVariants {
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
-  target?: string
-  rel?: string
   class?: string
-  [key: string]: any // Allow any additional HTML attributes
 }
 
 const {
@@ -18,35 +16,18 @@ const {
   color,
   size,
   fullWidth,
-  href,
-  external,
-  type = 'button',
-  disabled = false,
-  target,
-  rel,
   class: className = '',
+  type,
+  disabled,
   ...rest
 } = Astro.props
-
-const Element = href ? 'a' : 'button'
-
-// Auto-detect external links
-const isExternal =
-  external || (href?.startsWith('http') && !href.includes(Astro.site?.hostname || ''))
-
-// Set target and rel for external links
-const linkTarget = target || (isExternal ? '_blank' : undefined)
-const linkRel = rel || (isExternal ? 'noopener noreferrer' : undefined)
 ---
 
-<Element
-  {href}
-  type={!href ? type : undefined}
-  disabled={!href && disabled}
-  target={linkTarget}
-  rel={linkRel}
+<button
+  {type}
+  {disabled}
   class={cn(buttonVariants({ variant, color, size, fullWidth }), className)}
   {...rest}
 >
   <slot />
-</Element>
+</button>

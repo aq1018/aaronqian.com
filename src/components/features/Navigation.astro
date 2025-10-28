@@ -1,17 +1,18 @@
 ---
 import ThemeToggle from './ThemeToggle.astro'
+
+import Container from '@/components/primitives/Container.astro'
+import Icon from '@/components/primitives/Icon.astro'
+import Link from '@/components/primitives/Link.astro'
 import NavBar from '@/components/primitives/NavBar.astro'
 import NavBarContent from '@/components/primitives/NavBarContent.astro'
-import Link from '@/components/primitives/Link.astro'
-import Container from '@/components/primitives/Container.astro'
 import Stack from '@/components/primitives/Stack.astro'
-import Icon from '@/components/primitives/Icon.astro'
 
 const currentPath = Astro.url.pathname
 ---
 
 <NavBar position="sticky" border="bottom" backdrop>
-  <Container size="wide">
+  <Container width="wide">
     <NavBarContent>
       <!-- Home Icon (Left) -->
       <Link variant="nav" href="/" active={currentPath === '/'} aria-label="Home">

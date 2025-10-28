@@ -1,25 +1,10 @@
 import '@testing-library/jest-dom/vitest'
-import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
 
 import AngleLabels from '@/components/features/CuttingMatAngleLabels.astro'
+import { renderAstroComponent } from '@test/testHelpers'
 
 describe('AngleLabels', () => {
-  const renderComponent = async (props: {
-    width: number
-    height: number
-    angleLineCount: number
-    angleLabelArcIndex: number
-    majorLineInterval: number
-    labelOpacity: number
-  }) => {
-    const container = await AstroContainer.create()
-    const result = await container.renderToString(AngleLabels, { props })
-    const div = document.createElement('div')
-    div.innerHTML = result
-    return div
-  }
-
   const width = 4000
   const height = 4000
   const centerX = width / 2
@@ -30,13 +15,15 @@ describe('AngleLabels', () => {
   const labelOpacity = 0.175
 
   it('should create text elements for each angle', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')
@@ -45,13 +32,15 @@ describe('AngleLabels', () => {
   })
 
   it('should create background and foreground text pairs', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount: 5,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount: 5,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')
@@ -66,13 +55,15 @@ describe('AngleLabels', () => {
   })
 
   it('should display correct angle values', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount: 5,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount: 5,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')
@@ -85,13 +76,15 @@ describe('AngleLabels', () => {
   })
 
   it('should position labels above the specified arc', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')
@@ -111,13 +104,15 @@ describe('AngleLabels', () => {
   })
 
   it('should apply opacity to foreground text only', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')
@@ -128,13 +123,15 @@ describe('AngleLabels', () => {
   })
 
   it('should use CSS variable for background color', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')
@@ -147,13 +144,15 @@ describe('AngleLabels', () => {
   })
 
   it('should set correct text attributes', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')
@@ -167,13 +166,15 @@ describe('AngleLabels', () => {
   })
 
   it('should create background with stroke for halo effect', async () => {
-    const root = await renderComponent({
-      width,
-      height,
-      angleLineCount,
-      angleLabelArcIndex,
-      majorLineInterval,
-      labelOpacity,
+    const root = await renderAstroComponent(AngleLabels, {
+      props: {
+        width,
+        height,
+        angleLineCount,
+        angleLabelArcIndex,
+        majorLineInterval,
+        labelOpacity,
+      },
     })
 
     const labels = root.querySelectorAll('text')

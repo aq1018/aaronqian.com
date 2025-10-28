@@ -8,9 +8,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@test/*": ["./test/*"]
     }
   },
-  "include": ["src/env.d.ts", ".astro/types.d.ts", "**/*"],
+  "include": ["src/env.d.ts", ".astro/types.d.ts", ".prettierrc.mjs", "**/*"],
   "exclude": ["dist"]
 }

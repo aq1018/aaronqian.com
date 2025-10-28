@@ -1,12 +1,14 @@
 ---
-import { navBarCva, type NavBarStyle } from './NavBar.cva'
+import type { HTMLTag, Polymorphic } from 'astro/types'
+
+import { type NavBarStyle, navBarCva } from './NavBar.cva'
+
 import { cn } from '@/lib/utils'
 
-export interface Props extends NavBarStyle {
-  as?: 'nav' | 'div' | 'header'
-  class?: string
-  [key: string]: any // Allow any additional HTML attributes
-}
+export type Props<Tag extends HTMLTag = 'nav'> = Polymorphic<{ as: Tag }> &
+  NavBarStyle & {
+    class?: string
+  }
 
 const {
   position,

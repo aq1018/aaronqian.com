@@ -1,14 +1,15 @@
 ---
 // ProjectLogEntry - Terminal-style log entry component
 import type { CollectionEntry } from 'astro:content'
-import Sheet from '@/components/primitives/Sheet.astro'
-import Badge from '@/components/primitives/Badge.astro'
-import Stack from '@/components/primitives/Stack.astro'
-import Heading from '@/components/primitives/Heading.astro'
-import Text from '@/components/primitives/Text.astro'
-import Prose from '@/components/primitives/Prose.astro'
 
-interface Props {
+import Badge from '@/components/primitives/Badge.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Prose from '@/components/primitives/Prose.astro'
+import Sheet from '@/components/primitives/Sheet.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Text from '@/components/primitives/Text.astro'
+
+export interface Props {
   log: CollectionEntry<'projectLogs'>
 }
 
@@ -36,9 +37,7 @@ const tagColorMap: Record<
   ux: { color: 'info' },
 }
 
-const getTagProps = (tag: string) => {
-  return tagColorMap[tag.toLowerCase()] || { color: 'muted' }
-}
+const getTagProps = (tag: string) => tagColorMap[tag.toLowerCase()] ?? { color: 'muted' }
 ---
 
 <Sheet as="article" variant="bar" color="neutral" padding="none" hover class="pl-6">
@@ -55,15 +54,16 @@ const getTagProps = (tag: string) => {
   <!-- Tags -->
   {
     log.data.tags.length > 0 && (
-      <Stack direction="row" space="xs" wrap class="mb-4">
-        {log.data.tags.map((tag) => {
-          const tagProps = getTagProps(tag)
-          return (
-            <Badge color={tagProps.color} size="xs" class={`px-2 ${tagProps.customClass || ''}`}>
-              {tag}
-            </Badge>
-          )
-        })}
+      <Stack direction="row" space="xs" class="mb-4 flex-wrap">
+        {log.data.tags.map((tag) => (
+          <Badge
+            color={getTagProps(tag).color}
+            size="xs"
+            class={`px-2 ${getTagProps(tag).customClass ?? ''}`}
+          >
+            {tag}
+          </Badge>
+        ))}
       </Stack>
     )
   }

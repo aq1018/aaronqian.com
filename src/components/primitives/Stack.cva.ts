@@ -2,11 +2,41 @@ import { type VariantProps, cva } from 'class-variance-authority'
 
 /**
  * Stack: unified flex container with responsive direction support
- * Direction is controlled separately via Stack.utils getDirectionClasses()
- * Defaults to flex-col (vertical) but can be row (horizontal) or responsive
+ * Uses mobile-first approach with direction (base) and direction-{breakpoint} props
+ * Note: 'direction' refers to flex-direction, not HTML's 'dir' attribute (text direction)
  */
 export const stackCva = cva('flex', {
   variants: {
+    direction: {
+      row: 'flex-row',
+      column: 'flex-col',
+      'row-reverse': 'flex-row-reverse',
+      'column-reverse': 'flex-col-reverse',
+    },
+    'direction-sm': {
+      row: 'sm:flex-row',
+      column: 'sm:flex-col',
+      'row-reverse': 'sm:flex-row-reverse',
+      'column-reverse': 'sm:flex-col-reverse',
+    },
+    'direction-md': {
+      row: 'md:flex-row',
+      column: 'md:flex-col',
+      'row-reverse': 'md:flex-row-reverse',
+      'column-reverse': 'md:flex-col-reverse',
+    },
+    'direction-lg': {
+      row: 'lg:flex-row',
+      column: 'lg:flex-col',
+      'row-reverse': 'lg:flex-row-reverse',
+      'column-reverse': 'lg:flex-col-reverse',
+    },
+    'direction-xl': {
+      row: 'xl:flex-row',
+      column: 'xl:flex-col',
+      'row-reverse': 'xl:flex-row-reverse',
+      'column-reverse': 'xl:flex-col-reverse',
+    },
     space: {
       none: 'gap-0',
       xs: 'gap-2 md:gap-3', // 8 → 12
@@ -32,6 +62,7 @@ export const stackCva = cva('flex', {
     },
   },
   defaultVariants: {
+    direction: 'column',
     space: 'md',
     align: 'stretch',
     justify: 'start',

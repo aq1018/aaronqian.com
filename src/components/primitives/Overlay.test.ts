@@ -32,32 +32,32 @@ describe('Overlay Component', () => {
       expect(result).not.toContain('bg-')
     })
 
-    it('should apply soft preset (20% black)', () => {
+    it('should apply soft preset (20% background)', () => {
       const result = overlayCva({ preset: 'soft' })
-      expect(result).toContain('bg-black/20')
+      expect(result).toContain('bg-background/20')
     })
 
-    it('should apply medium preset (40% black)', () => {
+    it('should apply medium preset (40% background)', () => {
       const result = overlayCva({ preset: 'medium' })
-      expect(result).toContain('bg-black/40')
+      expect(result).toContain('bg-background/40')
     })
 
-    it('should apply strong preset (60% black)', () => {
+    it('should apply strong preset (60% background)', () => {
       const result = overlayCva({ preset: 'strong' })
-      expect(result).toContain('bg-black/60')
+      expect(result).toContain('bg-background/60')
     })
 
     it('should apply top-fade preset (gradient from top)', () => {
       const result = overlayCva({ preset: 'top-fade' })
       expect(result).toContain('bg-gradient-to-b')
-      expect(result).toContain('from-black/40')
+      expect(result).toContain('from-background/40')
       expect(result).toContain('to-transparent')
     })
 
     it('should apply bottom-fade preset (gradient from bottom)', () => {
       const result = overlayCva({ preset: 'bottom-fade' })
       expect(result).toContain('bg-gradient-to-t')
-      expect(result).toContain('from-black/40')
+      expect(result).toContain('from-background/40')
       expect(result).toContain('to-transparent')
     })
   })
@@ -89,7 +89,7 @@ describe('Overlay Component', () => {
   describe('overlayCva - Preset + Blur Combinations', () => {
     it('should work with preset and blur combined', () => {
       const result = overlayCva({ preset: 'medium', blur: 'md' })
-      expect(result).toContain('bg-black/40')
+      expect(result).toContain('bg-background/40')
       expect(result).toContain('backdrop-blur')
     })
 
@@ -112,7 +112,7 @@ describe('Overlay Component', () => {
   describe('overlayCva - Glassmorphism Effect', () => {
     it('should create glassmorphism with soft preset and blur', () => {
       const result = overlayCva({ preset: 'soft', blur: 'lg' })
-      expect(result).toContain('bg-black/20')
+      expect(result).toContain('bg-background/20')
       expect(result).toContain('backdrop-blur-lg')
     })
   })

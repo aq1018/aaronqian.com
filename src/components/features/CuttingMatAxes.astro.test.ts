@@ -1,29 +1,18 @@
 import '@testing-library/jest-dom/vitest'
-import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { describe, expect, it } from 'vitest'
 
 import Axes from '@/components/features/CuttingMatAxes.astro'
+import { renderAstroComponent } from '@test/testHelpers'
 
 describe('Axes', () => {
-  const renderComponent = async (props: {
-    width: number
-    height: number
-    opacity: number
-    strokeWidth: number
-  }) => {
-    const container = await AstroContainer.create()
-    const result = await container.renderToString(Axes, { props })
-    const div = document.createElement('div')
-    div.innerHTML = result
-    return div
-  }
-
   it('should create two line elements', async () => {
-    const root = await renderComponent({
-      width: 4000,
-      height: 4000,
-      opacity: 0.175,
-      strokeWidth: 1.5,
+    const root = await renderAstroComponent(Axes, {
+      props: {
+        width: 4000,
+        height: 4000,
+        opacity: 0.175,
+        strokeWidth: 1.5,
+      },
     })
     const lines = root.querySelectorAll('line')
 
@@ -31,11 +20,13 @@ describe('Axes', () => {
   })
 
   it('should create x-axis at bottom of canvas', async () => {
-    const root = await renderComponent({
-      width: 4000,
-      height: 4000,
-      opacity: 0.175,
-      strokeWidth: 1.5,
+    const root = await renderAstroComponent(Axes, {
+      props: {
+        width: 4000,
+        height: 4000,
+        opacity: 0.175,
+        strokeWidth: 1.5,
+      },
     })
     const lines = root.querySelectorAll('line')
     const xAxis = lines[0]
@@ -47,11 +38,13 @@ describe('Axes', () => {
   })
 
   it('should create y-axis at center', async () => {
-    const root = await renderComponent({
-      width: 4000,
-      height: 4000,
-      opacity: 0.175,
-      strokeWidth: 1.5,
+    const root = await renderAstroComponent(Axes, {
+      props: {
+        width: 4000,
+        height: 4000,
+        opacity: 0.175,
+        strokeWidth: 1.5,
+      },
     })
     const lines = root.querySelectorAll('line')
     const yAxis = lines[1]
@@ -63,11 +56,13 @@ describe('Axes', () => {
   })
 
   it('should apply opacity to both axes', async () => {
-    const root = await renderComponent({
-      width: 4000,
-      height: 4000,
-      opacity: 0.5,
-      strokeWidth: 1.5,
+    const root = await renderAstroComponent(Axes, {
+      props: {
+        width: 4000,
+        height: 4000,
+        opacity: 0.5,
+        strokeWidth: 1.5,
+      },
     })
     const lines = root.querySelectorAll('line')
 
@@ -76,11 +71,13 @@ describe('Axes', () => {
   })
 
   it('should apply stroke width to both axes', async () => {
-    const root = await renderComponent({
-      width: 4000,
-      height: 4000,
-      opacity: 0.175,
-      strokeWidth: 2.5,
+    const root = await renderAstroComponent(Axes, {
+      props: {
+        width: 4000,
+        height: 4000,
+        opacity: 0.175,
+        strokeWidth: 2.5,
+      },
     })
     const lines = root.querySelectorAll('line')
 
@@ -89,11 +86,13 @@ describe('Axes', () => {
   })
 
   it('should handle different dimensions', async () => {
-    const root = await renderComponent({
-      width: 2000,
-      height: 3000,
-      opacity: 0.175,
-      strokeWidth: 1.5,
+    const root = await renderAstroComponent(Axes, {
+      props: {
+        width: 2000,
+        height: 3000,
+        opacity: 0.175,
+        strokeWidth: 1.5,
+      },
     })
     const lines = root.querySelectorAll('line')
     const xAxis = lines[0]

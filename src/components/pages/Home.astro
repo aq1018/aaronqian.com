@@ -1,12 +1,14 @@
 ---
 import { getCollection } from 'astro:content'
-import { sortProjectsByLatestLog, markLatestProjectAsLive } from '@/lib/projects'
+
 import HomeHero from './HomeHero.astro'
+
 import ProjectList from '@/components/features/ProjectList.astro'
-import Surface from '@/components/primitives/Surface.astro'
 import Container from '@/components/primitives/Container.astro'
-import Stack from '@/components/primitives/Stack.astro'
 import Heading from '@/components/primitives/Heading.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import { markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects'
 
 // Fetch and sort projects by latest log
 const allProjects = await getCollection('projects')

@@ -11,42 +11,17 @@ export default {
   bracketSameLine: false,
   arrowParens: 'always',
   endOfLine: 'lf',
+  tailwindStylesheet: './src/styles/global.css',
 
-  plugins: ['prettier-plugin-astro'],
+  // IMPORTANT: Tailwind plugin must be last
+  plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
 
   overrides: [
-    {
-      files: '*.astro',
-      options: {
-        parser: 'astro',
-      },
-    },
-    {
-      files: ['*.json', '*.jsonc'],
-      options: {
-        parser: 'json',
-        trailingComma: 'none',
-      },
-    },
-    {
-      files: ['*.yaml', '*.yml'],
-      options: {
-        parser: 'yaml',
-        tabWidth: 2,
-        singleQuote: false,
-      },
-    },
-    {
-      files: ['*.md', '*.mdx'],
-      options: {
-        parser: 'mdx',
-        printWidth: 80,
-        proseWrap: 'always',
-        embeddedLanguageFormatting: 'auto',
-      },
-    },
+    { files: '*.astro', options: { parser: 'astro' } },
+    { files: ['*.json', '*.jsonc'], options: { parser: 'json', trailingComma: 'none' } },
+    { files: ['*.yaml', '*.yml'], options: { parser: 'yaml', tabWidth: 2, singleQuote: false } },
+    { files: ['*.md', '*.mdx'], options: { parser: 'mdx', printWidth: 80, proseWrap: 'always' } },
   ],
 
-  // Astro-specific options
   astroAllowShorthand: true,
 }

@@ -14,7 +14,7 @@
 import Badge from './Badge.astro'
 import type { BadgeVariants } from './Badge.cva'
 
-interface Props extends BadgeVariants {
+export interface Props extends BadgeVariants {
   /** The key(s) to display (e.g., "k", "enter") */
   keys: string
   /** Optional modifier key(s) - use pipe for platform-specific (e.g., "cmd|ctrl") */

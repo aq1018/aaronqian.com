@@ -1,0 +1,55 @@
+{
+  "format_on_save": "on",
+
+  "lsp": {
+    "eslint": { "initialization_options": { "useFlatConfig": true } }
+  },
+
+  "languages": {
+    "Astro": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": { "source.fixAll.eslint": true }
+    },
+
+    "TypeScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": { "source.fixAll.eslint": true }
+    },
+
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": { "source.fixAll.eslint": true }
+    },
+
+    "Markdown": {
+      "formatter": {
+        "external": { "command": "prettier", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    },
+    "JSON": {
+      "formatter": {
+        "external": { "command": "prettier", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    },
+    "CSS": {
+      "formatter": {
+        "external": { "command": "prettier", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    }
+  }
+}

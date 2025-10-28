@@ -1,9 +1,10 @@
 ---
 // Projects Index Page - Full listing of all projects
 import { getCollection } from 'astro:content'
-import { sortProjectsByLatestLog, markLatestProjectAsLive } from '@/lib/projects'
-import BaseLayout from '@/layouts/BaseLayout.astro'
+
 import ProjectsIndex from '@/components/pages/ProjectsIndex.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects'
 
 // Fetch and sort projects by latest log
 const projects = await getCollection('projects')

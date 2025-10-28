@@ -4,14 +4,17 @@
  * Uses CVA for base styles and .hook.ts for behavior
  * State is controlled via data-open attribute + pure CSS Grid animation
  */
+import type { HTMLAttributes } from 'astro/types'
+
 import {
-  collapsibleVariants,
-  collapsibleContentVariants,
   type CollapsibleVariants,
+  collapsibleContentVariants,
+  collapsibleVariants,
 } from './Collapsible.cva'
+
 import { cn } from '@/lib/utils'
 
-interface Props extends CollapsibleVariants {
+export interface Props extends HTMLAttributes<'div'>, CollapsibleVariants {
   open?: boolean
   class?: string
 }

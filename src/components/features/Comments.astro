@@ -1,27 +1,16 @@
 ---
-/**
- * Comments component using Giscus (GitHub Discussions)
- *
- * Setup required:
- * 1. Enable Discussions on your repo: Settings → Features → Discussions
- * 2. Install Giscus app: https://github.com/apps/giscus
- * 3. Get your category ID from: https://giscus.app
- *
- * Initial theme is detected client-side to match user preference.
- * Theme syncing after load is handled by Comments.hook.ts
- */
+import {
+  GISCUS_CATEGORY as CATEGORY,
+  GISCUS_CATEGORY_ID as CATEGORY_ID,
+  GISCUS_REPO as REPO,
+  GISCUS_REPO_ID as REPO_ID,
+} from 'astro:env/client'
 
-interface Props {
+export interface Props {
   class?: string
 }
 
 const { class: className } = Astro.props
-
-// Configuration from environment variables
-const REPO = import.meta.env.PUBLIC_GISCUS_REPO
-const REPO_ID = import.meta.env.PUBLIC_GISCUS_REPO_ID
-const CATEGORY = import.meta.env.PUBLIC_GISCUS_CATEGORY
-const CATEGORY_ID = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID
 const ORIGIN = Astro.url.origin
 ---
 
