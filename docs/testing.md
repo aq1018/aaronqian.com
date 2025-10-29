@@ -1,6 +1,6 @@
 # Testing & CI
 
-> Testing requirements and best practices
+> Testing requirements and patterns
 
 ## Testing Requirements (P1)
 
@@ -8,18 +8,28 @@
 
 **For EXISTING code:** Add tests when modifying components.
 
+## File Naming & Co-location
+
+- **Extension:** `.test.ts` only (no `.test.tsx` or `.spec.*`)
+- **Co-location:** Tests live next to source files
+- **Pattern:** `Component.[module].test.ts`
+
+Examples:
+
+- `Button.astro` → `Button.astro.test.ts`
+- `Button.cva.ts` → `Button.cva.test.ts`
+- `PillToggle.hook.ts` → `PillToggle.hook.test.ts`
+
 ## What MUST Be Tested
 
 | File Type             | Test Required | Test File Pattern               |
 | --------------------- | ------------- | ------------------------------- |
-| `Component.astro`     | ✅ Yes        | `Component.test.ts`             |
+| `Component.astro`     | ✅ Yes        | `Component.astro.test.ts`       |
 | `Component.hook.ts`   | ✅ Yes        | `Component.hook.test.ts`        |
 | `Component.utils.ts`  | ✅ Yes        | `Component.utils.test.ts`       |
 | `Component.config.ts` | ✅ Yes        | `Component.config.test.ts`      |
 | `Component.types.ts`  | ✅ Yes        | `Component.types.test.ts`       |
 | Subcomponents         | ✅ Yes        | `ComponentSubcomponent.test.ts` |
-
-**Search for examples:** `Glob: **/*.test.ts`
 
 ## Test Coverage Targets (P2)
 
@@ -32,33 +42,40 @@
 
 ## Testing Stack
 
-- **Framework:** Vitest
-- **DOM Testing:** `@testing-library/dom`
-- **Assertions:** Vitest's `expect` API
-- **Mocking:** Vitest's `vi` utilities
+- **Framework:** Vitest (happy-dom environment)
+- **Assertions:** Vitest `expect` API
+- **Matchers:** `@testing-library/jest-dom/vitest`
+- **Config:** `vitest.config.ts`, `test/vitest.setup.ts`
 
-## Test Structure
+## Test Utilities
 
-```typescript
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+**Location:** `test/testHelpers.ts`, `test/vitest.setup.ts`
 
-describe('ComponentName', () => {
-  beforeEach(() => {
-    // Setup
-  })
+**Custom Matchers:**
 
-  afterEach(() => {
-    // Cleanup
-  })
+- `toContainClasses(classes)` - Assert class string contains classes
+- `toHaveAllVariantClasses(props, classes)` - CVA variant assertion
+- `toRenderElement(selector)` - Element exists in rendered component
+- `toHaveDataAttribute(attribute, value?)` - data-\* attribute assertion
+- `toHaveClasses(classes)` - Element has CSS classes
 
-  it('should do something when condition', () => {
-    // Arrange - Set up test data
-    // Act - Execute code
-    // Assert - Verify results
-    expect(result).toBe(expected)
-  })
-})
-```
+**Rendering:**
+
+- `renderAstroComponent(component, { props, slots })` - Astro components
+
+**CVA Testing:**
+
+- `testBaseClasses(variantFn, baseClasses)`
+- `testAllVariants(variantFn, propName, values)`
+- `testCompoundVariants(variantFn, variantCombinations)`
+- `testDefaultVariants(variantFn, expectedClasses)`
+- `testEdgeCases(variantFn, props, defaultClasses)`
+
+**Hook Testing:**
+
+- `setupTestDOM(html)` - Setup DOM with cleanup
+- `expectEventListenersRemoved(cleanup, element, eventType)`
+- `simulateEvent(element, eventType, eventInit?)`
 
 ## Test Commands
 
@@ -86,33 +103,100 @@ npm run test:run   # Run once (CI)
 - Type definitions (TypeScript handles this)
 - CSS styling (unless critical to functionality)
 
-## Testing Hooks
+## Testing Hooks (P0)
 
 **Must test:**
 
 - ✅ Initialization (elements found, listeners attached, initial state)
 - ✅ Interactions (user actions trigger expected behavior)
-- ✅ Cleanup (listeners removed, state reset, no memory leaks)
+- ✅ Cleanup (listeners removed, observers disconnected, no memory leaks)
 - ✅ View Transitions (re-initialization works, no duplicate listeners)
+- ✅ Double initialization prevention (previous cleanup called automatically)
+- ✅ Cleanup idempotency (safe to call multiple times)
 
-**Search for examples:** `Glob: **/*.hook.test.ts`
+**View Transitions Lifecycle (P0):**
+
+- `astro:page-load` - Initialize/re-initialize features
+- `astro:before-preparation` - Cleanup before navigation
+- References: `DigitalAnalyzer.hook.test.ts:348-520`,
+  `Comments.hook.test.ts:555-584`
+
+**Examples:** `DigitalAnalyzer.hook.test.ts`, `PillToggle.hook.test.ts`,
+`Comments.hook.test.ts`
 
 ## Testing Components
 
 **Must test:**
 
 - ✅ Default rendering
+- ✅ Props handling
+- ✅ Slots rendering
+- ✅ HTML attributes passthrough
 - ✅ Custom classes (class prop merging)
 - ✅ Element polymorphism (if applicable)
 - ✅ Variant combinations (if using CVA)
 
-**Search for examples:** `Glob: **/Button.test.ts`, `**/Link.test.ts`
+**Examples:** `Button.astro.test.ts`, `DigitalAnalyzer.astro.test.ts`
+
+## Testing CVA Variants
+
+**Structure:**
+
+- Base classes verification
+- Default variants
+- All variant values systematically
+- Compound variants (combinations)
+- Edge cases (undefined/null/empty)
+- Semantic usage scenarios
+- Accessibility checks
+
+**Examples:** `Button.cva.test.ts`, `Badge.cva.test.ts`
 
 ## Testing Utils
 
 Aim for 100% coverage. Test all edge cases.
 
-**Search for examples:** `Glob: **/*.utils.test.ts`
+**Examples:** `typeGuards.test.ts`
+
+## Browser API Testing Patterns
+
+**ResizeObserver/MutationObserver/IntersectionObserver:**
+
+- Inline class mocks with vi.fn() methods
+- Test observe/disconnect calls
+- Reference: `DigitalAnalyzer.hook.test.ts:114-171`,
+  `Comments.hook.test.ts:174-332`
+
+**Timer Management:**
+
+```typescript
+function setupFakeTimers(): () => void {
+  vi.clearAllTimers()
+  vi.useFakeTimers()
+  return () => {
+    vi.clearAllTimers()
+    vi.useRealTimers()
+  }
+}
+```
+
+**Property Overrides:**
+
+- `Object.defineProperty(iframe, 'contentWindow', { value: { postMessage: vi.fn() } })`
+- Reference: `Comments.hook.test.ts:54-85`
+
+## Mock Data Factories
+
+For Astro content collections, use factory functions:
+
+```typescript
+const createMock = (id: string): CollectionEntry<'type'> =>
+  ({
+    /* mock */
+  }) as unknown as CollectionEntry<'type'>
+```
+
+**Examples:** `projects.test.ts:11-33`, `ProjectList.test.ts`
 
 ## Pre-Commit & CI
 
