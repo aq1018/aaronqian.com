@@ -1,13 +1,15 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { initializeThemeToggle, setupThemeToggle } from './ThemeToggle.hook'
 
+import { setupTestDOM } from '@test/testHelpers'
+
 describe('Theme Toggle System', () => {
-  beforeEach(() => {
-    // Reset DOM before each test
-    document.body.innerHTML = ''
+  // Helper to setup test environment
+  function setupTestEnvironment(): () => void {
     // Clear localStorage
     localStorage.clear()
+
     // Reset matchMedia mock
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -22,6 +24,7 @@ describe('Theme Toggle System', () => {
         dispatchEvent: vi.fn(),
       })),
     })
+
     // Mock View Transitions API
     // View Transitions API not in TypeScript DOM types yet, need to add to document
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- View Transitions API not yet in DOM types
@@ -34,23 +37,22 @@ describe('Theme Toggle System', () => {
         updateCallbackDone: Promise.resolve(),
       }
     })
-  })
 
-  afterEach(() => {
-    // Clean up
-    document.body.innerHTML = ''
-    localStorage.clear()
-  })
+    return () => {
+      localStorage.clear()
+    }
+  }
 
   describe('initializeThemeToggle', () => {
     it('should initialize theme toggle buttons', () => {
-      document.body.innerHTML = `
+      const envCleanup = setupTestEnvironment()
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -60,18 +62,21 @@ describe('Theme Toggle System', () => {
       expect(buttons.length).toBe(3)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should mark correct button as selected for light theme', () => {
+      const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'light')
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -82,18 +87,21 @@ describe('Theme Toggle System', () => {
       expect(buttons[2].classList.contains('selected')).toBe(false)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should mark correct button as selected for dark theme', () => {
+      const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'dark')
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -104,18 +112,21 @@ describe('Theme Toggle System', () => {
       expect(buttons[2].classList.contains('selected')).toBe(false)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should mark correct button as selected for system theme', () => {
+      const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'system')
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -126,18 +137,21 @@ describe('Theme Toggle System', () => {
       expect(buttons[2].classList.contains('selected')).toBe(true)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should change theme when button is clicked', () => {
+      const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'light')
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -155,16 +169,19 @@ describe('Theme Toggle System', () => {
       expect(buttons[0].classList.contains('selected')).toBe(false)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should apply theme to document when changed', () => {
-      document.body.innerHTML = `
+      const envCleanup = setupTestEnvironment()
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -183,9 +200,12 @@ describe('Theme Toggle System', () => {
       expect(document.documentElement.classList.contains('dark')).toBe(false)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should update theme when system preference changes', () => {
+      const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'system')
 
       // Mock matchMedia to support addEventListener and dynamic matches value
@@ -221,13 +241,13 @@ describe('Theme Toggle System', () => {
         })),
       })
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -245,9 +265,12 @@ describe('Theme Toggle System', () => {
       expect(document.documentElement.classList.contains('dark')).toBe(true)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should not update when system preference changes if theme is not system', () => {
+      const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'light')
 
       const listeners: Array<(e: MediaQueryListEvent) => void> = []
@@ -269,13 +292,13 @@ describe('Theme Toggle System', () => {
         })),
       })
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -292,16 +315,19 @@ describe('Theme Toggle System', () => {
       expect(document.documentElement.classList.contains('dark')).toBe(false)
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
 
     it('should clean up event listeners when cleanup is called', () => {
-      document.body.innerHTML = `
+      const envCleanup = setupTestEnvironment()
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       const cleanup = initializeThemeToggle()
 
@@ -317,10 +343,13 @@ describe('Theme Toggle System', () => {
       expect(removeEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function))
 
       removeEventListenerSpy.mockRestore()
+      domCleanup()
+      envCleanup()
     })
 
     it('should return early if required DOM elements are missing', () => {
-      document.body.innerHTML = `<div>No theme toggle here</div>`
+      const envCleanup = setupTestEnvironment()
+      const domCleanup = setupTestDOM(`<div>No theme toggle here</div>`)
 
       const cleanup = initializeThemeToggle()
 
@@ -329,20 +358,23 @@ describe('Theme Toggle System', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      envCleanup()
     })
   })
 
   describe('setupThemeToggle', () => {
     it('should initialize theme toggle immediately', () => {
+      const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'dark')
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div id="theme-toggle">
           <button data-value="light">Light</button>
           <button data-value="dark">Dark</button>
           <button data-value="system">System</button>
         </div>
-      `
+      `)
 
       setupThemeToggle()
 
@@ -350,6 +382,9 @@ describe('Theme Toggle System', () => {
 
       // Should work immediately - dark button should be selected
       expect(buttons[1].classList.contains('selected')).toBe(true)
+
+      domCleanup()
+      envCleanup()
     })
 
     it('should setup View Transitions event listeners', () => {

@@ -1,6 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { initializeDigitalAnalyzer, setupDigitalAnalyzer } from './DigitalAnalyzer.hook'
+
+import { setupTestDOM } from '@test/testHelpers'
 
 // Mock GSAP
 vi.mock('gsap', () => ({
@@ -25,30 +27,26 @@ vi.mock('./DigitalAnalyzer.animation', () => ({
 }))
 
 describe('Digital Analyzer Hook', () => {
-  beforeEach(() => {
-    // Reset DOM before each test
-    document.body.innerHTML = ''
-    // Clear all timers
+  // Helper to setup and teardown fake timers
+  function setupFakeTimers(): () => void {
     vi.clearAllTimers()
     vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    // Clean up
-    document.body.innerHTML = ''
-    vi.clearAllTimers()
-    vi.useRealTimers()
-    vi.clearAllMocks()
-  })
+    return () => {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+      vi.clearAllMocks()
+    }
+  }
 
   describe('initializeDigitalAnalyzer', () => {
     it('should initialize digital analyzer with required DOM elements', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -56,13 +54,16 @@ describe('Digital Analyzer Hook', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should return early if digital-analyzer container is missing', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <svg id="digital-analyzer-svg"></svg>
         <svg class="digital-analyzer-static"></svg>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -70,14 +71,17 @@ describe('Digital Analyzer Hook', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should return early if SVG element is missing', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -85,14 +89,17 @@ describe('Digital Analyzer Hook', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should return early if static SVG element is missing', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer>
           <svg id="digital-analyzer-svg"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -100,9 +107,13 @@ describe('Digital Analyzer Hook', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should initialize ResizeObserver to track container dimensions', () => {
+      const timerCleanup = setupFakeTimers()
+
       // Mock ResizeObserver
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
@@ -113,12 +124,12 @@ describe('Digital Analyzer Hook', () => {
         unobserve = vi.fn()
       } as unknown as typeof ResizeObserver
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -126,9 +137,12 @@ describe('Digital Analyzer Hook', () => {
       expect(mockObserve).toHaveBeenCalled()
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should disconnect ResizeObserver on cleanup', () => {
+      const timerCleanup = setupFakeTimers()
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
@@ -138,12 +152,12 @@ describe('Digital Analyzer Hook', () => {
         unobserve = vi.fn()
       } as unknown as typeof ResizeObserver
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -151,17 +165,21 @@ describe('Digital Analyzer Hook', () => {
       cleanup()
 
       expect(mockDisconnect).toHaveBeenCalled()
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should clean up SVG traces on cleanup', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg">
             <path d="M0,0 L100,100" />
           </svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -178,16 +196,20 @@ describe('Digital Analyzer Hook', () => {
       cleanup()
 
       expect(svg.innerHTML).toBe('')
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should reset decoder toggle styles on cleanup', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
           <div data-decoder-toggle style="opacity: 0.5; transform: scale(1.2); filter: blur(2px);"></div>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -205,23 +227,31 @@ describe('Digital Analyzer Hook', () => {
 
       expect(decoderToggle?.style.transform).toBe('')
       expect(decoderToggle?.style.filter).toBe('brightness(0.7)')
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should handle missing decoder toggle gracefully', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
       // Should not throw error even without lightning bolt
       expect(() => cleanup()).not.toThrow()
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should clean up previous initialization when called multiple times', () => {
+      const timerCleanup = setupFakeTimers()
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
@@ -231,12 +261,12 @@ describe('Digital Analyzer Hook', () => {
         unobserve = vi.fn()
       } as unknown as typeof ResizeObserver
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       initializeDigitalAnalyzer()
 
@@ -252,15 +282,19 @@ describe('Digital Analyzer Hook', () => {
       cleanup2()
 
       expect(mockDisconnect).toHaveBeenCalled()
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should handle cleanup being called multiple times safely', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -270,17 +304,21 @@ describe('Digital Analyzer Hook', () => {
         cleanup()
         cleanup()
       }).not.toThrow()
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should clear display managers on cleanup', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer="test-analyzer" style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
           <span data-buffer-target="test-analyzer" data-buffer-type="binary">01010101</span>
           <span data-buffer-target="test-analyzer" data-buffer-type="ascii">Test</span>
         </div>
-      `
+      `)
 
       const cleanup = initializeDigitalAnalyzer()
 
@@ -301,6 +339,9 @@ describe('Digital Analyzer Hook', () => {
       // Check that display was cleared (may be empty string or whitespace)
       expect(binaryBuffer?.textContent.trim()).toBe('')
       expect(asciiText?.textContent.trim()).toBe('')
+
+      domCleanup()
+      timerCleanup()
     })
   })
 
@@ -324,12 +365,12 @@ describe('Digital Analyzer Hook', () => {
       const addEventListenerSpy = vi.spyOn(document, 'addEventListener')
 
       // Create minimal DOM to allow initialization
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       setupDigitalAnalyzer()
 
@@ -341,6 +382,7 @@ describe('Digital Analyzer Hook', () => {
       expect(calls.length).toBeGreaterThan(0)
 
       addEventListenerSpy.mockRestore()
+      domCleanup()
     })
 
     it('should call cleanup when astro:before-preparation event fires', () => {
@@ -352,12 +394,12 @@ describe('Digital Analyzer Hook', () => {
         unobserve = vi.fn()
       } as unknown as typeof ResizeObserver
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       setupDigitalAnalyzer()
 
@@ -372,6 +414,8 @@ describe('Digital Analyzer Hook', () => {
 
       // Should have called cleanup (which disconnects ResizeObserver)
       expect(mockDisconnect).toHaveBeenCalled()
+
+      domCleanup()
     })
 
     it('should re-initialize on astro:page-load event', () => {
@@ -384,12 +428,12 @@ describe('Digital Analyzer Hook', () => {
         unobserve = vi.fn()
       } as unknown as typeof ResizeObserver
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       setupDigitalAnalyzer()
 
@@ -401,6 +445,8 @@ describe('Digital Analyzer Hook', () => {
 
       // Should initialize (observe container)
       expect(mockObserve).toHaveBeenCalled()
+
+      domCleanup()
     })
 
     it('should handle astro:page-load firing only once on initial load (no double initialization)', () => {
@@ -413,12 +459,12 @@ describe('Digital Analyzer Hook', () => {
         unobserve = vi.fn()
       } as unknown as typeof ResizeObserver
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       setupDigitalAnalyzer()
 
@@ -430,6 +476,8 @@ describe('Digital Analyzer Hook', () => {
 
       // Should initialize exactly once (one observe() call)
       expect(mockObserve).toHaveBeenCalledTimes(1)
+
+      domCleanup()
     })
   })
 
@@ -444,12 +492,12 @@ describe('Digital Analyzer Hook', () => {
         unobserve = vi.fn()
       } as unknown as typeof ResizeObserver
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
           <svg id="digital-analyzer-svg"></svg>
           <svg class="digital-analyzer-static"></svg>
         </div>
-      `
+      `)
 
       setupDigitalAnalyzer()
 
@@ -466,6 +514,8 @@ describe('Digital Analyzer Hook', () => {
       mockObserve.mockClear()
       document.dispatchEvent(new Event('astro:page-load'))
       expect(mockObserve).toHaveBeenCalled()
+
+      domCleanup()
     })
   })
 })

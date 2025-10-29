@@ -1,29 +1,20 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { initializeToggles, setupToggles } from './PillToggle.hook'
 
+import { setupTestDOM, simulateEvent } from '@test/testHelpers'
+
 describe('Toggle Button System', () => {
-  beforeEach(() => {
-    // Reset DOM before each test
-    document.body.innerHTML = ''
-  })
-
-  afterEach(() => {
-    // Clean up
-    document.body.innerHTML = ''
-  })
-
   describe('initializeToggles', () => {
     it('should initialize toggle buttons and menus', () => {
-      // Setup DOM
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             Toggle
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -35,17 +26,18 @@ describe('Toggle Button System', () => {
       expect(menu?.classList.contains('hidden')).toBe(true)
 
       cleanup()
+      domCleanup()
     })
 
     it('should toggle menu visibility when button is clicked', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             Toggle
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -67,10 +59,11 @@ describe('Toggle Button System', () => {
       expect(button.getAttribute('aria-expanded')).toBe('false')
 
       cleanup()
+      domCleanup()
     })
 
     it('should close menu when clicking outside', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             Toggle
@@ -78,7 +71,7 @@ describe('Toggle Button System', () => {
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
         <div id="outside">Outside</div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -96,10 +89,11 @@ describe('Toggle Button System', () => {
       expect(button.getAttribute('aria-expanded')).toBe('false')
 
       cleanup()
+      domCleanup()
     })
 
     it('should handle multiple toggle buttons independently', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="toggle-1" data-toggle-button aria-expanded="false">
             Toggle 1
@@ -112,7 +106,7 @@ describe('Toggle Button System', () => {
           </button>
           <div id="menu-2" class="hidden">Menu 2</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -131,17 +125,18 @@ describe('Toggle Button System', () => {
       expect(menu2.classList.contains('hidden')).toBe(false)
 
       cleanup()
+      domCleanup()
     })
 
     it('should clean up event listeners when cleanup is called', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             Toggle
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -163,10 +158,12 @@ describe('Toggle Button System', () => {
       button.click()
       // Menu should still be hidden since listeners are removed
       expect(menu.classList.contains('hidden')).toBe(true)
+
+      domCleanup()
     })
 
     it('should handle clicks on nested elements within button', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             <span id="icon">Icon</span>
@@ -174,7 +171,7 @@ describe('Toggle Button System', () => {
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -186,10 +183,11 @@ describe('Toggle Button System', () => {
       expect(menu.classList.contains('hidden')).toBe(false)
 
       cleanup()
+      domCleanup()
     })
 
     it('should handle clicks on SVG icons within button', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             <svg id="icon" width="20" height="20">
@@ -198,7 +196,7 @@ describe('Toggle Button System', () => {
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -208,16 +206,16 @@ describe('Toggle Button System', () => {
       // Initially hidden
       expect(menu.classList.contains('hidden')).toBe(true)
 
-      // Click on SVG icon using dispatchEvent
-      const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true })
-      icon.dispatchEvent(clickEvent)
+      // Click on SVG icon using simulateEvent
+      simulateEvent(icon, 'click')
       expect(menu.classList.contains('hidden')).toBe(false)
 
       cleanup()
+      domCleanup()
     })
 
     it('should handle clicks on nested SVG path elements', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             <svg id="icon" width="20" height="20">
@@ -226,7 +224,7 @@ describe('Toggle Button System', () => {
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -236,16 +234,16 @@ describe('Toggle Button System', () => {
       // Initially hidden
       expect(menu.classList.contains('hidden')).toBe(true)
 
-      // Click on deeply nested SVG path element using dispatchEvent
-      const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true })
-      iconPath.dispatchEvent(clickEvent)
+      // Click on deeply nested SVG path element using simulateEvent
+      simulateEvent(iconPath, 'click')
       expect(menu.classList.contains('hidden')).toBe(false)
 
       cleanup()
+      domCleanup()
     })
 
     it('should handle clicks on multiple nested SVG elements like theme toggle', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             <svg id="theme-icon" width="20" height="20">
@@ -257,7 +255,7 @@ describe('Toggle Button System', () => {
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -269,23 +267,22 @@ describe('Toggle Button System', () => {
       // Initially hidden
       expect(menu.classList.contains('hidden')).toBe(true)
 
-      // Click on first SVG icon using dispatchEvent
-      const clickEvent1 = new MouseEvent('click', { bubbles: true, cancelable: true })
-      themeIcon.dispatchEvent(clickEvent1)
+      // Click on first SVG icon using simulateEvent
+      simulateEvent(themeIcon, 'click')
       expect(menu.classList.contains('hidden')).toBe(false)
       expect(button.getAttribute('aria-expanded')).toBe('true')
 
       // Click on nested path in second SVG to close
-      const clickEvent2 = new MouseEvent('click', { bubbles: true, cancelable: true })
-      chevronPath.dispatchEvent(clickEvent2)
+      simulateEvent(chevronPath, 'click')
       expect(menu.classList.contains('hidden')).toBe(true)
       expect(button.getAttribute('aria-expanded')).toBe('false')
 
       cleanup()
+      domCleanup()
     })
 
     it('should return early if no toggle buttons exist', () => {
-      document.body.innerHTML = `<div>No toggle buttons here</div>`
+      const domCleanup = setupTestDOM(`<div>No toggle buttons here</div>`)
 
       const cleanup = initializeToggles()
 
@@ -294,14 +291,15 @@ describe('Toggle Button System', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
     })
 
     it('should handle button without menu gracefully', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <button id="test-toggle" data-toggle-button aria-expanded="false">
           Toggle
         </button>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -311,19 +309,20 @@ describe('Toggle Button System', () => {
       expect(() => button.click()).not.toThrow()
 
       cleanup()
+      domCleanup()
     })
   })
 
   describe('explicit toggle targeting with data-toggle-target', () => {
     it('should find menu using data-toggle-target attribute', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button data-toggle-target="test-menu" aria-expanded="false">
             Toggle
           </button>
         </div>
         <div id="test-menu" class="hidden">Menu Content</div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -339,10 +338,11 @@ describe('Toggle Button System', () => {
       expect(button.getAttribute('aria-expanded')).toBe('true')
 
       cleanup()
+      domCleanup()
     })
 
     it('should work with non-adjacent menu elements', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <nav>
           <button id="nav-toggle" data-toggle-button data-toggle-target="nav-menu" aria-expanded="false">
             Menu
@@ -351,7 +351,7 @@ describe('Toggle Button System', () => {
         <aside>
           <div id="nav-menu" class="hidden">Navigation Menu</div>
         </aside>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -362,14 +362,15 @@ describe('Toggle Button System', () => {
       expect(menu.classList.contains('hidden')).toBe(false)
 
       cleanup()
+      domCleanup()
     })
 
     it('should handle invalid target gracefully', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <button id="test-toggle" data-toggle-button data-toggle-target="nonexistent" aria-expanded="false">
           Toggle
         </button>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -379,17 +380,18 @@ describe('Toggle Button System', () => {
       expect(() => button.click()).not.toThrow()
 
       cleanup()
+      domCleanup()
     })
 
     it('should fallback to nextElementSibling when no target specified', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             Toggle
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -401,10 +403,11 @@ describe('Toggle Button System', () => {
       expect(menu.classList.contains('hidden')).toBe(false)
 
       cleanup()
+      domCleanup()
     })
 
     it('should prefer data-toggle-target over nextElementSibling', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button data-toggle-target="correct-menu" aria-expanded="false">
             Toggle
@@ -412,7 +415,7 @@ describe('Toggle Button System', () => {
           <div id="wrong-menu" class="hidden">Wrong Menu</div>
         </div>
         <div id="correct-menu" class="hidden">Correct Menu</div>
-      `
+      `)
 
       const cleanup = initializeToggles()
 
@@ -425,19 +428,20 @@ describe('Toggle Button System', () => {
       expect(wrongMenu.classList.contains('hidden')).toBe(true)
 
       cleanup()
+      domCleanup()
     })
   })
 
   describe('setupToggles', () => {
     it('should initialize toggles immediately', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             Toggle
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
         </div>
-      `
+      `)
 
       setupToggles()
 
@@ -447,6 +451,8 @@ describe('Toggle Button System', () => {
       // Should work immediately
       button.click()
       expect(menu.classList.contains('hidden')).toBe(false)
+
+      domCleanup()
     })
 
     it('should setup View Transitions event listeners', () => {

@@ -1,26 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { setupKbd } from './Kbd.hook'
 
+import { setupTestDOM } from '@test/testHelpers'
+
 describe('Kbd Hook', () => {
-  let originalUserAgent: string
-
-  beforeEach(() => {
-    // Reset DOM before each test
-    document.body.innerHTML = ''
-    // Store original userAgent
-    originalUserAgent = navigator.userAgent
-  })
-
-  afterEach(() => {
-    // Clean up
-    document.body.innerHTML = ''
-    // Restore original userAgent
-    Object.defineProperty(navigator, 'userAgent', {
-      value: originalUserAgent,
-      configurable: true,
-    })
-  })
+  // Store original userAgent before all tests
+  const originalUserAgent = navigator.userAgent
 
   /**
    * Helper to mock userAgent
@@ -32,12 +18,23 @@ describe('Kbd Hook', () => {
     })
   }
 
+  /**
+   * Helper to restore original userAgent and cleanup DOM
+   */
+  function cleanupTest(): void {
+    document.body.innerHTML = ''
+    Object.defineProperty(navigator, 'userAgent', {
+      value: originalUserAgent,
+      configurable: true,
+    })
+  }
+
   describe('OS Detection', () => {
     it('should detect macOS', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd">⌘K</span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -45,13 +42,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⌘K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should detect Windows', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="ctrl">Ctrl+K</span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -59,13 +58,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Ctrl+K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should detect Linux', () => {
       mockUserAgent('Mozilla/5.0 (X11; Linux x86_64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="ctrl">Ctrl+K</span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -73,15 +74,17 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Ctrl+K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
   })
 
   describe('Platform-Specific Modifiers (cmd|ctrl)', () => {
     it('should use cmd on macOS', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -89,13 +92,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⌘K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should use ctrl on Windows', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -103,13 +108,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Ctrl+K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should use ctrl on Linux', () => {
       mockUserAgent('Mozilla/5.0 (X11; Linux x86_64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -117,15 +124,17 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Ctrl+K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
   })
 
   describe('Single Modifiers', () => {
     it('should format cmd on macOS', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="s" data-modifier="cmd"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -133,13 +142,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⌘S')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should format ctrl on macOS', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="c" data-modifier="ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -147,13 +158,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⌃C')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should format alt on macOS', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="f" data-modifier="alt"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -161,13 +174,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⌥F')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should format shift on macOS', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="tab" data-modifier="shift"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -175,13 +190,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⇧Tab')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should format ctrl on Windows', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="c" data-modifier="ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -189,13 +206,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Ctrl+C')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should format alt on Windows', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="f4" data-modifier="alt"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -203,13 +222,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Alt+F4')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should format shift on Windows', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="delete" data-modifier="shift"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -217,15 +238,17 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Shift+Delete')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
   })
 
   describe('Keys Only (No Modifier)', () => {
     it('should format single key', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="escape"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -233,13 +256,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Escape')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should capitalize first letter of key', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="enter"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -247,17 +272,19 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Enter')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
   })
 
   describe('Multiple Kbd Elements', () => {
     it('should update all Kbd elements independently', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
         <span data-kbd data-keys="s" data-modifier="cmd|ctrl"></span>
         <span data-kbd data-keys="enter"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -267,15 +294,17 @@ describe('Kbd Hook', () => {
       expect(kbdElements[2].textContent).toBe('Enter')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should handle mixed OS-specific shortcuts', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
         <span data-kbd data-keys="f" data-modifier="alt"></span>
         <span data-kbd data-keys="tab" data-modifier="shift"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -285,15 +314,17 @@ describe('Kbd Hook', () => {
       expect(kbdElements[2].textContent).toBe('Shift+Tab')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
   })
 
   describe('Edge Cases', () => {
     it('should handle missing keys attribute', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-modifier="cmd"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -302,13 +333,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should handle empty modifier attribute', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier=""></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -316,13 +349,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should handle unknown modifier gracefully', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="unknown"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -331,11 +366,13 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('unknownK')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should handle no Kbd elements on page', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `<div>No Kbd elements</div>`
+      const domCleanup = setupTestDOM(`<div>No Kbd elements</div>`)
 
       const cleanup = setupKbd()
 
@@ -344,6 +381,8 @@ describe('Kbd Hook', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
   })
 
@@ -360,9 +399,9 @@ describe('Kbd Hook', () => {
 
     it('should update Kbd elements after page navigation', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -380,6 +419,8 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⌘K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should remove event listener on cleanup', () => {
@@ -397,9 +438,9 @@ describe('Kbd Hook', () => {
   describe('Real-World Usage', () => {
     it('should match HomeHero keyboard shortcut behavior (Mac)', () => {
       mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -407,13 +448,15 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('⌘K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
 
     it('should match HomeHero keyboard shortcut behavior (Windows)', () => {
       mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <span data-kbd data-keys="k" data-modifier="cmd|ctrl"></span>
-      `
+      `)
 
       const cleanup = setupKbd()
 
@@ -421,6 +464,8 @@ describe('Kbd Hook', () => {
       expect(kbd.textContent).toBe('Ctrl+K')
 
       cleanup()
+      domCleanup()
+      cleanupTest()
     })
   })
 })

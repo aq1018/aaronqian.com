@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import {
   getCurrentTheme,
@@ -8,21 +8,18 @@ import {
   syncGiscusTheme,
 } from './Comments.hook'
 
+import { setupTestDOM } from '@test/testHelpers'
+
 describe('Comments System', () => {
-  beforeEach(() => {
-    // Reset DOM before each test
-    document.body.innerHTML = ''
-    // Clear all timers
+  // Helper to setup and teardown fake timers
+  function setupFakeTimers(): () => void {
     vi.clearAllTimers()
     vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    // Clean up
-    document.body.innerHTML = ''
-    vi.clearAllTimers()
-    vi.useRealTimers()
-  })
+    return () => {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    }
+  }
 
   describe('getCurrentTheme', () => {
     it('should return "light" when dark class is not present', () => {
@@ -55,9 +52,9 @@ describe('Comments System', () => {
 
   describe('syncGiscusTheme', () => {
     it('should send theme change message to giscus iframe', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <iframe class="giscus-frame"></iframe>
-      `
+      `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -83,19 +80,23 @@ describe('Comments System', () => {
         },
         '*',
       )
+
+      domCleanup()
     })
 
     it('should handle missing iframe gracefully', () => {
-      document.body.innerHTML = `<div>No iframe here</div>`
+      const domCleanup = setupTestDOM(`<div>No iframe here</div>`)
 
       // Should not throw
       expect(() => syncGiscusTheme('light')).not.toThrow()
+
+      domCleanup()
     })
 
     it('should handle iframe without contentWindow gracefully', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <iframe class="giscus-frame"></iframe>
-      `
+      `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       if (iframe === null) return
@@ -107,12 +108,14 @@ describe('Comments System', () => {
 
       // Should not throw
       expect(() => syncGiscusTheme('dark')).not.toThrow()
+
+      domCleanup()
     })
 
     it('should use wildcard origin in development', () => {
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <iframe class="giscus-frame"></iframe>
-      `
+      `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       if (iframe === null) return
@@ -129,14 +132,17 @@ describe('Comments System', () => {
 
       // In test environment (localhost), should use '*' for CORS flexibility
       expect(postMessageSpy).toHaveBeenCalledWith(expect.any(Object), '*')
+
+      domCleanup()
     })
   })
 
   describe('initializeComments', () => {
     it('should initialize comments when container exists', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-comments></div>
-      `
+      `)
 
       const cleanup = initializeComments()
 
@@ -146,10 +152,13 @@ describe('Comments System', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should return early if comments container does not exist', () => {
-      document.body.innerHTML = `<div>No comments here</div>`
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`<div>No comments here</div>`)
 
       const cleanup = initializeComments()
 
@@ -158,9 +167,13 @@ describe('Comments System', () => {
       expect(typeof cleanup).toBe('function')
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should sync theme to giscus iframe when theme changes to dark', () => {
+      const timerCleanup = setupFakeTimers()
+
       // Start with light theme (no dark class)
       document.documentElement.classList.remove('dark')
 
@@ -175,11 +188,11 @@ describe('Comments System', () => {
       }
 
       // Setup DOM with comments container and giscus iframe
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-comments>
           <iframe class="giscus-frame"></iframe>
         </div>
-      `
+      `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -235,9 +248,13 @@ describe('Comments System', () => {
       window.MutationObserver = OriginalMutationObserver
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should sync theme to giscus iframe when theme changes to light', () => {
+      const timerCleanup = setupFakeTimers()
+
       // Start with dark theme
       document.documentElement.classList.add('dark')
 
@@ -251,11 +268,11 @@ describe('Comments System', () => {
         }
       }
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-comments>
           <iframe class="giscus-frame"></iframe>
         </div>
-      `
+      `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -310,12 +327,15 @@ describe('Comments System', () => {
       window.MutationObserver = OriginalMutationObserver
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should set initial theme when iframe loads', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-comments></div>
-      `
+      `)
 
       const cleanup = initializeComments()
 
@@ -354,12 +374,15 @@ describe('Comments System', () => {
       )
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should handle iframe not loading within timeout', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-comments></div>
-      `
+      `)
 
       const cleanup = initializeComments()
 
@@ -370,9 +393,13 @@ describe('Comments System', () => {
       expect(() => cleanup()).not.toThrow()
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should configure MutationObserver to watch documentElement classList changes', () => {
+      const timerCleanup = setupFakeTimers()
+
       // Mock MutationObserver to capture configuration
       let observedElement: Node | null = null
       let observerOptions: MutationObserverInit | null = null
@@ -386,9 +413,9 @@ describe('Comments System', () => {
         }
       }
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-comments></div>
-      `
+      `)
 
       const cleanup = initializeComments()
 
@@ -403,14 +430,17 @@ describe('Comments System', () => {
       window.MutationObserver = OriginalMutationObserver
 
       cleanup()
+      domCleanup()
+      timerCleanup()
     })
 
     it('should clean up MutationObserver when cleanup is called', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-comments>
           <iframe class="giscus-frame"></iframe>
         </div>
-      `
+      `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -444,9 +474,14 @@ describe('Comments System', () => {
 
       // Should NOT send message because observer was disconnected
       expect(postMessageSpy).not.toHaveBeenCalled()
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should clean up previous initialization when called multiple times', () => {
+      const timerCleanup = setupFakeTimers()
+
       // Track observer disconnect calls
       const disconnectCalls: number[] = []
       let observerIndex = 0
@@ -467,11 +502,11 @@ describe('Comments System', () => {
         }
       }
 
-      document.body.innerHTML = `
+      const domCleanup = setupTestDOM(`
         <div data-comments>
           <iframe class="giscus-frame"></iframe>
         </div>
-      `
+      `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -512,19 +547,25 @@ describe('Comments System', () => {
 
       cleanup1()
       cleanup2()
+      domCleanup()
+      timerCleanup()
     })
   })
 
   describe('setupComments', () => {
     it('should initialize comments immediately', () => {
-      document.body.innerHTML = `
+      const timerCleanup = setupFakeTimers()
+      const domCleanup = setupTestDOM(`
         <div data-comments></div>
-      `
+      `)
 
       setupComments()
 
       const container = document.querySelector('[data-comments]')
       expect(container).toBeDefined()
+
+      domCleanup()
+      timerCleanup()
     })
 
     it('should setup View Transitions event listeners', () => {

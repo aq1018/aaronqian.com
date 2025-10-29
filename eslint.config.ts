@@ -13,7 +13,7 @@ import tseslint from 'typescript-eslint'
 // ============================================================================
 const TS_JS_FILES = ['**/*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}']
 const ASTRO_FILES = ['**/*.astro']
-const TEST_FILES = ['**/*.{test,spec}.{ts,tsx}']
+const TEST_FILES = ['**/*.{test,spec}.{ts,tsx}', '/test/*.{ts,tsx}']
 const CSS_FILES = ['**/*.css']
 const JSON_FILES = ['**/*.json']
 const MARKDOWN_FILES = ['**/*.md']
