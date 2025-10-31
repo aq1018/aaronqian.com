@@ -61,7 +61,7 @@ describe('ProjectList', () => {
       }
     })
 
-    it('should render project status with correct style', async () => {
+    it('should render project status label', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
       const root = await renderAstroComponent(ProjectList, {
         props: {
@@ -72,7 +72,6 @@ describe('ProjectList', () => {
       })
 
       expect(root.textContent).toContain('ACTIVE')
-      expect(root.innerHTML).toContain('text-primary')
     })
 
     it('should render project description and aside', async () => {
@@ -183,20 +182,6 @@ describe('ProjectList', () => {
       })
 
       expect(root.textContent).toContain('DONE')
-    })
-
-    it('should apply correct status style class', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderAstroComponent(ProjectList, {
-        props: {
-          projects,
-          statusStyles: defaultStatusStyles,
-          statusLabels: defaultStatusLabels,
-        },
-      })
-
-      const statusSpan = root.querySelector('span')
-      expect(statusSpan?.className).toContain('text-primary')
     })
   })
 
@@ -316,20 +301,6 @@ describe('ProjectList', () => {
       expect(root.textContent).toContain('Project')
       expect(root.textContent).toContain('Status')
       expect(root.textContent).toContain('Description')
-    })
-
-    it('should render column headers in a hidden container on mobile', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
-      const root = await renderAstroComponent(ProjectList, {
-        props: {
-          projects,
-          statusStyles: defaultStatusStyles,
-          statusLabels: defaultStatusLabels,
-        },
-      })
-
-      // Check for hidden container with md:grid class
-      expect(root.innerHTML).toContain('hidden md:grid')
     })
   })
 

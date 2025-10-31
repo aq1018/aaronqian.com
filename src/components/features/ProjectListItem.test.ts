@@ -59,7 +59,7 @@ describe('ProjectListItem Component', () => {
       expect(root.innerHTML).not.toContain('/projects/another-project/index')
     })
 
-    it('should render status with correct style', async () => {
+    it('should render status label', async () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
@@ -69,7 +69,6 @@ describe('ProjectListItem Component', () => {
       })
 
       expect(root.innerHTML).toContain('In Progress')
-      expect(root.innerHTML).toContain('text-blue-500')
     })
 
     it('should render project description', async () => {
@@ -128,63 +127,6 @@ describe('ProjectListItem Component', () => {
     })
   })
 
-  describe('Layout', () => {
-    it('should use Sheet with bar variant', async () => {
-      const root = await renderAstroComponent(ProjectListItem, {
-        props: {
-          project: mockProject,
-          statusStyle: 'text-green-500',
-          statusLabel: 'Active',
-        },
-      })
-
-      // Sheet with bar variant has border-l-2 and bg-transparent
-      expect(root.innerHTML).toContain('border-l-2')
-      expect(root.innerHTML).toContain('bg-transparent')
-    })
-
-    it('should have hover effect on Sheet', async () => {
-      const root = await renderAstroComponent(ProjectListItem, {
-        props: {
-          project: mockProject,
-          statusStyle: 'text-green-500',
-          statusLabel: 'Active',
-        },
-      })
-
-      expect(root.innerHTML).toContain('transition-colors')
-    })
-
-    it('should use Grid layout with 12-column system', async () => {
-      const root = await renderAstroComponent(ProjectListItem, {
-        props: {
-          project: mockProject,
-          statusStyle: 'text-green-500',
-          statusLabel: 'Active',
-        },
-      })
-
-      // Should have grid container
-      expect(root.innerHTML).toContain('grid')
-      // Should have responsive column spans
-      expect(root.innerHTML).toContain('col-span-12')
-      expect(root.innerHTML).toContain('md:col-span-4')
-    })
-
-    it('should align status column to the right on desktop', async () => {
-      const root = await renderAstroComponent(ProjectListItem, {
-        props: {
-          project: mockProject,
-          statusStyle: 'text-green-500',
-          statusLabel: 'Active',
-        },
-      })
-
-      expect(root.innerHTML).toContain('md:justify-self-end')
-      expect(root.innerHTML).toContain('md:items-end')
-    })
-  })
-
   describe('Different Project Statuses', () => {
     it('should render completed status', async () => {
       const completedProject = {
@@ -201,7 +143,6 @@ describe('ProjectListItem Component', () => {
       })
 
       expect(root.innerHTML).toContain('Completed')
-      expect(root.innerHTML).toContain('text-gray-500')
     })
 
     it('should render paused status', async () => {
@@ -219,7 +160,6 @@ describe('ProjectListItem Component', () => {
       })
 
       expect(root.innerHTML).toContain('Paused')
-      expect(root.innerHTML).toContain('text-yellow-500')
     })
 
     it('should render archived status', async () => {
@@ -237,7 +177,6 @@ describe('ProjectListItem Component', () => {
       })
 
       expect(root.innerHTML).toContain('Archived')
-      expect(root.innerHTML).toContain('text-gray-400')
     })
   })
 

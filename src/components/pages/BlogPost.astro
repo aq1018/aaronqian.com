@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 
 import Comments from '@/components/features/Comments.astro'
@@ -8,6 +7,7 @@ import Cluster from '@/components/primitives/Cluster.astro'
 import Container from '@/components/primitives/Container.astro'
 import Divider from '@/components/primitives/Divider.astro'
 import Heading from '@/components/primitives/Heading.astro'
+import Link from '@/components/primitives/Link.astro'
 import Prose from '@/components/primitives/Prose.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Surface from '@/components/primitives/Surface.astro'
@@ -21,34 +21,17 @@ const { post } = Astro.props
 const { Content } = await post.render()
 ---
 
-<main class="flex-1">
-  <Surface>
-    <Container>
-      <Cluster space="sm">
-        <a
-          href="/blog"
-          class="text-link transition-colors hover:text-[color-mix(in_oklab,var(--color-link),black_10%)]"
-        >
-          ← Back to blog
-        </a>
-      </Cluster>
+<Surface>
+  <Container width="narrow">
+    <Stack space="lg">
+      <Link href="/blog" variant="back"> ← Back to blog </Link>
 
-      <Heading size="h1" class="mt-6 leading-tight sm:text-5xl">
+      <Heading size="h1">
         {post.data.title}
       </Heading>
 
-      {
-        post.data.hero !== undefined && (
-          <Image
-            src={post.data.hero}
-            alt={post.data.title}
-            class="mt-8 h-auto max-h-96 w-full rounded-lg object-cover"
-          />
-        )
-      }
-
-      <Stack space="sm" class="mb-8">
-        <Text class="mt-4">
+      <Stack space="xs">
+        <Text color="muted">
           {
             post.data.date.toLocaleDateString('en-US', {
               year: 'numeric',
@@ -58,24 +41,25 @@ const { Content } = await post.render()
           }
         </Text>
         {
-          post.data.tags !== undefined && (
-            <Stack direction="row" space="xs" class="flex-wrap">
+          post.data.tags !== undefined && post.data.tags.length > 0 && (
+            <Cluster space="xs">
               {post.data.tags.map((tag) => (
-                <Badge color="muted" size="md">
+                <Badge color="neutral" size="sm">
                   {tag}
                 </Badge>
               ))}
-            </Stack>
+            </Cluster>
           )
         }
-        <Divider />
       </Stack>
+
+      <Divider />
 
       <Prose size="base">
         <Content />
       </Prose>
 
-      <Comments class="mt-16" />
-    </Container>
-  </Surface>
-</main>
+      <Comments />
+    </Stack>
+  </Container>
+</Surface>

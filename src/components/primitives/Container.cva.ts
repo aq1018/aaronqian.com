@@ -6,7 +6,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 export const containerCva = cva('relative w-full', {
   variants: {
     width: {
-      narrow: 'max-w-2xl', // 672px - for reading content
+      narrow: 'max-w-5xl', // 1024px - for reading content
       default: 'max-w-6xl', // 1152px - standard content width
       wide: 'max-w-7xl', // 1280px - wide layouts
       full: '', // No constraint - full viewport width

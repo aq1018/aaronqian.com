@@ -141,6 +141,28 @@ npm run test:run   # Run once (CI)
 
 **Examples:** `Button.astro.test.ts`, `DigitalAnalyzer.astro.test.ts`
 
+## Testing Features/Pages (P1)
+
+**High-level content/structure only. Do NOT test styling details.**
+
+**Test:**
+
+- ✅ Content exists (titles, descriptions, dates, labels)
+- ✅ Semantic markup (ul/li, headings, articles)
+- ✅ Data display (correct values rendered)
+- ✅ Links and URLs
+- ✅ Conditional rendering (badges, empty states)
+
+**Don't test:**
+
+- ❌ CSS classes, Tailwind utilities
+- ❌ Responsive breakpoint classes
+- ❌ Primitive component styling
+- ❌ Layout implementation details
+
+**References:** `ProjectList.test.ts`, `ProjectListItem.test.ts`,
+`BlogList.test.ts`, `BlogListItem.test.ts`
+
 ## Testing CVA Variants
 
 **Structure:**

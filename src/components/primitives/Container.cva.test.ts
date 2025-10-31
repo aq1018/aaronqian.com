@@ -19,7 +19,7 @@ describe('Container.cva', () => {
     testAllVariants(containerCva, 'width', ['narrow', 'default', 'wide', 'full'])
 
     it('should apply narrow width correctly', () => {
-      expect(containerCva({ width: 'narrow' })).toContainClasses(['max-w-2xl'])
+      expect(containerCva({ width: 'narrow' })).toContainClasses(['max-w-5xl'])
     })
 
     it('should apply default width correctly', () => {

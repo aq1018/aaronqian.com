@@ -1,15 +1,10 @@
 ---
-import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 
-import Badge from '@/components/primitives/Badge.astro'
+import BlogList from '@/components/features/BlogList.astro'
+import HeroContent from '@/components/patterns/HeroContent.astro'
 import Container from '@/components/primitives/Container.astro'
-import Divider from '@/components/primitives/Divider.astro'
-import Heading from '@/components/primitives/Heading.astro'
-import Link from '@/components/primitives/Link.astro'
-import Stack from '@/components/primitives/Stack.astro'
 import Surface from '@/components/primitives/Surface.astro'
-import Text from '@/components/primitives/Text.astro'
 
 export interface Props {
   posts: Array<CollectionEntry<'blog'>>
@@ -18,55 +13,20 @@ export interface Props {
 const { posts } = Astro.props
 ---
 
-<main class="flex-1">
-  <Surface>
-    <Container>
-      <Heading size="h1">Blog Posts</Heading>
+<Surface>
+  <HeroContent
+    eyebrow="BLOG"
+    title="Notes from the Lab"
+    description="Software engineering insights, experiments, and the occasional bug that became a feature."
+    microLine="Updated irregularly. Mostly coherent."
+  />
+</Surface>
 
-      <Stack space="md" class="mt-8">
-        {
-          posts.map((post, index) => (
-            <article>
-              <Stack space="sm">
-                {post.data.hero !== undefined && (
-                  <Link href={`/blog/${post.slug}`} class="block">
-                    <Image
-                      src={post.data.hero}
-                      alt={post.data.title}
-                      width={800}
-                      height={200}
-                      class="h-48 w-full rounded-lg object-cover"
-                    />
-                  </Link>
-                )}
-                <Heading size="h2">
-                  <Link href={`/blog/${post.slug}`} class="no-underline hover:underline">
-                    {post.data.title}
-                  </Link>
-                </Heading>
-                <Text>
-                  {post.data.date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </Text>
-                {<Text>{post.data.description}</Text>}
-                {post.data.tags !== undefined && (
-                  <Stack direction="row" space="xs" class="flex-wrap">
-                    {post.data.tags.map((tag) => (
-                      <Badge color="muted" size="md">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </Stack>
-                )}
-                {index < posts.length - 1 && <Divider />}
-              </Stack>
-            </article>
-          ))
-        }
-      </Stack>
-    </Container>
-  </Surface>
-</main>
+<Surface>
+  <Container>
+    <BlogList
+      {posts}
+      footer="New posts whenever inspiration strikes. Or when the coffee kicks in."
+    />
+  </Container>
+</Surface>
