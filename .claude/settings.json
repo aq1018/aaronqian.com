@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/hooks/format-and-lint.sh {file_path}"
+            "command": "ai/tools/format-and-lint.js"
           }
         ]
       }

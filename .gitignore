@@ -30,9 +30,6 @@ pnpm-debug.log*
 # AI files - ignore all except shared settings and hooks
 .claude/*
 !.claude/settings.json
-!.claude/hooks/
-.claude/hooks/*
-!.claude/hooks/format-and-lint.sh
 
 # generated files
 *.generated.*

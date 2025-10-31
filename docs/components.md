@@ -2,6 +2,9 @@
 
 > Component architecture, naming, and file organization rules
 
+**After creating/modifying component files:** Follow Per-File Validation
+workflow (AGENTS.md).
+
 ## File Structure
 
 | File                  | Purpose                     | When Required                        |

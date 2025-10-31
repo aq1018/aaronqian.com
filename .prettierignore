@@ -42,7 +42,8 @@ pnpm-lock.yaml
 .astro/
 
 # Claude
-.claude/
+.claude/*
+!.claude/settings.json
 
 # Generated files
 *.generated.*

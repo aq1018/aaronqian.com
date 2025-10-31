@@ -2,6 +2,9 @@
 
 > `.hook.ts` files for client-side JavaScript with View Transitions support
 
+**After creating/modifying `.hook.ts` files:** Follow Per-File Validation
+workflow (AGENTS.md).
+
 ## Required Pattern (P0)
 
 **Every `.hook.ts` file MUST follow this pattern:**

@@ -2,6 +2,9 @@
 
 > Testing requirements and patterns
 
+**After creating/modifying test files:** Follow Per-File Validation workflow
+(AGENTS.md).
+
 ## Testing Requirements (P1)
 
 **For NEW code:** Tests MUST exist before commit.

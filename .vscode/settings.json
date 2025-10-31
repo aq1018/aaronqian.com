@@ -19,7 +19,8 @@
     "longread",
     "oklch",
     "Qian",
-    "Subcomponent"
+    "Subcomponent",
+    "TSES"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }
