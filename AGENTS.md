@@ -12,8 +12,9 @@ failures, memory leaks, failed CI/CD, and blocked merges.
 1. Load relevant docs from Documentation Map below
 2. Search codebase for similar patterns (Glob/Grep)
 3. Follow patterns EXACTLY
-4. Run `npm run autofix && npm run ci` before committing
-5. NEVER use `git commit --no-verify`
+4. **Validate EVERY file after Edit/Write** (see Per-File Validation below)
+5. Run `npm run autofix && npm run ci` before committing
+6. NEVER use `git commit --no-verify`
 
 **When uncertain: STOP and ASK. Do NOT guess.**
 
@@ -44,6 +45,7 @@ failures, memory leaks, failed CI/CD, and blocked merges.
 
 ### P0 Rules (NEVER VIOLATE)
 
+- **Per-file validation after EVERY file change/creation** (see workflow below)
 - View Transitions lifecycle patterns with cleanup functions
 - Memory leak prevention (always remove event listeners)
 - No `git commit --no-verify`
@@ -78,6 +80,22 @@ failures, memory leaks, failed CI/CD, and blocked merges.
 - Optional file creation thresholds (3+ items)
 - Documentation style preferences
 - Opportunistic refactoring
+
+---
+
+## Per-File Validation Workflow (P0)
+
+**After EVERY Edit/Write:**
+
+**Automatic (PostToolUse hook):** `eslint --fix` → `prettier --write` → `eslint`
+verification
+
+**Manual (YOU must do):**
+
+1. Type check: `npx tsc --noEmit <file>` (`.ts`) or `astro check` (`.astro`)
+2. If errors: fix and repeat until clean
+
+**Iterate immediately. Do NOT batch files.**
 
 ---
 
@@ -123,7 +141,8 @@ git commit           # Commit (hooks run automatically, never use --no-verify)
 1. Check Documentation Map - load relevant docs FIRST
 2. Search for examples - use Glob/Grep patterns
 3. Follow patterns EXACTLY - don't deviate from P0/P1 without approval
-4. Run checks before committing - `npm run autofix && npm run ci`
-5. Ask when uncertain - better to ask than to guess
+4. **Validate EVERY file after changes** - see Per-File Validation
+5. Run checks before committing - `npm run autofix && npm run ci`
+6. Ask when uncertain - better to ask than to guess
 
 **Last Updated:** 2025-10-26

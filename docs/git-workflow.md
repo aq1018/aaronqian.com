@@ -8,6 +8,16 @@
 
 Pre-commit hooks are mandatory.
 
+## Per-File Validation (P0)
+
+**After EVERY file Edit/Write, validate immediately:**
+
+1. Hook auto-runs: `eslint --fix` → `prettier --write` → `eslint` verification
+2. YOU verify: `npx tsc --noEmit <file>` or `astro check`
+3. If errors: fix and repeat
+
+See AGENTS.md Per-File Validation section.
+
 ## Pre-Commit Sequence
 
 **Run checks BEFORE committing:**
