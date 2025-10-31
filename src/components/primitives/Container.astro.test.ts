@@ -28,7 +28,7 @@ describe('Container.astro', () => {
       const root = await renderAstroComponent(Container, { props: {} })
 
       const div = root.querySelector('div')
-      expect(div).toHaveClasses(['w-full'])
+      expect(div).toHaveClasses(['relative', 'w-full'])
     })
 
     it('should merge custom classes with variant classes', async () => {
@@ -38,7 +38,7 @@ describe('Container.astro', () => {
 
       const div = root.querySelector('div')
       expect(div?.classList.contains('custom-class')).toBe(true)
-      expect(div).toHaveClasses(['w-full'])
+      expect(div).toHaveClasses(['relative', 'w-full'])
     })
 
     it('should pass through HTML attributes', async () => {

@@ -1,0 +1,190 @@
+/* src/styles/typography.css
+   Tailwind v4
+   Dual-family typography scales
+*/
+
+@theme {
+  /* =========================
+     LEADING: SANS
+     0 = tightest, 4 = roomiest
+     ========================= */
+  --leading-sans-0: 0.97; /* display / hero */
+  --leading-sans-1: 1.35; /* headings h1–h4 */
+  --leading-sans-2: 1.7; /* body / default */
+  --leading-sans-3: 1.85; /* relaxed text */
+  --leading-sans-4: 2; /* longread / marketing */
+
+  /* =========================
+     LEADING: MONO
+     slightly more open at each step
+     ========================= */
+  --leading-mono-0: 1; /* display mono */
+  --leading-mono-1: 1.4; /* mono headings */
+  --leading-mono-2: 1.75; /* mono body */
+  --leading-mono-3: 1.9; /* mono relaxed */
+  --leading-mono-4: 2.05; /* mono long */
+
+  /* =========================
+     TRACKING: SANS
+     0 = tightest, 4 = widest
+     ========================= */
+  --tracking-sans-0: -0.01em; /* display */
+  --tracking-sans-1: -0.005em; /* headings */
+  --tracking-sans-2: 0em; /* body */
+  --tracking-sans-3: 0.01em; /* small / note */
+  --tracking-sans-4: 0.06em; /* labels / all-caps */
+
+  /* =========================
+     TRACKING: MONO
+     same steps, but generally tighter
+     ========================= */
+  --tracking-mono-0: -0.015em; /* display mono */
+  --tracking-mono-1: -0.01em; /* mono headings */
+  --tracking-mono-2: -0.003em; /* mono “neutral” */
+  --tracking-mono-3: 0.008em; /* mono small */
+  --tracking-mono-4: 0.05em; /* mono labels */
+}
+
+@layer utilities {
+  /* ======================================
+     DISPLAY HEADINGS (sans defaults)
+     ====================================== */
+
+  .typography-heading-display-2 {
+    @apply text-5xl font-bold md:text-6xl lg:text-7xl;
+    @apply leading-sans-0 tracking-sans-0;
+  }
+
+  .typography-heading-display-1 {
+    @apply text-4xl font-bold md:text-5xl lg:text-6xl;
+    /* slightly less tight than display-2 */
+    @apply leading-sans-0 tracking-sans-1;
+  }
+
+  /* ======================================
+     REGULAR HEADINGS (1 step down)
+     ====================================== */
+
+  .typography-heading-h1 {
+    @apply text-3xl font-semibold md:text-4xl lg:text-5xl;
+    @apply leading-sans-1 tracking-sans-1;
+  }
+
+  .typography-heading-h2 {
+    @apply text-2xl font-semibold md:text-3xl lg:text-4xl;
+    @apply leading-sans-1 tracking-sans-1;
+  }
+
+  .typography-heading-h3 {
+    @apply text-xl font-semibold md:text-2xl lg:text-3xl;
+    @apply leading-sans-1 tracking-sans-1;
+  }
+
+  .typography-heading-h4 {
+    @apply text-lg font-medium md:text-xl lg:text-2xl;
+    @apply leading-sans-1 tracking-sans-1;
+  }
+
+  .typography-heading-h5 {
+    @apply text-base font-medium md:text-lg;
+    @apply leading-sans-2 tracking-sans-2;
+  }
+
+  .typography-heading-h6 {
+    @apply text-sm font-medium md:text-base;
+    @apply leading-sans-2 tracking-sans-3;
+  }
+
+  /* ======================================
+     TEXT SCALES
+     ====================================== */
+
+  .typography-text-lead {
+    @apply text-lg md:text-xl;
+    /* lead is closer to heading than to tight body */
+    @apply leading-sans-2 tracking-sans-2;
+  }
+
+  .typography-text-body {
+    @apply text-base;
+    @apply leading-sans-2 tracking-sans-2;
+  }
+
+  .typography-text-body-dense {
+    @apply text-base;
+    /* go a bit tighter vertically, tracking stays neutral */
+    @apply leading-sans-1 tracking-sans-2;
+  }
+
+  .typography-text-small {
+    @apply text-sm;
+    @apply leading-sans-2 tracking-sans-3;
+  }
+
+  .typography-text-small-dense {
+    @apply text-sm;
+    @apply leading-sans-1 tracking-sans-3;
+  }
+
+  .typography-text-micro {
+    @apply text-xs;
+    @apply leading-sans-2 tracking-sans-3;
+  }
+
+  .typography-text-label-lg {
+    @apply text-base uppercase;
+    @apply leading-sans-1 tracking-sans-4;
+  }
+
+  .typography-text-label {
+    @apply text-sm uppercase;
+    @apply leading-sans-1 tracking-sans-4;
+  }
+
+  .typography-text-label-sm {
+    @apply text-xs uppercase;
+    @apply leading-sans-1 tracking-sans-4;
+  }
+
+  .typography-text-xl {
+    @apply text-xl md:text-2xl;
+    @apply leading-sans-2 tracking-sans-2;
+  }
+
+  .typography-text-2xl {
+    @apply text-2xl md:text-3xl;
+    @apply leading-sans-2 tracking-sans-2;
+  }
+
+  /* ======================================
+     PRESETS
+     ====================================== */
+
+  /* hero = display-ish */
+  .typography-preset-hero {
+    @apply leading-sans-0 tracking-sans-0;
+  }
+
+  /* kicker = wide caps */
+  .typography-preset-kicker {
+    @apply uppercase;
+    @apply leading-sans-1 tracking-sans-4;
+  }
+
+  /* note = small-ish text */
+  .typography-preset-note {
+    @apply leading-sans-2 tracking-sans-3;
+  }
+
+  /* longread = comfy */
+  .typography-preset-longread {
+    @apply leading-sans-4 tracking-sans-2;
+  }
+
+  /* ======================================
+     UTIL
+     ====================================== */
+  .typography-truncate {
+    @apply overflow-hidden break-normal text-ellipsis whitespace-nowrap;
+  }
+}

@@ -13,14 +13,24 @@ import Heading from '@/components/primitives/Heading.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
 
-export interface Props {
-  projects: Array<CollectionEntry<'projects'>>
-  statusStyles: Record<string, string>
-  statusLabels: Record<string, string>
-  showFooter?: boolean
+const statusStyles = {
+  active: 'text-primary',
+  planning: 'text-muted',
+  done: 'text-content/60',
 }
 
-const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
+const statusLabels = {
+  active: 'ACTIVE',
+  planning: 'PLANNING',
+  done: 'DONE',
+}
+
+export interface Props {
+  projects: Array<CollectionEntry<'projects'>>
+  footer?: string
+}
+
+const { projects, footer } = Astro.props
 ---
 
 <Stack>
@@ -49,6 +59,5 @@ const { projects, statusStyles, statusLabels, showFooter = true } = Astro.props
     }
   </ul>
 
-  <!-- Footer -->
-  {showFooter && <Text color="muted">Updates monthly. Expect context switches.</Text>}
+  {footer != null && <Text color="muted">{footer}</Text>}
 </Stack>

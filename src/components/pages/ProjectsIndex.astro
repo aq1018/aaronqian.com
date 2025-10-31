@@ -5,37 +5,34 @@ import CuttingMat from '@/components/features/CuttingMat.astro'
 import ProjectList from '@/components/features/ProjectList.astro'
 import HeroContent from '@/components/patterns/HeroContent.astro'
 import Container from '@/components/primitives/Container.astro'
+import Overlay from '@/components/primitives/Overlay.astro'
 import Surface from '@/components/primitives/Surface.astro'
-import Text from '@/components/primitives/Text.astro'
 
 export interface Props {
   projects: Array<CollectionEntry<'projects'>>
-  statusStyles: Record<string, string>
-  statusLabels: Record<string, string>
 }
 
-const { projects, statusStyles, statusLabels } = Astro.props
+const { projects } = Astro.props
 ---
 
-<!-- Hero Section -->
-<CuttingMat class="cutting-mat w-full py-16 sm:py-20 lg:py-24">
-  <HeroContent
-    eyebrow="PROJECT ARCHIVE"
-    title="Projects / Lab Notes"
-    description="My digital workshop — half experiments, half excuses to learn new tools."
-  >
-    <!-- Micro-line in named slot - mt-4 since no CTAs -->
-    <Text slot="microLine" align="center" class="mt-4 text-muted/70">
-      <span class="text-primary">⚠️</span> Some projects are still in beta. Including me.
-    </Text>
-  </HeroContent>
-</CuttingMat>
+<Surface>
+  <div slot="background" class="flex h-full w-full items-end justify-center overflow-hidden">
+    <CuttingMat />
+  </div>
 
-<!-- Projects Content -->
-<main>
-  <Surface>
-    <Container>
-      <ProjectList {projects} {statusStyles} {statusLabels} />
-    </Container>
-  </Surface>
-</main>
+  <Overlay slot="background" preset="radial-fade" />
+  <Container>
+    <HeroContent
+      eyebrow="PROJECT ARCHIVE"
+      title="Projects / Lab Notes"
+      description="My digital workshop — half experiments, half excuses to learn new tools."
+      microLine="⚠️ Some projects are still in beta. Including me."
+    />
+  </Container>
+</Surface>
+
+<Surface>
+  <Container>
+    <ProjectList {projects} footer="Updates monthly. Expect context switches." />
+  </Container>
+</Surface>

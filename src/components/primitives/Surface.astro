@@ -15,7 +15,7 @@ const { padY, class: className = '', ...rest } = Astro.props
 <section class={cn(surfaceCva({ padY }), className)} {...rest}>
   {
     Astro.slots.has('background') && (
-      <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 -z-10 overflow-hidden">
         <slot name="background" />
       </div>
     )

@@ -65,7 +65,8 @@ failures, memory leaks, failed CI/CD, and blocked merges.
 - 3-layer architecture: primitives (domain-free) → features (domain-specific) →
   pages
 - Primitives interface with Tailwind; features/pages interface with primitives
-  only
+  only (text spacing fine tuning with `tracking-*`/`leading-*` utilities is an
+  allowed exception)
 - Ad-hoc classes in features/pages indicate missing primitives - refactor
   required
 - Component props must be semantic, never Tailwind pass-through (e.g.,

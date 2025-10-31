@@ -6,8 +6,10 @@
    Only create when component needs styles that don't fit in <style> blocks.
 
    Import pattern:
-   @import '../components/ui/Button.css';
-   @import '../components/ui/Badge.css';
+   @import '../components/primitives/Button.css';
+   @import '../components/primitives/Badge.css';
 
    Currently: Mostly empty (expected - most components use inline styles or CVA)
    ----------------------------- */
+
+@import '../components/primitives/typography.css';

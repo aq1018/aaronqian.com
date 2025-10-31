@@ -11,12 +11,9 @@ import {
 
 describe('Heading.cva', () => {
   testDefaultVariants(headingVariants, [
-    'text-3xl', // Size h2
-    'md:text-4xl',
-    'font-semibold',
+    'typography-heading-h2', // Size h2 (includes font-size, weight, leading, tracking)
     'text-inherit', // Color inherit
     'font-mono', // Family mono
-    'tracking-wider', // Compound: mono family
     'whitespace-normal',
     'break-normal',
   ])
@@ -35,28 +32,16 @@ describe('Heading.cva', () => {
 
     it('should render display-2 size correctly', () => {
       expect(headingVariants({ size: 'display-2' })).toContainClasses([
-        'text-6xl',
-        'md:text-7xl',
-        'font-bold',
-        'leading-[0.95]',
+        'typography-heading-display-2',
       ])
     })
 
     it('should render h1 size correctly', () => {
-      expect(headingVariants({ size: 'h1' })).toContainClasses([
-        'text-4xl',
-        'md:text-5xl',
-        'font-semibold',
-        'leading-tight',
-      ])
+      expect(headingVariants({ size: 'h1' })).toContainClasses(['typography-heading-h1'])
     })
 
     it('should render h6 size correctly', () => {
-      expect(headingVariants({ size: 'h6' })).toContainClasses([
-        'text-base',
-        'font-medium',
-        'leading-normal',
-      ])
+      expect(headingVariants({ size: 'h6' })).toContainClasses(['typography-heading-h6'])
     })
   })
 
@@ -82,12 +67,12 @@ describe('Heading.cva', () => {
   describe('Family Variants', () => {
     testAllVariants(headingVariants, 'family', ['inherit', 'sans', 'mono'])
 
-    it('should render mono family with tracking-wider', () => {
-      expect(headingVariants({ family: 'mono' })).toContainClasses(['font-mono', 'tracking-wider'])
+    it('should render mono family with font-mono', () => {
+      expect(headingVariants({ family: 'mono' })).toContainClasses(['font-mono'])
     })
 
-    it('should render sans family with tracking-tight', () => {
-      expect(headingVariants({ family: 'sans' })).toContainClasses(['font-sans', 'tracking-tight'])
+    it('should render sans family with font-sans', () => {
+      expect(headingVariants({ family: 'sans' })).toContainClasses(['font-sans'])
     })
 
     it('should render inherit family without font class', () => {
@@ -130,18 +115,21 @@ describe('Heading.cva', () => {
   })
 
   describe('Compound Variants', () => {
-    it('should apply tracking-wider for mono family', () => {
-      expect(headingVariants({ family: 'mono' })).toContain('tracking-wider')
+    it('should apply special tracking for display-2 with mono family', () => {
+      expect(headingVariants({ size: 'display-2', family: 'mono' })).toContain(
+        'tracking-heading-display-mono',
+      )
     })
 
-    it('should apply tracking-tight for sans family', () => {
-      expect(headingVariants({ family: 'sans' })).toContain('tracking-tight')
+    it('should apply special tracking for display-1 with mono family', () => {
+      expect(headingVariants({ size: 'display-1', family: 'mono' })).toContain(
+        'tracking-heading-display-mono',
+      )
     })
 
-    it('should not apply tracking for inherit family', () => {
-      const result = headingVariants({ family: 'inherit' })
-      expect(result).not.toContain('tracking-wider')
-      expect(result).not.toContain('tracking-tight')
+    it('should not apply special tracking for regular headings with mono family', () => {
+      const result = headingVariants({ size: 'h2', family: 'mono' })
+      expect(result).not.toContain('tracking-heading-display-mono')
     })
   })
 
@@ -152,34 +140,33 @@ describe('Heading.cva', () => {
   })
 
   testEdgeCases(headingVariants, { size: 'h2', color: 'inherit', family: 'mono' }, [
-    'text-3xl',
+    'typography-heading-h2',
     'font-mono',
   ])
 
   describe('Semantic Usage', () => {
     it('should provide appropriate styles for page headings', () => {
       expect(headingVariants({ size: 'h1', color: 'primary' })).toContainClasses([
-        'text-4xl',
-        'md:text-5xl',
+        'typography-heading-h1',
         'text-primary',
       ])
     })
 
     it('should provide appropriate styles for truncated headings', () => {
       expect(headingVariants({ truncate: true, whitespace: 'nowrap' })).toContainClasses([
-        'truncate',
+        'typography-truncate',
         'whitespace-nowrap',
       ])
     })
   })
 
   describe('Consistency', () => {
-    it('should maintain consistent tracking across same family', () => {
+    it('should maintain consistent font family across different sizes', () => {
       const h1Mono = headingVariants({ size: 'h1', family: 'mono' })
       const h3Mono = headingVariants({ size: 'h3', family: 'mono' })
 
-      expect(h1Mono).toContain('tracking-wider')
-      expect(h3Mono).toContain('tracking-wider')
+      expect(h1Mono).toContain('font-mono')
+      expect(h3Mono).toContain('font-mono')
     })
   })
 })

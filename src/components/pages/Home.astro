@@ -1,51 +1,7 @@
 ---
-import { getCollection } from 'astro:content'
-
 import HomeHero from './HomeHero.astro'
-
-import ProjectList from '@/components/features/ProjectList.astro'
-import Container from '@/components/primitives/Container.astro'
-import Heading from '@/components/primitives/Heading.astro'
-import Stack from '@/components/primitives/Stack.astro'
-import Surface from '@/components/primitives/Surface.astro'
-import { markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects'
-
-// Fetch and sort projects by latest log
-const allProjects = await getCollection('projects')
-const projectLogs = await getCollection('projectLogs')
-
-// Sort by latest log and mark latest as live
-const sortedProjects = sortProjectsByLatestLog(allProjects, projectLogs)
-const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
-
-// Take top 3 for home page
-const featuredProjects = projectsWithLive.slice(0, 3)
-
-// Status indicator styles
-const statusStyles = {
-  active: 'text-primary',
-  planning: 'text-muted',
-  done: 'text-content/60',
-}
-
-const statusLabels = {
-  active: 'ACTIVE',
-  planning: 'PLANNING',
-  done: 'DONE',
-}
+import HomeProjects from './HomeProjects.astro'
 ---
 
 <HomeHero />
-
-<!-- Projects Section -->
-<Surface id="projects" class="relative">
-  <Container>
-    <Stack space="lg">
-      <!-- Section header -->
-      <Heading size="h2" class="sm:text-3xl">Now / Currently Building</Heading>
-
-      <!-- Project List -->
-      <ProjectList projects={featuredProjects} {statusStyles} {statusLabels} showFooter={true} />
-    </Stack>
-  </Container>
-</Surface>
+<HomeProjects />

@@ -1,6 +1,5 @@
 ---
 // Hero Section - Tech Lab meets Meditation Space
-// Features: Digital analyzer with animated signal traces
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 import DigitalAnalyzerBuffer from '@/components/features/DigitalAnalyzerBuffer.astro'
 import DigitalAnalyzerDecoderToggle from '@/components/features/DigitalAnalyzerDecoderToggle.astro'
@@ -8,7 +7,6 @@ import HeroContent from '@/components/patterns/HeroContent.astro'
 import Button from '@/components/primitives/Button.astro'
 import ButtonLink from '@/components/primitives/ButtonLink.astro'
 import Collapsible from '@/components/primitives/Collapsible.astro'
-import Heading from '@/components/primitives/Heading.astro'
 import Icon from '@/components/primitives/Icon.astro'
 import Kbd from '@/components/primitives/Kbd.astro'
 import Overlay from '@/components/primitives/Overlay.astro'
@@ -17,80 +15,68 @@ import Surface from '@/components/primitives/Surface.astro'
 import Text from '@/components/primitives/Text.astro'
 ---
 
-<Surface class="flex min-h-[85vh] items-center justify-center" padY="none">
+<Surface padY="none" class="flex min-h-[85vh] items-center justify-center">
   <DigitalAnalyzer name="hero-display" slot="background" />
   <Overlay slot="background" preset="radial-fade" />
 
-  <HeroContent eyebrow="Aaron Qian">
-    <Stack slot="title">
-      <Heading size="display-1" align="center">
-        <Stack
-          direction-lg="column"
-          direction-xl="row"
-          align="center"
-          justify="center"
-          space="none"
+  <HeroContent
+    eyebrow="AARON QIAN"
+    description="Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints."
+    centered
+  >
+    <Fragment slot="title">
+      <Stack direction="column" direction-xl="row" align="center" justify="center" space="xs">
+        <span>Input coffee</span>
+
+        <DigitalAnalyzerDecoderToggle
+          target="secret-message"
+          keyboardKey="k"
+          keyboardModifier="cmd|ctrl"
         >
-          <span>Input coffee</span>
-          <DigitalAnalyzerDecoderToggle
-            target="secret-message"
-            keyboardKey="k"
-            keyboardModifier="cmd|ctrl"
-          >
-            <Button
-              variant="link"
-              color="primary"
-              style="filter: brightness(0.7);"
-              aria-label="Toggle secret message"
-              type="button"
-            >
-              <Icon name="heroicons:bolt-solid" size="xl" />
-            </Button>
-          </DigitalAnalyzerDecoderToggle>
-          <span>Output code</span>
-        </Stack>
-      </Heading>
+          <Button variant="link" color="primary" aria-label="Toggle secret message" type="button">
+            <Icon name="heroicons:bolt-solid" size="xl" />
+          </Button>
+        </DigitalAnalyzerDecoderToggle>
 
-      <Collapsible data-collapsible-id="secret-message">
-        <Stack space="xs">
-          <Text
-            size="xl"
-            color="primary"
-            align="center"
-            family="mono"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            <DigitalAnalyzerBuffer target="hero-display" type="ascii" />
-          </Text>
-          <Text
-            size="small"
-            color="muted"
-            align="center"
-            family="mono"
-            aria-live="polite"
-            aria-atomic="false"
-          >
-            <DigitalAnalyzerBuffer target="hero-display" type="binary" />
-          </Text>
-        </Stack>
-      </Collapsible>
-    </Stack>
+        <span>Output code</span>
+      </Stack>
+    </Fragment>
 
-    <Stack slot="description" space="sm">
-      <Text align="center" size="xl">
-        Welcome to my lab: caffeine-fueled commits, circuit boards, and questionable 3D prints.
-      </Text>
-      <Text align="center" size="xl"> Safety goggles recommended. Coffee mandatory. </Text>
-    </Stack>
+    <Collapsible data-collapsible-id="secret-message">
+      <Stack align="center" justify="center" space="xs">
+        <Text
+          size="body"
+          color="secondary"
+          align="center"
+          preset="note"
+          family="mono"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <DigitalAnalyzerBuffer target="hero-display" type="ascii" />
+        </Text>
 
-    <Stack direction="row" space="sm" justify="center">
+        <Text
+          size="small"
+          align="center"
+          color="muted"
+          preset="note"
+          family="mono"
+          aria-live="polite"
+          aria-atomic="false"
+        >
+          <DigitalAnalyzerBuffer target="hero-display" type="binary" />
+        </Text>
+      </Stack>
+    </Collapsible>
+
+    <Stack direction="row" align="center" justify="center" space="xl">
       <ButtonLink href="/blog" variant="solid" color="primary" size="lg">
         <span>Read My Notes →</span>
       </ButtonLink>
 
       <ButtonLink
-        href="https://launchpath.com"
+        href="https://launchpath.tech"
         color="accent"
         variant="outline"
         size="lg"
@@ -101,12 +87,16 @@ import Text from '@/components/primitives/Text.astro'
       </ButtonLink>
     </Stack>
 
-    <Text slot="microLine" align="center" color="muted">
-      <span>
-        Decoder controls: Click/Tap ⚡ or press
-        <Kbd keys="k" modifier="cmd|ctrl" color="neutral" size="xs" />
-        to toggle.
-      </span>
-    </Text>
+    <Fragment slot="microLine">
+      <Stack align="center" justify="center" space="none">
+        <p>Safety goggles recommended. Coffee mandatory.</p>
+
+        <p>
+          Decoder controls: Click/Tap ⚡ or press
+          <Kbd keys="k" modifier="cmd|ctrl" color="neutral" size="xs" />
+          to toggle.
+        </p>
+      </Stack>
+    </Fragment>
   </HeroContent>
 </Surface>

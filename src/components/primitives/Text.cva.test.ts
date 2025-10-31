@@ -6,8 +6,7 @@ import { testAllVariants, testDefaultVariants, testEdgeCases } from '@test/testH
 
 describe('Text.cva (textVariants)', () => {
   testDefaultVariants(textVariants, [
-    'text-base', // size: body
-    'leading-7',
+    'typography-text-body', // size: body (includes font-size, leading, tracking)
     'text-inherit', // color: inherit
   ])
 
@@ -27,31 +26,23 @@ describe('Text.cva (textVariants)', () => {
     ])
 
     it('should apply lead size', () => {
-      expect(textVariants({ size: 'lead' })).toContainClasses(['text-lg', 'leading-8'])
+      expect(textVariants({ size: 'lead' })).toContainClasses(['typography-text-lead'])
     })
 
     it('should apply body size', () => {
-      expect(textVariants({ size: 'body' })).toContainClasses(['text-base', 'leading-7'])
+      expect(textVariants({ size: 'body' })).toContainClasses(['typography-text-body'])
     })
 
     it('should apply small size', () => {
-      expect(textVariants({ size: 'small' })).toContainClasses(['text-sm', 'leading-6'])
+      expect(textVariants({ size: 'small' })).toContainClasses(['typography-text-small'])
     })
 
-    it('should apply label-lg with tracking', () => {
-      expect(textVariants({ size: 'label-lg' })).toContainClasses([
-        'text-base',
-        'leading-6',
-        'tracking-wide',
-      ])
+    it('should apply label-lg with uppercase', () => {
+      expect(textVariants({ size: 'label-lg' })).toContainClasses(['typography-text-label-lg'])
     })
 
-    it('should apply label-sm with wider tracking', () => {
-      expect(textVariants({ size: 'label-sm' })).toContainClasses([
-        'text-xs',
-        'leading-4',
-        'tracking-wider',
-      ])
+    it('should apply label-sm', () => {
+      expect(textVariants({ size: 'label-sm' })).toContainClasses(['typography-text-label-sm'])
     })
   })
 
@@ -176,11 +167,11 @@ describe('Text.cva (textVariants)', () => {
   describe('Truncate Variants', () => {
     it('should not apply truncate by default', () => {
       const result = textVariants()
-      expect(result).not.toContain('truncate')
+      expect(result).not.toContain('typography-truncate')
     })
 
     it('should apply truncate when true', () => {
-      expect(textVariants({ truncate: true })).toContainClasses(['truncate'])
+      expect(textVariants({ truncate: true })).toContainClasses(['typography-truncate'])
     })
   })
 
@@ -216,7 +207,7 @@ describe('Text.cva (textVariants)', () => {
     })
   })
 
-  testEdgeCases(textVariants, { size: 'body', color: 'inherit' }, ['text-base', 'leading-7'])
+  testEdgeCases(textVariants, { size: 'body', color: 'inherit' }, ['typography-text-body'])
 
   describe('Combined Props', () => {
     it('should work with multiple props combined', () => {
@@ -228,26 +219,32 @@ describe('Text.cva (textVariants)', () => {
           uppercase: true,
           align: 'center',
         }),
-      ).toContainClasses(['text-sm', 'text-muted', 'font-semibold', 'uppercase', 'text-center'])
+      ).toContainClasses([
+        'typography-text-small',
+        'text-muted',
+        'font-semibold',
+        'uppercase',
+        'text-center',
+      ])
     })
   })
 
   describe('Label Variants Consistency', () => {
-    it('should apply proper tracking for all label variants', () => {
+    it('should apply proper utility classes for all label variants', () => {
       const labelLg = textVariants({ size: 'label-lg' })
       const label = textVariants({ size: 'label' })
       const labelSm = textVariants({ size: 'label-sm' })
 
-      expect(labelLg).toContain('tracking-wide')
-      expect(label).toContain('tracking-wide')
-      expect(labelSm).toContain('tracking-wider')
+      expect(labelLg).toContain('typography-text-label-lg')
+      expect(label).toContain('typography-text-label')
+      expect(labelSm).toContain('typography-text-label-sm')
     })
   })
 
   describe('Semantic Usage', () => {
     it('should provide appropriate styles for muted secondary text', () => {
       expect(textVariants({ size: 'small', color: 'muted' })).toContainClasses([
-        'text-sm',
+        'typography-text-small',
         'text-muted',
       ])
     })
@@ -261,9 +258,8 @@ describe('Text.cva (textVariants)', () => {
 
     it('should provide appropriate styles for uppercase labels', () => {
       expect(textVariants({ size: 'label', uppercase: true })).toContainClasses([
-        'text-sm',
+        'typography-text-label',
         'uppercase',
-        'tracking-wide',
       ])
     })
   })

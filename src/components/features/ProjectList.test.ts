@@ -201,45 +201,42 @@ describe('ProjectList', () => {
   })
 
   describe('Footer', () => {
-    it('should render footer by default', async () => {
+    it('should render footer when provided', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
+      const footerText = 'Updates monthly. Expect context switches.'
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
-          statusLabels: defaultStatusLabels,
+          footer: footerText,
         },
       })
 
-      expect(root.textContent).toContain('Updates monthly. Expect context switches.')
+      expect(root.textContent).toContain(footerText)
     })
 
-    it('should render footer when showFooter=true', async () => {
+    it('should render custom footer text', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
+      const customFooter = 'Custom footer message'
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
-          statusLabels: defaultStatusLabels,
-          showFooter: true,
+          footer: customFooter,
         },
       })
 
-      expect(root.textContent).toContain('Updates monthly. Expect context switches.')
+      expect(root.textContent).toContain(customFooter)
     })
 
-    it('should not render footer when showFooter=false', async () => {
+    it('should not render footer when not provided', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
-          statusLabels: defaultStatusLabels,
-          showFooter: false,
         },
       })
 
-      expect(root.textContent).not.toContain('Updates monthly. Expect context switches.')
+      // Should not have a footer element
+      expect(root.textContent).not.toContain('Updates monthly')
     })
   })
 

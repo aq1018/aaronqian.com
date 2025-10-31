@@ -97,6 +97,7 @@ export default [
       '.vscode/',
       'package-lock.json',
       'src/styles/global.css', // Exception: Contains Tailwind v4 @custom-variant syntax that CSS parser cannot handle
+      'src/components/primitives/typography.css', // Exception: Contains @apply with custom utilities that CSS parser cannot handle
       '*.generated.*', // Ignore all generated files
     ],
   },

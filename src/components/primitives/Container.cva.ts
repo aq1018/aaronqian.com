@@ -3,7 +3,7 @@ import { type VariantProps, cva } from 'class-variance-authority'
 /**
  * Container: constrains content width and provides responsive horizontal gutters
  */
-export const containerCva = cva('w-full', {
+export const containerCva = cva('relative w-full', {
   variants: {
     width: {
       narrow: 'max-w-2xl', // 672px - for reading content

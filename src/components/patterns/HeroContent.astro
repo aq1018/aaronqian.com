@@ -1,9 +1,17 @@
 ---
 /**
  * HeroContent - Reusable hero section content layout
- * Provides standardized styling for hero sections across the site
- * Supports both props (simple) and slots (complex) for maximum flexibility
+ * Block-safe slot wrappers so consumers can pass complex markup.
+ * - Eyebrow: small uppercase line above the title
+ * - Title: main hero heading
+ * - Description: subhead (a.k.a. "kicker" text under title)
+ * - microLine: tiny helper line under everything
+ *
+ * Accessibility:
+ * - When `title` prop is used → semantic <h1>
+ * - When `title` slot is used (may contain blocks) → <div role="heading" aria-level="1">
  */
+
 import Stack from '../primitives/Stack.astro'
 
 import Container from '@/components/primitives/Container.astro'
@@ -31,70 +39,82 @@ const {
   class: className,
 } = Astro.props
 
-// Check which slots have content (slots take precedence over props)
 const hasEyebrowSlot = Astro.slots.has('eyebrow')
 const hasTitleSlot = Astro.slots.has('title')
 const hasDescriptionSlot = Astro.slots.has('description')
 const hasMicroLineSlot = Astro.slots.has('microLine')
 ---
 
-<Container {width} class={cn('relative z-10 py-16', centered && 'text-center', className)}>
+<Container {width} class={cn(className)}>
   <Stack space="lg">
-    <!-- Eyebrow: slot takes precedence over prop -->
     {
-      (hasEyebrowSlot || (eyebrow !== undefined && eyebrow !== '')) &&
-        (hasEyebrowSlot ? (
-          <slot name="eyebrow" />
-        ) : (
-          <Heading
-            size="h6"
-            color="primary"
-            align={centered ? 'center' : undefined}
-            transform="uppercase"
-          >
-            {eyebrow}
-          </Heading>
-        ))
+      (hasEyebrowSlot || (eyebrow ?? '') !== '') && (
+        <Text
+          as="div"
+          size="label-lg"
+          color="primary"
+          preset="kicker"
+          align={centered ? 'center' : undefined}
+        >
+          {hasEyebrowSlot ? <slot name="eyebrow" /> : eyebrow}
+        </Text>
+      )
     }
 
-    <!-- Title: slot takes precedence over prop -->
     {
-      (hasTitleSlot || (title !== undefined && title !== '')) &&
+      (hasTitleSlot || (title ?? '') !== '') &&
         (hasTitleSlot ? (
-          <slot name="title" />
+          <Heading
+            as="div"
+            role="heading"
+            aria-level="1"
+            size="display-1"
+            preset="hero"
+            line="none"
+            align={centered ? 'center' : undefined}
+          >
+            <slot name="title" />
+          </Heading>
         ) : (
-          <Heading size="h1" align={centered ? 'center' : undefined}>
+          <Heading
+            as="h1"
+            size="display-1"
+            preset="hero"
+            line="none"
+            align={centered ? 'center' : undefined}
+          >
             {title}
           </Heading>
         ))
     }
 
-    <!-- Description: slot takes precedence over prop -->
     {
-      (hasDescriptionSlot || (description !== undefined && description !== '')) &&
+      (hasDescriptionSlot || (description ?? '') !== '') &&
         (hasDescriptionSlot ? (
-          <slot name="description" />
+          <Text
+            as="div"
+            size="2xl"
+            preset="note"
+            line="normal"
+            align={centered ? 'center' : undefined}
+          >
+            <slot name="description" />
+          </Text>
         ) : (
-          <Text align={centered ? 'center' : undefined}>{description}</Text>
+          <Text as="div" size="xl" preset="note" align={centered ? 'center' : undefined}>
+            {description}
+          </Text>
         ))
     }
 
-    <!-- Default slot for custom content (buttons, collapsibles, etc.) -->
-    <div>
-      <slot />
-    </div>
+    <slot />
 
-    <!-- Micro-line: slot takes precedence over prop - appears AFTER default slot -->
-    <!-- Note: Use mt-4 when no default slot content, mt-8 when there are CTAs -->
     {
-      (hasMicroLineSlot || (microLine !== undefined && microLine !== '')) &&
-        (hasMicroLineSlot ? (
-          <slot name="microLine" />
-        ) : (
-          <Text align={centered ? 'center' : undefined} class="text-muted/70">
-            {microLine}
-          </Text>
-        ))
+      (hasMicroLineSlot || (microLine ?? '') !== '') && (
+        <Text as="div" preset="note" align={centered ? 'center' : undefined} class="text-muted">
+          {hasMicroLineSlot ? <slot name="microLine" /> : microLine}
+        </Text>
+      )
     }
   </Stack>
 </Container>

@@ -5,13 +5,15 @@ import { type HeadingStyle, headingVariants } from './typography.cva'
 
 import { cn } from '@/lib/utils'
 
-// h1-h6 have identical HTML attributes, so we use h1 as the base
-// HTMLAttributes first, then HeadingStyle overrides (including 'color')
+type AsTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'p' | 'span'
+
 export interface Props extends Omit<HTMLAttributes<'h1'>, 'color'>, HeadingStyle {
+  as?: AsTag
   class?: string
 }
 
 const {
+  as,
   size = 'h2',
   align,
   color,
@@ -20,6 +22,8 @@ const {
   truncate,
   transform,
   break: breakProp,
+  line,
+  preset,
   class: className = '',
   ...rest
 } = Astro.props
@@ -34,58 +38,112 @@ const classes = cn(
     whitespace,
     truncate,
     break: breakProp,
+    line,
+    preset,
   }),
   className,
 )
 
-// Map size to semantic HTML element
-const isH1 = size === 'display-2' || size === 'display-1' || size === 'h1'
-const isH2 = size === 'h2'
-const isH3 = size === 'h3'
-const isH4 = size === 'h4'
-const isH5 = size === 'h5'
-const isH6 = size === 'h6'
+// Map size → numeric level
+const level =
+  size === 'display-2' || size === 'display-1' || size === 'h1'
+    ? 1
+    : size === 'h2'
+      ? 2
+      : size === 'h3'
+        ? 3
+        : size === 'h4'
+          ? 4
+          : size === 'h5'
+            ? 5
+            : 6
+
+// Infer tag from level (no assertions)
+const inferredTag = (() => {
+  switch (level) {
+    case 1:
+      return 'h1' as const
+    case 2:
+      return 'h2' as const
+    case 3:
+      return 'h3' as const
+    case 4:
+      return 'h4' as const
+    case 5:
+      return 'h5' as const
+    default:
+      return 'h6' as const
+  }
+})()
+
+const tag: AsTag = as ?? inferredTag
+const isHeadingTag =
+  tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4' || tag === 'h5' || tag === 'h6'
+
+const roleAttrs = isHeadingTag ? {} : { role: 'heading' as const, 'aria-level': `${level}` }
+const finalAttrs: HTMLAttributes<'h1'> = { ...rest, ...roleAttrs }
 ---
 
 {
-  isH1 && (
-    <h1 class={classes} {...rest}>
+  tag === 'h1' && (
+    <h1 class={classes} {...finalAttrs}>
       <slot />
     </h1>
   )
 }
 {
-  isH2 && (
-    <h2 class={classes} {...rest}>
+  tag === 'h2' && (
+    <h2 class={classes} {...finalAttrs}>
       <slot />
     </h2>
   )
 }
 {
-  isH3 && (
-    <h3 class={classes} {...rest}>
+  tag === 'h3' && (
+    <h3 class={classes} {...finalAttrs}>
       <slot />
     </h3>
   )
 }
 {
-  isH4 && (
-    <h4 class={classes} {...rest}>
+  tag === 'h4' && (
+    <h4 class={classes} {...finalAttrs}>
       <slot />
     </h4>
   )
 }
 {
-  isH5 && (
-    <h5 class={classes} {...rest}>
+  tag === 'h5' && (
+    <h5 class={classes} {...finalAttrs}>
       <slot />
     </h5>
   )
 }
 {
-  isH6 && (
-    <h6 class={classes} {...rest}>
+  tag === 'h6' && (
+    <h6 class={classes} {...finalAttrs}>
       <slot />
     </h6>
+  )
+}
+{
+  tag === 'div' && (
+    <div class={classes} {...finalAttrs}>
+      <slot />
+    </div>
+  )
+}
+{
+  tag === 'p' && (
+    <p class={classes} {...finalAttrs}>
+      <slot />
+    </p>
+  )
+}
+{
+  tag === 'span' && (
+    <span class={classes} {...finalAttrs}>
+      <slot />
+    </span>
   )
 }

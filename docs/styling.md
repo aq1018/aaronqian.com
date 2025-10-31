@@ -107,7 +107,9 @@ accent, caret, fill, stroke
 ## Layout Primitives (P1)
 
 **ALWAYS use layout primitives for spacing. Never use inline spacing in page
-components.**
+components.** Minor text spacing adjustments (`tracking-*`, `leading-*`) are
+permitted outside primitives when a semantic prop or primitive variant does not
+exist.
 
 ### Section - Vertical Padding
 

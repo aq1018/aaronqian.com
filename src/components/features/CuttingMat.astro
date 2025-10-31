@@ -11,9 +11,10 @@ import AngleLines from './CuttingMatAngleLines.astro'
 import AngleMarks from './CuttingMatAngleMarks.astro'
 import Arcs from './CuttingMatArcs.astro'
 import Axes from './CuttingMatAxes.astro'
-import GradientMask from './CuttingMatGradientMask.astro'
 import GridLines from './CuttingMatGridLines.astro'
 import TeethMarks from './CuttingMatTeethMarks.astro'
+
+import { cn } from '@/lib/utils'
 
 export interface Props extends Partial<CuttingMatOptions> {
   class?: string
@@ -29,32 +30,21 @@ const labelArcIndex =
   config.angleLabelArcIndex === -1 ? config.arcCount - 1 : config.angleLabelArcIndex
 const finalConfig = { ...config, angleLabelArcIndex: labelArcIndex }
 
-// Use fixed large dimensions for CSS scaling
-const width = 4000
-const height = 4000
+// ViewBox dimensions for coordinate system
+const viewBoxWidth = 4000
+const viewBoxHeight = 4000
 
 // Calculate minor interval
 const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRatio
 ---
 
-<div class={`relative ${className ?? ''}`} data-cutting-mat>
-  <slot />
-  <svg
-    viewBox={`0 0 ${width} ${height}`}
-    {width}
-    {height}
-    style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);"
-    class="cutting-mat-overlays"
-  >
-    <!-- Gradient mask -->
-    <GradientMask {width} {height} />
-
-    <!-- Main group with mask -->
-    <g stroke="currentColor" fill="none" stroke-width="1" mask="url(#fade-mask)">
+<div class={cn('w-full color-primary', className)} data-cutting-mat>
+  <svg viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`} class="pointer-events-none object-none">
+    <g stroke="currentColor" fill="none" stroke-width="1">
       <!-- Coordinate axes -->
       <Axes
-        {width}
-        {height}
+        width={viewBoxWidth}
+        height={viewBoxHeight}
         opacity={finalConfig.majorOpacity}
         strokeWidth={finalConfig.majorStrokeWidth}
       />
@@ -63,8 +53,8 @@ const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRati
       {
         finalConfig.showTeeth && (
           <TeethMarks
-            width={width}
-            height={height}
+            width={viewBoxWidth}
+            height={viewBoxHeight}
             minorInterval={minorInterval}
             opacity={finalConfig.majorOpacity}
             strokeWidth={finalConfig.minorStrokeWidth}
@@ -74,8 +64,8 @@ const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRati
 
       <!-- Vertical and horizontal grid lines -->
       <GridLines
-        {width}
-        {height}
+        width={viewBoxWidth}
+        height={viewBoxHeight}
         majorLineInterval={finalConfig.majorLineInterval}
         {minorInterval}
         majorOpacity={finalConfig.majorOpacity}
@@ -86,8 +76,8 @@ const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRati
 
       <!-- Half circles at origin -->
       <Arcs
-        {width}
-        {height}
+        width={viewBoxWidth}
+        height={viewBoxHeight}
         arcCount={finalConfig.arcCount}
         arcRadiusInterval={finalConfig.arcRadiusInterval}
         majorLineInterval={finalConfig.majorLineInterval}
@@ -97,8 +87,8 @@ const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRati
 
       <!-- Diagonal angle lines -->
       <AngleLines
-        {width}
-        {height}
+        width={viewBoxWidth}
+        height={viewBoxHeight}
         angleLineCount={finalConfig.angleLineCount}
         opacity={finalConfig.majorOpacity}
         strokeWidth={finalConfig.majorStrokeWidth}
@@ -106,8 +96,8 @@ const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRati
 
       <!-- Angle labels -->
       <AngleLabels
-        {width}
-        {height}
+        width={viewBoxWidth}
+        height={viewBoxHeight}
         angleLineCount={finalConfig.angleLineCount}
         angleLabelArcIndex={finalConfig.angleLabelArcIndex}
         majorLineInterval={finalConfig.majorLineInterval}
@@ -116,8 +106,8 @@ const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRati
 
       <!-- Angle mark arcs -->
       <AngleMarks
-        {width}
-        {height}
+        width={viewBoxWidth}
+        height={viewBoxHeight}
         angleLineCount={finalConfig.angleLineCount}
         {minorInterval}
         angleMarkRadius={finalConfig.angleMarkRadius}
@@ -130,13 +120,6 @@ const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRati
 
 <style>
   [data-cutting-mat] {
-    position: relative;
-    background-color: var(--color-surface);
-    overflow: hidden;
     color: var(--color-primary);
-  }
-
-  .cutting-mat-overlays {
-    pointer-events: none;
   }
 </style>

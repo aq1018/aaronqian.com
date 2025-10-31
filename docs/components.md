@@ -9,7 +9,7 @@
 | `Component.astro`     | Template, markup, props     | Always                               |
 | `Component.cva.ts`    | CVA variant definitions     | If component has variants            |
 | `Component.hook.ts`   | Global lifecycle management | If interactive across multiple pages |
-| `Component.css`       | Component-specific CSS      | Rare (use `<style>` blocks instead)  |
+| `Component.css`       | Shared utility classes      | For component families (see below)   |
 | `<style>` in .astro   | Scoped CSS, animations      | Primary CSS method                   |
 | `<script>` in .astro  | Client-side JS              | One-off interactions                 |
 | `Component.test.ts`   | Tests                       | Required for all components          |
@@ -44,6 +44,73 @@ class={cn(variants({ variant, size }), className)}
 // ❌ Wrong
 class={variants({ variant, size, class: className })}
 ```
+
+## Component.css Pattern (P1)
+
+Use a shared `.css` file when multiple closely related components share CVA
+variants and CSS tokens.
+
+**When to use:**
+
+- Related components sharing a design system (e.g., Heading + Text)
+- Many shared custom CSS properties or utility classes
+- Dual-family system (e.g., sans vs mono typography)
+
+**Example:** `typography.cva.ts` + `typography.css`
+
+- Both `Heading.astro` and `Text.astro` import from these shared files
+- `typography.css` defines custom utility classes with `@apply`
+- `typography.cva.ts` maps variants to these utility classes
+
+**Structure:**
+
+```css
+/* typography.css */
+@theme {
+  --leading-sans-0: 0.97;
+  --tracking-sans-0: -0.01em;
+}
+
+@layer utilities {
+  .typography-heading-h1 {
+    @apply text-3xl font-semibold md:text-4xl lg:text-5xl;
+    @apply leading-sans-1 tracking-sans-1;
+  }
+}
+```
+
+```typescript
+// typography.cva.ts
+export const headingVariants = cva('', {
+  variants: {
+    size: {
+      h1: 'typography-heading-h1', // Uses custom utility class
+      h2: 'typography-heading-h2',
+    },
+  },
+})
+
+export const textVariants = cva('', {
+  variants: {
+    size: {
+      body: 'typography-text-body',
+      small: 'typography-text-small',
+    },
+  },
+})
+```
+
+**Benefits:**
+
+- Centralized typography definitions
+- Shared leading/tracking tokens across component family
+- More maintainable than inline Tailwind classes
+- Follows Tailwind v4 custom `@theme` patterns
+
+**ESLint Note:** Files using `@apply` with custom utilities must be added to
+ESLint ignores (CSS parser cannot handle Tailwind directives).
+
+**Search for examples:** `Glob: **/typography.{cva.ts,css}`
 
 ## Import Aliases (P1)
 
@@ -84,7 +151,9 @@ pages/** - Page sections, uses primitives + features
 **Rules:**
 
 - Primitives → Tailwind allowed
-- Features/Pages → Primitives only, semantic props
+- Features/Pages → Primitives only, semantic props (text spacing fine-tuning
+  with `tracking-*` or `leading-*` utilities is permitted when no primitive prop
+  covers the use case)
 - Ad-hoc classes in features/pages = missing primitive
 
 ❌ `<Grid columns="2fr 140px 3fr">` (Tailwind pass-through) ✅

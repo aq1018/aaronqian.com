@@ -52,61 +52,57 @@ describe('HeroContent', () => {
   })
 
   describe('Centered alignment', () => {
-    it('should apply text-center class by default', async () => {
+    it('should center content by default', async () => {
       const root = await renderAstroComponent(HeroContent, {
         props: { title: 'Test' },
       })
-      const wrapper = root.querySelector('div')
-      expect(wrapper?.className).toContain('text-center')
+      const heading = root.querySelector('h1')
+      expect(heading?.className).toContain('text-center')
     })
 
-    it('should apply text-center when centered=true', async () => {
+    it('should center content when centered=true', async () => {
       const root = await renderAstroComponent(HeroContent, {
         props: { title: 'Test', centered: true },
       })
-      const wrapper = root.querySelector('div')
-      expect(wrapper?.className).toContain('text-center')
+      const heading = root.querySelector('h1')
+      expect(heading?.className).toContain('text-center')
     })
 
-    it('should not apply text-center when centered=false', async () => {
+    it('should not center content when centered=false', async () => {
       const root = await renderAstroComponent(HeroContent, {
         props: { title: 'Test', centered: false },
       })
-      const wrapper = root.querySelector('div')
-      expect(wrapper?.className).not.toContain('text-center')
+      const heading = root.querySelector('h1')
+      expect(heading?.className).not.toContain('text-center')
     })
   })
 
   describe('Custom className', () => {
-    it('should apply custom class', async () => {
+    it('should apply custom class to Container', async () => {
       const root = await renderAstroComponent(HeroContent, {
         props: { class: 'custom-class' },
       })
-      const wrapper = root.querySelector('div')
-      expect(wrapper?.className).toContain('custom-class')
+      const container = root.querySelector('div')
+      expect(container?.className).toContain('custom-class')
     })
 
-    it('should merge custom class with default classes', async () => {
+    it('should merge custom class with Container classes', async () => {
       const root = await renderAstroComponent(HeroContent, {
         props: { class: 'custom-class' },
       })
-      const wrapper = root.querySelector('div')
-      expect(wrapper?.className).toContain('custom-class')
-      expect(wrapper?.className).toContain('max-w-6xl')
-      expect(wrapper?.className).toContain('px-6')
+      const container = root.querySelector('div')
+      expect(container?.className).toContain('custom-class')
+      expect(container?.className).toContain('w-full')
     })
   })
 
   describe('Default classes', () => {
-    it('should apply default wrapper classes', async () => {
+    it('should render with Container component', async () => {
       const root = await renderAstroComponent(HeroContent, { props: {} })
-      const wrapper = root.querySelector('div')
-      expect(wrapper?.className).toContain('relative')
-      expect(wrapper?.className).toContain('z-10')
-      expect(wrapper?.className).toContain('mx-auto')
-      expect(wrapper?.className).toContain('max-w-6xl')
-      expect(wrapper?.className).toContain('px-6')
-      expect(wrapper?.className).toContain('py-16')
+      const container = root.querySelector('div')
+      expect(container?.className).toContain('relative')
+      expect(container?.className).toContain('w-full')
+      expect(container?.className).toContain('mx-auto')
     })
   })
 

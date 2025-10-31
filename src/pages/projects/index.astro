@@ -12,24 +12,11 @@ const projectLogs = await getCollection('projectLogs')
 
 const sortedProjects = sortProjectsByLatestLog(projects, projectLogs)
 const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
-
-// Status indicator styles
-const statusStyles = {
-  active: 'text-primary',
-  planning: 'text-muted',
-  done: 'text-content/60',
-}
-
-const statusLabels = {
-  active: 'ACTIVE',
-  planning: 'PLANNING',
-  done: 'DONE',
-}
 ---
 
 <BaseLayout
   title="Projects — Aaron Qian"
   description="Current projects, experiments, and build logs. Engineering lab in progress."
 >
-  <ProjectsIndex projects={projectsWithLive} {statusStyles} {statusLabels} />
+  <ProjectsIndex projects={projectsWithLive} />
 </BaseLayout>
