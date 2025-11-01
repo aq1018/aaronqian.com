@@ -2,8 +2,10 @@
 import type { CollectionEntry } from 'astro:content'
 
 import BlogList from '@/components/features/BlogList.astro'
+import EngineeringGrid from '@/components/features/EngineeringGrid.astro'
 import HeroContent from '@/components/patterns/HeroContent.astro'
 import Container from '@/components/primitives/Container.astro'
+import Overlay from '@/components/primitives/Overlay.astro'
 import Surface from '@/components/primitives/Surface.astro'
 
 export interface Props {
@@ -14,6 +16,14 @@ const { posts } = Astro.props
 ---
 
 <Surface>
+  <EngineeringGrid
+    slot="background"
+    spacing="lg"
+    corners={{ topLeft: 'BLOG', bottomRight: 'LAB NOTES' }}
+    showCorners={{ topLeft: true, topRight: false, bottomLeft: false, bottomRight: true }}
+  />
+
+  <Overlay slot="background" preset="soft" />
   <HeroContent
     eyebrow="BLOG"
     title="Notes from the Lab"

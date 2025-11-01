@@ -14,8 +14,6 @@ import Axes from './CuttingMatAxes.astro'
 import GridLines from './CuttingMatGridLines.astro'
 import TeethMarks from './CuttingMatTeethMarks.astro'
 
-import { cn } from '@/lib/utils'
-
 export interface Props extends Partial<CuttingMatOptions> {
   class?: string
 }
@@ -38,85 +36,89 @@ const viewBoxHeight = 4000
 const minorInterval = finalConfig.majorLineInterval / finalConfig.majorMinorRatio
 ---
 
-<div class={cn('w-full color-primary', className)} data-cutting-mat>
-  <svg viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`} class="pointer-events-none object-none">
-    <g stroke="currentColor" fill="none" stroke-width="1">
-      <!-- Coordinate axes -->
-      <Axes
-        width={viewBoxWidth}
-        height={viewBoxHeight}
-        opacity={finalConfig.majorOpacity}
-        strokeWidth={finalConfig.majorStrokeWidth}
-      />
+<svg
+  viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+  width={viewBoxHeight}
+  height={viewBoxHeight}
+  class={className}
+  data-cutting-mat
+>
+  <g stroke="currentColor" fill="none" stroke-width="1">
+    <!-- Coordinate axes -->
+    <Axes
+      width={viewBoxWidth}
+      height={viewBoxHeight}
+      opacity={finalConfig.majorOpacity}
+      strokeWidth={finalConfig.majorStrokeWidth}
+    />
 
-      <!-- Teeth marks on x-axis (optional) -->
-      {
-        finalConfig.showTeeth && (
-          <TeethMarks
-            width={viewBoxWidth}
-            height={viewBoxHeight}
-            minorInterval={minorInterval}
-            opacity={finalConfig.majorOpacity}
-            strokeWidth={finalConfig.minorStrokeWidth}
-          />
-        )
-      }
+    <!-- Teeth marks on x-axis (optional) -->
+    {
+      finalConfig.showTeeth && (
+        <TeethMarks
+          width={viewBoxWidth}
+          height={viewBoxHeight}
+          minorInterval={minorInterval}
+          opacity={finalConfig.majorOpacity}
+          strokeWidth={finalConfig.minorStrokeWidth}
+        />
+      )
+    }
 
-      <!-- Vertical and horizontal grid lines -->
-      <GridLines
-        width={viewBoxWidth}
-        height={viewBoxHeight}
-        majorLineInterval={finalConfig.majorLineInterval}
-        {minorInterval}
-        majorOpacity={finalConfig.majorOpacity}
-        minorOpacity={finalConfig.minorOpacity}
-        majorStrokeWidth={finalConfig.majorStrokeWidth}
-        minorStrokeWidth={finalConfig.minorStrokeWidth}
-      />
+    <!-- Vertical and horizontal grid lines -->
+    <GridLines
+      width={viewBoxWidth}
+      height={viewBoxHeight}
+      majorLineInterval={finalConfig.majorLineInterval}
+      {minorInterval}
+      majorOpacity={finalConfig.majorOpacity}
+      minorOpacity={finalConfig.minorOpacity}
+      majorStrokeWidth={finalConfig.majorStrokeWidth}
+      minorStrokeWidth={finalConfig.minorStrokeWidth}
+    />
 
-      <!-- Half circles at origin -->
-      <Arcs
-        width={viewBoxWidth}
-        height={viewBoxHeight}
-        arcCount={finalConfig.arcCount}
-        arcRadiusInterval={finalConfig.arcRadiusInterval}
-        majorLineInterval={finalConfig.majorLineInterval}
-        opacity={finalConfig.majorOpacity}
-        strokeWidth={finalConfig.majorStrokeWidth}
-      />
+    <!-- Half circles at origin -->
+    <Arcs
+      width={viewBoxWidth}
+      height={viewBoxHeight}
+      arcCount={finalConfig.arcCount}
+      arcRadiusInterval={finalConfig.arcRadiusInterval}
+      majorLineInterval={finalConfig.majorLineInterval}
+      opacity={finalConfig.majorOpacity}
+      strokeWidth={finalConfig.majorStrokeWidth}
+    />
 
-      <!-- Diagonal angle lines -->
-      <AngleLines
-        width={viewBoxWidth}
-        height={viewBoxHeight}
-        angleLineCount={finalConfig.angleLineCount}
-        opacity={finalConfig.majorOpacity}
-        strokeWidth={finalConfig.majorStrokeWidth}
-      />
+    <!-- Diagonal angle lines -->
+    <AngleLines
+      width={viewBoxWidth}
+      height={viewBoxHeight}
+      angleLineCount={finalConfig.angleLineCount}
+      opacity={finalConfig.majorOpacity}
+      strokeWidth={finalConfig.majorStrokeWidth}
+    />
 
-      <!-- Angle labels -->
-      <AngleLabels
-        width={viewBoxWidth}
-        height={viewBoxHeight}
-        angleLineCount={finalConfig.angleLineCount}
-        angleLabelArcIndex={finalConfig.angleLabelArcIndex}
-        majorLineInterval={finalConfig.majorLineInterval}
-        labelOpacity={finalConfig.labelOpacity}
-      />
+    <!-- Angle labels -->
+    <AngleLabels
+      width={viewBoxWidth}
+      height={viewBoxHeight}
+      angleLineCount={finalConfig.angleLineCount}
+      angleLabelArcIndex={finalConfig.angleLabelArcIndex}
+      majorLineInterval={finalConfig.majorLineInterval}
+      labelOpacity={finalConfig.labelOpacity}
+    />
 
-      <!-- Angle mark arcs -->
-      <AngleMarks
-        width={viewBoxWidth}
-        height={viewBoxHeight}
-        angleLineCount={finalConfig.angleLineCount}
-        {minorInterval}
-        angleMarkRadius={finalConfig.angleMarkRadius}
-        opacity={finalConfig.majorOpacity}
-        strokeWidth={finalConfig.majorStrokeWidth}
-      />
-    </g>
-  </svg>
-</div>
+    <!-- Angle mark arcs -->
+    <AngleMarks
+      width={viewBoxWidth}
+      height={viewBoxHeight}
+      angleLineCount={finalConfig.angleLineCount}
+      {minorInterval}
+      angleMarkRadius={finalConfig.angleMarkRadius}
+      opacity={finalConfig.majorOpacity}
+      strokeWidth={finalConfig.majorStrokeWidth}
+    />
+  </g>
+</svg>
 
 <style>
   [data-cutting-mat] {
