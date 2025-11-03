@@ -79,7 +79,11 @@ export function setupCollapsibles(): void {
   initializeCollapsibles()
 
   // Re-initialize after View Transitions navigation
-  document.addEventListener('astro:page-load', initializeCollapsibles)
+  // Use queueMicrotask to ensure DOM modifications from other hooks (like
+  // DecoderToggle injecting data-collapsible-trigger) complete before querying
+  document.addEventListener('astro:page-load', () => {
+    queueMicrotask(initializeCollapsibles)
+  })
 
   // Cleanup before page swap to prevent memory leaks
   document.addEventListener('astro:before-preparation', () => {
