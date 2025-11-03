@@ -1,0 +1,9 @@
+{
+  "name": "TypeScript",
+  "category": "Languages",
+  "blurb": "Type safety catches bugs before runtime",
+  "url": "https://www.typescriptlang.org/",
+  "position": 1,
+  "enabled": true,
+  "tags": ["language", "type-system"]
+}

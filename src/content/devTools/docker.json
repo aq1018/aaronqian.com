@@ -1,0 +1,9 @@
+{
+  "name": "Docker",
+  "category": "Infrastructure",
+  "blurb": "Consistent environments from dev to prod",
+  "url": "https://www.docker.com/",
+  "position": 30,
+  "enabled": true,
+  "tags": ["containers", "deployment"]
+}

@@ -37,8 +37,74 @@ const projectLogs = defineCollection({
   }),
 })
 
+const socials = defineCollection({
+  type: 'data',
+  schema: z.object({
+    label: z.string(),
+    url: z.string(),
+    position: z.number(),
+    enabled: z.boolean(),
+    rel: z.string().optional(),
+  }),
+})
+
+const devTools = defineCollection({
+  type: 'data',
+  schema: z.object({
+    name: z.string(),
+    category: z.string(),
+    blurb: z.string(),
+    url: z.string().url().optional(),
+    position: z.number(),
+    enabled: z.boolean(),
+    tags: z.array(z.string()).optional(),
+  }),
+})
+
+const benchTools = defineCollection({
+  type: 'data',
+  schema: z.object({
+    name: z.string(),
+    category: z.string(),
+    blurb: z.string(),
+    url: z.string().url().optional(),
+    position: z.number(),
+    enabled: z.boolean(),
+    tags: z.array(z.string()).optional(),
+  }),
+})
+
+const testimonials = defineCollection({
+  type: 'data',
+  schema: z.object({
+    quote: z.string(),
+    author: z.string(),
+    title: z.string().optional(),
+    position: z.number(),
+    enabled: z.boolean(),
+  }),
+})
+
+const about = defineCollection({
+  type: 'content',
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      tagline: z.string(),
+      heroImage: image(),
+      heroImageAlt: z.string(),
+      workingStyle: z.array(z.string()),
+      availability: z.string().optional(),
+    }),
+})
+
 export const collections = {
   blog,
   projects,
   projectLogs,
+  socials,
+  devTools,
+  benchTools,
+  testimonials,
+  about,
 }

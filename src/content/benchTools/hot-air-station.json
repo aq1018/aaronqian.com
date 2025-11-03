@@ -1,0 +1,8 @@
+{
+  "name": "Hot Air Station",
+  "category": "Assembly",
+  "blurb": "For SMD rework and heat-shrink work",
+  "position": 11,
+  "enabled": true,
+  "tags": ["assembly", "smd"]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "VS Code",
+  "category": "Tools",
+  "blurb": "Extensible editor with best-in-class TypeScript support",
+  "url": "https://code.visualstudio.com/",
+  "position": 22,
+  "enabled": true,
+  "tags": ["editor", "ide"]
+}

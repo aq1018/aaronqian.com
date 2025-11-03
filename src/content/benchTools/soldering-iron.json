@@ -1,0 +1,8 @@
+{
+  "name": "Soldering Iron",
+  "category": "Assembly",
+  "blurb": "Temperature-controlled for reliable connections",
+  "position": 10,
+  "enabled": true,
+  "tags": ["assembly", "basics"]
+}

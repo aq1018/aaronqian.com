@@ -1,0 +1,9 @@
+{
+  "name": "Tailwind CSS",
+  "category": "Frameworks",
+  "blurb": "Utility-first styling without context switching",
+  "url": "https://tailwindcss.com/",
+  "position": 12,
+  "enabled": true,
+  "tags": ["css", "framework"]
+}

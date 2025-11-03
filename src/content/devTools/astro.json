@@ -1,0 +1,9 @@
+{
+  "name": "Astro",
+  "category": "Frameworks",
+  "blurb": "Content-first with zero JS by default",
+  "url": "https://astro.build/",
+  "position": 10,
+  "enabled": true,
+  "tags": ["framework", "static-site"]
+}

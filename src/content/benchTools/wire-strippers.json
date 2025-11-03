@@ -1,0 +1,8 @@
+{
+  "name": "Wire Strippers",
+  "category": "Assembly",
+  "blurb": "Clean wire prep without nicking conductors",
+  "position": 13,
+  "enabled": true,
+  "tags": ["assembly", "wiring"]
+}

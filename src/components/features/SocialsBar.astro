@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content'
+
+import Icon from '@/components/primitives/Icon.astro'
+import Link from '@/components/primitives/Link.astro'
+import Stack from '@/components/primitives/Stack.astro'
+
+export interface Props {
+  variant?: 'compact' | 'wide'
+  class?: string
+}
+
+const { variant = 'compact', class: className } = Astro.props
+
+// Fetch enabled socials sorted by position
+const socials = (await getCollection('socials', ({ data }) => data.enabled)).sort(
+  (a, b) => a.data.position - b.data.position,
+)
+
+// Map social labels to icon names
+function getIconName(label: string): string {
+  const iconMap: Record<string, string> = {
+    GitHub: 'heroicons:code-bracket',
+    LinkedIn: 'heroicons:user-circle',
+    Twitter: 'heroicons:at-symbol',
+    Email: 'heroicons:envelope',
+    Bluesky: 'heroicons:cloud',
+    Mastodon: 'heroicons:chat-bubble-left-right',
+    YouTube: 'heroicons:video-camera',
+    Twitch: 'heroicons:tv',
+    Discord: 'heroicons:chat-bubble-bottom-center-text',
+    CodePen: 'heroicons:code-bracket-square',
+  }
+  return iconMap[label] ?? 'heroicons:link'
+}
+
+const showLabels = variant === 'wide'
+---
+
+<Stack direction="row" space="sm" align="center" class={className}>
+  {
+    socials.map((social) => (
+      <Link
+        href={social.data.url}
+        rel={social.data.rel}
+        aria-label={`${social.data.label} profile`}
+        variant="nav"
+      >
+        <Stack direction="row" space="xs" align="center">
+          <Icon name={getIconName(social.data.label)} size="md" />
+          {showLabels && <span>{social.data.label}</span>}
+        </Stack>
+      </Link>
+    ))
+  }
+</Stack>

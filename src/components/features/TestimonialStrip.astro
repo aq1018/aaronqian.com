@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content'
+
+import Sheet from '@/components/primitives/Sheet.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Text from '@/components/primitives/Text.astro'
+
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+// Fetch enabled testimonials, sorted by position, limited to 2
+const testimonials = (await getCollection('testimonials', ({ data }) => data.enabled))
+  .sort((a, b) => a.data.position - b.data.position)
+  .slice(0, 2)
+---
+
+{
+  testimonials.length > 0 && (
+    <Stack space="md" class={className}>
+      {testimonials.map((testimonial) => (
+        <Sheet variant="soft" color="neutral" padding="md">
+          <Stack space="sm">
+            <Text size="body" preset="longread">
+              "{testimonial.data.quote}"
+            </Text>
+            <Text size="small" color="muted">
+              — {testimonial.data.author}
+              {testimonial.data.title !== undefined && `, ${testimonial.data.title}`}
+            </Text>
+          </Stack>
+        </Sheet>
+      ))}
+    </Stack>
+  )
+}

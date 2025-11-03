@@ -1,0 +1,9 @@
+{
+  "name": "JavaScript",
+  "category": "Languages",
+  "blurb": "The web's universal language, endlessly flexible",
+  "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+  "position": 2,
+  "enabled": true,
+  "tags": ["language", "web"]
+}

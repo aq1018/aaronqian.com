@@ -1,0 +1,8 @@
+{
+  "name": "Function Generator",
+  "category": "Measurement",
+  "blurb": "Generate test signals for circuits",
+  "position": 4,
+  "enabled": true,
+  "tags": ["testing", "signals"]
+}

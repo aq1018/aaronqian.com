@@ -1,0 +1,8 @@
+{
+  "name": "Bench Power Supply",
+  "category": "Power",
+  "blurb": "Adjustable voltage and current limiting",
+  "position": 20,
+  "enabled": true,
+  "tags": ["power", "testing"]
+}

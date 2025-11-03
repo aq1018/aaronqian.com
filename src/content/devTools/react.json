@@ -1,0 +1,9 @@
+{
+  "name": "React",
+  "category": "Frameworks",
+  "blurb": "Component model that scales with complexity",
+  "url": "https://react.dev/",
+  "position": 11,
+  "enabled": true,
+  "tags": ["framework", "ui"]
+}

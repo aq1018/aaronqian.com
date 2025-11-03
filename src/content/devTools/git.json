@@ -1,0 +1,9 @@
+{
+  "name": "Git",
+  "category": "Tools",
+  "blurb": "Version control that makes collaboration safe",
+  "url": "https://git-scm.com/",
+  "position": 21,
+  "enabled": true,
+  "tags": ["vcs", "collaboration"]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Prettier",
+  "category": "Tools",
+  "blurb": "Consistent formatting, zero decisions",
+  "url": "https://prettier.io/",
+  "position": 25,
+  "enabled": true,
+  "tags": ["formatting", "code-quality"]
+}

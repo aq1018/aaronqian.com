@@ -1,0 +1,8 @@
+{
+  "name": "Logic Analyzer",
+  "category": "Measurement",
+  "blurb": "Decode digital protocols like I2C and SPI",
+  "position": 3,
+  "enabled": true,
+  "tags": ["electronics", "digital"]
+}
