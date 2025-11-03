@@ -37,6 +37,8 @@ const currentPath = Astro.url.pathname
           Blog
         </Link>
 
+        <Link variant="nav" href="/about" active={currentPath === '/about'}> About </Link>
+
         <!-- Theme Toggle -->
         <ThemeToggle />
       </Stack>
