@@ -29,21 +29,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
     <Container>
       <Stack space="sm">
         <!-- Back link -->
-        <Link href="/projects" class="mb-6">
-          <svg
-            class="h-4 w-4 transition-transform group-hover:-translate-x-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"></path>
-          </svg>
-          All Projects
-        </Link>
+        <Link href="/projects" variant="back"> ← Back to projects </Link>
 
         <!-- Title and status -->
         <Stack direction="row" space="sm" class="flex-wrap" align="baseline">
