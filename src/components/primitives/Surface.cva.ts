@@ -1,10 +1,14 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 /**
  * Surface: semantic section wrapper with vertical padding
  * Simplified for terminal aesthetic - no fancy themes or backgrounds
  */
 export const surfaceCva = cva('relative w-full', {
+  defaultVariants: {
+    padY: 'md',
+  },
   variants: {
     padY: {
       none: 'py-0',
@@ -13,9 +17,6 @@ export const surfaceCva = cva('relative w-full', {
       lg: 'py-20 sm:py-24 lg:py-28', // 80 → 96 → 112px
       xl: 'py-24 sm:py-28 lg:py-32', // 96 → 112 → 128px
     },
-  },
-  defaultVariants: {
-    padY: 'md',
   },
 })
 

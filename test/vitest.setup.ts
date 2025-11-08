@@ -18,13 +18,13 @@ expect.extend({
     const missing = expected.filter((className) => !received.includes(className))
 
     return {
-      pass: missing.length === 0,
+      actual: received,
+      expected,
       message: () =>
         missing.length === 0
           ? `Expected classes not to be in "${received}"`
           : `Expected classes ${missing.map((c) => `"${c}"`).join(', ')} to be in "${received}"`,
-      actual: received,
-      expected,
+      pass: missing.length === 0,
     }
   },
 
@@ -41,13 +41,13 @@ expect.extend({
     const missing = expected.filter((className) => !result.includes(className))
 
     return {
-      pass: missing.length === 0,
+      actual: result,
+      expected,
       message: () =>
         missing.length === 0
           ? `Expected variant classes not to be in result`
           : `Expected variant classes ${missing.map((c) => `"${c}"`).join(', ')} to be in result with props ${JSON.stringify(props)}`,
-      actual: result,
-      expected,
+      pass: missing.length === 0,
     }
   },
 
@@ -57,16 +57,16 @@ expect.extend({
    */
   toRenderElement(received: HTMLElement, selector: string): MatcherResult {
     const element = received.querySelector(selector)
-    const exists = element != null
+    const exists = !!element
 
     return {
-      pass: exists,
+      actual: element,
+      expected: selector,
       message: () =>
         exists
           ? `Expected element "${selector}" not to exist`
           : `Expected element "${selector}" to exist in rendered component`,
-      actual: element,
-      expected: selector,
+      pass: exists,
     }
   },
 
@@ -81,19 +81,20 @@ expect.extend({
   ): MatcherResult {
     if (received == null) {
       return {
-        pass: false,
-        message: () => `Expected element to exist, but got null`,
         actual: received,
         expected: attribute,
+        message: () => `Expected element to exist, but got null`,
+        pass: false,
       }
     }
 
     const actualValue = received.getAttribute(attribute)
     const hasAttribute = actualValue != null
-    const valueMatches = expectedValue === undefined || actualValue === expectedValue
+    const valueMatches = expectedValue == null || actualValue === expectedValue
 
     return {
-      pass: hasAttribute && valueMatches,
+      actual: actualValue,
+      expected: expectedValue ?? attribute,
       message: () => {
         if (!hasAttribute) {
           return `Expected element to have attribute "${attribute}"`
@@ -103,8 +104,7 @@ expect.extend({
         }
         return `Expected element not to have attribute "${attribute}"`
       },
-      actual: actualValue,
-      expected: expectedValue ?? attribute,
+      pass: hasAttribute && valueMatches,
     }
   },
 
@@ -115,23 +115,23 @@ expect.extend({
   toHaveClasses(received: Element | null, expected: string[]): MatcherResult {
     if (received == null) {
       return {
-        pass: false,
-        message: () => `Expected element to exist, but got null`,
         actual: received,
         expected,
+        message: () => `Expected element to exist, but got null`,
+        pass: false,
       }
     }
 
     const missing = expected.filter((className) => !received.classList.contains(className))
 
     return {
-      pass: missing.length === 0,
+      actual: [...received.classList],
+      expected,
       message: () =>
         missing.length === 0
           ? `Expected element not to have classes ${expected.map((c) => `"${c}"`).join(', ')}`
           : `Expected element to have classes ${missing.map((c) => `"${c}"`).join(', ')}`,
-      actual: Array.from(received.classList),
-      expected,
+      pass: missing.length === 0,
     }
   },
 })

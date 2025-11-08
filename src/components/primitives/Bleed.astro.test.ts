@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Bleed from './Bleed.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Bleed from './Bleed.astro'
 
 describe('Bleed.astro', () => {
   describe('Rendering', () => {
@@ -37,12 +37,12 @@ describe('Bleed.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-class')).toBe(true)
+      expect(div?.classList.contains('custom-class')).toBeTruthy()
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Bleed, {
-        props: { id: 'test-bleed', 'data-testid': 'bleed' },
+        props: { 'data-testid': 'bleed', id: 'test-bleed' },
       })
 
       const div = root.querySelector('div')

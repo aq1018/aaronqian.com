@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
-import { getCollection, getEntry, type CollectionEntry } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
 import SocialsBar from '@/components/features/SocialsBar.astro'
 import TestimonialStrip from '@/components/features/TestimonialStrip.astro'
@@ -16,19 +17,23 @@ import Text from '@/components/primitives/Text.astro'
 
 // Fetch all data
 const aboutEntry = await getEntry('about', 'main')
-if (aboutEntry === undefined) {
+if (aboutEntry == null) {
   throw new Error('About entry not found')
 }
 
-const devTools = (
-  await getCollection('devTools', ({ data }: CollectionEntry<'devTools'>) => data.enabled)
-).toSorted(
+const devToolsCollection = await getCollection(
+  'devTools',
+  ({ data }: CollectionEntry<'devTools'>) => data.enabled,
+)
+const devTools = devToolsCollection.toSorted(
   (a: CollectionEntry<'devTools'>, b: CollectionEntry<'devTools'>) =>
     a.data.position - b.data.position,
 )
-const benchTools = (
-  await getCollection('benchTools', ({ data }: CollectionEntry<'benchTools'>) => data.enabled)
-).toSorted(
+const benchToolsCollection = await getCollection(
+  'benchTools',
+  ({ data }: CollectionEntry<'benchTools'>) => data.enabled,
+)
+const benchTools = benchToolsCollection.toSorted(
   (a: CollectionEntry<'benchTools'>, b: CollectionEntry<'benchTools'>) =>
     a.data.position - b.data.position,
 )
@@ -102,7 +107,7 @@ const { Content } = await aboutEntry.render()
     <Stack space="md" align="center">
       <Heading as="h2" size="h2" align="center"> Let's Work Together </Heading>
       {
-        data.availability !== undefined && (
+        data.availability && (
           <Text size="body" align="center" color="muted">
             {data.availability}
           </Text>

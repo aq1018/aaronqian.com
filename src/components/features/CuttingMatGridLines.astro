@@ -29,24 +29,24 @@ const centerX = width / 2
 const bottomY = height
 
 // Generate vertical grid lines
-const verticalLines: Array<{
+const verticalLines: {
   x: number
   isMajor: boolean
-}> = []
+}[] = []
 for (let offset = minorInterval; offset < width / 2; offset += minorInterval) {
   const isMajor = offset % majorLineInterval === 0
-  verticalLines.push({ x: centerX + offset, isMajor })
-  verticalLines.push({ x: centerX - offset, isMajor })
+  verticalLines.push({ isMajor, x: centerX + offset })
+  verticalLines.push({ isMajor, x: centerX - offset })
 }
 
 // Generate horizontal grid lines
-const horizontalLines: Array<{
+const horizontalLines: {
   y: number
   isMajor: boolean
-}> = []
+}[] = []
 for (let offset = minorInterval; offset < height; offset += minorInterval) {
   const isMajor = offset % majorLineInterval === 0
-  horizontalLines.push({ y: bottomY - offset, isMajor })
+  horizontalLines.push({ isMajor, y: bottomY - offset })
 }
 ---
 

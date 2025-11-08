@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { initializeThemeToggle, setupThemeToggle } from './ThemeToggle.hook'
-
 import { setupTestDOM } from '@test/testHelpers'
+
+import { initializeThemeToggle, setupThemeToggle } from './ThemeToggle.hook'
 
 describe('Theme Toggle System', () => {
   // Helper to setup test environment
@@ -12,17 +12,17 @@ describe('Theme Toggle System', () => {
 
     // Reset matchMedia mock
     Object.defineProperty(window, 'matchMedia', {
-      writable: true,
       value: vi.fn().mockImplementation((query: string) => ({
         matches: false,
         media: query,
-        onchange: null,
+        onchange: undefined,
         addListener: vi.fn(), // Deprecated
         removeListener: vi.fn(), // Deprecated
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
       })),
+      writable: true,
     })
 
     document.startViewTransition = vi.fn<typeof document.startViewTransition>((callbackOptions) => {
@@ -32,11 +32,11 @@ describe('Theme Toggle System', () => {
       }
 
       return {
-        ready: Promise.resolve(),
         finished: Promise.resolve(),
-        updateCallbackDone: Promise.resolve(),
-        types: new Set<string>(),
+        ready: Promise.resolve(),
         skipTransition: () => {},
+        types: new Set<string>(),
+        updateCallbackDone: Promise.resolve(),
       } satisfies ViewTransition
     })
 
@@ -84,9 +84,9 @@ describe('Theme Toggle System', () => {
 
       const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      expect(buttons[0].classList.contains('selected')).toBe(true)
-      expect(buttons[1].classList.contains('selected')).toBe(false)
-      expect(buttons[2].classList.contains('selected')).toBe(false)
+      expect(buttons[0].classList.contains('selected')).toBeTruthy()
+      expect(buttons[1].classList.contains('selected')).toBeFalsy()
+      expect(buttons[2].classList.contains('selected')).toBeFalsy()
 
       cleanup()
       domCleanup()
@@ -109,9 +109,9 @@ describe('Theme Toggle System', () => {
 
       const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      expect(buttons[0].classList.contains('selected')).toBe(false)
-      expect(buttons[1].classList.contains('selected')).toBe(true)
-      expect(buttons[2].classList.contains('selected')).toBe(false)
+      expect(buttons[0].classList.contains('selected')).toBeFalsy()
+      expect(buttons[1].classList.contains('selected')).toBeTruthy()
+      expect(buttons[2].classList.contains('selected')).toBeFalsy()
 
       cleanup()
       domCleanup()
@@ -134,9 +134,9 @@ describe('Theme Toggle System', () => {
 
       const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
-      expect(buttons[0].classList.contains('selected')).toBe(false)
-      expect(buttons[1].classList.contains('selected')).toBe(false)
-      expect(buttons[2].classList.contains('selected')).toBe(true)
+      expect(buttons[0].classList.contains('selected')).toBeFalsy()
+      expect(buttons[1].classList.contains('selected')).toBeFalsy()
+      expect(buttons[2].classList.contains('selected')).toBeTruthy()
 
       cleanup()
       domCleanup()
@@ -167,8 +167,8 @@ describe('Theme Toggle System', () => {
       expect(localStorage.getItem('theme')).toBe('dark')
 
       // Should update selection
-      expect(darkButton.classList.contains('selected')).toBe(true)
-      expect(buttons[0].classList.contains('selected')).toBe(false)
+      expect(darkButton.classList.contains('selected')).toBeTruthy()
+      expect(buttons[0].classList.contains('selected')).toBeFalsy()
 
       cleanup()
       domCleanup()
@@ -193,13 +193,13 @@ describe('Theme Toggle System', () => {
       buttons[1].click()
 
       // Should add dark class to html element
-      expect(document.documentElement.classList.contains('dark')).toBe(true)
+      expect(document.documentElement.classList.contains('dark')).toBeTruthy()
 
       // Click light theme
       buttons[0].click()
 
       // Should remove dark class
-      expect(document.documentElement.classList.contains('dark')).toBe(false)
+      expect(document.documentElement.classList.contains('dark')).toBeFalsy()
 
       cleanup()
       domCleanup()
@@ -211,36 +211,36 @@ describe('Theme Toggle System', () => {
       localStorage.setItem('theme', 'system')
 
       // Mock matchMedia to support addEventListener and dynamic matches value
-      const listeners: Array<(e: MediaQueryListEvent) => void> = []
+      const listeners: ((e: MediaQueryListEvent) => void)[] = []
       let matchesDark = false
 
       Object.defineProperty(window, 'matchMedia', {
-        writable: true,
         value: vi.fn().mockImplementation((query: string) => ({
-          get matches() {
-            return matchesDark
-          },
-          media: query,
-          onchange: null,
-          addListener: vi.fn(),
-          removeListener: vi.fn(),
           addEventListener: vi.fn((event: string, listener: (e: MediaQueryListEvent) => void) => {
             if (event === 'change') {
               listeners.push(listener)
             }
           }),
+          addListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+          get matches() {
+            return matchesDark
+          },
+          media: query,
+          onchange: undefined,
           removeEventListener: vi.fn(
             (event: string, listener: (e: MediaQueryListEvent) => void) => {
               if (event === 'change') {
                 const index = listeners.indexOf(listener)
-                if (index > -1) {
+                if (index !== -1) {
                   listeners.splice(index, 1)
                 }
               }
             },
           ),
-          dispatchEvent: vi.fn(),
+          removeListener: vi.fn(),
         })),
+        writable: true,
       })
 
       const domCleanup = setupTestDOM(`
@@ -254,7 +254,7 @@ describe('Theme Toggle System', () => {
       const cleanup = initializeThemeToggle()
 
       // Initially light (system is light)
-      expect(document.documentElement.classList.contains('dark')).toBe(false)
+      expect(document.documentElement.classList.contains('dark')).toBeFalsy()
 
       // Simulate system theme change to dark
       matchesDark = true
@@ -264,7 +264,7 @@ describe('Theme Toggle System', () => {
       })
 
       // Should apply dark theme when system theme is dark
-      expect(document.documentElement.classList.contains('dark')).toBe(true)
+      expect(document.documentElement.classList.contains('dark')).toBeTruthy()
 
       cleanup()
       domCleanup()
@@ -275,23 +275,23 @@ describe('Theme Toggle System', () => {
       const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'light')
 
-      const listeners: Array<(e: MediaQueryListEvent) => void> = []
+      const listeners: ((e: MediaQueryListEvent) => void)[] = []
       Object.defineProperty(window, 'matchMedia', {
-        writable: true,
         value: vi.fn().mockImplementation((query: string) => ({
-          matches: false,
-          media: query,
-          onchange: null,
-          addListener: vi.fn(),
-          removeListener: vi.fn(),
           addEventListener: vi.fn((event: string, listener: (e: MediaQueryListEvent) => void) => {
             if (event === 'change') {
               listeners.push(listener)
             }
           }),
-          removeEventListener: vi.fn(),
+          addListener: vi.fn(),
           dispatchEvent: vi.fn(),
+          matches: false,
+          media: query,
+          onchange: undefined,
+          removeEventListener: vi.fn(),
+          removeListener: vi.fn(),
         })),
+        writable: true,
       })
 
       const domCleanup = setupTestDOM(`
@@ -305,7 +305,7 @@ describe('Theme Toggle System', () => {
       const cleanup = initializeThemeToggle()
 
       // Initially light (no dark class)
-      expect(document.documentElement.classList.contains('dark')).toBe(false)
+      expect(document.documentElement.classList.contains('dark')).toBeFalsy()
 
       // Simulate system theme change to dark
       const event = new MediaQueryListEvent('change', { matches: true })
@@ -314,7 +314,7 @@ describe('Theme Toggle System', () => {
       })
 
       // Should still be light because theme is set to "light", not "system"
-      expect(document.documentElement.classList.contains('dark')).toBe(false)
+      expect(document.documentElement.classList.contains('dark')).toBeFalsy()
 
       cleanup()
       domCleanup()
@@ -383,7 +383,7 @@ describe('Theme Toggle System', () => {
       const buttons = document.querySelectorAll<HTMLElement>('#theme-toggle button[data-value]')
 
       // Should work immediately - dark button should be selected
-      expect(buttons[1].classList.contains('selected')).toBe(true)
+      expect(buttons[1].classList.contains('selected')).toBeTruthy()
 
       domCleanup()
       envCleanup()

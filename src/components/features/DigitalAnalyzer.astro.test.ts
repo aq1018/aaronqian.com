@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('DigitalAnalyzer', () => {
@@ -11,16 +12,16 @@ describe('DigitalAnalyzer', () => {
     const container = root.querySelector('[data-digital-analyzer]')
 
     expect(container).toBeDefined()
-    expect(container?.classList.contains('digital-analyzer')).toBe(true)
+    expect(container?.classList.contains('digital-analyzer')).toBeTruthy()
   })
 
   it('should apply custom class name', async () => {
     const root = await renderAstroComponent(DigitalAnalyzer, {
-      props: { name: 'test-analyzer', class: 'custom-class' },
+      props: { class: 'custom-class', name: 'test-analyzer' },
     })
     const container = root.querySelector('[data-digital-analyzer]')
 
-    expect(container?.classList.contains('custom-class')).toBe(true)
+    expect(container?.classList.contains('custom-class')).toBeTruthy()
   })
 
   it('should create two SVG elements (static lines and pulses)', async () => {
@@ -49,7 +50,7 @@ describe('DigitalAnalyzer', () => {
     const pulsesSvg = root.querySelector('#digital-analyzer-svg')
 
     expect(pulsesSvg).toBeDefined()
-    expect(pulsesSvg?.classList.contains('digital-analyzer-traces')).toBe(true)
+    expect(pulsesSvg?.classList.contains('digital-analyzer-traces')).toBeTruthy()
   })
 
   it('should not set viewBox on SVGs (set dynamically by JS)', async () => {
@@ -108,7 +109,7 @@ describe('DigitalAnalyzer', () => {
     })
     const groups = root.querySelectorAll('g')
 
-    const primaryGroup = Array.from(groups).find((g) => g.classList.contains('text-primary'))
+    const primaryGroup = [...groups].find((g) => g.classList.contains('text-primary'))
     expect(primaryGroup).toBeDefined()
   })
 
@@ -131,8 +132,8 @@ describe('DigitalAnalyzer', () => {
     const svgs = root.querySelectorAll('svg')
 
     svgs.forEach((svg) => {
-      expect(svg.classList.contains('absolute')).toBe(true)
-      expect(svg.classList.contains('inset-0')).toBe(true)
+      expect(svg.classList.contains('absolute')).toBeTruthy()
+      expect(svg.classList.contains('inset-0')).toBeTruthy()
     })
   })
 })

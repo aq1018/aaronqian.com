@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { collapsibleContentVariants, collapsibleVariants } from './Collapsible.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { collapsibleContentVariants, collapsibleVariants } from './Collapsible.cva'
 
 describe('Collapsible.cva', () => {
   describe('collapsibleVariants', () => {
@@ -79,7 +79,7 @@ describe('Collapsible.cva', () => {
       speed: ['fast', 'normal', 'slow'],
     })
 
-    testEdgeCases(collapsibleVariants, { speed: 'normal', bordered: false }, [
+    testEdgeCases(collapsibleVariants, { bordered: false, speed: 'normal' }, [
       'grid',
       'duration-300',
     ])

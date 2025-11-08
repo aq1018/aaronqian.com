@@ -9,7 +9,7 @@ import Overlay from '@/components/primitives/Overlay.astro'
 import Surface from '@/components/primitives/Surface.astro'
 
 export interface Props {
-  posts: Array<CollectionEntry<'blog'>>
+  posts: CollectionEntry<'blog'>[]
 }
 
 const { posts } = Astro.props

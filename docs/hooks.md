@@ -83,8 +83,8 @@ export function initUiHooks() {
 
 ```typescript
 // src/components/hooks.ts
-import { initUiHooks } from './ui/hooks'
 import { initFeatureHooks } from './features/hooks'
+import { initUiHooks } from './ui/hooks'
 
 export function initComponentHooks() {
   initUiHooks()

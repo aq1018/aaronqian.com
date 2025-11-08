@@ -9,7 +9,7 @@ import Overlay from '@/components/primitives/Overlay.astro'
 import Surface from '@/components/primitives/Surface.astro'
 
 export interface Props {
-  projects: Array<CollectionEntry<'projects'>>
+  projects: CollectionEntry<'projects'>[]
 }
 
 const { projects } = Astro.props

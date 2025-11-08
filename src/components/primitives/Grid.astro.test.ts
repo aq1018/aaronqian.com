@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Grid from './Grid.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Grid from './Grid.astro'
 
 describe('Grid.astro - Container Mode', () => {
   describe('Rendering', () => {
@@ -40,13 +40,13 @@ describe('Grid.astro - Container Mode', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-grid')).toBe(true)
+      expect(div?.classList.contains('custom-grid')).toBeTruthy()
       expect(div).toHaveClasses(['grid'])
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Grid, {
-        props: { id: 'test-grid', 'data-testid': 'grid-container' },
+        props: { 'data-testid': 'grid-container', id: 'test-grid' },
       })
 
       const div = root.querySelector('div')
@@ -81,8 +81,8 @@ describe('Grid.astro - Item Mode', () => {
       const root = await renderAstroComponent(Grid, {
         props: {
           size: 12,
-          'size-sm': 6,
           'size-md': 4,
+          'size-sm': 6,
         },
       })
 
@@ -93,8 +93,8 @@ describe('Grid.astro - Item Mode', () => {
     it('should handle offset props', async () => {
       const root = await renderAstroComponent(Grid, {
         props: {
-          size: 6,
           offset: 3,
+          size: 6,
         },
       })
 
@@ -120,7 +120,7 @@ describe('Grid.astro - Item Mode', () => {
 
       const div = root.querySelector('div')
       // Item mode doesn't have grid base class
-      expect(div?.classList.contains('grid')).toBe(false)
+      expect(div?.classList.contains('grid')).toBeFalsy()
     })
   })
 })

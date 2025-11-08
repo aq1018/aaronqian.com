@@ -2,6 +2,7 @@
  * Runtime animations for digital analyzer signal visualization
  * Orchestrates waveform timing and lightning bolt sync with dynamic sizing
  */
+import { queryElement, querySVGElement } from '@/utils/typeGuards'
 
 import { createTraceAnimation } from './DigitalAnalyzer.animation'
 import { defaultOptions } from './DigitalAnalyzer.config'
@@ -11,13 +12,11 @@ import { GridManager } from './DigitalAnalyzer.grid'
 import type { DigitalAnalyzerOptions } from './DigitalAnalyzer.types'
 import { generateSquareWavePath, getGlowColor } from './DigitalAnalyzer.utils'
 
-import { queryElement, querySVGElement } from '@/utils/typeGuards'
-
 type CleanupFunction = () => void
 type DigitalAnalyzerConfig = Required<DigitalAnalyzerOptions>
 
-let cleanup: CleanupFunction | null = null
-let resizeObserver: ResizeObserver | null = null
+let cleanup: CleanupFunction | null
+let resizeObserver: ResizeObserver | null
 
 /**
  * Calculate Y positions for trace based on grid
@@ -132,19 +131,19 @@ function createTriggerTraceFunction(deps: {
     deps.displayManager.clearBinaryBuffer()
 
     const timeline = createTraceAnimation({
-      pathElement,
       binaryData,
-      currentChunk,
-      shouldClear,
-      displayManager: deps.displayManager,
-      decoderToggle: deps.decoderToggle,
       config: {
-        traceDrawDuration: deps.config.traceDrawDuration,
-        traceFadeDelay: deps.config.traceFadeDelay,
-        traceClearDelay: deps.config.traceClearDelay,
         byteCount: deps.config.byteCount,
         dataSource: deps.config.dataSource,
+        traceClearDelay: deps.config.traceClearDelay,
+        traceDrawDuration: deps.config.traceDrawDuration,
+        traceFadeDelay: deps.config.traceFadeDelay,
       },
+      currentChunk,
+      decoderToggle: deps.decoderToggle,
+      displayManager: deps.displayManager,
+      pathElement,
+      shouldClear,
     })
 
     deps.setCurrentTimeline(timeline)
@@ -176,16 +175,16 @@ function createCleanupFunction(refs: {
 }): CleanupFunction {
   return () => {
     const currentTimeline = refs.getCurrentTimeline()
-    if (currentTimeline != null) {
+    if (currentTimeline) {
       currentTimeline.kill()
       refs.setCurrentTimeline(null)
     }
-    if (resizeObserver != null) {
+    if (resizeObserver) {
       resizeObserver.disconnect()
       resizeObserver = null
     }
     refs.svg.innerHTML = ''
-    if (refs.decoderToggle != null && refs.decoderToggleListeners != null) {
+    if (refs.decoderToggle && refs.decoderToggleListeners) {
       refs.decoderToggle.removeEventListener(
         'mouseenter',
         refs.decoderToggleListeners.handleMouseEnter,
@@ -195,7 +194,7 @@ function createCleanupFunction(refs: {
         refs.decoderToggleListeners.handleMouseLeave,
       )
     }
-    if (refs.decoderToggle != null) {
+    if (refs.decoderToggle) {
       refs.decoderToggle.style.transform = ''
       refs.decoderToggle.style.filter = 'brightness(0.7)'
     }
@@ -225,9 +224,9 @@ function queryRequiredElements(): {
 
   return {
     container,
-    svg: svgResult,
-    staticSvg: staticSvgResult,
     decoderToggle,
+    staticSvg: staticSvgResult,
+    svg: svgResult,
   }
 }
 
@@ -246,15 +245,15 @@ function initializeManagers(
 } {
   const bitCount = config.byteCount * config.bitsPerByte
   const dataSourceManager = new DataSourceManager({
-    fullMessage: config.defaultMessage,
-    byteCount: config.byteCount,
     bitCount,
+    byteCount: config.byteCount,
     dataSource: config.dataSource,
+    fullMessage: config.defaultMessage,
   })
   const displayManager = new DisplayManager(analyzerName)
   const gridManager = new GridManager(staticSvg, svg, {
-    byteCount: config.byteCount,
     bitsPerByte: config.bitsPerByte,
+    byteCount: config.byteCount,
     gridOpacity: config.gridOpacity,
   })
   return { dataSourceManager, displayManager, gridManager }
@@ -280,14 +279,14 @@ function setupGridDimensions(
   })
   resizeObserver.observe(container)
 
-  return () => ({ gridLines, height, gridSize })
+  return () => ({ gridLines, gridSize, height })
 }
 
 /**
  * Initialize digital analyzer animations with dynamic sizing
  */
 export function initializeDigitalAnalyzer(): CleanupFunction {
-  if (cleanup != null) cleanup()
+  if (cleanup) cleanup()
 
   const elements = queryRequiredElements()
   if (elements == null) {
@@ -299,7 +298,7 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
   const analyzerName = container.dataset['digital-analyzer'] ?? 'default'
   const config: DigitalAnalyzerConfig = defaultOptions
 
-  let currentTimeline: gsap.core.Timeline | null = null
+  let currentTimeline: gsap.core.Timeline | null
   let decoderToggleListeners: {
     handleMouseEnter: EventListener
     handleMouseLeave: EventListener
@@ -314,33 +313,33 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
 
   const getGridData = setupGridDimensions(container, gridManager)
 
-  if (decoderToggle != null) {
+  if (decoderToggle) {
     decoderToggleListeners = setupDecoderToggleHover(decoderToggle, () => currentTimeline)
   }
 
   const triggerTrace = createTriggerTraceFunction({
-    getGridData,
-    dataSourceManager,
-    displayManager,
-    svg,
     config,
+    dataSourceManager,
     decoderToggle,
+    displayManager,
+    getGridData,
     setCurrentTimeline: (timeline) => {
       currentTimeline = timeline
     },
+    svg,
   })
 
   window.setTimeout(triggerTrace, config.traceInitialDelay)
 
   cleanup = createCleanupFunction({
+    decoderToggle,
+    decoderToggleListeners,
+    displayManager,
     getCurrentTimeline: () => currentTimeline,
     setCurrentTimeline: (timeline) => {
       currentTimeline = timeline
     },
     svg,
-    decoderToggle,
-    decoderToggleListeners,
-    displayManager,
   })
 
   return cleanup
@@ -353,8 +352,6 @@ export function setupDigitalAnalyzer(): void {
   document.addEventListener('astro:page-load', initializeDigitalAnalyzer)
 
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup != null) {
-      cleanup()
-    }
+    if (cleanup != null) cleanup()
   })
 }

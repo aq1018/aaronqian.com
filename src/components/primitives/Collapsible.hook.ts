@@ -6,7 +6,7 @@
 
 type CleanupFunction = () => void
 
-let cleanup: CleanupFunction | null = null
+let cleanup: CleanupFunction | null
 
 /**
  * Initialize collapsible components
@@ -15,7 +15,7 @@ let cleanup: CleanupFunction | null = null
  */
 export function initializeCollapsibles(): CleanupFunction {
   // Clean up previous initialization if it exists
-  if (cleanup != null) {
+  if (cleanup) {
     cleanup()
   }
 
@@ -25,7 +25,9 @@ export function initializeCollapsibles(): CleanupFunction {
   // Set up click handlers for triggers
   triggers.forEach((trigger) => {
     const targetId = trigger.dataset.collapsibleTrigger
-    if (targetId == null || targetId === '') return
+    if (targetId == null || targetId === '') {
+      return
+    }
 
     const handler = (e: Event) => {
       e.preventDefault()
@@ -54,7 +56,9 @@ export function initializeCollapsibles(): CleanupFunction {
  */
 function toggleCollapsible(id: string): void {
   const collapsible = document.querySelector<HTMLElement>(`[data-collapsible-id="${id}"]`)
-  if (collapsible == null) return
+  if (collapsible == null) {
+    return
+  }
 
   const isOpen = collapsible.dataset.open === 'true'
   const newState = !isOpen

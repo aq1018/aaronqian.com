@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { clusterCva } from './Cluster.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { clusterCva } from './Cluster.cva'
 
 describe('Cluster.cva', () => {
   testBaseClasses(clusterCva, ['inline-flex'])
@@ -64,11 +64,11 @@ describe('Cluster.cva', () => {
   })
 
   testCompoundVariants(clusterCva, {
-    space: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
     align: ['center', 'start', 'end', 'baseline'],
+    space: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
   })
 
-  testEdgeCases(clusterCva, { space: 'md', align: 'center' }, ['inline-flex', 'gap-2'])
+  testEdgeCases(clusterCva, { align: 'center', space: 'md' }, ['inline-flex', 'gap-2'])
 
   describe('Fixed Spacing', () => {
     it('should use fixed spacing values without responsive breakpoints', () => {

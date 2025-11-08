@@ -3,8 +3,8 @@
  * CVA pattern for expandable/collapsible content sections
  * Uses modern CSS Grid technique for smooth height transitions
  */
-
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 // Shared transition base (extracted to reduce duplication)
 const transitionBase = 'transition-[grid-template-rows] ease-out'
@@ -16,20 +16,20 @@ export const collapsibleVariants = cva(
     'collapsible-wrapper',
   ],
   {
+    defaultVariants: {
+      bordered: false,
+      speed: 'normal',
+    },
     variants: {
+      bordered: {
+        false: '',
+        true: 'rounded-lg border border-border',
+      },
       speed: {
         fast: `${transitionBase} duration-150`,
         normal: `${transitionBase} duration-300`,
         slow: `${transitionBase} duration-500`,
       },
-      bordered: {
-        true: 'rounded-lg border border-border',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      speed: 'normal',
-      bordered: false,
     },
   },
 )

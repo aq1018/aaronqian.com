@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { badgeVariants } from './Badge.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { badgeVariants } from './Badge.cva'
 
 describe('Badge.cva', () => {
   testBaseClasses(badgeVariants, [
@@ -210,7 +210,7 @@ describe('Badge.cva', () => {
     variant: ['solid', 'outline', 'soft'],
   })
 
-  testEdgeCases(badgeVariants, { size: 'sm', color: 'neutral', variant: 'solid' }, [
+  testEdgeCases(badgeVariants, { color: 'neutral', size: 'sm', variant: 'solid' }, [
     'bg-neutral',
     'text-xs',
   ])
@@ -226,7 +226,7 @@ describe('Badge.cva', () => {
 
     it('should provide appropriate styles for status labels', () => {
       expect(
-        badgeVariants({ color: 'primary', variant: 'outline', uppercase: true }),
+        badgeVariants({ color: 'primary', uppercase: true, variant: 'outline' }),
       ).toContainClasses(['border-primary', 'uppercase', 'tracking-wider'])
     })
 

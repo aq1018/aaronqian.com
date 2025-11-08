@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { textVariants } from './typography.cva'
-
 import { testAllVariants, testDefaultVariants, testEdgeCases } from '@test/testHelpers'
+
+import { textVariants } from './typography.cva'
 
 describe('Text.cva (textVariants)', () => {
   testDefaultVariants(textVariants, [
@@ -143,10 +143,10 @@ describe('Text.cva (textVariants)', () => {
     it('should combine all boolean styles', () => {
       expect(
         textVariants({
-          uppercase: true,
-          strong: true,
           italic: true,
           strike: true,
+          strong: true,
+          uppercase: true,
         }),
       ).toContainClasses(['uppercase', 'font-semibold', 'italic', 'line-through'])
     })
@@ -207,17 +207,17 @@ describe('Text.cva (textVariants)', () => {
     })
   })
 
-  testEdgeCases(textVariants, { size: 'body', color: 'inherit' }, ['typography-text-body'])
+  testEdgeCases(textVariants, { color: 'inherit', size: 'body' }, ['typography-text-body'])
 
   describe('Combined Props', () => {
     it('should work with multiple props combined', () => {
       expect(
         textVariants({
-          size: 'small',
+          align: 'center',
           color: 'muted',
+          size: 'small',
           strong: true,
           uppercase: true,
-          align: 'center',
         }),
       ).toContainClasses([
         'typography-text-small',
@@ -243,14 +243,14 @@ describe('Text.cva (textVariants)', () => {
 
   describe('Semantic Usage', () => {
     it('should provide appropriate styles for muted secondary text', () => {
-      expect(textVariants({ size: 'small', color: 'muted' })).toContainClasses([
+      expect(textVariants({ color: 'muted', size: 'small' })).toContainClasses([
         'typography-text-small',
         'text-muted',
       ])
     })
 
     it('should provide appropriate styles for emphasized text', () => {
-      expect(textVariants({ strong: true, color: 'default' })).toContainClasses([
+      expect(textVariants({ color: 'default', strong: true })).toContainClasses([
         'font-semibold',
         'text-content',
       ])

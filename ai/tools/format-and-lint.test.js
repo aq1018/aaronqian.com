@@ -40,8 +40,8 @@ async function runTool(filePath) {
 
   // Send JSON input via stdin
   const input = JSON.stringify({
-    tool_name: 'Write',
     tool_input: { file_path: filePath },
+    tool_name: 'Write',
   })
   child.stdin.write(input)
   child.stdin.end()
@@ -49,17 +49,17 @@ async function runTool(filePath) {
   // Wait for process to close using events.once (promise-based)
   const closeEvent = /** @type {unknown} */ (await once(child, 'close'))
   /** @type {number | null} */
-  let exitCode = null
+  let exitCode
   if (Array.isArray(closeEvent) && closeEvent.length > 0) {
     const firstItem = /** @type {unknown} */ (closeEvent[0])
     if (typeof firstItem === 'number') {
       exitCode = firstItem
     } else if (firstItem == null) {
-      exitCode = null
+      exitCode = undefined
     }
   }
 
-  return { stdout, stderr, exitCode }
+  return { exitCode, stderr, stdout }
 }
 
 /**
@@ -84,7 +84,7 @@ function createTestFile(name, content) {
 function cleanupTestFiles() {
   const testDir = path.resolve(DIRNAME, '../..', 'test-temp')
   if (fs.existsSync(testDir)) {
-    fs.rmSync(testDir, { recursive: true, force: true })
+    fs.rmSync(testDir, { force: true, recursive: true })
   }
 }
 
@@ -124,7 +124,7 @@ export function validFunction() {
       expect(output.hookSpecificOutput.additionalContext).toContain('✓ Prettier completed')
       expect(output.hookSpecificOutput.additionalContext).toContain('✓ oxlint verification passed')
       expect(output.hookSpecificOutput.additionalContext).toContain('Next: Verify typecheck only')
-    }, 30000)
+    }, 30_000)
   })
 
   describe('oxlint Fails Case', () => {
@@ -153,7 +153,7 @@ function unusedFunc() { return 1 }
       expect(output.hookSpecificOutput.additionalContext).toContain('unused_var')
       expect(output.hookSpecificOutput.additionalContext).toContain('⊘ Formatting skipped')
       expect(output.hookSpecificOutput.additionalContext).toContain('Next: Fix the errors above')
-    }, 30000)
+    }, 30_000)
   })
 
   describe('File Filtering', () => {
@@ -239,13 +239,13 @@ function unusedFunc() { return 1 }
 
       const closeEvent = /** @type {unknown} */ (await once(child, 'close'))
       /** @type {number | null} */
-      let exitCode = null
+      let exitCode
       if (Array.isArray(closeEvent) && closeEvent.length > 0) {
         const firstItem = /** @type {unknown} */ (closeEvent[0])
         if (typeof firstItem === 'number') {
           exitCode = firstItem
         } else if (firstItem == null) {
-          exitCode = null
+          exitCode = undefined
         }
       }
 
@@ -277,6 +277,6 @@ export const title = "Test"
       /** @type {{hookSpecificOutput: {additionalContext: string}}} */
       const output = parsed
       expect(output.hookSpecificOutput.additionalContext).toContain('astro check')
-    }, 30000)
+    }, 30_000)
   })
 })

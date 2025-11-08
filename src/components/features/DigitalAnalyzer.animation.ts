@@ -35,14 +35,14 @@ export interface TraceAnimationOptions {
  * Add decoder toggle energize animation to timeline
  */
 function addDecoderEnergize(timeline: gsap.core.Timeline, decoderToggle: HTMLElement | null): void {
-  if (decoderToggle != null) {
+  if (decoderToggle) {
     timeline.to(
       decoderToggle,
       {
-        scale: 1.1,
-        filter: `brightness(${DECODER_TOGGLE_BRIGHTNESS_BRIGHT})`,
         duration: 0.2,
         ease: 'power2.out',
+        filter: `brightness(${DECODER_TOGGLE_BRIGHTNESS_BRIGHT})`,
+        scale: 1.1,
       },
       0,
     )
@@ -62,9 +62,9 @@ function addPathDrawing(
     pathElement,
     { strokeDashoffset: pathLength },
     {
-      strokeDashoffset: 0,
       duration: duration / 1000,
       ease: 'none',
+      strokeDashoffset: 0,
     },
     0,
   )
@@ -129,15 +129,15 @@ function addDecoderReset(
   decoderToggle: HTMLElement | null,
   duration: number,
 ): void {
-  if (decoderToggle != null) {
+  if (decoderToggle) {
     const resetTime = duration / 1000
     timeline.to(
       decoderToggle,
       {
-        scale: 1,
-        filter: `brightness(${DECODER_TOGGLE_BRIGHTNESS_DIM})`,
         duration: 0.3,
         ease: 'power2.out',
+        filter: `brightness(${DECODER_TOGGLE_BRIGHTNESS_DIM})`,
+        scale: 1,
       },
       resetTime,
     )

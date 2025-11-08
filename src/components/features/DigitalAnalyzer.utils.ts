@@ -19,10 +19,9 @@ export function generateGridLines(height: number, gridSize: number): number[] {
  * Returns binary string like "01001000" for each character
  */
 export function stringToBinary(input: string): string {
-  return input
-    .split('')
-    .map((char) => char.codePointAt(0)?.toString(2).padStart(8, '0'))
-    .join('')
+  const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
+  const segments = Array.from(segmenter.segment(input), (s) => s.segment)
+  return segments.map((char) => char.codePointAt(0)?.toString(2).padStart(8, '0')).join('')
 }
 
 /**
@@ -30,11 +29,10 @@ export function stringToBinary(input: string): string {
  * Example: "A5" -> "10100101"
  */
 export function hexToBinary(hex: string): string {
-  return hex
-    .replaceAll(/[^0-9A-Fa-f]/g, '')
-    .split('')
-    .map((char) => parseInt(char, 16).toString(2).padStart(4, '0'))
-    .join('')
+  const cleaned = hex.replaceAll(/[^0-9A-Fa-f]/g, '')
+  const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
+  const segments = Array.from(segmenter.segment(cleaned), (s) => s.segment)
+  return segments.map((char) => parseInt(char, 16).toString(2).padStart(4, '0')).join('')
 }
 
 /**

@@ -1,8 +1,10 @@
 import type { CollectionEntry } from 'astro:content'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getCollection } from 'astro:content'
-import SocialsBar from './SocialsBar.astro'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import { renderAstroComponent } from '@test/testHelpers'
+
+import SocialsBar from './SocialsBar.astro'
 
 type SocialEntry = CollectionEntry<'socials'>
 
@@ -23,15 +25,15 @@ interface MockSocialParams {
 
 const createMockSocial = (params: MockSocialParams): SocialEntry => {
   const result = {
-    id: params.id,
     collection: 'socials',
     data: {
-      label: params.label,
-      url: params.url,
-      position: params.position,
       enabled: params.enabled,
+      label: params.label,
+      position: params.position,
       rel: params.rel,
+      url: params.url,
     },
+    id: params.id,
   } satisfies SocialEntry
 
   return result
@@ -46,19 +48,19 @@ describe('SocialsBar', () => {
     it('should render enabled social links', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
           rel: 'me noopener',
+          url: 'https://github.com/user',
         }),
         createMockSocial({
+          enabled: true,
           id: 'linkedin',
           label: 'LinkedIn',
-          url: 'https://linkedin.com/in/user',
           position: 2,
-          enabled: true,
+          url: 'https://linkedin.com/in/user',
         }),
       ])
 
@@ -71,11 +73,11 @@ describe('SocialsBar', () => {
     it('should not render disabled social links', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
+          url: 'https://github.com/user',
         }),
       ])
 
@@ -89,25 +91,25 @@ describe('SocialsBar', () => {
     it('should render social links in position order', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'linkedin',
           label: 'LinkedIn',
-          url: 'https://linkedin.com/in/user',
           position: 2,
-          enabled: true,
+          url: 'https://linkedin.com/in/user',
         }),
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
+          url: 'https://github.com/user',
         }),
         createMockSocial({
+          enabled: true,
           id: 'email',
           label: 'Email',
-          url: 'mailto:user@example.com',
           position: 3,
-          enabled: true,
+          url: 'mailto:user@example.com',
         }),
       ])
 
@@ -126,18 +128,18 @@ describe('SocialsBar', () => {
     it('should include correct href attributes', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
+          url: 'https://github.com/user',
         }),
       ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
       const link = root.querySelector('a')
-      if (link != null) {
+      if (link) {
         expect(link.getAttribute('href')).toBe('https://github.com/user')
       }
     })
@@ -145,18 +147,18 @@ describe('SocialsBar', () => {
     it('should include aria-label for accessibility', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
+          url: 'https://github.com/user',
         }),
       ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
       const link = root.querySelector('a')
-      if (link != null) {
+      if (link) {
         expect(link.getAttribute('aria-label')).toBe('GitHub profile')
       }
     })
@@ -164,19 +166,19 @@ describe('SocialsBar', () => {
     it('should apply rel attribute when provided', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
           rel: 'me noopener',
+          url: 'https://github.com/user',
         }),
       ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
       const link = root.querySelector('a')
-      if (link != null) {
+      if (link) {
         expect(link.getAttribute('rel')).toBe('me noopener')
       }
     })
@@ -186,11 +188,11 @@ describe('SocialsBar', () => {
     it('should render compact variant without labels by default', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
+          url: 'https://github.com/user',
         }),
       ])
 
@@ -200,7 +202,7 @@ describe('SocialsBar', () => {
       const link = root.querySelector('a')
       expect(link).toBeTruthy()
       // In compact mode, label is not rendered in the link
-      if (link != null) {
+      if (link) {
         expect(link.textContent.trim()).not.toBe('GitHub')
       }
     })
@@ -208,18 +210,18 @@ describe('SocialsBar', () => {
     it('should render wide variant with labels', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
+          url: 'https://github.com/user',
         }),
       ])
 
       const root = await renderAstroComponent(SocialsBar, { props: { variant: 'wide' } })
 
       const link = root.querySelector('a')
-      if (link != null) {
+      if (link) {
         expect(link.textContent).toContain('GitHub')
       }
     })
@@ -241,18 +243,18 @@ describe('SocialsBar', () => {
     it('should render icons for all social links', async () => {
       vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
+          enabled: true,
           id: 'github',
           label: 'GitHub',
-          url: 'https://github.com/user',
           position: 1,
-          enabled: true,
+          url: 'https://github.com/user',
         }),
         createMockSocial({
+          enabled: true,
           id: 'linkedin',
           label: 'LinkedIn',
-          url: 'https://linkedin.com/in/user',
           position: 2,
-          enabled: true,
+          url: 'https://linkedin.com/in/user',
         }),
       ])
 

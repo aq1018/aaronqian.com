@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { dividerCva } from './Divider.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { dividerCva } from './Divider.cva'
 
 describe('Divider.cva', () => {
   testBaseClasses(dividerCva, [])

@@ -1,9 +1,9 @@
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it, vi } from 'vitest'
 
-import ProjectList from './ProjectList.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import ProjectList from './ProjectList.astro'
 
 type ProjectEntry = CollectionEntry<'projects'>
 
@@ -14,31 +14,31 @@ const createMockProject = (
   status: 'active' | 'planning' | 'done',
   live = false,
 ): ProjectEntry => ({
-  id,
+  body: '',
   collection: 'projects',
   data: {
-    title,
-    description: `Description for ${title}`,
     aside: `Aside for ${title}`,
-    status,
+    description: `Description for ${title}`,
     live,
     order: 1,
+    status,
+    title,
   },
-  slug: id.replace(/\/index(\.md)?$/, ''),
+  id,
   render: vi.fn(),
-  body: '',
+  slug: id.replace(/\/index(\.md)?$/, ''),
 })
 
 const defaultStatusStyles = {
   active: 'text-primary',
-  planning: 'text-muted',
   done: 'text-fg/60',
+  planning: 'text-muted',
 }
 
 const defaultStatusLabels = {
   active: 'ACTIVE',
-  planning: 'PLANNING',
   done: 'DONE',
+  planning: 'PLANNING',
 }
 
 describe('ProjectList', () => {
@@ -48,16 +48,16 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
       // Find the project link (skip header links)
       const links = root.querySelectorAll('a')
-      const projectLink = Array.from(links).find((link) => link.textContent.trim() === 'Project A')
+      const projectLink = [...links].find((link) => link.textContent.trim() === 'Project A')
       expect(projectLink).toBeDefined()
-      if (projectLink !== undefined) {
+      if (projectLink) {
         expect(projectLink.getAttribute('href')).toBe('/projects/project-a')
       }
     })
@@ -67,8 +67,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -80,8 +80,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -98,8 +98,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -119,8 +119,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -132,8 +132,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -151,8 +151,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -164,8 +164,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -177,8 +177,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -192,8 +192,8 @@ describe('ProjectList', () => {
       const footerText = 'Updates monthly. Expect context switches.'
       const root = await renderAstroComponent(ProjectList, {
         props: {
-          projects,
           footer: footerText,
+          projects,
         },
       })
 
@@ -205,8 +205,8 @@ describe('ProjectList', () => {
       const customFooter = 'Custom footer message'
       const root = await renderAstroComponent(ProjectList, {
         props: {
-          projects,
           footer: customFooter,
+          projects,
         },
       })
 
@@ -231,8 +231,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects: [],
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -243,8 +243,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects: [],
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -263,24 +263,18 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
       // Find project links by title text
       const links = root.querySelectorAll('a')
-      const projectALink = Array.from(links).find((link) =>
-        link.textContent.trim().includes('Project A'),
-      )
-      const projectBLink = Array.from(links).find((link) =>
-        link.textContent.trim().includes('Project B'),
-      )
-      const projectCLink = Array.from(links).find((link) =>
-        link.textContent.trim().includes('Project C'),
-      )
+      const projectALink = [...links].find((link) => link.textContent.trim().includes('Project A'))
+      const projectBLink = [...links].find((link) => link.textContent.trim().includes('Project B'))
+      const projectCLink = [...links].find((link) => link.textContent.trim().includes('Project C'))
 
-      if (projectALink !== undefined && projectBLink !== undefined && projectCLink !== undefined) {
+      if (projectALink && projectBLink && projectCLink) {
         expect(projectALink.getAttribute('href')).toBe('/projects/project-a')
         expect(projectBLink.getAttribute('href')).toBe('/projects/project-b')
         expect(projectCLink.getAttribute('href')).toBe('/projects/project-c')
@@ -294,8 +288,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -311,8 +305,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 
@@ -328,8 +322,8 @@ describe('ProjectList', () => {
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
-          statusStyles: defaultStatusStyles,
           statusLabels: defaultStatusLabels,
+          statusStyles: defaultStatusStyles,
         },
       })
 

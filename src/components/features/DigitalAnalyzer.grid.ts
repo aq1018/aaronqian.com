@@ -2,7 +2,6 @@
  * Grid management for digital analyzer signal visualization
  * Handles grid line generation and resize optimization
  */
-
 import { calculateGridSize } from './DigitalAnalyzer.config'
 import { generateGridLines } from './DigitalAnalyzer.utils'
 
@@ -114,7 +113,9 @@ export class GridManager {
 
     this.gridLines = generateGridLines(this.height, this.gridSize)
     const gridGroup = this.staticSvg.querySelector('g')
-    if (gridGroup == null) return
+    if (gridGroup == null) {
+      return
+    }
 
     gridGroup.innerHTML = ''
 

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Divider from './Divider.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Divider from './Divider.astro'
 
 describe('Divider.astro', () => {
   describe('Rendering', () => {
@@ -34,12 +34,12 @@ describe('Divider.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-class')).toBe(true)
+      expect(div?.classList.contains('custom-class')).toBeTruthy()
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Divider, {
-        props: { id: 'test-divider', 'data-testid': 'divider' },
+        props: { 'data-testid': 'divider', id: 'test-divider' },
       })
 
       const div = root.querySelector('div')

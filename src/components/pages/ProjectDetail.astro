@@ -15,7 +15,7 @@ import Text from '@/components/primitives/Text.astro'
 
 export interface Props {
   project: CollectionEntry<'projects'>
-  projectLogs: Array<CollectionEntry<'projectLogs'>>
+  projectLogs: CollectionEntry<'projectLogs'>[]
   statusStyles: Record<string, string>
   statusLabels: Record<string, string>
 }
@@ -60,7 +60,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
 
         <!-- External link if available -->
         {
-          project.data.url !== undefined && project.data.url !== '' && (
+          project.data.url && project.data.url !== '' && (
             <div class="mt-6">
               <ButtonLink href={project.data.url} external color="primary" class="text-sm">
                 <span>Visit Site</span>

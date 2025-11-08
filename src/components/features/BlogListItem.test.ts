@@ -1,18 +1,16 @@
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it } from 'vitest'
 
-import BlogListItem from './BlogListItem.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import BlogListItem from './BlogListItem.astro'
 
 type BlogEntry = CollectionEntry<'blog'>
 
 function createMockPost(overrides?: Partial<BlogEntry['data']>): Partial<BlogEntry> {
   return {
-    id: 'test-post/index.md',
-    slug: 'test-post',
-    collection: 'blog',
     body: '',
+    collection: 'blog',
     data: {
       title: 'Test Blog Post',
       description: 'A test blog post description',
@@ -21,6 +19,8 @@ function createMockPost(overrides?: Partial<BlogEntry['data']>): Partial<BlogEnt
       draft: false,
       ...overrides,
     },
+    id: 'test-post/index.md',
+    slug: 'test-post',
   }
 }
 

@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { overlayCva } from './Overlay.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { overlayCva } from './Overlay.cva'
 
 describe('Overlay.cva', () => {
   testBaseClasses(overlayCva, ['absolute', 'inset-0', 'pointer-events-none'])
@@ -81,22 +81,22 @@ describe('Overlay.cva', () => {
   })
 
   testCompoundVariants(overlayCva, {
-    preset: ['none', 'soft', 'medium', 'strong', 'top-fade', 'bottom-fade', 'radial-fade'],
     blur: ['none', 'sm', 'md', 'lg'],
+    preset: ['none', 'soft', 'medium', 'strong', 'top-fade', 'bottom-fade', 'radial-fade'],
   })
 
-  testEdgeCases(overlayCva, { preset: 'none', blur: 'none' }, ['absolute', 'inset-0'])
+  testEdgeCases(overlayCva, { blur: 'none', preset: 'none' }, ['absolute', 'inset-0'])
 
   describe('Glassmorphism Effect', () => {
     it('should create glassmorphism with soft preset and blur', () => {
-      expect(overlayCva({ preset: 'soft', blur: 'lg' })).toContainClasses([
+      expect(overlayCva({ blur: 'lg', preset: 'soft' })).toContainClasses([
         'bg-background/20',
         'backdrop-blur-lg',
       ])
     })
 
     it('should create glassmorphism with medium preset and blur', () => {
-      expect(overlayCva({ preset: 'medium', blur: 'md' })).toContainClasses([
+      expect(overlayCva({ blur: 'md', preset: 'medium' })).toContainClasses([
         'bg-background/40',
         'backdrop-blur',
       ])

@@ -1,4 +1,5 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 /**
  * PillToggle Container Variants
@@ -16,8 +17,8 @@ export const pillToggleVariants = cva(
     'dark:bg-gray-800',
   ],
   {
-    variants: {},
     defaultVariants: {},
+    variants: {},
   },
 )
 
@@ -43,8 +44,8 @@ export const pillToggleSliderVariants = cva(
     'duration-200',
   ],
   {
-    variants: {},
     defaultVariants: {},
+    variants: {},
   },
 )
 
@@ -71,8 +72,8 @@ export const pillToggleButtonVariants = cva(
     'dark:[&.selected]:text-white',
   ],
   {
-    variants: {},
     defaultVariants: {},
+    variants: {},
   },
 )
 

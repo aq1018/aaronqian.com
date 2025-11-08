@@ -1,4 +1,5 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 /**
  * Inset: interior padding for cards/panels/islands.
@@ -6,6 +7,10 @@ import { type VariantProps, cva } from 'class-variance-authority'
  * - `squish` reduces vertical padding for button-like layouts (overrides space's vertical padding).
  */
 export const insetCva = cva('', {
+  defaultVariants: {
+    space: 'md',
+    squish: 'none',
+  },
   variants: {
     space: {
       none: 'p-0',
@@ -16,15 +21,11 @@ export const insetCva = cva('', {
       xl: 'p-6 md:p-8 lg:p-10', // 24 → 32 → 40
     },
     squish: {
+      lg: 'py-4',
+      md: 'py-3',
       none: '',
       sm: 'py-2',
-      md: 'py-3',
-      lg: 'py-4',
     },
-  },
-  defaultVariants: {
-    space: 'md',
-    squish: 'none',
   },
 })
 

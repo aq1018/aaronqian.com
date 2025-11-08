@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import Arcs from '@/components/features/CuttingMatArcs.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('Arcs', () => {
@@ -17,13 +18,13 @@ describe('Arcs', () => {
   it('should create correct number of path elements', async () => {
     const root = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount,
         arcRadiusInterval,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -34,13 +35,13 @@ describe('Arcs', () => {
   it('should create arcs with correct radii', async () => {
     const root = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount,
         arcRadiusInterval,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -57,13 +58,13 @@ describe('Arcs', () => {
   it('should create semicircles at bottom center', async () => {
     const root = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount,
         arcRadiusInterval,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -83,13 +84,13 @@ describe('Arcs', () => {
   it('should apply correct opacity', async () => {
     const root = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount,
         arcRadiusInterval,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -102,13 +103,13 @@ describe('Arcs', () => {
   it('should apply correct stroke width', async () => {
     const root = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount,
         arcRadiusInterval,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -121,24 +122,24 @@ describe('Arcs', () => {
   it('should handle different arc counts', async () => {
     const root1 = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount: 1,
         arcRadiusInterval,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
     const root5 = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount: 5,
         arcRadiusInterval,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -152,13 +153,13 @@ describe('Arcs', () => {
   it('should handle different arc radius intervals', async () => {
     const root = await renderAstroComponent(Arcs, {
       props: {
-        width,
-        height,
         arcCount,
         arcRadiusInterval: 2,
+        height,
         majorLineInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 

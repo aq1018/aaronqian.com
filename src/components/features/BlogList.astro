@@ -6,15 +6,15 @@
  */
 import type { CollectionEntry } from 'astro:content'
 
-import BlogListItem from './BlogListItem.astro'
-
 import Grid from '@/components/primitives/Grid.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
 
+import BlogListItem from './BlogListItem.astro'
+
 export interface Props {
-  posts: Array<CollectionEntry<'blog'>>
+  posts: CollectionEntry<'blog'>[]
   footer?: string
 }
 

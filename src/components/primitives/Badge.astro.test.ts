@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Badge from './Badge.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Badge from './Badge.astro'
 
 describe('Badge.astro', () => {
   describe('Rendering', () => {
@@ -40,13 +40,13 @@ describe('Badge.astro', () => {
       })
 
       const span = root.querySelector('span')
-      expect(span?.classList.contains('custom-class')).toBe(true)
+      expect(span?.classList.contains('custom-class')).toBeTruthy()
       expect(span).toHaveClasses(['inline-flex']) // Base class still present
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Badge, {
-        props: { id: 'test-badge', 'data-testid': 'badge' },
+        props: { 'data-testid': 'badge', id: 'test-badge' },
       })
 
       const span = root.querySelector('span')

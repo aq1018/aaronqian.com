@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Stack from './Stack.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Stack from './Stack.astro'
 
 describe('Stack.astro', () => {
   describe('Rendering', () => {
@@ -43,13 +43,13 @@ describe('Stack.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-stack')).toBe(true)
+      expect(div?.classList.contains('custom-stack')).toBeTruthy()
       expect(div).toHaveClasses(['flex']) // Base class still present
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Stack, {
-        props: { id: 'test-stack', 'data-testid': 'stack' },
+        props: { 'data-testid': 'stack', id: 'test-stack' },
       })
 
       const div = root.querySelector('div')
@@ -63,8 +63,8 @@ describe('Stack.astro', () => {
       const root = await renderAstroComponent(Stack, {
         props: {
           direction: 'column',
-          'direction-md': 'row',
           'direction-lg': 'column',
+          'direction-md': 'row',
         },
       })
 
@@ -78,10 +78,10 @@ describe('Stack.astro', () => {
     it('should handle all variant props together', async () => {
       const root = await renderAstroComponent(Stack, {
         props: {
-          direction: 'row',
-          space: 'md',
           align: 'center',
+          direction: 'row',
           justify: 'between',
+          space: 'md',
         },
       })
 

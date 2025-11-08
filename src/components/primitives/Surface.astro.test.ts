@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Surface from './Surface.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Surface from './Surface.astro'
 
 describe('Surface.astro', () => {
   describe('Rendering', () => {
@@ -41,13 +41,13 @@ describe('Surface.astro', () => {
       })
 
       const section = root.querySelector('section')
-      expect(section?.classList.contains('custom-surface')).toBe(true)
+      expect(section?.classList.contains('custom-surface')).toBeTruthy()
       expect(section).toHaveClasses(['relative', 'w-full']) // Base classes still present
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Surface, {
-        props: { id: 'test-surface', 'data-testid': 'surface' },
+        props: { 'data-testid': 'surface', id: 'test-surface' },
       })
 
       const section = root.querySelector('section')
@@ -72,8 +72,8 @@ describe('Surface.astro', () => {
       const root = await renderAstroComponent(Surface, {
         props: {},
         slots: {
-          default: '<p>Content</p>',
           background: '<div class="bg-gradient"></div>',
+          default: '<p>Content</p>',
         },
       })
 
@@ -87,8 +87,8 @@ describe('Surface.astro', () => {
       const root = await renderAstroComponent(Surface, {
         props: {},
         slots: {
-          default: '<p>Content</p>',
           background: '<div>Background</div>',
+          default: '<p>Content</p>',
         },
       })
 
@@ -103,8 +103,8 @@ describe('Surface.astro', () => {
       const root = await renderAstroComponent(Surface, {
         props: {},
         slots: {
-          default: '<p>Main Content</p>',
           background: '<div>Background</div>',
+          default: '<p>Main Content</p>',
         },
       })
 

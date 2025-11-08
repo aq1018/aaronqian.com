@@ -18,7 +18,6 @@
     "jsx-a11y",
     "node",
     "promise",
-    "vitest",
     "regex"
   ],
   "env": {
@@ -30,10 +29,11 @@
     "suspicious": "error",
     "pedantic": "error",
     "perf": "error",
-    // "style": "error",
+    "style": "error",
     "nursery": "error"
   },
   "rules": {
+    // pedantic
     "no-useless-undefined": "off",
     "no-undefined": "off",
     "no-console": "off",
@@ -53,9 +53,35 @@
         "skipBlankLines": true
       }
     ],
-    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "eslint/eqeqeq": ["error", "always", { "null": "never" }],
     "max-dependencies": "off",
-    "no-unassigned-import": "off"
+    "no-unassigned-import": "off",
+
+    // style
+    "eslint/sort-keys": "off",
+    "eslint/sort-imports": "off",
+    "eslint/no-duplicate-imports": ["error", { "allowSeparateTypeImports": true }],
+    "eslint/func-style": "off",
+    "eslint/no-nested-ternary": "off",
+    "eslint/max-params": "off",
+    "eslint/prefer-destructuring": "off",
+    "eslint/no-magic-numbers": "off",
+    "eslint/init-declarations": "off",
+    "eslint/no-ternary": "off",
+    "eslint/id-length": "off",
+    "eslint/func-names": "off",
+    "eslint/curly": "off",
+    "import/group-exports": "off",
+    "import/prefer-default-export": "off",
+    "import/no-named-export": "off",
+    "import/no-namespace": "off",
+    "import/no-anonymous-default-export": "off",
+    "import/exports-last": "off",
+    "promise/prefer-await-to-then": "off",
+    "promise/prefer-await-to-callbacks": "off",
+    "unicorn/filename-case": "off",
+    "unicorn/prefer-global-this": "off",
+    "unicorn/no-null": "off"
   },
   "globals": {
     "Astro": "readonly"
@@ -63,6 +89,7 @@
   "overrides": [
     {
       "files": ["**/*.test.{ts,js}"],
+      "plugins": ["vitest"],
       "rules": {
         "no-await-in-loop": "off",
         "max-lines-per-function": "off",

@@ -1,7 +1,6 @@
 /**
  * Tests for DigitalAnalyzer.data.ts - Data source management
  */
-
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { DataSourceManager } from './DigitalAnalyzer.data'
@@ -25,18 +24,18 @@ describe('DataSourceManager', () => {
 
     // Initialize with default options, will be reset in beforeEach
     let manager: DataSourceManager = new DataSourceManager({
-      fullMessage: testMessage,
-      byteCount,
       bitCount,
+      byteCount,
       dataSource: 'config',
+      fullMessage: testMessage,
     })
 
     beforeEach(() => {
       const options: DataSourceOptions = {
-        fullMessage: testMessage,
-        byteCount,
         bitCount,
+        byteCount,
         dataSource: 'config',
+        fullMessage: testMessage,
       }
       manager = new DataSourceManager(options)
     })
@@ -46,7 +45,7 @@ describe('DataSourceManager', () => {
 
       expect(result.currentChunk).toBe('HE') // First 2 chars
       expect(result.binaryData).toHaveLength(bitCount)
-      expect(result.shouldClear).toBe(false)
+      expect(result.shouldClear).toBeFalsy()
     })
 
     it('should convert text chunk to binary', () => {
@@ -78,7 +77,7 @@ describe('DataSourceManager', () => {
       const result2 = manager.getNextBinaryData() // 'LL'
 
       expect(result2.currentChunk).toBe('LL')
-      expect(result2.shouldClear).toBe(false)
+      expect(result2.shouldClear).toBeFalsy()
     })
 
     it('should set shouldClear=true when reaching end of message', () => {
@@ -87,7 +86,7 @@ describe('DataSourceManager', () => {
       const result3 = manager.getNextBinaryData() // 'O' (position 4, last char)
 
       expect(result3.currentChunk).toBe('O')
-      expect(result3.shouldClear).toBe(true)
+      expect(result3.shouldClear).toBeTruthy()
     })
 
     it('should loop back to start after reaching end', () => {
@@ -95,30 +94,30 @@ describe('DataSourceManager', () => {
       manager.getNextBinaryData() // 'HE'
       manager.getNextBinaryData() // 'LL'
       const lastResult = manager.getNextBinaryData() // 'O'
-      expect(lastResult.shouldClear).toBe(true)
+      expect(lastResult.shouldClear).toBeTruthy()
 
       // Next call should loop back to start
       const firstAgain = manager.getNextBinaryData() // 'HE'
       expect(firstAgain.currentChunk).toBe('HE')
-      expect(firstAgain.shouldClear).toBe(false)
+      expect(firstAgain.shouldClear).toBeFalsy()
       expect(manager.getMessagePosition()).toBe(2) // Position advanced from start
     })
 
     it('should handle exact message length divisible by byteCount', () => {
       // Message length = 4, byteCount = 2 → exactly 2 chunks
       const options: DataSourceOptions = {
-        fullMessage: 'TEST',
-        byteCount: 2,
         bitCount: 16,
+        byteCount: 2,
         dataSource: 'config',
+        fullMessage: 'TEST',
       }
       const exactManager = new DataSourceManager(options)
 
       const result1 = exactManager.getNextBinaryData() // 'TE'
-      expect(result1.shouldClear).toBe(false)
+      expect(result1.shouldClear).toBeFalsy()
 
       const result2 = exactManager.getNextBinaryData() // 'ST'
-      expect(result2.shouldClear).toBe(true) // End reached
+      expect(result2.shouldClear).toBeTruthy() // End reached
 
       const result3 = exactManager.getNextBinaryData() // Loop to 'TE'
       expect(result3.currentChunk).toBe('TE')
@@ -126,16 +125,16 @@ describe('DataSourceManager', () => {
 
     it('should handle single character message', () => {
       const options: DataSourceOptions = {
-        fullMessage: 'A',
-        byteCount: 1,
         bitCount: 8,
+        byteCount: 1,
         dataSource: 'config',
+        fullMessage: 'A',
       }
       const singleManager = new DataSourceManager(options)
 
       const result1 = singleManager.getNextBinaryData()
       expect(result1.currentChunk).toBe('A')
-      expect(result1.shouldClear).toBe(true) // Immediately at end
+      expect(result1.shouldClear).toBeTruthy() // Immediately at end
 
       const result2 = singleManager.getNextBinaryData()
       expect(result2.currentChunk).toBe('A') // Loops
@@ -143,17 +142,17 @@ describe('DataSourceManager', () => {
 
     it('should handle empty message gracefully', () => {
       const options: DataSourceOptions = {
-        fullMessage: '',
-        byteCount: 2,
         bitCount: 16,
+        byteCount: 2,
         dataSource: 'config',
+        fullMessage: '',
       }
       const emptyManager = new DataSourceManager(options)
 
       const result = emptyManager.getNextBinaryData()
       expect(result.currentChunk).toBe('')
       expect(result.binaryData).toBe('0000000000000000') // All padding
-      expect(result.shouldClear).toBe(true) // Empty message is "at end"
+      expect(result.shouldClear).toBeTruthy() // Empty message is "at end"
     })
   })
 
@@ -162,10 +161,10 @@ describe('DataSourceManager', () => {
 
     // Initialize with default options, will be reset in beforeEach
     let manager: DataSourceManager = new DataSourceManager({
-      fullMessage: '',
-      byteCount: 2,
       bitCount,
+      byteCount: 2,
       dataSource: 'random',
+      fullMessage: '',
     })
 
     beforeEach(() => {
@@ -187,7 +186,7 @@ describe('DataSourceManager', () => {
       expect(utils.generateRandomBinary).toHaveBeenCalledWith(bitCount)
       expect(result.binaryData).toBe('1010101010101010')
       expect(result.currentChunk).toBe('')
-      expect(result.shouldClear).toBe(false)
+      expect(result.shouldClear).toBeFalsy()
     })
 
     it('should call generateRandomBinary on each call', () => {
@@ -201,7 +200,7 @@ describe('DataSourceManager', () => {
     it('should never set shouldClear=true', () => {
       for (let i = 0; i < 10; i += 1) {
         const result = manager.getNextBinaryData()
-        expect(result.shouldClear).toBe(false)
+        expect(result.shouldClear).toBeFalsy()
       }
     })
 
@@ -214,10 +213,10 @@ describe('DataSourceManager', () => {
   describe('reset()', () => {
     it('should reset message position to zero', () => {
       const options: DataSourceOptions = {
-        fullMessage: 'HELLO',
-        byteCount: 2,
         bitCount: 16,
+        byteCount: 2,
         dataSource: 'config',
+        fullMessage: 'HELLO',
       }
       const manager = new DataSourceManager(options)
 
@@ -239,10 +238,10 @@ describe('DataSourceManager', () => {
       vi.mocked(utils.generateRandomBinary).mockReturnValue('1010101010101010')
 
       const options: DataSourceOptions = {
-        fullMessage: '',
-        byteCount: 2,
         bitCount: 16,
+        byteCount: 2,
         dataSource: 'random',
+        fullMessage: '',
       }
       const manager = new DataSourceManager(options)
 
@@ -256,10 +255,10 @@ describe('DataSourceManager', () => {
   describe('getMessagePosition()', () => {
     it('should return current position in config mode', () => {
       const options: DataSourceOptions = {
-        fullMessage: 'TESTING',
-        byteCount: 2,
         bitCount: 16,
+        byteCount: 2,
         dataSource: 'config',
+        fullMessage: 'TESTING',
       }
       const manager = new DataSourceManager(options)
 
@@ -274,15 +273,15 @@ describe('DataSourceManager', () => {
 
     it('should return 0 after message loops', () => {
       const options: DataSourceOptions = {
-        fullMessage: 'AB',
-        byteCount: 2,
         bitCount: 16,
+        byteCount: 2,
         dataSource: 'config',
+        fullMessage: 'AB',
       }
       const manager = new DataSourceManager(options)
 
       const result = manager.getNextBinaryData()
-      expect(result.shouldClear).toBe(true)
+      expect(result.shouldClear).toBeTruthy()
       expect(manager.getMessagePosition()).toBe(0) // Looped back
     })
 
@@ -290,10 +289,10 @@ describe('DataSourceManager', () => {
       vi.mocked(utils.generateRandomBinary).mockReturnValue('1010101010101010')
 
       const options: DataSourceOptions = {
-        fullMessage: '',
-        byteCount: 2,
         bitCount: 16,
+        byteCount: 2,
         dataSource: 'random',
+        fullMessage: '',
       }
       const manager = new DataSourceManager(options)
 
@@ -307,10 +306,10 @@ describe('DataSourceManager', () => {
     it('should handle very long messages', () => {
       const longMessage = 'A'.repeat(1000)
       const options: DataSourceOptions = {
-        fullMessage: longMessage,
-        byteCount: 10,
         bitCount: 80,
+        byteCount: 10,
         dataSource: 'config',
+        fullMessage: longMessage,
       }
       const manager = new DataSourceManager(options)
 
@@ -329,10 +328,10 @@ describe('DataSourceManager', () => {
       vi.mocked(utils.generateRandomBinary).mockReturnValue('1'.repeat(1024))
 
       const options: DataSourceOptions = {
-        fullMessage: '',
-        byteCount: 128,
         bitCount: 1024,
+        byteCount: 128,
         dataSource: 'random',
+        fullMessage: '',
       }
       const manager = new DataSourceManager(options)
 

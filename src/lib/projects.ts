@@ -1,7 +1,6 @@
 /**
  * Project utilities for sorting and filtering
  */
-
 import type { CollectionEntry } from 'astro:content'
 
 interface ProjectWithLatestLog extends CollectionEntry<'projects'> {
@@ -16,13 +15,17 @@ interface ProjectWithLatestLog extends CollectionEntry<'projects'> {
 function extractDateFromLogId(logId: string): Date | null {
   // Match pattern: {slug}-YYYY-MM-DD-{rest}
   const dateMatch = /-(\d{4}-\d{2}-\d{2})-/.exec(logId)
-  if (dateMatch == null) return null
+  if (dateMatch == null) {
+    return null
+  }
 
   const dateStr = dateMatch[1]
   const date = new Date(dateStr)
 
   // Validate that the date is valid (not NaN)
-  if (Number.isNaN(date.getTime())) return null
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
 
   return date
 }
@@ -45,8 +48,8 @@ function extractProjectSlugFromLog(logId: string): string {
  * Also attaches latestLogDate to each project for reference
  */
 export function sortProjectsByLatestLog(
-  projects: Array<CollectionEntry<'projects'>>,
-  projectLogs: Array<CollectionEntry<'projectLogs'>>,
+  projects: CollectionEntry<'projects'>[],
+  projectLogs: CollectionEntry<'projectLogs'>[],
 ): ProjectWithLatestLog[] {
   // Build map of project slug -> latest log date
   const latestLogDates = new Map<string, Date>()
@@ -57,7 +60,7 @@ export function sortProjectsByLatestLog(
 
     if (logDate != null) {
       const currentLatest = latestLogDates.get(projectSlug)
-      if (currentLatest === undefined || logDate > currentLatest) {
+      if (currentLatest == null || logDate > currentLatest) {
         latestLogDates.set(projectSlug, logDate)
       }
     }
@@ -74,9 +77,15 @@ export function sortProjectsByLatestLog(
 
   // Sort by latest log date (descending), projects without logs go last
   return projectsWithDates.toSorted((a, b) => {
-    if (a.latestLogDate === undefined && b.latestLogDate === undefined) return 0
-    if (a.latestLogDate === undefined) return 1
-    if (b.latestLogDate === undefined) return -1
+    if (a.latestLogDate == null && b.latestLogDate == null) {
+      return 0
+    }
+    if (a.latestLogDate == null) {
+      return 1
+    }
+    if (b.latestLogDate == null) {
+      return -1
+    }
     return b.latestLogDate.getTime() - a.latestLogDate.getTime()
   })
 }
@@ -86,15 +95,19 @@ export function sortProjectsByLatestLog(
  * Returns null if no projects have logs
  */
 export function getLatestActiveProjectSlug(
-  projects: Array<CollectionEntry<'projects'>>,
-  projectLogs: Array<CollectionEntry<'projectLogs'>>,
+  projects: CollectionEntry<'projects'>[],
+  projectLogs: CollectionEntry<'projectLogs'>[],
 ): string | null {
   const sorted = sortProjectsByLatestLog(projects, projectLogs)
 
-  if (sorted.length === 0) return null
+  if (sorted.length === 0) {
+    return null
+  }
 
   const latest = sorted[0]
-  if (latest.latestLogDate === undefined) return null
+  if (latest.latestLogDate == null) {
+    return null
+  }
 
   return latest.id.replace(/\/index(\.md)?$/, '')
 }
@@ -104,11 +117,13 @@ export function getLatestActiveProjectSlug(
  * Returns a new array with the live flag set
  */
 export function markLatestProjectAsLive(
-  projects: Array<CollectionEntry<'projects'>>,
-  projectLogs: Array<CollectionEntry<'projectLogs'>>,
-): Array<CollectionEntry<'projects'>> {
+  projects: CollectionEntry<'projects'>[],
+  projectLogs: CollectionEntry<'projectLogs'>[],
+): CollectionEntry<'projects'>[] {
   const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
-  if (latestSlug == null) return projects
+  if (latestSlug == null) {
+    return projects
+  }
 
   return projects.map((project) => {
     const projectSlug = project.id.replace(/\/index(\.md)?$/, '')

@@ -26,9 +26,9 @@ function formatModifier(modifier: string, isMac: boolean): string {
 
   // Map modifier to display string
   const modifierMap: Record<string, { mac: string; windows: string }> = {
+    alt: { mac: '⌥', windows: 'Alt' },
     cmd: { mac: '⌘', windows: 'Cmd' },
     ctrl: { mac: '⌃', windows: 'Ctrl' },
-    alt: { mac: '⌥', windows: 'Alt' },
     option: { mac: '⌥', windows: 'Alt' },
     shift: { mac: '⇧', windows: 'Shift' },
   }
@@ -53,7 +53,7 @@ function formatShortcut(keys: string, modifier: string | undefined, isMac: boole
   const formattedKeys = keys.charAt(0).toUpperCase() + keys.slice(1)
 
   // If no modifier, just return keys
-  if (modifier === undefined || modifier === '') {
+  if (modifier == null || modifier === '') {
     return formattedKeys
   }
 
@@ -79,7 +79,7 @@ function updateKbdDisplays(): void {
     const keys = kbdElement.dataset.keys
     const modifier = kbdElement.dataset.modifier
 
-    if (keys !== undefined) {
+    if (keys != null && keys !== '') {
       const formattedText = formatShortcut(keys, modifier, isMac)
       kbdElement.textContent = formattedText
     }

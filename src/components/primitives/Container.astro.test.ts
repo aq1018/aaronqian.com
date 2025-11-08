@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Container from './Container.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Container from './Container.astro'
 
 describe('Container.astro', () => {
   describe('Rendering', () => {
@@ -36,13 +36,13 @@ describe('Container.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-class')).toBe(true)
+      expect(div?.classList.contains('custom-class')).toBeTruthy()
       expect(div).toHaveClasses(['relative', 'w-full'])
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Container, {
-        props: { id: 'test-container', 'data-testid': 'container' },
+        props: { 'data-testid': 'container', id: 'test-container' },
       })
 
       const div = root.querySelector('div')

@@ -13,15 +13,28 @@ export default {
   endOfLine: 'lf',
   tailwindStylesheet: './src/styles/global.css',
 
-  // IMPORTANT: Tailwind plugin must be last
-  plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
+  plugins: [
+    'prettier-plugin-astro',
+    'prettier-plugin-tailwindcss',
+    '@trivago/prettier-plugin-sort-imports',
+  ],
 
   overrides: [
     { files: '*.astro', options: { parser: 'astro' } },
     { files: ['*.json', '*.jsonc'], options: { parser: 'json', trailingComma: 'none' } },
-    { files: ['*.yaml', '*.yml'], options: { parser: 'yaml', tabWidth: 2, singleQuote: false } },
+    { files: ['*.yaml', '*.yml'], options: { parser: 'yaml', singleQuote: false, tabWidth: 2 } },
     { files: ['*.md', '*.mdx'], options: { parser: 'mdx', printWidth: 80, proseWrap: 'always' } },
   ],
+
+  importOrder: [
+    '<BUILTIN_MODULES>', // Node.js built-in modules
+    '<THIRD_PARTY_MODULES>', // Other third-party libraries
+    '^@/', // Project-specific components
+    '^@test/', // Project-specific libraries
+    '^[./]', // Relative imports
+  ],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 
   astroAllowShorthand: true,
 }

@@ -8,7 +8,10 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit"
   },
-  "oxc.fmt.experimental": true,
+  "prettier.documentSelectors": ["**/*.astro"],
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "cSpell.words": [
     "aaronqian",
     "Collapsibles",
@@ -22,6 +25,7 @@
     "oxlint",
     "Qian",
     "Subcomponent",
+    "trivago",
     "TSES"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"

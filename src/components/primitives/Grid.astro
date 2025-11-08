@@ -1,12 +1,8 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-import {
-  type GridContainerStyle,
-  type GridItemStyle,
-  gridContainerCva,
-  gridItemCva,
-} from './Grid.cva'
+import { gridContainerCva, gridItemCva } from './Grid.cva'
+import type { GridContainerStyle, GridItemStyle } from './Grid.cva'
 
 import { cn } from '@/lib/utils'
 
@@ -47,7 +43,7 @@ const props = Astro.props
 
 // Type guard to check if props are ItemProps
 function isItemProps(p: ContainerProps | ItemProps): p is ItemProps {
-  return 'size' in p && p.size !== undefined
+  return 'size' in p && p.size != null
 }
 
 /**
@@ -72,21 +68,21 @@ function processItemProps(p: ItemProps) {
   } = p
 
   const variantClasses = gridItemCva({
-    size,
-    'size-sm': sizeSm,
-    'size-md': sizeMd,
-    'size-lg': sizeLg,
-    'size-xl': sizeXl,
-    offset,
-    'offset-sm': offsetSm,
-    'offset-md': offsetMd,
-    'offset-lg': offsetLg,
-    'offset-xl': offsetXl,
-    justifySelf,
     alignSelf,
+    justifySelf,
+    offset,
+    'offset-lg': offsetLg,
+    'offset-md': offsetMd,
+    'offset-sm': offsetSm,
+    'offset-xl': offsetXl,
+    size,
+    'size-lg': sizeLg,
+    'size-md': sizeMd,
+    'size-sm': sizeSm,
+    'size-xl': sizeXl,
   })
 
-  return { variantClasses, className, restProps: rest }
+  return { className, restProps: rest, variantClasses }
 }
 
 /**
@@ -96,14 +92,14 @@ function processContainerProps(p: ContainerProps) {
   const { columns, spacing, direction, justify, align, class: className = '', ...rest } = p
 
   const variantClasses = gridContainerCva({
+    align,
     columns,
-    spacing,
     direction,
     justify,
-    align,
+    spacing,
   })
 
-  return { variantClasses, className, restProps: rest }
+  return { className, restProps: rest, variantClasses }
 }
 
 // Build classes based on mode

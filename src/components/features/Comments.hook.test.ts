@@ -1,27 +1,27 @@
 import { describe, expect, it, vi } from 'vitest'
 
+import { setupTestDOM } from '@test/testHelpers'
+
 import {
   getCurrentTheme,
   getGiscusThemeUrl,
   initializeComments,
   setupComments,
   syncGiscusTheme,
-  type GiscusMessage,
 } from './Comments.hook'
-
-import { setupTestDOM } from '@test/testHelpers'
+import type { GiscusMessage } from './Comments.hook'
 
 // Type guard for GiscusMessage
 function isGiscusMessage(value: unknown): value is GiscusMessage {
   return (
     typeof value === 'object' &&
-    value !== null &&
+    value != null &&
     'giscus' in value &&
     typeof value.giscus === 'object' &&
-    value.giscus !== null &&
+    value.giscus != null &&
     'setConfig' in value.giscus &&
     typeof value.giscus.setConfig === 'object' &&
-    value.giscus.setConfig !== null &&
+    value.giscus.setConfig != null &&
     'theme' in value.giscus.setConfig &&
     typeof value.giscus.setConfig.theme === 'string'
   )
@@ -44,15 +44,15 @@ function createMutationRecord(partial: {
   attributeName?: string | null
 }): MutationRecord {
   return {
-    type: partial.type,
-    target: partial.target,
     addedNodes: document.createDocumentFragment().childNodes,
-    removedNodes: document.createDocumentFragment().childNodes,
-    previousSibling: null,
-    nextSibling: null,
     attributeName: partial.attributeName ?? null,
     attributeNamespace: null,
+    nextSibling: null,
     oldValue: null,
+    previousSibling: null,
+    removedNodes: document.createDocumentFragment().childNodes,
+    target: partial.target,
+    type: partial.type,
   }
 }
 
@@ -104,7 +104,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe == null) return
+      if (iframe == null) {
+        return
+      }
 
       const postMessageSpy = vi.fn<Window['postMessage']>()
       Object.defineProperty(iframe, 'contentWindow', {
@@ -145,7 +147,9 @@ describe('Comments System', () => {
       `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
-      if (iframe == null) return
+      if (iframe == null) {
+        return
+      }
 
       Object.defineProperty(iframe, 'contentWindow', {
         value: null,
@@ -166,7 +170,9 @@ describe('Comments System', () => {
       `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
-      if (iframe == null) return
+      if (iframe == null) {
+        return
+      }
 
       const postMessageSpy = vi.fn()
       Object.defineProperty(iframe, 'contentWindow', {
@@ -244,7 +250,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe == null) return
+      if (iframe == null) {
+        return
+      }
 
       const postMessageSpy = vi.fn<Window['postMessage']>()
 
@@ -269,12 +277,12 @@ describe('Comments System', () => {
 
       // Manually trigger the MutationObserver callback
       expect(observerCallback).toBeDefined()
-      if (observerCallback !== undefined) {
+      if (observerCallback) {
         const mockMutations: MutationRecord[] = [
           createMutationRecord({
-            type: 'attributes',
             attributeName: 'class',
             target: document.documentElement,
+            type: 'attributes',
           }),
         ]
         observerCallback(mockMutations, new OriginalMutationObserver(() => {}))
@@ -323,7 +331,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe == null) return
+      if (iframe == null) {
+        return
+      }
 
       const postMessageSpy = vi.fn<Window['postMessage']>()
 
@@ -347,12 +357,12 @@ describe('Comments System', () => {
 
       // Manually trigger the MutationObserver callback
       expect(observerCallback).toBeDefined()
-      if (observerCallback !== undefined) {
+      if (observerCallback) {
         const mockMutations: MutationRecord[] = [
           createMutationRecord({
-            type: 'attributes',
             attributeName: 'class',
             target: document.documentElement,
+            type: 'attributes',
           }),
         ]
         observerCallback(mockMutations, new OriginalMutationObserver(() => {}))
@@ -400,7 +410,9 @@ describe('Comments System', () => {
       })
       const container = document.querySelector('[data-comments]')
       expect(container).not.toBeNull()
-      if (container == null) return
+      if (container == null) {
+        return
+      }
       container.append(iframe)
 
       // Fast-forward past the interval check and initial theme sync
@@ -433,7 +445,7 @@ describe('Comments System', () => {
       const cleanup = initializeComments()
 
       // Fast-forward past the 10 second timeout
-      vi.advanceTimersByTime(11000)
+      vi.advanceTimersByTime(11_000)
 
       // Should not throw error even though iframe never loaded
       expect(() => {
@@ -470,8 +482,8 @@ describe('Comments System', () => {
       // Verify observer is configured correctly
       expect(observedElement).toBe(document.documentElement)
       expect(observerOptions).toEqual({
-        attributes: true,
         attributeFilter: ['class'],
+        attributes: true,
       })
 
       // Restore original MutationObserver
@@ -492,7 +504,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe == null) return
+      if (iframe == null) {
+        return
+      }
 
       const postMessageSpy = vi.fn()
 
@@ -558,7 +572,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe == null) return
+      if (iframe == null) {
+        return
+      }
 
       const postMessageSpy = vi.fn()
 

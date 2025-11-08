@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { containerCva } from './Container.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { containerCva } from './Container.cva'
 
 describe('Container.cva', () => {
   testBaseClasses(containerCva, ['w-full'])
@@ -109,11 +109,11 @@ describe('Container.cva', () => {
   })
 
   testCompoundVariants(containerCva, {
-    width: ['narrow', 'default', 'wide', 'full'],
     padX: ['none', 'sm', 'md', 'lg', 'xl'],
+    width: ['narrow', 'default', 'wide', 'full'],
   })
 
-  testEdgeCases(containerCva, { width: 'default', padX: 'lg', fluidUntil: 'none', center: true }, [
+  testEdgeCases(containerCva, { center: true, fluidUntil: 'none', padX: 'lg', width: 'default' }, [
     'w-full',
     'max-w-6xl',
   ])

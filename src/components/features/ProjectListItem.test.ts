@@ -1,18 +1,16 @@
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it } from 'vitest'
 
-import ProjectListItem from './ProjectListItem.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import ProjectListItem from './ProjectListItem.astro'
 
 function createMockProject(
   overrides?: Partial<CollectionEntry<'projects'>['data']>,
 ): Partial<CollectionEntry<'projects'>> {
   return {
-    id: 'test-project/index.md',
-    slug: 'test-project',
-    collection: 'projects',
     body: '',
+    collection: 'projects',
     data: {
       title: 'Test Project',
       description: 'A test project description',
@@ -22,6 +20,8 @@ function createMockProject(
       order: 1,
       ...overrides,
     },
+    id: 'test-project/index.md',
+    slug: 'test-project',
   }
 }
 
@@ -33,8 +33,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -45,8 +45,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -58,8 +58,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: { ...mockProject, id: 'another-project/index.md' },
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -71,8 +71,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusStyle: 'text-blue-500',
           statusLabel: 'In Progress',
+          statusStyle: 'text-blue-500',
         },
       })
 
@@ -83,8 +83,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -95,8 +95,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -114,8 +114,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: liveProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -126,8 +126,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -145,8 +145,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: completedProject,
-          statusStyle: 'text-gray-500',
           statusLabel: 'Completed',
+          statusStyle: 'text-gray-500',
         },
       })
 
@@ -162,8 +162,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: pausedProject,
-          statusStyle: 'text-yellow-500',
           statusLabel: 'Paused',
+          statusStyle: 'text-yellow-500',
         },
       })
 
@@ -179,8 +179,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: archivedProject,
-          statusStyle: 'text-gray-400',
           statusLabel: 'Archived',
+          statusStyle: 'text-gray-400',
         },
       })
 
@@ -198,8 +198,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: projectWithoutAside,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -219,8 +219,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: longTitleProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 
@@ -242,8 +242,8 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: longDescProject,
-          statusStyle: 'text-green-500',
           statusLabel: 'Active',
+          statusStyle: 'text-green-500',
         },
       })
 

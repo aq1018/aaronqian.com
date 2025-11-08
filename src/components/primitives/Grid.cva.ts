@@ -1,4 +1,5 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 /**
  * Grid: CSS Grid layout primitive with 12-column system
@@ -20,9 +21,25 @@ import { type VariantProps, cva } from 'class-variance-authority'
  * Container variants (when no size props present)
  */
 export const gridContainerCva = cva('grid', {
+  defaultVariants: {
+    align: 'stretch',
+    columns: 12,
+    direction: 'row',
+    justify: 'stretch',
+    spacing: 'md',
+  },
   variants: {
+    align: {
+      center: 'items-center',
+      end: 'items-end',
+      start: 'items-start',
+      stretch: 'items-stretch',
+    },
     columns: {
       1: 'grid-cols-1',
+      10: 'grid-cols-10',
+      11: 'grid-cols-11',
+      12: 'grid-cols-12',
       2: 'grid-cols-2',
       3: 'grid-cols-3',
       4: 'grid-cols-4',
@@ -31,9 +48,17 @@ export const gridContainerCva = cva('grid', {
       7: 'grid-cols-7',
       8: 'grid-cols-8',
       9: 'grid-cols-9',
-      10: 'grid-cols-10',
-      11: 'grid-cols-11',
-      12: 'grid-cols-12',
+    },
+    direction: {
+      column: 'grid-flow-col',
+      dense: 'grid-flow-dense',
+      row: 'grid-flow-row',
+    },
+    justify: {
+      center: 'justify-items-center',
+      end: 'justify-items-end',
+      start: 'justify-items-start',
+      stretch: 'justify-items-stretch',
     },
     spacing: {
       none: 'gap-0',
@@ -43,30 +68,6 @@ export const gridContainerCva = cva('grid', {
       lg: 'gap-5 md:gap-6 lg:gap-8', // 20 → 24 → 32px
       xl: 'gap-6 md:gap-8 lg:gap-10', // 24 → 32 → 40px
     },
-    direction: {
-      row: 'grid-flow-row',
-      column: 'grid-flow-col',
-      dense: 'grid-flow-dense',
-    },
-    justify: {
-      start: 'justify-items-start',
-      center: 'justify-items-center',
-      end: 'justify-items-end',
-      stretch: 'justify-items-stretch',
-    },
-    align: {
-      start: 'items-start',
-      center: 'items-center',
-      end: 'items-end',
-      stretch: 'items-stretch',
-    },
-  },
-  defaultVariants: {
-    columns: 12,
-    spacing: 'md',
-    direction: 'row',
-    justify: 'stretch',
-    align: 'stretch',
   },
 })
 
@@ -77,10 +78,17 @@ export type GridContainerStyle = VariantProps<typeof gridContainerCva>
  * Supports responsive size and offset with flat prop syntax
  */
 export const gridItemCva = cva('', {
+  defaultVariants: {
+    alignSelf: 'auto',
+    justifySelf: 'auto',
+  },
   variants: {
     // Base size (mobile-first)
     size: {
       1: 'col-span-1',
+      10: 'col-span-10',
+      11: 'col-span-11',
+      12: 'col-span-12',
       2: 'col-span-2',
       3: 'col-span-3',
       4: 'col-span-4',
@@ -89,14 +97,14 @@ export const gridItemCva = cva('', {
       7: 'col-span-7',
       8: 'col-span-8',
       9: 'col-span-9',
-      10: 'col-span-10',
-      11: 'col-span-11',
-      12: 'col-span-12',
       auto: 'col-auto',
       grow: 'col-span-full',
     },
     'size-sm': {
       1: 'sm:col-span-1',
+      10: 'sm:col-span-10',
+      11: 'sm:col-span-11',
+      12: 'sm:col-span-12',
       2: 'sm:col-span-2',
       3: 'sm:col-span-3',
       4: 'sm:col-span-4',
@@ -105,14 +113,14 @@ export const gridItemCva = cva('', {
       7: 'sm:col-span-7',
       8: 'sm:col-span-8',
       9: 'sm:col-span-9',
-      10: 'sm:col-span-10',
-      11: 'sm:col-span-11',
-      12: 'sm:col-span-12',
       auto: 'sm:col-auto',
       grow: 'sm:col-span-full',
     },
     'size-md': {
       1: 'md:col-span-1',
+      10: 'md:col-span-10',
+      11: 'md:col-span-11',
+      12: 'md:col-span-12',
       2: 'md:col-span-2',
       3: 'md:col-span-3',
       4: 'md:col-span-4',
@@ -121,14 +129,14 @@ export const gridItemCva = cva('', {
       7: 'md:col-span-7',
       8: 'md:col-span-8',
       9: 'md:col-span-9',
-      10: 'md:col-span-10',
-      11: 'md:col-span-11',
-      12: 'md:col-span-12',
       auto: 'md:col-auto',
       grow: 'md:col-span-full',
     },
     'size-lg': {
       1: 'lg:col-span-1',
+      10: 'lg:col-span-10',
+      11: 'lg:col-span-11',
+      12: 'lg:col-span-12',
       2: 'lg:col-span-2',
       3: 'lg:col-span-3',
       4: 'lg:col-span-4',
@@ -137,14 +145,14 @@ export const gridItemCva = cva('', {
       7: 'lg:col-span-7',
       8: 'lg:col-span-8',
       9: 'lg:col-span-9',
-      10: 'lg:col-span-10',
-      11: 'lg:col-span-11',
-      12: 'lg:col-span-12',
       auto: 'lg:col-auto',
       grow: 'lg:col-span-full',
     },
     'size-xl': {
       1: 'xl:col-span-1',
+      10: 'xl:col-span-10',
+      11: 'xl:col-span-11',
+      12: 'xl:col-span-12',
       2: 'xl:col-span-2',
       3: 'xl:col-span-3',
       4: 'xl:col-span-4',
@@ -153,15 +161,15 @@ export const gridItemCva = cva('', {
       7: 'xl:col-span-7',
       8: 'xl:col-span-8',
       9: 'xl:col-span-9',
-      10: 'xl:col-span-10',
-      11: 'xl:col-span-11',
-      12: 'xl:col-span-12',
       auto: 'xl:col-auto',
       grow: 'xl:col-span-full',
     },
     // Base offset (mobile-first)
     offset: {
       1: 'col-start-2',
+      10: 'col-start-11',
+      11: 'col-start-12',
+      12: 'col-start-13',
       2: 'col-start-3',
       3: 'col-start-4',
       4: 'col-start-5',
@@ -170,12 +178,12 @@ export const gridItemCva = cva('', {
       7: 'col-start-8',
       8: 'col-start-9',
       9: 'col-start-10',
-      10: 'col-start-11',
-      11: 'col-start-12',
-      12: 'col-start-13',
     },
     'offset-sm': {
       1: 'sm:col-start-2',
+      10: 'sm:col-start-11',
+      11: 'sm:col-start-12',
+      12: 'sm:col-start-13',
       2: 'sm:col-start-3',
       3: 'sm:col-start-4',
       4: 'sm:col-start-5',
@@ -184,12 +192,12 @@ export const gridItemCva = cva('', {
       7: 'sm:col-start-8',
       8: 'sm:col-start-9',
       9: 'sm:col-start-10',
-      10: 'sm:col-start-11',
-      11: 'sm:col-start-12',
-      12: 'sm:col-start-13',
     },
     'offset-md': {
       1: 'md:col-start-2',
+      10: 'md:col-start-11',
+      11: 'md:col-start-12',
+      12: 'md:col-start-13',
       2: 'md:col-start-3',
       3: 'md:col-start-4',
       4: 'md:col-start-5',
@@ -198,12 +206,12 @@ export const gridItemCva = cva('', {
       7: 'md:col-start-8',
       8: 'md:col-start-9',
       9: 'md:col-start-10',
-      10: 'md:col-start-11',
-      11: 'md:col-start-12',
-      12: 'md:col-start-13',
     },
     'offset-lg': {
       1: 'lg:col-start-2',
+      10: 'lg:col-start-11',
+      11: 'lg:col-start-12',
+      12: 'lg:col-start-13',
       2: 'lg:col-start-3',
       3: 'lg:col-start-4',
       4: 'lg:col-start-5',
@@ -212,12 +220,12 @@ export const gridItemCva = cva('', {
       7: 'lg:col-start-8',
       8: 'lg:col-start-9',
       9: 'lg:col-start-10',
-      10: 'lg:col-start-11',
-      11: 'lg:col-start-12',
-      12: 'lg:col-start-13',
     },
     'offset-xl': {
       1: 'xl:col-start-2',
+      10: 'xl:col-start-11',
+      11: 'xl:col-start-12',
+      12: 'xl:col-start-13',
       2: 'xl:col-start-3',
       3: 'xl:col-start-4',
       4: 'xl:col-start-5',
@@ -226,9 +234,6 @@ export const gridItemCva = cva('', {
       7: 'xl:col-start-8',
       8: 'xl:col-start-9',
       9: 'xl:col-start-10',
-      10: 'xl:col-start-11',
-      11: 'xl:col-start-12',
-      12: 'xl:col-start-13',
     },
     // Alignment overrides for individual items
     justifySelf: {
@@ -245,10 +250,6 @@ export const gridItemCva = cva('', {
       end: 'self-end',
       stretch: 'self-stretch',
     },
-  },
-  defaultVariants: {
-    justifySelf: 'auto',
-    alignSelf: 'auto',
   },
 })
 

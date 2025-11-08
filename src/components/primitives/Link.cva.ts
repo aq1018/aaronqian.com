@@ -1,7 +1,27 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 export const linkVariants = cva(['transition-colors'], {
+  compoundVariants: [
+    {
+      active: true,
+      class: 'text-primary',
+      variant: 'nav',
+    },
+    {
+      active: false,
+      class: 'text-muted',
+      variant: 'nav',
+    },
+  ],
+  defaultVariants: {
+    active: false,
+    variant: 'content',
+  },
   variants: {
+    active: {
+      true: '',
+    },
     variant: {
       // Navigation links (nav bar)
       nav: 'hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]',
@@ -10,25 +30,6 @@ export const linkVariants = cva(['transition-colors'], {
       // Back buttons (with arrow)
       back: 'group inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-link',
     },
-    active: {
-      true: '',
-    },
-  },
-  compoundVariants: [
-    {
-      variant: 'nav',
-      active: true,
-      class: 'text-primary',
-    },
-    {
-      variant: 'nav',
-      active: false,
-      class: 'text-muted',
-    },
-  ],
-  defaultVariants: {
-    variant: 'content',
-    active: false,
   },
 })
 

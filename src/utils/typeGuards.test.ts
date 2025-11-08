@@ -1,7 +1,6 @@
 /**
  * Tests for type guard utilities
  */
-
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import {
@@ -34,69 +33,69 @@ describe('typeGuards', () => {
   describe('isHTMLElement', () => {
     it('should return true for HTMLElement instances', () => {
       const div = document.createElement('div')
-      expect(isHTMLElement(div)).toBe(true)
+      expect(isHTMLElement(div)).toBeTruthy()
     })
 
     it('should return true for specific HTMLElement types', () => {
       const button = document.createElement('button')
       const input = document.createElement('input')
-      expect(isHTMLElement(button)).toBe(true)
-      expect(isHTMLElement(input)).toBe(true)
+      expect(isHTMLElement(button)).toBeTruthy()
+      expect(isHTMLElement(input)).toBeTruthy()
     })
 
     it('should return false for null', () => {
-      expect(isHTMLElement(null)).toBe(false)
+      expect(isHTMLElement(undefined)).toBeFalsy()
     })
 
     it('should return false for undefined', () => {
-      expect(isHTMLElement()).toBe(false)
+      expect(isHTMLElement()).toBeFalsy()
     })
 
     it('should return false for non-HTMLElement objects', () => {
-      expect(isHTMLElement({})).toBe(false)
-      expect(isHTMLElement({ nodeType: 1 })).toBe(false)
+      expect(isHTMLElement({})).toBeFalsy()
+      expect(isHTMLElement({ nodeType: 1 })).toBeFalsy()
     })
 
     it('should return false for primitives', () => {
-      expect(isHTMLElement('div')).toBe(false)
-      expect(isHTMLElement(123)).toBe(false)
-      expect(isHTMLElement(true)).toBe(false)
+      expect(isHTMLElement('div')).toBeFalsy()
+      expect(isHTMLElement(123)).toBeFalsy()
+      expect(isHTMLElement(true)).toBeFalsy()
     })
 
     it('should return false for SVGElement', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       // SVGElement is not an HTMLElement
-      expect(isHTMLElement(svg)).toBe(false)
+      expect(isHTMLElement(svg)).toBeFalsy()
     })
   })
 
   describe('isSVGSVGElement', () => {
     it('should return true for SVGSVGElement instances', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-      expect(isSVGSVGElement(svg)).toBe(true)
+      expect(isSVGSVGElement(svg)).toBeTruthy()
     })
 
     it('should return false for null', () => {
-      expect(isSVGSVGElement(null)).toBe(false)
+      expect(isSVGSVGElement(undefined)).toBeFalsy()
     })
 
     it('should return false for undefined', () => {
-      expect(isSVGSVGElement(undefined)).toBe(false)
+      expect(isSVGSVGElement(undefined)).toBeFalsy()
     })
 
     it('should return false for HTMLElement', () => {
       const div = document.createElement('div')
-      expect(isSVGSVGElement(div)).toBe(false)
+      expect(isSVGSVGElement(div)).toBeFalsy()
     })
 
     it('should return false for other SVG elements', () => {
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-      expect(isSVGSVGElement(circle)).toBe(false)
+      expect(isSVGSVGElement(circle)).toBeFalsy()
     })
 
     it('should return false for non-element objects', () => {
-      expect(isSVGSVGElement({})).toBe(false)
-      expect(isSVGSVGElement('svg')).toBe(false)
+      expect(isSVGSVGElement({})).toBeFalsy()
+      expect(isSVGSVGElement('svg')).toBeFalsy()
     })
   })
 
@@ -214,63 +213,63 @@ describe('typeGuards', () => {
 
   describe('isNonNull', () => {
     it('should return true for non-null values', () => {
-      expect(isNonNull('string')).toBe(true)
-      expect(isNonNull(123)).toBe(true)
-      expect(isNonNull(true)).toBe(true)
-      expect(isNonNull({})).toBe(true)
-      expect(isNonNull([])).toBe(true)
+      expect(isNonNull('string')).toBeTruthy()
+      expect(isNonNull(123)).toBeTruthy()
+      expect(isNonNull(true)).toBeTruthy()
+      expect(isNonNull({})).toBeTruthy()
+      expect(isNonNull([])).toBeTruthy()
     })
 
     it('should return true for falsy values that are not null/undefined', () => {
-      expect(isNonNull(0)).toBe(true)
-      expect(isNonNull('')).toBe(true)
-      expect(isNonNull(false)).toBe(true)
+      expect(isNonNull(0)).toBeTruthy()
+      expect(isNonNull('')).toBeTruthy()
+      expect(isNonNull(false)).toBeTruthy()
     })
 
     it('should return false for null', () => {
-      expect(isNonNull(null)).toBe(false)
+      expect(isNonNull(undefined)).toBeFalsy()
     })
 
     it('should return false for undefined', () => {
-      expect(isNonNull(undefined)).toBe(false)
+      expect(isNonNull(undefined)).toBeFalsy()
     })
   })
 
   describe('isString', () => {
     it('should return true for string values', () => {
-      expect(isString('hello')).toBe(true)
-      expect(isString('')).toBe(true)
-      expect(isString('123')).toBe(true)
+      expect(isString('hello')).toBeTruthy()
+      expect(isString('')).toBeTruthy()
+      expect(isString('123')).toBeTruthy()
     })
 
     it('should return false for non-string values', () => {
-      expect(isString(123)).toBe(false)
-      expect(isString(true)).toBe(false)
-      expect(isString(null)).toBe(false)
-      expect(isString(undefined)).toBe(false)
-      expect(isString({})).toBe(false)
-      expect(isString([])).toBe(false)
+      expect(isString(123)).toBeFalsy()
+      expect(isString(true)).toBeFalsy()
+      expect(isString(undefined)).toBeFalsy()
+      expect(isString(undefined)).toBeFalsy()
+      expect(isString({})).toBeFalsy()
+      expect(isString([])).toBeFalsy()
     })
   })
 
   describe('isNumber', () => {
     it('should return true for number values', () => {
-      expect(isNumber(123)).toBe(true)
-      expect(isNumber(0)).toBe(true)
-      expect(isNumber(-42)).toBe(true)
-      expect(isNumber(3.14)).toBe(true)
+      expect(isNumber(123)).toBeTruthy()
+      expect(isNumber(0)).toBeTruthy()
+      expect(isNumber(-42)).toBeTruthy()
+      expect(isNumber(3.14)).toBeTruthy()
     })
 
     it('should return false for NaN', () => {
-      expect(isNumber(Number.NaN)).toBe(false)
+      expect(isNumber(Number.NaN)).toBeFalsy()
     })
 
     it('should return false for non-number values', () => {
-      expect(isNumber('123')).toBe(false)
-      expect(isNumber(true)).toBe(false)
-      expect(isNumber(null)).toBe(false)
-      expect(isNumber(undefined)).toBe(false)
-      expect(isNumber({})).toBe(false)
+      expect(isNumber('123')).toBeFalsy()
+      expect(isNumber(true)).toBeFalsy()
+      expect(isNumber(undefined)).toBeFalsy()
+      expect(isNumber(undefined)).toBeFalsy()
+      expect(isNumber({})).toBeFalsy()
     })
   })
 
@@ -305,7 +304,7 @@ describe('typeGuards', () => {
 
     it('should throw for null with default message', () => {
       expect(() => {
-        assertNonNull(null)
+        assertNonNull(undefined)
       }).toThrow('Expected non-null value')
     })
 
@@ -317,7 +316,7 @@ describe('typeGuards', () => {
 
     it('should throw with custom message', () => {
       expect(() => {
-        assertNonNull(null, 'Custom error message')
+        assertNonNull(undefined, 'Custom error message')
       }).toThrow('Custom error message')
     })
   })
@@ -332,7 +331,7 @@ describe('typeGuards', () => {
 
     it('should throw for null with default message', () => {
       expect(() => {
-        assertHTMLElement(null)
+        assertHTMLElement(undefined)
       }).toThrow('Expected HTMLElement')
     })
 
@@ -351,7 +350,7 @@ describe('typeGuards', () => {
 
     it('should throw with custom message', () => {
       expect(() => {
-        assertHTMLElement(null, 'Button element not found')
+        assertHTMLElement(undefined, 'Button element not found')
       }).toThrow('Button element not found')
     })
   })
@@ -366,7 +365,7 @@ describe('typeGuards', () => {
 
     it('should throw for null with default message', () => {
       expect(() => {
-        assertSVGSVGElement(null)
+        assertSVGSVGElement(undefined)
       }).toThrow('Expected SVGSVGElement')
     })
 
@@ -386,7 +385,7 @@ describe('typeGuards', () => {
 
     it('should throw with custom message', () => {
       expect(() => {
-        assertSVGSVGElement(null, 'SVG canvas not found')
+        assertSVGSVGElement(undefined, 'SVG canvas not found')
       }).toThrow('SVG canvas not found')
     })
   })

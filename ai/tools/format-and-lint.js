@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 // Auto-format and lint-fix after file edits
-
 import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 
@@ -24,7 +23,7 @@ import fs from 'node:fs'
  */
 function parseInput(inputData) {
   /** @type {unknown} */
-  let parsedData = null
+  let parsedData
   try {
     parsedData = JSON.parse(inputData)
   } catch (error) {
@@ -42,7 +41,7 @@ function parseInput(inputData) {
     parsedData.tool_input == null ||
     !('file_path' in parsedData.tool_input)
   ) {
-    return null
+    return
   }
 
   /** @type {ToolInput} */
@@ -50,7 +49,7 @@ function parseInput(inputData) {
   const filePath = data.tool_input.file_path
 
   if (typeof filePath !== 'string' || filePath === '' || !fs.existsSync(filePath)) {
-    return null
+    return
   }
 
   return { filePath }
@@ -65,8 +64,8 @@ function parseInput(inputData) {
 function runOxlintFix(filePath, feedback) {
   try {
     execSync(`npx oxlint --type-aware --fix "${filePath}"`, {
-      stdio: 'pipe',
       cwd: process.env.CLAUDE_PROJECT_DIR,
+      stdio: 'pipe',
     })
     feedback.hookSpecificOutput.additionalContext += `✓ oxlint --type-aware --fix completed\n`
     return true
@@ -74,13 +73,13 @@ function runOxlintFix(filePath, feedback) {
     feedback.hookSpecificOutput.additionalContext += `✗ oxlint --type-aware --fix failed (unfixable errors detected)\n\n`
     try {
       execSync(`npx oxlint --type-aware "${filePath}"`, {
+        cwd: process.env.CLAUDE_PROJECT_DIR,
         encoding: 'utf8',
         stdio: 'pipe',
-        cwd: process.env.CLAUDE_PROJECT_DIR,
       })
-    } catch (verifyError) {
+    } catch (error) {
       /** @type {{stdout?: string, stderr?: string}} */
-      const err = verifyError
+      const err = error
       const output = err.stdout ?? err.stderr ?? ''
       feedback.hookSpecificOutput.additionalContext += `oxlint errors:\n${output}\n\n`
     }
@@ -99,8 +98,8 @@ function runOxlintFix(filePath, feedback) {
 function runPrettier(filePath, feedback) {
   try {
     execSync(`npx prettier --write "${filePath}"`, {
-      stdio: 'pipe',
       cwd: process.env.CLAUDE_PROJECT_DIR,
+      stdio: 'pipe',
     })
     feedback.hookSpecificOutput.additionalContext += `✓ Prettier completed (formatted)\n`
     return true
@@ -126,9 +125,9 @@ function runPrettier(filePath, feedback) {
 function verifyOxlint(filePath, feedback) {
   try {
     execSync(`npx oxlint --type-aware "${filePath}"`, {
+      cwd: process.env.CLAUDE_PROJECT_DIR,
       encoding: 'utf8',
       stdio: 'pipe',
-      cwd: process.env.CLAUDE_PROJECT_DIR,
     })
     feedback.hookSpecificOutput.additionalContext += `✓ oxlint verification passed (no errors)\n`
     feedback.hookSpecificOutput.additionalContext += `\nNext: Verify typecheck only (${filePath.endsWith('.ts') ? 'npx tsc --noEmit' : 'astro check'})`
@@ -159,8 +158,8 @@ process.stdin.on('end', () => {
     /** @type {HookFeedback} */
     const feedback = {
       hookSpecificOutput: {
-        hookEventName: 'PostToolUse',
         additionalContext: '',
+        hookEventName: 'PostToolUse',
       },
     }
 
@@ -181,8 +180,8 @@ process.stdin.on('end', () => {
     console.log(
       JSON.stringify({
         hookSpecificOutput: {
-          hookEventName: 'PostToolUse',
           additionalContext: `Hook error: ${String(error)}`,
+          hookEventName: 'PostToolUse',
         },
       }),
     )

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import GridLines from '@/components/features/CuttingMatGridLines.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('GridLines', () => {
@@ -18,14 +19,14 @@ describe('GridLines', () => {
   it('should create vertical and horizontal lines', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
@@ -36,19 +37,19 @@ describe('GridLines', () => {
   it('should create vertical lines from center outward', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
     const lines = root.querySelectorAll('line')
-    const verticalLines = Array.from(lines).filter(
+    const verticalLines = [...lines].filter(
       (line) => line.getAttribute('x1') === line.getAttribute('x2'),
     )
 
@@ -63,19 +64,19 @@ describe('GridLines', () => {
   it('should create horizontal lines from bottom upward', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
     const lines = root.querySelectorAll('line')
-    const horizontalLines = Array.from(lines).filter(
+    const horizontalLines = [...lines].filter(
       (line) => line.getAttribute('y1') === line.getAttribute('y2'),
     )
 
@@ -90,19 +91,19 @@ describe('GridLines', () => {
   it('should apply major opacity to major lines', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
     const lines = root.querySelectorAll('line')
-    const majorLine = Array.from(lines).find((line) => {
+    const majorLine = [...lines].find((line) => {
       const x = line.getAttribute('x1')
       return x === String(centerX + majorLineInterval)
     })
@@ -113,19 +114,19 @@ describe('GridLines', () => {
   it('should apply minor opacity to minor lines', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
     const lines = root.querySelectorAll('line')
-    const minorLine = Array.from(lines).find((line) => {
+    const minorLine = [...lines].find((line) => {
       const x = line.getAttribute('x1')
       return x === String(centerX + minorInterval)
     })
@@ -136,19 +137,19 @@ describe('GridLines', () => {
   it('should apply major stroke width to major lines', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
     const lines = root.querySelectorAll('line')
-    const majorLine = Array.from(lines).find((line) => {
+    const majorLine = [...lines].find((line) => {
       const x = line.getAttribute('x1')
       return x === String(centerX + majorLineInterval)
     })
@@ -159,19 +160,19 @@ describe('GridLines', () => {
   it('should apply minor stroke width to minor lines', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
     const lines = root.querySelectorAll('line')
-    const minorLine = Array.from(lines).find((line) => {
+    const minorLine = [...lines].find((line) => {
       const x = line.getAttribute('x1')
       return x === String(centerX + minorInterval)
     })
@@ -182,19 +183,19 @@ describe('GridLines', () => {
   it('should create symmetric vertical lines on both sides of center', async () => {
     const root = await renderAstroComponent(GridLines, {
       props: {
-        width,
         height,
         majorLineInterval,
-        minorInterval,
         majorOpacity,
-        minorOpacity,
         majorStrokeWidth,
+        minorInterval,
+        minorOpacity,
         minorStrokeWidth,
+        width,
       },
     })
 
     const lines = root.querySelectorAll('line')
-    const verticalLines = Array.from(lines).filter(
+    const verticalLines = [...lines].filter(
       (line) => line.getAttribute('x1') === line.getAttribute('x2'),
     )
 

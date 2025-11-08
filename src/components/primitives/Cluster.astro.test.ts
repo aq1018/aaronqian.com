@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Cluster from './Cluster.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Cluster from './Cluster.astro'
 
 describe('Cluster.astro', () => {
   describe('Rendering', () => {
@@ -37,13 +37,13 @@ describe('Cluster.astro', () => {
       })
 
       const span = root.querySelector('span')
-      expect(span?.classList.contains('custom-class')).toBe(true)
+      expect(span?.classList.contains('custom-class')).toBeTruthy()
       expect(span).toHaveClasses(['inline-flex'])
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Cluster, {
-        props: { id: 'test-cluster', 'data-testid': 'cluster' },
+        props: { 'data-testid': 'cluster', id: 'test-cluster' },
       })
 
       const span = root.querySelector('span')

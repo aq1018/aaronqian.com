@@ -1,110 +1,110 @@
 import { defineCollection, z } from 'astro:content'
 
 const blog = defineCollection({
-  type: 'content',
   schema: ({ image }) =>
     z.object({
-      title: z.string(),
-      description: z.string(),
-      date: z.coerce.date(),
-      hero: image().optional(),
       categories: z.array(z.string()).optional(),
-      tags: z.array(z.string()).optional(),
+      date: z.coerce.date(),
+      description: z.string(),
       draft: z.boolean().optional().default(false),
+      hero: image().optional(),
+      tags: z.array(z.string()).optional(),
+      title: z.string(),
     }),
+  type: 'content',
 })
 
 const projects = defineCollection({
-  type: 'content',
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    status: z.enum(['active', 'planning', 'done']),
-    url: z.string().url().optional(),
     aside: z.string(),
-    order: z.number(),
+    description: z.string(),
     live: z.boolean().optional().default(false),
+    order: z.number(),
+    status: z.enum(['active', 'planning', 'done']),
+    title: z.string(),
+    url: z.string().url().optional(),
   }),
+  type: 'content',
 })
 
 const projectLogs = defineCollection({
-  type: 'content',
   schema: z.object({
     date: z.coerce.date(),
-    title: z.string(),
+    project: z.string(),
     tags: z.array(z.string()),
-    project: z.string(), // slug reference to parent project
+    title: z.string(), // slug reference to parent project
   }),
+  type: 'content',
 })
 
 const socials = defineCollection({
-  type: 'data',
   schema: z.object({
-    label: z.string(),
-    url: z.string(),
-    position: z.number(),
     enabled: z.boolean(),
+    label: z.string(),
+    position: z.number(),
     rel: z.string().optional(),
+    url: z.string(),
   }),
+  type: 'data',
 })
 
 const devTools = defineCollection({
-  type: 'data',
   schema: z.object({
-    name: z.string(),
-    category: z.string(),
     blurb: z.string(),
-    url: z.string().url().optional(),
-    position: z.number(),
+    category: z.string(),
     enabled: z.boolean(),
+    name: z.string(),
+    position: z.number(),
     tags: z.array(z.string()).optional(),
+    url: z.string().url().optional(),
   }),
+  type: 'data',
 })
 
 const benchTools = defineCollection({
-  type: 'data',
   schema: z.object({
-    name: z.string(),
-    category: z.string(),
     blurb: z.string(),
-    url: z.string().url().optional(),
-    position: z.number(),
+    category: z.string(),
     enabled: z.boolean(),
+    name: z.string(),
+    position: z.number(),
     tags: z.array(z.string()).optional(),
+    url: z.string().url().optional(),
   }),
+  type: 'data',
 })
 
 const testimonials = defineCollection({
-  type: 'data',
   schema: z.object({
-    quote: z.string(),
     author: z.string(),
-    title: z.string().optional(),
-    position: z.number(),
     enabled: z.boolean(),
+    position: z.number(),
+    quote: z.string(),
+    title: z.string().optional(),
   }),
+  type: 'data',
 })
 
 const about = defineCollection({
-  type: 'content',
   schema: ({ image }) =>
     z.object({
-      name: z.string(),
-      tagline: z.string(),
+      availability: z.string().optional(),
       heroImage: image(),
       heroImageAlt: z.string(),
+      name: z.string(),
+      tagline: z.string(),
       workingStyle: z.array(z.string()),
-      availability: z.string().optional(),
     }),
+  type: 'content',
 })
 
 export const collections = {
-  blog,
-  projects,
-  projectLogs,
-  socials,
-  devTools,
-  benchTools,
-  testimonials,
   about,
+  benchTools,
+  blog,
+  devTools,
+  projectLogs,
+  projects,
+  socials,
+  testimonials,
 }

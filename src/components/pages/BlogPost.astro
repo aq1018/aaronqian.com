@@ -41,7 +41,7 @@ const { Content } = await post.render()
           }
         </Text>
         {
-          post.data.tags !== undefined && post.data.tags.length > 0 && (
+          post.data.tags && post.data.tags.length > 0 && (
             <Cluster space="xs">
               {post.data.tags.map((tag: string) => (
                 <Badge color="neutral" size="sm">

@@ -1,7 +1,9 @@
 export type Theme = 'light' | 'dark' | 'system'
 
 export function getTheme(): Theme {
-  if (typeof window === 'undefined') return 'system'
+  if (typeof window === 'undefined') {
+    return 'system'
+  }
   const stored = localStorage.getItem('theme')
   if (stored === 'light' || stored === 'dark' || stored === 'system') {
     return stored
@@ -10,31 +12,37 @@ export function getTheme(): Theme {
 }
 
 export function setTheme(theme: Theme): void {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined') {
+    return
+  }
   localStorage.setItem('theme', theme)
 }
 
 export function isDark(theme: Theme): boolean {
-  if (typeof window === 'undefined') return false
+  if (typeof window === 'undefined') {
+    return false
+  }
 
-  if (theme === 'dark') return true
-  if (theme === 'light') return false
+  if (theme === 'dark') {
+    return true
+  }
+  if (theme === 'light') {
+    return false
+  }
 
   // System theme - check OS preference
   return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
 export function applyTheme(theme: Theme): void {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined') {
+    return
+  }
 
   const updateDOM = () => {
     const dark = isDark(theme)
 
-    if (dark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    document.documentElement.classList.toggle('dark', dark)
   }
 
   // Use View Transitions API if supported for smooth theme changes
@@ -47,8 +55,12 @@ export function applyTheme(theme: Theme): void {
 }
 
 export function getNextTheme(currentTheme: Theme): Theme {
-  if (currentTheme === 'light') return 'dark'
-  if (currentTheme === 'dark') return 'system'
+  if (currentTheme === 'light') {
+    return 'dark'
+  }
+  if (currentTheme === 'dark') {
+    return 'system'
+  }
   return 'light'
 }
 
@@ -59,7 +71,7 @@ export function getNextTheme(currentTheme: Theme): Theme {
 
 type CleanupFunction = () => void
 
-let cleanup: CleanupFunction | null = null
+let cleanup: CleanupFunction | null
 
 /**
  * Calculate slider offset for a theme
@@ -103,7 +115,9 @@ function updateSliderPosition(
   themeButtons: NodeListOf<HTMLButtonElement>,
   skipTransition = false,
 ): void {
-  if (sliderElement == null) return
+  if (sliderElement == null) {
+    return
+  }
   const offset = calculateSliderOffset(theme, themeButtons)
   applySliderPosition(sliderElement, offset, skipTransition)
 }
@@ -119,11 +133,7 @@ function updateButtonSelection(
 ): void {
   themeButtons.forEach((button) => {
     const buttonValue = button.dataset.value
-    if (buttonValue === theme) {
-      button.classList.add('selected')
-    } else {
-      button.classList.remove('selected')
-    }
+    button.classList.toggle('selected', buttonValue === theme)
   })
   updateSliderPosition(slider, theme, themeButtons, skipTransition)
 }
@@ -158,14 +168,18 @@ function setupButtonClickHandlers(
  * Manages button selection and theme switching
  */
 export function initializeThemeToggle(): CleanupFunction {
-  if (cleanup != null) cleanup()
+  if (cleanup) {
+    cleanup()
+  }
 
   const themeButtons = document.querySelectorAll<HTMLButtonElement>(
     '#theme-toggle button[data-value]',
   )
   const slider = document.querySelector<HTMLElement>('#theme-toggle [data-slider]')
 
-  if (themeButtons.length === 0) return () => {}
+  if (themeButtons.length === 0) {
+    return () => {}
+  }
 
   const theme = getTheme()
   applyTheme(theme)
@@ -181,7 +195,9 @@ export function initializeThemeToggle(): CleanupFunction {
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
   const mediaQueryHandler = (): void => {
     const currentTheme = getTheme()
-    if (currentTheme === 'system') applyTheme(currentTheme)
+    if (currentTheme === 'system') {
+      applyTheme(currentTheme)
+    }
   }
   mediaQuery.addEventListener('change', mediaQueryHandler)
 
@@ -214,7 +230,7 @@ export function setupThemeToggle(): void {
 
   // Cleanup before navigation
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup != null) {
+    if (cleanup) {
       cleanup()
     }
   })

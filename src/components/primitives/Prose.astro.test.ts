@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Prose from './Prose.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Prose from './Prose.astro'
 
 describe('Prose.astro', () => {
   describe('Rendering', () => {
@@ -40,7 +40,7 @@ describe('Prose.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-prose')).toBe(true)
+      expect(div?.classList.contains('custom-prose')).toBeTruthy()
       expect(div).toHaveClasses(['prose', 'prose-invert']) // Base classes still present
     })
   })
@@ -68,7 +68,7 @@ describe('Prose.astro', () => {
   describe('HTML Attributes', () => {
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Prose, {
-        props: { id: 'article-content', 'data-testid': 'prose' },
+        props: { 'data-testid': 'prose', id: 'article-content' },
       })
 
       const div = root.querySelector('div')

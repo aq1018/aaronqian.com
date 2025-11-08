@@ -1,10 +1,10 @@
 /**
  * Tests for GridManager grid rendering and resize optimization
  */
-
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import { type GridConfig, GridManager } from './DigitalAnalyzer.grid'
+import { GridManager } from './DigitalAnalyzer.grid'
+import type { GridConfig } from './DigitalAnalyzer.grid'
 
 describe('GridManager', () => {
   let staticSvg!: SVGSVGElement
@@ -23,8 +23,8 @@ describe('GridManager', () => {
 
     // Standard config
     config = {
-      byteCount: 2,
       bitsPerByte: 8,
+      byteCount: 2,
       gridOpacity: 0.2,
     }
   })
@@ -46,8 +46,8 @@ describe('GridManager', () => {
 
     it('should calculate bitCount correctly', () => {
       const gridManager = new GridManager(staticSvg, dynamicSvg, {
-        byteCount: 4,
         bitsPerByte: 8,
+        byteCount: 4,
         gridOpacity: 0.2,
       })
 
@@ -127,8 +127,8 @@ describe('GridManager', () => {
 
     it('should set correct opacity on grid lines', () => {
       const gridManager = new GridManager(staticSvg, dynamicSvg, {
-        byteCount: 2,
         bitsPerByte: 8,
+        byteCount: 2,
         gridOpacity: 0.5,
       })
       const rect = new DOMRect(0, 0, 1600, 800)
@@ -149,7 +149,7 @@ describe('GridManager', () => {
 
       // Select only horizontal lines (x1="0" AND x2="1600")
       const horizontalLines = gridGroup.querySelectorAll('line[x1="0"][x2="1600"]')
-      const yPositions = Array.from(horizontalLines).map((line) => Number(line.getAttribute('y1')))
+      const yPositions = [...horizontalLines].map((line) => Number(line.getAttribute('y1')))
 
       // Should be at gridSize intervals: 100, 200, 300, etc.
       expect(yPositions).toEqual([100, 200, 300, 400, 500, 600, 700])
@@ -162,7 +162,7 @@ describe('GridManager', () => {
       gridManager.updateDimensions(rect)
 
       const verticalLines = gridGroup.querySelectorAll('line[y1="0"]')
-      const xPositions = Array.from(verticalLines).map((line) => Number(line.getAttribute('x1')))
+      const xPositions = [...verticalLines].map((line) => Number(line.getAttribute('x1')))
 
       // Should be at gridSize intervals: 0, 100, 200, ..., 1600
       expect(xPositions).toEqual([
@@ -179,7 +179,7 @@ describe('GridManager', () => {
       gridManager.updateDimensions(new DOMRect(0, 0, 1600, 800))
 
       // Should regenerate for width change > 10px
-      expect(gridManager.shouldRegenerateGrid(1620)).toBe(true)
+      expect(gridManager.shouldRegenerateGrid(1620)).toBeTruthy()
     })
 
     it('should return true when width decreases beyond threshold', () => {
@@ -188,7 +188,7 @@ describe('GridManager', () => {
       gridManager.updateDimensions(new DOMRect(0, 0, 1600, 800))
 
       // Should regenerate for width change > 10px (decrease)
-      expect(gridManager.shouldRegenerateGrid(1580)).toBe(true)
+      expect(gridManager.shouldRegenerateGrid(1580)).toBeTruthy()
     })
 
     it('should return false when width change is below threshold', () => {
@@ -197,7 +197,7 @@ describe('GridManager', () => {
       gridManager.updateDimensions(new DOMRect(0, 0, 1600, 800))
 
       // Should NOT regenerate for small width change (5px)
-      expect(gridManager.shouldRegenerateGrid(1605)).toBe(false)
+      expect(gridManager.shouldRegenerateGrid(1605)).toBeFalsy()
     })
 
     it('should return false when width is exactly at threshold', () => {
@@ -206,7 +206,7 @@ describe('GridManager', () => {
       gridManager.updateDimensions(new DOMRect(0, 0, 1600, 800))
 
       // Should NOT regenerate at exactly threshold (10px)
-      expect(gridManager.shouldRegenerateGrid(1610)).toBe(false)
+      expect(gridManager.shouldRegenerateGrid(1610)).toBeFalsy()
     })
 
     it('should return true when width change is just over threshold', () => {
@@ -215,7 +215,7 @@ describe('GridManager', () => {
       gridManager.updateDimensions(new DOMRect(0, 0, 1600, 800))
 
       // Should regenerate just over threshold (11px)
-      expect(gridManager.shouldRegenerateGrid(1611)).toBe(true)
+      expect(gridManager.shouldRegenerateGrid(1611)).toBeTruthy()
     })
   })
 
@@ -287,7 +287,7 @@ describe('GridManager', () => {
 
       const gridLines = gridManager.getGridLines()
 
-      expect(Array.isArray(gridLines)).toBe(true)
+      expect(Array.isArray(gridLines)).toBeTruthy()
       expect(gridLines.length).toBe(7)
       expect(gridLines).toEqual([100, 200, 300, 400, 500, 600, 700])
     })
@@ -408,8 +408,8 @@ describe('GridManager', () => {
 
     it('should handle different byteCount configurations', () => {
       const gridManager = new GridManager(staticSvg, dynamicSvg, {
-        byteCount: 4,
         bitsPerByte: 8,
+        byteCount: 4,
         gridOpacity: 0.2,
       })
 

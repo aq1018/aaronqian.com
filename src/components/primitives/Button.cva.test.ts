@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { buttonVariants } from './Button.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { buttonVariants } from './Button.cva'
 
 describe('Button.cva', () => {
   testBaseClasses(buttonVariants, [
@@ -40,7 +40,7 @@ describe('Button.cva', () => {
     testAllVariants(buttonVariants, 'variant', ['solid', 'outline', 'soft', 'ghost', 'link'])
 
     it('should render solid variant correctly', () => {
-      expect(buttonVariants({ variant: 'solid', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'solid' })).toContainClasses([
         'bg-primary',
         'text-primary-content',
         'hover:brightness-90',
@@ -49,7 +49,7 @@ describe('Button.cva', () => {
     })
 
     it('should render outline variant correctly', () => {
-      expect(buttonVariants({ variant: 'outline', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'outline' })).toContainClasses([
         'border-2',
         'bg-transparent',
         'border-primary',
@@ -59,7 +59,7 @@ describe('Button.cva', () => {
     })
 
     it('should render soft variant correctly', () => {
-      expect(buttonVariants({ variant: 'soft', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'soft' })).toContainClasses([
         'bg-primary/20',
         'text-primary',
         'hover:bg-primary/30',
@@ -67,7 +67,7 @@ describe('Button.cva', () => {
     })
 
     it('should render ghost variant correctly', () => {
-      expect(buttonVariants({ variant: 'ghost', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'ghost' })).toContainClasses([
         'bg-transparent',
         'text-primary',
         'hover:bg-primary/10',
@@ -75,7 +75,7 @@ describe('Button.cva', () => {
     })
 
     it('should render link variant correctly', () => {
-      expect(buttonVariants({ variant: 'link', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'link' })).toContainClasses([
         'bg-transparent',
         'underline-offset-4',
         'hover:underline',
@@ -133,21 +133,21 @@ describe('Button.cva', () => {
 
   describe('Compound Variants - Solid', () => {
     it('should render primary solid correctly', () => {
-      expect(buttonVariants({ variant: 'solid', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'solid' })).toContainClasses([
         'bg-primary',
         'text-primary-content',
       ])
     })
 
     it('should render danger solid correctly', () => {
-      expect(buttonVariants({ variant: 'solid', color: 'danger' })).toContainClasses([
+      expect(buttonVariants({ color: 'danger', variant: 'solid' })).toContainClasses([
         'bg-danger',
         'text-danger-content',
       ])
     })
 
     it('should render success solid correctly', () => {
-      expect(buttonVariants({ variant: 'solid', color: 'success' })).toContainClasses([
+      expect(buttonVariants({ color: 'success', variant: 'solid' })).toContainClasses([
         'bg-success',
         'text-success-content',
       ])
@@ -156,7 +156,7 @@ describe('Button.cva', () => {
 
   describe('Compound Variants - Outline', () => {
     it('should render primary outline correctly', () => {
-      expect(buttonVariants({ variant: 'outline', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'outline' })).toContainClasses([
         'border-primary',
         'text-primary',
         'hover:bg-primary/10',
@@ -164,7 +164,7 @@ describe('Button.cva', () => {
     })
 
     it('should render danger outline correctly', () => {
-      expect(buttonVariants({ variant: 'outline', color: 'danger' })).toContainClasses([
+      expect(buttonVariants({ color: 'danger', variant: 'outline' })).toContainClasses([
         'border-danger',
         'text-danger',
         'hover:bg-danger/10',
@@ -174,7 +174,7 @@ describe('Button.cva', () => {
 
   describe('Compound Variants - Soft', () => {
     it('should render primary soft correctly', () => {
-      expect(buttonVariants({ variant: 'soft', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'soft' })).toContainClasses([
         'bg-primary/20',
         'text-primary',
         'hover:bg-primary/30',
@@ -182,7 +182,7 @@ describe('Button.cva', () => {
     })
 
     it('should render danger soft correctly', () => {
-      expect(buttonVariants({ variant: 'soft', color: 'danger' })).toContainClasses([
+      expect(buttonVariants({ color: 'danger', variant: 'soft' })).toContainClasses([
         'bg-danger/20',
         'text-danger',
         'hover:bg-danger/30',
@@ -192,14 +192,14 @@ describe('Button.cva', () => {
 
   describe('Compound Variants - Ghost', () => {
     it('should render primary ghost correctly', () => {
-      expect(buttonVariants({ variant: 'ghost', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'ghost' })).toContainClasses([
         'text-primary',
         'hover:bg-primary/10',
       ])
     })
 
     it('should render danger ghost correctly', () => {
-      expect(buttonVariants({ variant: 'ghost', color: 'danger' })).toContainClasses([
+      expect(buttonVariants({ color: 'danger', variant: 'ghost' })).toContainClasses([
         'text-danger',
         'hover:bg-danger/10',
       ])
@@ -208,29 +208,29 @@ describe('Button.cva', () => {
 
   describe('Compound Variants - Link', () => {
     it('should render primary link correctly', () => {
-      expect(buttonVariants({ variant: 'link', color: 'primary' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', variant: 'link' })).toContainClasses([
         'text-primary',
       ])
     })
 
     it('should render danger link correctly', () => {
-      expect(buttonVariants({ variant: 'link', color: 'danger' })).toContainClasses(['text-danger'])
+      expect(buttonVariants({ color: 'danger', variant: 'link' })).toContainClasses(['text-danger'])
     })
   })
 
   testCompoundVariants(buttonVariants, {
-    variant: ['solid', 'outline', 'soft', 'ghost', 'link'],
     color: ['primary', 'accent', 'secondary', 'neutral', 'danger', 'success', 'warning', 'info'],
+    variant: ['solid', 'outline', 'soft', 'ghost', 'link'],
   })
 
-  testEdgeCases(buttonVariants, { variant: 'solid', color: 'primary', size: 'md' }, [
+  testEdgeCases(buttonVariants, { color: 'primary', size: 'md', variant: 'solid' }, [
     'bg-primary',
     'px-4',
   ])
 
   describe('Semantic Usage', () => {
     it('should provide appropriate styles for primary CTA', () => {
-      expect(buttonVariants({ variant: 'solid', color: 'primary', size: 'lg' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', size: 'lg', variant: 'solid' })).toContainClasses([
         'bg-primary',
         'text-primary-content',
         'px-6',
@@ -239,14 +239,14 @@ describe('Button.cva', () => {
     })
 
     it('should provide appropriate styles for destructive action', () => {
-      expect(buttonVariants({ variant: 'outline', color: 'danger' })).toContainClasses([
+      expect(buttonVariants({ color: 'danger', variant: 'outline' })).toContainClasses([
         'border-danger',
         'text-danger',
       ])
     })
 
     it('should provide appropriate styles for inline text button', () => {
-      expect(buttonVariants({ variant: 'link', color: 'primary', size: 'sm' })).toContainClasses([
+      expect(buttonVariants({ color: 'primary', size: 'sm', variant: 'link' })).toContainClasses([
         'text-primary',
         'underline-offset-4',
       ])

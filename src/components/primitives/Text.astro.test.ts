@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Text from './Text.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Text from './Text.astro'
 
 describe('Text.astro', () => {
   describe('Rendering', () => {
@@ -50,12 +50,12 @@ describe('Text.astro', () => {
       })
 
       const p = root.querySelector('p')
-      expect(p?.classList.contains('custom-text')).toBe(true)
+      expect(p?.classList.contains('custom-text')).toBeTruthy()
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Text, {
-        props: { id: 'test-text', 'data-testid': 'text' },
+        props: { 'data-testid': 'text', id: 'test-text' },
       })
 
       const p = root.querySelector('p')
@@ -114,7 +114,7 @@ describe('Text.astro', () => {
 
     it('should handle boolean variant props', async () => {
       const root = await renderAstroComponent(Text, {
-        props: { strong: true, italic: true },
+        props: { italic: true, strong: true },
       })
 
       const p = root.querySelector('p')
@@ -124,10 +124,10 @@ describe('Text.astro', () => {
     it('should handle all variant props together', async () => {
       const root = await renderAstroComponent(Text, {
         props: {
-          size: 'small',
-          color: 'muted',
           align: 'center',
+          color: 'muted',
           family: 'mono',
+          size: 'small',
           strong: true,
           uppercase: true,
         },
@@ -163,26 +163,26 @@ describe('Text.astro', () => {
       const root = await renderAstroComponent(Text, {
         props: {
           as: 'span',
-          size: 'small',
-          color: 'primary',
           class: 'custom-class',
+          color: 'primary',
+          size: 'small',
         },
         slots: { default: 'Content' },
       })
 
       const span = root.querySelector('span')
       expect(span?.textContent.trim()).toBe('Content')
-      expect(span?.classList.contains('custom-class')).toBe(true)
+      expect(span?.classList.contains('custom-class')).toBeTruthy()
     })
 
     it('should combine all features: element type, variants, attributes, slots', async () => {
       const root = await renderAstroComponent(Text, {
         props: {
           as: 'label',
+          'data-field': 'username',
+          id: 'field-label',
           size: 'label',
           strong: true,
-          id: 'field-label',
-          'data-field': 'username',
         },
         slots: { default: 'Username' },
       })

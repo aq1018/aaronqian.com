@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Inset from './Inset.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Inset from './Inset.astro'
 
 describe('Inset.astro', () => {
   describe('Rendering', () => {
@@ -40,12 +40,12 @@ describe('Inset.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-inset')).toBe(true)
+      expect(div?.classList.contains('custom-inset')).toBeTruthy()
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Inset, {
-        props: { id: 'test-inset', 'data-testid': 'inset' },
+        props: { 'data-testid': 'inset', id: 'test-inset' },
       })
 
       const div = root.querySelector('div')

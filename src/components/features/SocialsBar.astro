@@ -1,5 +1,6 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
 import Icon from '@/components/primitives/Icon.astro'
 import Link from '@/components/primitives/Link.astro'
@@ -13,29 +14,31 @@ export interface Props {
 const { variant = 'compact', class: className } = Astro.props
 
 // Fetch enabled socials sorted by position
-const socials = (
-  await getCollection('socials', ({ data }: CollectionEntry<'socials'>) => data.enabled)
-).toSorted(
+const socialsCollection = await getCollection(
+  'socials',
+  ({ data }: CollectionEntry<'socials'>) => data.enabled,
+)
+const socials = socialsCollection.toSorted(
   (a: CollectionEntry<'socials'>, b: CollectionEntry<'socials'>) =>
     a.data.position - b.data.position,
 )
 
 // Type-safe socials array for mapping
-const typedSocials: Array<CollectionEntry<'socials'>> = socials
+const typedSocials: CollectionEntry<'socials'>[] = socials
 
 // Map social labels to icon names
 function getIconName(label: string): string {
   const iconMap: Record<string, string> = {
+    Bluesky: 'heroicons:cloud',
+    CodePen: 'heroicons:code-bracket-square',
+    Discord: 'heroicons:chat-bubble-bottom-center-text',
+    Email: 'heroicons:envelope',
     GitHub: 'heroicons:code-bracket',
     LinkedIn: 'heroicons:user-circle',
-    Twitter: 'heroicons:at-symbol',
-    Email: 'heroicons:envelope',
-    Bluesky: 'heroicons:cloud',
     Mastodon: 'heroicons:chat-bubble-left-right',
-    YouTube: 'heroicons:video-camera',
     Twitch: 'heroicons:tv',
-    Discord: 'heroicons:chat-bubble-bottom-center-text',
-    CodePen: 'heroicons:code-bracket-square',
+    Twitter: 'heroicons:at-symbol',
+    YouTube: 'heroicons:video-camera',
   }
   return iconMap[label] ?? 'heroicons:link'
 }

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Button from './Button.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Button from './Button.astro'
 
 describe('Button.astro', () => {
   describe('Rendering', () => {
@@ -27,7 +27,7 @@ describe('Button.astro', () => {
 
     it('should render with variant classes applied', async () => {
       const root = await renderAstroComponent(Button, {
-        props: { variant: 'solid', color: 'primary' },
+        props: { color: 'primary', variant: 'solid' },
       })
 
       const button = root.querySelector('button')
@@ -40,7 +40,7 @@ describe('Button.astro', () => {
       })
 
       const button = root.querySelector('button')
-      expect(button?.classList.contains('custom-btn')).toBe(true)
+      expect(button?.classList.contains('custom-btn')).toBeTruthy()
       expect(button).toHaveClasses(['inline-flex']) // Base class still present
     })
   })
@@ -81,7 +81,7 @@ describe('Button.astro', () => {
       })
 
       const button = root.querySelector('button')
-      expect(button?.disabled).toBe(false)
+      expect(button?.disabled).toBeFalsy()
     })
 
     it('should apply disabled attribute when true', async () => {
@@ -90,14 +90,14 @@ describe('Button.astro', () => {
       })
 
       const button = root.querySelector('button')
-      expect(button?.disabled).toBe(true)
+      expect(button?.disabled).toBeTruthy()
     })
   })
 
   describe('HTML Attributes', () => {
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Button, {
-        props: { id: 'test-btn', 'data-testid': 'button', 'aria-label': 'Test button' },
+        props: { 'aria-label': 'Test button', 'data-testid': 'button', id: 'test-btn' },
       })
 
       const button = root.querySelector('button')

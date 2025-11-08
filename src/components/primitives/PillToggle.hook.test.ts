@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, screen } from '@testing-library/dom'
-
-import { initializeToggles, setupToggles } from './PillToggle.hook'
+import { describe, expect, it, vi } from 'vitest'
 
 import { setupTestDOM } from '@test/testHelpers'
+
+import { initializeToggles, setupToggles } from './PillToggle.hook'
 
 describe('Toggle Button System', () => {
   describe('initializeToggles', () => {

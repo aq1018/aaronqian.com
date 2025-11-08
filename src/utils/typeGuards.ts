@@ -111,7 +111,7 @@ export function getElementById(id: string): HTMLElement | null {
  * }
  */
 export function isNonNull<T>(value: T | null | undefined): value is NonNullable<T> {
-  return value != null && value !== undefined
+  return value != null
 }
 
 /**
@@ -146,7 +146,7 @@ export function assertNonNull<T>(
   value: T | null | undefined,
   message = 'Expected non-null value',
 ): asserts value is NonNullable<T> {
-  if (value == null || value === undefined) {
+  if (value == null) {
     throw new Error(message)
   }
 }

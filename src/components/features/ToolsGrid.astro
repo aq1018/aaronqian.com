@@ -9,7 +9,7 @@ import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
 
 export interface Props {
-  tools: Array<CollectionEntry<'devTools'> | CollectionEntry<'benchTools'>>
+  tools: (CollectionEntry<'devTools'> | CollectionEntry<'benchTools'>)[]
   title?: string
   class?: string
 }
@@ -34,7 +34,7 @@ for (const category in groupedTools) {
 
 <Stack space="lg" class={className}>
   {
-    title !== undefined && (
+    title && (
       <Heading as="h2" size="h2">
         {title}
       </Heading>
@@ -50,7 +50,7 @@ for (const category in groupedTools) {
           {categoryTools.map((tool) => (
             <Sheet variant="bar" padding="sm">
               <Stack space="xs">
-                {tool.data.url === undefined ? (
+                {tool.data.url == null ? (
                   <Heading as="h4" size="h6">
                     {tool.data.name}
                   </Heading>

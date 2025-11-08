@@ -39,7 +39,7 @@ const labels = angles.map((angle) => {
   const labelX = centerX + labelDistance * Math.cos(radians)
   const labelY = bottomY - labelDistance * Math.sin(radians)
   const angleText = `${Math.round(angle)}°`
-  return { labelX, labelY, angleText }
+  return { angleText, labelX, labelY }
 })
 ---
 

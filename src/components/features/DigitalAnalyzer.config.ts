@@ -2,7 +2,6 @@
  * Default configuration for digital analyzer signal visualization
  * Dimensions are calculated dynamically at runtime based on container size
  */
-
 import type { DigitalAnalyzerOptions } from './DigitalAnalyzer.types'
 
 export const defaultOptions: Required<DigitalAnalyzerOptions> = {

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Link from './Link.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Link from './Link.astro'
 
 describe('Link.astro', () => {
   describe('Rendering', () => {
@@ -36,7 +36,7 @@ describe('Link.astro', () => {
 
     it('should render with variant classes applied', async () => {
       const root = await renderAstroComponent(Link, {
-        props: { href: '/test', variant: 'nav', active: true },
+        props: { active: true, href: '/test', variant: 'nav' },
       })
 
       const a = root.querySelector('a')
@@ -45,17 +45,17 @@ describe('Link.astro', () => {
 
     it('should merge custom classes with variant classes', async () => {
       const root = await renderAstroComponent(Link, {
-        props: { href: '/test', class: 'custom-link' },
+        props: { class: 'custom-link', href: '/test' },
       })
 
       const a = root.querySelector('a')
-      expect(a?.classList.contains('custom-link')).toBe(true)
+      expect(a?.classList.contains('custom-link')).toBeTruthy()
       expect(a).toHaveClasses(['transition-colors'])
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Link, {
-        props: { href: '/test', id: 'test-link', 'data-testid': 'link' },
+        props: { 'data-testid': 'link', href: '/test', id: 'test-link' },
       })
 
       const a = root.querySelector('a')
@@ -77,7 +77,7 @@ describe('Link.astro', () => {
 
     it('should set target and rel for external links (http)', async () => {
       const root = await renderAstroComponent(Link, {
-        props: { href: 'https://example.com', external: true },
+        props: { external: true, href: 'https://example.com' },
       })
 
       const a = root.querySelector('a')
@@ -87,7 +87,7 @@ describe('Link.astro', () => {
 
     it('should respect explicit external prop', async () => {
       const root = await renderAstroComponent(Link, {
-        props: { href: '/path', external: true },
+        props: { external: true, href: '/path' },
       })
 
       const a = root.querySelector('a')

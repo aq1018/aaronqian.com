@@ -2,7 +2,6 @@
  * Feature component lifecycle hooks
  * Initialize all feature component hooks
  */
-
 import { setupComments } from './Comments.hook'
 import { setupDigitalAnalyzer } from './DigitalAnalyzer.hook'
 import { setupDecoderToggle } from './DigitalAnalyzerDecoderToggle.hook'

@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { gridContainerCva, gridItemCva } from './Grid.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { gridContainerCva, gridItemCva } from './Grid.cva'
 
 describe('Grid.cva - Container', () => {
   testBaseClasses(gridContainerCva, ['grid'])
@@ -79,7 +79,7 @@ describe('Grid.cva - Container', () => {
 
   testEdgeCases(
     gridContainerCva,
-    { columns: 12, spacing: 'md', direction: 'row', justify: 'stretch', align: 'stretch' },
+    { align: 'stretch', columns: 12, direction: 'row', justify: 'stretch', spacing: 'md' },
     ['grid', 'grid-cols-12'],
   )
 
@@ -246,7 +246,7 @@ describe('Grid.cva - Item', () => {
 
       justifySelfValues.forEach((justifySelf) => {
         alignSelfValues.forEach((alignSelf) => {
-          const result = gridItemCva({ justifySelf, alignSelf })
+          const result = gridItemCva({ alignSelf, justifySelf })
           // Both auto will be empty string
           if (justifySelf === 'auto' && alignSelf === 'auto') {
             expect(result).toBe('')

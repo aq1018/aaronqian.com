@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
 import GradientMask from '@/components/features/CuttingMatGradientMask.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('GradientMask', () => {
   it('should create a defs element', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
     const defs = root.querySelector('defs')
 
@@ -15,7 +16,7 @@ describe('GradientMask', () => {
 
   it('should contain gradient and mask elements', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const gradient = root.querySelector('radialGradient')
@@ -27,7 +28,7 @@ describe('GradientMask', () => {
 
   it('should create gradient with correct id', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const gradient = root.querySelector('radialGradient')
@@ -36,7 +37,7 @@ describe('GradientMask', () => {
 
   it('should create radial gradient', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const gradient = root.querySelector('radialGradient')
@@ -45,7 +46,7 @@ describe('GradientMask', () => {
 
   it('should create gradient with 4 stops', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const stops = root.querySelectorAll('stop')
@@ -54,7 +55,7 @@ describe('GradientMask', () => {
 
   it('should create gradient stops with correct offsets', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const stops = root.querySelectorAll('stop')
@@ -66,7 +67,7 @@ describe('GradientMask', () => {
 
   it('should create gradient stops with correct opacity', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const stops = root.querySelectorAll('stop')
@@ -78,7 +79,7 @@ describe('GradientMask', () => {
 
   it('should create mask with correct id', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const mask = root.querySelector('mask')
@@ -87,7 +88,7 @@ describe('GradientMask', () => {
 
   it('should create mask ellipse with correct dimensions', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const ellipse = root.querySelector('mask ellipse')
@@ -99,7 +100,7 @@ describe('GradientMask', () => {
 
   it('should create mask ellipse referencing gradient', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 4000, height: 4000 },
+      props: { height: 4000, width: 4000 },
     })
 
     const ellipse = root.querySelector('mask ellipse')
@@ -108,7 +109,7 @@ describe('GradientMask', () => {
 
   it('should handle different dimensions', async () => {
     const root = await renderAstroComponent(GradientMask, {
-      props: { width: 2000, height: 3000 },
+      props: { height: 3000, width: 2000 },
     })
 
     const ellipse = root.querySelector('mask ellipse')

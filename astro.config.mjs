@@ -1,45 +1,43 @@
 // @ts-check
 import tailwindcss from '@tailwindcss/vite'
-import { defineConfig, envField } from 'astro/config'
 import icon from 'astro-icon'
+import { defineConfig, envField } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [icon()],
-
   env: {
     schema: {
-      GISCUS_REPO: envField.string({
-        context: 'client',
-        access: 'public',
-        optional: false,
-      }),
-      GISCUS_REPO_ID: envField.string({
-        context: 'client',
-        access: 'public',
-        optional: false,
-      }),
       GISCUS_CATEGORY: envField.string({
-        context: 'client',
         access: 'public',
+        context: 'client',
         optional: false,
       }),
       GISCUS_CATEGORY_ID: envField.string({
-        context: 'client',
         access: 'public',
+        context: 'client',
+        optional: false,
+      }),
+      GISCUS_REPO: envField.string({
+        access: 'public',
+        context: 'client',
+        optional: false,
+      }),
+      GISCUS_REPO_ID: envField.string({
+        access: 'public',
+        context: 'client',
         optional: false,
       }),
     },
   },
-
+  integrations: [icon()],
   vite: {
     plugins: [tailwindcss()],
     server: {
-      watch: {
-        ignored: ['**/*.test.ts', '**/*.spec.ts'],
-      },
       headers: {
         'Access-Control-Allow-Origin': '*',
+      },
+      watch: {
+        ignored: ['**/*.test.ts', '**/*.spec.ts'],
       },
     },
   },

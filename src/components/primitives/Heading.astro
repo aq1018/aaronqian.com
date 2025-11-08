@@ -1,7 +1,8 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 
-import { type HeadingStyle, headingVariants } from './typography.cva'
+import { headingVariants } from './typography.cva'
+import type { HeadingStyle } from './typography.cva'
 
 import { cn } from '@/lib/utils'
 
@@ -30,49 +31,61 @@ const {
 
 const classes = cn(
   headingVariants({
-    size,
     align,
+    break: breakProp,
     color,
     family,
-    transform,
-    whitespace,
-    truncate,
-    break: breakProp,
     line,
     preset,
+    size,
+    transform,
+    truncate,
+    whitespace,
   }),
   className,
 )
 
 // Map size → numeric level
-const level =
-  size === 'display-2' || size === 'display-1' || size === 'h1'
-    ? 1
-    : size === 'h2'
-      ? 2
-      : size === 'h3'
-        ? 3
-        : size === 'h4'
-          ? 4
-          : size === 'h5'
-            ? 5
-            : 6
+const level = (() => {
+  if (size === 'display-2' || size === 'display-1' || size === 'h1') {
+    return 1
+  }
+  if (size === 'h2') {
+    return 2
+  }
+  if (size === 'h3') {
+    return 3
+  }
+  if (size === 'h4') {
+    return 4
+  }
+  if (size === 'h5') {
+    return 5
+  }
+  return 6
+})()
 
 // Infer tag from level (no assertions)
 const inferredTag = (() => {
   switch (level) {
-    case 1:
+    case 1: {
       return 'h1' as const
-    case 2:
+    }
+    case 2: {
       return 'h2' as const
-    case 3:
+    }
+    case 3: {
       return 'h3' as const
-    case 4:
+    }
+    case 4: {
       return 'h4' as const
-    case 5:
+    }
+    case 5: {
       return 'h5' as const
-    default:
+    }
+    default: {
       return 'h6' as const
+    }
   }
 })()
 
@@ -80,7 +93,7 @@ const tag: AsTag = as ?? inferredTag
 const isHeadingTag =
   tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4' || tag === 'h5' || tag === 'h6'
 
-const roleAttrs = isHeadingTag ? {} : { role: 'heading' as const, 'aria-level': `${level}` }
+const roleAttrs = isHeadingTag ? {} : { 'aria-level': `${level}`, role: 'heading' as const }
 const finalAttrs: HTMLAttributes<'h1'> = { ...rest, ...roleAttrs }
 ---
 

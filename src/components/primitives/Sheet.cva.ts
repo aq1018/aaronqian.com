@@ -1,4 +1,5 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 /**
  * Color options (matches Button component)
@@ -27,87 +28,87 @@ const colors = [
  * - bar: Left border with opacity shift on hover
  */
 export const sheetCva = cva(['overflow-hidden'], {
-  variants: {
-    variant: {
-      outline: 'border-2 rounded',
-      soft: '',
-      bar: 'bg-transparent border-l-2',
-    },
-    color: {
-      primary: '',
-      accent: '',
-      secondary: '',
-      neutral: '',
-      danger: '',
-      success: '',
-      warning: '',
-      info: '',
-    },
-    padding: {
-      none: 'p-0',
-      sm: 'p-4',
-      md: 'p-6',
-      lg: 'p-8',
-    },
-    hover: {
-      true: 'transition-colors',
-      false: '',
-    },
-  },
   compoundVariants: [
     // Outline variant with hover
     ...colors.flatMap((color) => [
       {
-        variant: 'outline' as const,
+        class: `border-${color} hover:bg-${color}/5`,
         color,
         hover: true,
-        class: `border-${color} hover:bg-${color}/5`,
+        variant: 'outline' as const,
       },
       {
-        variant: 'outline' as const,
+        class: `border-${color}`,
         color,
         hover: false,
-        class: `border-${color}`,
+        variant: 'outline' as const,
       },
     ]),
 
     // Soft variant with hover
     ...colors.flatMap((color) => [
       {
-        variant: 'soft' as const,
+        class: `bg-${color}/10 hover:bg-${color}/15`,
         color,
         hover: true,
-        class: `bg-${color}/10 hover:bg-${color}/15`,
+        variant: 'soft' as const,
       },
       {
-        variant: 'soft' as const,
+        class: `bg-${color}/10`,
         color,
         hover: false,
-        class: `bg-${color}/10`,
+        variant: 'soft' as const,
       },
     ]),
 
     // Bar variant with hover (left border opacity shift)
     ...colors.flatMap((color) => [
       {
-        variant: 'bar' as const,
+        class: `border-l-neutral/30 hover:border-l-${color}`,
         color,
         hover: true,
-        class: `border-l-neutral/30 hover:border-l-${color}`,
+        variant: 'bar' as const,
       },
       {
-        variant: 'bar' as const,
+        class: `border-l-${color}/30`,
         color,
         hover: false,
-        class: `border-l-${color}/30`,
+        variant: 'bar' as const,
       },
     ]),
   ],
   defaultVariants: {
-    variant: 'outline',
     color: 'neutral',
-    padding: 'md',
     hover: false,
+    padding: 'md',
+    variant: 'outline',
+  },
+  variants: {
+    color: {
+      accent: '',
+      danger: '',
+      info: '',
+      neutral: '',
+      primary: '',
+      secondary: '',
+      success: '',
+      warning: '',
+    },
+    hover: {
+      false: '',
+      true: 'transition-colors',
+    },
+    padding: {
+      lg: 'p-8',
+      md: 'p-6',
+      none: 'p-0',
+      sm: 'p-4',
+    },
+    variant: {
+      bar: 'bg-transparent border-l-2',
+      outline: 'border-2 rounded',
+      soft: '',
+    },
   },
 })
 

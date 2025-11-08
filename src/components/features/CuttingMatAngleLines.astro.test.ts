@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import AngleLines from '@/components/features/CuttingMatAngleLines.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('AngleLines', () => {
@@ -14,7 +15,7 @@ describe('AngleLines', () => {
 
   it('should create correct number of line elements', async () => {
     const root = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount, opacity, strokeWidth },
+      props: { angleLineCount, height, opacity, strokeWidth, width },
     })
     const lines = root.querySelectorAll('line')
 
@@ -23,7 +24,7 @@ describe('AngleLines', () => {
 
   it('should create lines starting at bottom center', async () => {
     const root = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount, opacity, strokeWidth },
+      props: { angleLineCount, height, opacity, strokeWidth, width },
     })
     const lines = root.querySelectorAll('line')
 
@@ -35,7 +36,7 @@ describe('AngleLines', () => {
 
   it('should distribute angles evenly from 30° to 150°', async () => {
     const root = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount: 5, opacity, strokeWidth },
+      props: { angleLineCount: 5, height, opacity, strokeWidth, width },
     })
     const lines = root.querySelectorAll('line')
 
@@ -55,7 +56,7 @@ describe('AngleLines', () => {
 
   it('should apply correct opacity', async () => {
     const root = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount, opacity, strokeWidth },
+      props: { angleLineCount, height, opacity, strokeWidth, width },
     })
     const lines = root.querySelectorAll('line')
 
@@ -66,7 +67,7 @@ describe('AngleLines', () => {
 
   it('should apply correct stroke width', async () => {
     const root = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount, opacity, strokeWidth },
+      props: { angleLineCount, height, opacity, strokeWidth, width },
     })
     const lines = root.querySelectorAll('line')
 
@@ -77,10 +78,10 @@ describe('AngleLines', () => {
 
   it('should handle different angle line counts', async () => {
     const root3 = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount: 3, opacity, strokeWidth },
+      props: { angleLineCount: 3, height, opacity, strokeWidth, width },
     })
     const root7 = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount: 7, opacity, strokeWidth },
+      props: { angleLineCount: 7, height, opacity, strokeWidth, width },
     })
 
     const lines3 = root3.querySelectorAll('line')
@@ -92,7 +93,7 @@ describe('AngleLines', () => {
 
   it('should create lines long enough to reach edge of canvas', async () => {
     const root = await renderAstroComponent(AngleLines, {
-      props: { width, height, angleLineCount, opacity, strokeWidth },
+      props: { angleLineCount, height, opacity, strokeWidth, width },
     })
     const lines = root.querySelectorAll('line')
 

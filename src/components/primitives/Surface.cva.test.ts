@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { surfaceCva } from './Surface.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { surfaceCva } from './Surface.cva'
 
 describe('Surface.cva', () => {
   testBaseClasses(surfaceCva, ['relative', 'w-full'])

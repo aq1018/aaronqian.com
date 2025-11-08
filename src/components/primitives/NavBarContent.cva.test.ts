@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { navBarContentCva } from './NavBarContent.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { navBarContentCva } from './NavBarContent.cva'
 
 describe('NavBarContent.cva', () => {
   testBaseClasses(navBarContentCva, ['flex', 'flex-row', 'items-center', 'justify-between'])

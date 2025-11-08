@@ -28,24 +28,24 @@ describe('CuttingMat Types', () => {
       }
 
       expect(options.majorLineInterval).toBe(100)
-      expect(options.showTeeth).toBe(false)
+      expect(options.showTeeth).toBeFalsy()
     })
 
     it('should accept all options', () => {
       const options: CuttingMatOptions = {
-        majorLineInterval: 200,
-        majorMinorRatio: 5,
+        angleLabelArcIndex: 2,
+        angleLineCount: 5,
+        angleMarkRadius: 1.5,
         arcCount: 3,
         arcRadiusInterval: 1,
-        angleLineCount: 5,
-        angleLabelArcIndex: 2,
-        showTeeth: true,
-        angleMarkRadius: 1.5,
-        majorOpacity: 0.175,
-        minorOpacity: 0.12,
         labelOpacity: 0.175,
+        majorLineInterval: 200,
+        majorMinorRatio: 5,
+        majorOpacity: 0.175,
         majorStrokeWidth: 1.5,
+        minorOpacity: 0.12,
         minorStrokeWidth: 1,
+        showTeeth: true,
       }
 
       expect(options.majorLineInterval).toBe(200)
@@ -54,7 +54,7 @@ describe('CuttingMat Types', () => {
       expect(options.arcRadiusInterval).toBe(1)
       expect(options.angleLineCount).toBe(5)
       expect(options.angleLabelArcIndex).toBe(2)
-      expect(options.showTeeth).toBe(true)
+      expect(options.showTeeth).toBeTruthy()
       expect(options.angleMarkRadius).toBe(1.5)
       expect(options.majorOpacity).toBe(0.175)
       expect(options.minorOpacity).toBe(0.12)

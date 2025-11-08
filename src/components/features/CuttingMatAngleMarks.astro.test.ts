@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import AngleMarks from '@/components/features/CuttingMatAngleMarks.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('AngleMarks', () => {
@@ -17,13 +18,13 @@ describe('AngleMarks', () => {
   it('should create two path elements (left and right arcs)', async () => {
     const root = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount,
-        minorInterval,
         angleMarkRadius,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -34,13 +35,13 @@ describe('AngleMarks', () => {
   it('should calculate angle mark arc radius correctly', async () => {
     const root = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount,
-        minorInterval,
         angleMarkRadius,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -56,13 +57,13 @@ describe('AngleMarks', () => {
   it('should create right arc from x-axis to first angle line', async () => {
     const root = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount: 5,
-        minorInterval,
         angleMarkRadius,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -78,13 +79,13 @@ describe('AngleMarks', () => {
   it('should create left arc from last angle line to x-axis', async () => {
     const root = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount: 5,
-        minorInterval,
         angleMarkRadius,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -100,13 +101,13 @@ describe('AngleMarks', () => {
   it('should apply correct opacity', async () => {
     const root = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount,
-        minorInterval,
         angleMarkRadius,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -119,13 +120,13 @@ describe('AngleMarks', () => {
   it('should apply correct stroke width', async () => {
     const root = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount,
-        minorInterval,
         angleMarkRadius,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -138,24 +139,24 @@ describe('AngleMarks', () => {
   it('should handle different angle mark radius', async () => {
     const root1 = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount,
-        minorInterval,
         angleMarkRadius: 1,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
     const root2 = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount,
-        minorInterval,
         angleMarkRadius: 3,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 
@@ -172,13 +173,13 @@ describe('AngleMarks', () => {
   it('should handle single angle line', async () => {
     const root = await renderAstroComponent(AngleMarks, {
       props: {
-        width,
-        height,
         angleLineCount: 1,
-        minorInterval,
         angleMarkRadius,
+        height,
+        minorInterval,
         opacity,
         strokeWidth,
+        width,
       },
     })
 

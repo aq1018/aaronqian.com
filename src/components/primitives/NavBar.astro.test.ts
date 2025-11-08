@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import NavBar from './NavBar.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import NavBar from './NavBar.astro'
 
 describe('NavBar.astro', () => {
   describe('Rendering', () => {
@@ -27,7 +27,7 @@ describe('NavBar.astro', () => {
 
     it('should render with variant classes applied', async () => {
       const root = await renderAstroComponent(NavBar, {
-        props: { position: 'sticky', placement: 'top', backdrop: true },
+        props: { backdrop: true, placement: 'top', position: 'sticky' },
       })
 
       const nav = root.querySelector('nav')
@@ -40,13 +40,13 @@ describe('NavBar.astro', () => {
       })
 
       const nav = root.querySelector('nav')
-      expect(nav?.classList.contains('custom-navbar')).toBe(true)
+      expect(nav?.classList.contains('custom-navbar')).toBeTruthy()
       expect(nav).toHaveClasses(['w-full'])
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(NavBar, {
-        props: { id: 'test-navbar', 'data-testid': 'navbar' },
+        props: { 'data-testid': 'navbar', id: 'test-navbar' },
       })
 
       const nav = root.querySelector('nav')

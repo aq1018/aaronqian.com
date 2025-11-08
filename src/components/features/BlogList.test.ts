@@ -1,25 +1,25 @@
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it } from 'vitest'
 
-import BlogList from './BlogList.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import BlogList from './BlogList.astro'
 
 const createMockPost = (
   id: string,
   title: string,
   date: Date,
 ): Partial<CollectionEntry<'blog'>> => ({
-  id,
-  collection: 'blog',
   body: '',
+  collection: 'blog',
   data: {
-    title,
-    description: `Description for ${title}`,
     date,
+    description: `Description for ${title}`,
     draft: false,
     tags: ['tag1', 'tag2'],
+    title,
   },
+  id,
   slug: id.replace(/\/index(\.md)?$/, ''),
 })
 
@@ -34,9 +34,9 @@ describe('BlogList', () => {
       })
 
       const links = root.querySelectorAll('a')
-      const postLink = Array.from(links).find((link) => link.textContent.trim() === 'Post A')
+      const postLink = [...links].find((link) => link.textContent.trim() === 'Post A')
       expect(postLink).toBeDefined()
-      if (postLink !== undefined) {
+      if (postLink) {
         expect(postLink.getAttribute('href')).toBe('/blog/post-a')
       }
     })
@@ -117,8 +117,8 @@ describe('BlogList', () => {
       const footerText = 'New posts whenever inspiration strikes.'
       const root = await renderAstroComponent(BlogList, {
         props: {
-          posts,
           footer: footerText,
+          posts,
         },
       })
 
@@ -130,8 +130,8 @@ describe('BlogList', () => {
       const customFooter = 'Custom footer message'
       const root = await renderAstroComponent(BlogList, {
         props: {
-          posts,
           footer: customFooter,
+          posts,
         },
       })
 
@@ -187,11 +187,11 @@ describe('BlogList', () => {
       })
 
       const links = root.querySelectorAll('a')
-      const postALink = Array.from(links).find((link) => link.textContent.trim().includes('Post A'))
-      const postBLink = Array.from(links).find((link) => link.textContent.trim().includes('Post B'))
-      const postCLink = Array.from(links).find((link) => link.textContent.trim().includes('Post C'))
+      const postALink = [...links].find((link) => link.textContent.trim().includes('Post A'))
+      const postBLink = [...links].find((link) => link.textContent.trim().includes('Post B'))
+      const postCLink = [...links].find((link) => link.textContent.trim().includes('Post C'))
 
-      if (postALink !== undefined && postBLink !== undefined && postCLink !== undefined) {
+      if (postALink && postBLink && postCLink) {
         expect(postALink.getAttribute('href')).toBe('/blog/post-a')
         expect(postBLink.getAttribute('href')).toBe('/blog/post-b')
         expect(postCLink.getAttribute('href')).toBe('/blog/post-c')

@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { bleedCva } from './Bleed.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { bleedCva } from './Bleed.cva'
 
 describe('Bleed.cva', () => {
   testBaseClasses(bleedCva, [])

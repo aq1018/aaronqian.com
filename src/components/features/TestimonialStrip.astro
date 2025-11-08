@@ -1,5 +1,6 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 
 import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
@@ -12,9 +13,11 @@ export interface Props {
 const { class: className } = Astro.props
 
 // Fetch enabled testimonials, sorted by position, limited to 2
-const testimonials = (
-  await getCollection('testimonials', ({ data }: CollectionEntry<'testimonials'>) => data.enabled)
+const testimonialsCollection = await getCollection(
+  'testimonials',
+  ({ data }: CollectionEntry<'testimonials'>) => data.enabled,
 )
+const testimonials = testimonialsCollection
   .toSorted(
     (a: CollectionEntry<'testimonials'>, b: CollectionEntry<'testimonials'>) =>
       a.data.position - b.data.position,
@@ -33,7 +36,7 @@ const testimonials = (
             </Text>
             <Text size="small" color="muted">
               — {testimonial.data.author}
-              {testimonial.data.title !== undefined && `, ${testimonial.data.title}`}
+              {testimonial.data.title && `, ${testimonial.data.title}`}
             </Text>
           </Stack>
         </Sheet>

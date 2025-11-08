@@ -43,7 +43,7 @@ const { post } = Astro.props
       <div>
         <Text class="mb-2 leading-relaxed">{post.data.description}</Text>
         {
-          post.data.tags !== undefined && post.data.tags.length > 0 && (
+          post.data.tags && post.data.tags.length > 0 && (
             <Cluster space="xs">
               {post.data.tags.map((tag: string) => (
                 <Badge color="neutral" size="sm">

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import AngleLabels from '@/components/features/CuttingMatAngleLabels.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('AngleLabels', () => {
@@ -16,12 +17,12 @@ describe('AngleLabels', () => {
   it('should create text elements for each angle', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 
@@ -33,12 +34,12 @@ describe('AngleLabels', () => {
   it('should create background and foreground text pairs', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount: 5,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount: 5,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 
@@ -56,12 +57,12 @@ describe('AngleLabels', () => {
   it('should display correct angle values', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount: 5,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount: 5,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 
@@ -77,12 +78,12 @@ describe('AngleLabels', () => {
   it('should position labels above the specified arc', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 
@@ -105,12 +106,12 @@ describe('AngleLabels', () => {
   it('should apply opacity to foreground text only', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 
@@ -124,12 +125,12 @@ describe('AngleLabels', () => {
   it('should use CSS variable for background color', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 
@@ -145,12 +146,12 @@ describe('AngleLabels', () => {
   it('should set correct text attributes', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 
@@ -167,12 +168,12 @@ describe('AngleLabels', () => {
   it('should create background with stroke for halo effect', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
-        width,
-        height,
-        angleLineCount,
         angleLabelArcIndex,
-        majorLineInterval,
+        angleLineCount,
+        height,
         labelOpacity,
+        majorLineInterval,
+        width,
       },
     })
 

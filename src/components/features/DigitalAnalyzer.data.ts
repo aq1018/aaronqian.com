@@ -2,7 +2,6 @@
  * Data source management for digital analyzer signal visualization
  * Manages binary data generation and message position tracking
  */
-
 import { generateRandomBinary, stringToBinary } from '@/components/features/DigitalAnalyzer.utils'
 
 /**
@@ -94,12 +93,13 @@ export class DataSourceManager {
         return { binaryData, currentChunk: chunk, shouldClear }
       }
 
-      case 'random':
+      case 'random': {
         return {
           binaryData: generateRandomBinary(this.options.bitCount),
           currentChunk: '',
           shouldClear: false,
         }
+      }
     }
   }
 

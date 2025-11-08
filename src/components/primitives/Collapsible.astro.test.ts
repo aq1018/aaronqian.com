@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Collapsible from './Collapsible.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Collapsible from './Collapsible.astro'
 
 describe('Collapsible.astro', () => {
   describe('Rendering', () => {
@@ -48,13 +48,13 @@ describe('Collapsible.astro', () => {
       })
 
       const wrapper = root.querySelector('div')
-      expect(wrapper?.classList.contains('custom-class')).toBe(true)
+      expect(wrapper?.classList.contains('custom-class')).toBeTruthy()
       expect(wrapper).toHaveClasses(['grid'])
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Collapsible, {
-        props: { id: 'test-collapsible', 'data-testid': 'collapsible' },
+        props: { 'data-testid': 'collapsible', id: 'test-collapsible' },
       })
 
       const wrapper = root.querySelector('div')

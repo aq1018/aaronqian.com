@@ -8,14 +8,14 @@
 
 type CleanupFunction = () => void
 
-let cleanup: CleanupFunction | null = null
+let cleanup: CleanupFunction | null
 
 /**
  * Check if modifier key is pressed based on configuration
  */
 function isModifierPressed(
   e: KeyboardEvent,
-  keyboardModifier: string | null,
+  keyboardModifier: string | undefined,
   isMac: boolean,
 ): boolean {
   if (keyboardModifier == null || keyboardModifier === '') {
@@ -49,7 +49,7 @@ function isModifierPressed(
  */
 function toggleCollapsible(target: string): void {
   const collapsible = document.querySelector<HTMLElement>(`[data-collapsible-id="${target}"]`)
-  if (collapsible != null) {
+  if (collapsible) {
     const isOpen = collapsible.dataset.open === 'true'
     const newState = !isOpen
 
@@ -58,7 +58,7 @@ function toggleCollapsible(target: string): void {
 
     // Update trigger state
     const triggerElement = document.querySelector(`[data-collapsible-trigger="${target}"]`)
-    if (triggerElement != null) {
+    if (triggerElement) {
       triggerElement.setAttribute('aria-expanded', String(newState))
     }
   }
@@ -70,11 +70,13 @@ function toggleCollapsible(target: string): void {
 function createKeyboardHandler(
   target: string,
   keyboardKey: string,
-  keyboardModifier: string | null,
+  keyboardModifier: string | undefined,
   isMac: boolean,
 ): EventListener {
   return (evt: Event) => {
-    if (!(evt instanceof KeyboardEvent)) return
+    if (!(evt instanceof KeyboardEvent)) {
+      return
+    }
 
     if (
       isModifierPressed(evt, keyboardModifier, isMac) &&
@@ -96,7 +98,7 @@ function processWrapper(
 ): void {
   const target = wrapper.dataset.decoderTarget
   const keyboardKey = wrapper.dataset.keyboardKey
-  const keyboardModifier = wrapper.dataset.keyboardModifier ?? null
+  const keyboardModifier = wrapper.dataset.keyboardModifier
 
   if (target == null || target === '') {
     if (import.meta.env.DEV) {
@@ -137,7 +139,7 @@ function processWrapper(
  * 3. Sets up keyboard shortcuts based on data attributes
  */
 export function initializeDecoderToggles(): CleanupFunction {
-  if (cleanup != null) {
+  if (cleanup) {
     cleanup()
   }
 
@@ -172,7 +174,7 @@ export function setupDecoderToggle(): void {
 
   // Cleanup before page swap to prevent memory leaks
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup != null) {
+    if (cleanup) {
       cleanup()
     }
   })

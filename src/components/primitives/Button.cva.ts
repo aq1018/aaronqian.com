@@ -1,4 +1,5 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 // Color options for button variants
 const colors = [
@@ -36,74 +37,74 @@ export const buttonVariants = cva(
     'disabled:opacity-50',
   ],
   {
-    variants: {
-      variant: {
-        solid: solidHover,
-        outline: `border-2 bg-transparent ${translucentHover}`,
-        soft: translucentHover,
-        ghost: `bg-transparent ${translucentHover}`,
-        link: 'bg-transparent underline-offset-4 hover:underline hover:brightness-110 cursor-pointer',
-      },
-      color: {
-        primary: 'focus-visible:outline-primary',
-        accent: 'focus-visible:outline-accent',
-        secondary: 'focus-visible:outline-secondary',
-        neutral: 'focus-visible:outline-neutral',
-        danger: 'focus-visible:outline-danger',
-        success: 'focus-visible:outline-success',
-        warning: 'focus-visible:outline-warning',
-        info: 'focus-visible:outline-info',
-      },
-      size: {
-        sm: 'px-3 py-1.5',
-        md: 'px-4 py-2',
-        lg: 'px-6 py-3',
-      },
-      fullWidth: {
-        true: 'w-full',
-      },
-    },
     compoundVariants: [
       // Solid: background + content color
       ...colors.map((color) => ({
-        variant: 'solid' as const,
-        color,
         class: `bg-${color} text-${color}-content`,
+        color,
+        variant: 'solid' as const,
       })),
 
       // Outline: border + text + translucent hover background
       ...colors.map((color) => ({
-        variant: 'outline' as const,
-        color,
         class: `border-${color} text-${color} hover:bg-${color}/10`,
+        color,
+        variant: 'outline' as const,
       })),
 
       // Soft: subtle background + text + translucent hover
       ...colors.map((color) => ({
-        variant: 'soft' as const,
-        color,
         class: `bg-${color}/20 text-${color} hover:bg-${color}/30`,
+        color,
+        variant: 'soft' as const,
       })),
 
       // Ghost: text + translucent hover background
       ...colors.map((color) => ({
-        variant: 'ghost' as const,
-        color,
         class: `text-${color} hover:bg-${color}/10`,
+        color,
+        variant: 'ghost' as const,
       })),
 
       // Link: text only
       ...colors.map((color) => ({
-        variant: 'link' as const,
-        color,
         class: `text-${color}`,
+        color,
+        variant: 'link' as const,
       })),
     ],
     defaultVariants: {
-      variant: 'solid',
       color: 'primary',
-      size: 'md',
       fullWidth: false,
+      size: 'md',
+      variant: 'solid',
+    },
+    variants: {
+      color: {
+        accent: 'focus-visible:outline-accent',
+        danger: 'focus-visible:outline-danger',
+        info: 'focus-visible:outline-info',
+        neutral: 'focus-visible:outline-neutral',
+        primary: 'focus-visible:outline-primary',
+        secondary: 'focus-visible:outline-secondary',
+        success: 'focus-visible:outline-success',
+        warning: 'focus-visible:outline-warning',
+      },
+      fullWidth: {
+        true: 'w-full',
+      },
+      size: {
+        lg: 'px-6 py-3',
+        md: 'px-4 py-2',
+        sm: 'px-3 py-1.5',
+      },
+      variant: {
+        ghost: `bg-transparent ${translucentHover}`,
+        link: 'bg-transparent underline-offset-4 hover:underline hover:brightness-110 cursor-pointer',
+        outline: `border-2 bg-transparent ${translucentHover}`,
+        soft: translucentHover,
+        solid: solidHover,
+      },
     },
   },
 )

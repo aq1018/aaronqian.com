@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { insetCva } from './Inset.cva'
-
 import {
   testAllVariants,
   testCompoundVariants,
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { insetCva } from './Inset.cva'
 
 describe('Inset.cva', () => {
   testDefaultVariants(insetCva, [

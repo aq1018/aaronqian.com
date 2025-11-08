@@ -30,15 +30,15 @@ const {
   cornerOpacity = 1,
   cornerSize = 40,
   corners = {},
-  showCorners = { topLeft: true, topRight: true, bottomLeft: true, bottomRight: true },
+  showCorners = { bottomLeft: true, bottomRight: true, topLeft: true, topRight: true },
   class: className,
 } = Astro.props
 
 // Dot spacing in pixels
 const spacingMap = {
-  sm: 20,
-  md: 24,
   lg: 32,
+  md: 24,
+  sm: 20,
 }
 
 const gridSpacing = spacingMap[spacing]

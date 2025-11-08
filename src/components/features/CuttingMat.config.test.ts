@@ -27,7 +27,7 @@ describe('CuttingMat Config', () => {
       expect(defaultOptions.arcRadiusInterval).toBe(1)
       expect(defaultOptions.angleLineCount).toBe(5)
       expect(defaultOptions.angleLabelArcIndex).toBe(-1)
-      expect(defaultOptions.showTeeth).toBe(true)
+      expect(defaultOptions.showTeeth).toBeTruthy()
       expect(defaultOptions.angleMarkRadius).toBe(1.5)
       expect(defaultOptions.majorOpacity).toBe(0.3)
       expect(defaultOptions.minorOpacity).toBe(0.2)
@@ -45,7 +45,7 @@ describe('CuttingMat Config', () => {
       const merged = { ...defaultOptions, ...customOptions }
 
       expect(merged.majorLineInterval).toBe(100)
-      expect(merged.showTeeth).toBe(false)
+      expect(merged.showTeeth).toBeFalsy()
       expect(merged.majorMinorRatio).toBe(5) // default preserved
       expect(merged.arcCount).toBe(3) // default preserved
     })

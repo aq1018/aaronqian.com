@@ -12,34 +12,34 @@ type ProjectLogEntry = CollectionEntry<'projectLogs'>
 
 // Mock project data
 const createProject = (id: string, title: string): ProjectEntry => ({
-  id,
+  body: '',
   collection: 'projects',
   data: {
-    title,
-    description: 'Test project',
-    status: 'active',
     aside: '',
+    description: 'Test project',
     live: false,
     order: 0,
+    status: 'active',
+    title,
   },
-  slug: id.replace(/\/index(\.md)?$/, ''),
+  id,
   render: vi.fn(),
-  body: '',
+  slug: id.replace(/\/index(\.md)?$/, ''),
 })
 
 // Mock project log data
 const createProjectLog = (id: string): ProjectLogEntry => ({
-  id,
+  body: '',
   collection: 'projectLogs',
   data: {
-    title: 'Test log',
     date: new Date(),
-    tags: [],
     project: '',
+    tags: [],
+    title: 'Test log',
   },
-  slug: id.replace(/\.md$/, ''),
+  id,
   render: vi.fn(),
-  body: '',
+  slug: id.replace(/\.md$/, ''),
 })
 
 describe('sortProjectsByLatestLog', () => {
@@ -252,8 +252,8 @@ describe('markLatestProjectAsLive', () => {
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
-    expect(marked[0].data.live).toBe(false) // project-a not marked
-    expect(marked[1].data.live).toBe(true) // project-b is latest
+    expect(marked[0].data.live).toBeFalsy() // project-a not marked
+    expect(marked[1].data.live).toBeTruthy() // project-b is latest
   })
 
   it('should not modify projects if none have logs', () => {
@@ -264,8 +264,8 @@ describe('markLatestProjectAsLive', () => {
 
     const marked = markLatestProjectAsLive(projects, [])
 
-    expect(marked[0].data.live).toBe(false)
-    expect(marked[1].data.live).toBe(false)
+    expect(marked[0].data.live).toBeFalsy()
+    expect(marked[1].data.live).toBeFalsy()
   })
 
   it('should not modify projects if projects array is empty', () => {
@@ -287,12 +287,12 @@ describe('markLatestProjectAsLive', () => {
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
     // Original should not be modified
-    expect(projects[0].data.live).toBe(false)
-    expect(projects[1].data.live).toBe(false)
+    expect(projects[0].data.live).toBeFalsy()
+    expect(projects[1].data.live).toBeFalsy()
 
     // New array should have marked project
-    expect(marked[0].data.live).toBe(true)
-    expect(marked[1].data.live).toBe(false)
+    expect(marked[0].data.live).toBeTruthy()
+    expect(marked[1].data.live).toBeFalsy()
   })
 
   it('should preserve other project data properties', () => {
@@ -304,7 +304,7 @@ describe('markLatestProjectAsLive', () => {
     expect(marked[0].data.title).toBe('Project A')
     expect(marked[0].data.description).toBe('Test project')
     expect(marked[0].data.status).toBe('active')
-    expect(marked[0].data.live).toBe(true)
+    expect(marked[0].data.live).toBeTruthy()
   })
 
   it('should only mark one project as live (the latest)', () => {
@@ -338,8 +338,8 @@ describe('markLatestProjectAsLive', () => {
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
-    expect(marked[0].data.live).toBe(false)
-    expect(marked[1].data.live).toBe(true) // project-b/index matched
-    expect(marked[2].data.live).toBe(false)
+    expect(marked[0].data.live).toBeFalsy()
+    expect(marked[1].data.live).toBeTruthy() // project-b/index matched
+    expect(marked[2].data.live).toBeFalsy()
   })
 })

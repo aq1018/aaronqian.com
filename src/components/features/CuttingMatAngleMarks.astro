@@ -54,5 +54,5 @@ if (angles.length > 0) {
 }
 ---
 
-{rightArc != null && <path d={rightArc.d} opacity={opacity} stroke-width={strokeWidth} />}
-{leftArc != null && <path d={leftArc.d} opacity={opacity} stroke-width={strokeWidth} />}
+{rightArc && <path d={rightArc.d} opacity={opacity} stroke-width={strokeWidth} />}
+{leftArc && <path d={leftArc.d} opacity={opacity} stroke-width={strokeWidth} />}

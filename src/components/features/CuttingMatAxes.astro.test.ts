@@ -1,16 +1,17 @@
 import { describe, expect, it } from 'vitest'
 
 import Axes from '@/components/features/CuttingMatAxes.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('Axes', () => {
   it('should create two line elements', async () => {
     const root = await renderAstroComponent(Axes, {
       props: {
-        width: 4000,
         height: 4000,
         opacity: 0.175,
         strokeWidth: 1.5,
+        width: 4000,
       },
     })
     const lines = root.querySelectorAll('line')
@@ -21,10 +22,10 @@ describe('Axes', () => {
   it('should create x-axis at bottom of canvas', async () => {
     const root = await renderAstroComponent(Axes, {
       props: {
-        width: 4000,
         height: 4000,
         opacity: 0.175,
         strokeWidth: 1.5,
+        width: 4000,
       },
     })
     const lines = root.querySelectorAll('line')
@@ -39,10 +40,10 @@ describe('Axes', () => {
   it('should create y-axis at center', async () => {
     const root = await renderAstroComponent(Axes, {
       props: {
-        width: 4000,
         height: 4000,
         opacity: 0.175,
         strokeWidth: 1.5,
+        width: 4000,
       },
     })
     const lines = root.querySelectorAll('line')
@@ -57,10 +58,10 @@ describe('Axes', () => {
   it('should apply opacity to both axes', async () => {
     const root = await renderAstroComponent(Axes, {
       props: {
-        width: 4000,
         height: 4000,
         opacity: 0.5,
         strokeWidth: 1.5,
+        width: 4000,
       },
     })
     const lines = root.querySelectorAll('line')
@@ -72,10 +73,10 @@ describe('Axes', () => {
   it('should apply stroke width to both axes', async () => {
     const root = await renderAstroComponent(Axes, {
       props: {
-        width: 4000,
         height: 4000,
         opacity: 0.175,
         strokeWidth: 2.5,
+        width: 4000,
       },
     })
     const lines = root.querySelectorAll('line')
@@ -87,10 +88,10 @@ describe('Axes', () => {
   it('should handle different dimensions', async () => {
     const root = await renderAstroComponent(Axes, {
       props: {
-        width: 2000,
         height: 3000,
         opacity: 0.175,
         strokeWidth: 1.5,
+        width: 2000,
       },
     })
     const lines = root.querySelectorAll('line')

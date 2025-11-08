@@ -10,7 +10,7 @@ interface ToggleState {
   menuMap: WeakMap<HTMLElement, HTMLElement>
 }
 
-let cleanup: CleanupFunction | null = null
+let cleanup: CleanupFunction | null
 
 /**
  * Build map of toggle buttons and their associated menus
@@ -24,7 +24,7 @@ function buildToggleMap(): ToggleState {
 
     // Check for explicit target via data-toggle-target attribute
     const targetId = button.dataset.toggleTarget
-    if (targetId !== undefined && targetId != null && targetId !== '') {
+    if (targetId != null && targetId !== '') {
       const targetMenu = document.querySelector<HTMLElement>(`#${targetId}`)
       if (targetMenu != null) {
         menuMap.set(button, targetMenu)
@@ -38,7 +38,7 @@ function buildToggleMap(): ToggleState {
     }
   })
 
-  return { toggleButtons, menuMap }
+  return { menuMap, toggleButtons }
 }
 
 /**
@@ -47,15 +47,21 @@ function buildToggleMap(): ToggleState {
 function createButtonClickHandler(state: ToggleState): EventListener {
   return (e: Event): void => {
     const target = e.target
-    if (!(target instanceof Element)) return
+    if (!(target instanceof Element)) {
+      return
+    }
 
     const button = target.closest<HTMLElement>('[data-toggle-button]')
-    if (button == null || !state.toggleButtons.has(button)) return
+    if (button == null || !state.toggleButtons.has(button)) {
+      return
+    }
 
     e.stopPropagation()
 
     const menu = state.menuMap.get(button)
-    if (menu === undefined) return
+    if (menu == null) {
+      return
+    }
 
     const isHidden = menu.classList.contains('hidden')
     menu.classList.toggle('hidden')
@@ -69,14 +75,18 @@ function createButtonClickHandler(state: ToggleState): EventListener {
 function createDocumentClickHandler(state: ToggleState): EventListener {
   return (e: Event): void => {
     const target = e.target
-    if (!(target instanceof Element)) return
+    if (!(target instanceof Element)) {
+      return
+    }
 
     const clickedButton = target.closest<HTMLElement>('[data-toggle-button]')
-    if (clickedButton != null && state.toggleButtons.has(clickedButton)) return
+    if (clickedButton != null && state.toggleButtons.has(clickedButton)) {
+      return
+    }
 
     state.toggleButtons.forEach((button) => {
       const menu = state.menuMap.get(button)
-      if (menu !== undefined) {
+      if (menu) {
         menu.classList.add('hidden')
         button.setAttribute('aria-expanded', 'false')
       }
@@ -89,7 +99,7 @@ function createDocumentClickHandler(state: ToggleState): EventListener {
  * Uses event delegation to avoid multiple listeners
  */
 export function initializeToggles(): CleanupFunction {
-  if (cleanup != null) {
+  if (cleanup) {
     cleanup()
   }
 
@@ -121,7 +131,7 @@ export function setupToggles(): void {
 
   // Cleanup before navigation
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup != null) {
+    if (cleanup) {
       cleanup()
     }
   })

@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('Leak?', () => {
   it('yes it leaks', () => {
-    expect(true).toBe(true)
+    expect(true).toBeTruthy()
   })
 })

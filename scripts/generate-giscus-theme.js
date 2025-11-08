@@ -15,13 +15,13 @@ import atImport from 'postcss-import'
 const themes = [
   {
     name: 'giscus-light',
-    source: 'src/styles/giscus-light.source.css',
     output: 'public/giscus-light.generated.css',
+    source: 'src/styles/giscus-light.source.css',
   },
   {
     name: 'giscus-dark',
-    source: 'src/styles/giscus-dark.source.css',
     output: 'public/giscus-dark.generated.css',
+    source: 'src/styles/giscus-dark.source.css',
   },
 ]
 

@@ -1,16 +1,16 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { setupKbd } from './Kbd.hook'
-
 import { setupTestDOM } from '@test/testHelpers'
+
+import { setupKbd } from './Kbd.hook'
 
 /**
  * Helper to mock userAgent
  */
 function mockUserAgent(userAgent: string): void {
   Object.defineProperty(navigator, 'userAgent', {
-    value: userAgent,
     configurable: true,
+    value: userAgent,
   })
 }
 
@@ -24,8 +24,8 @@ describe('Kbd Hook', () => {
   function cleanupTest(): void {
     document.body.innerHTML = ''
     Object.defineProperty(navigator, 'userAgent', {
-      value: originalUserAgent,
       configurable: true,
+      value: originalUserAgent,
     })
   }
 
@@ -409,7 +409,9 @@ describe('Kbd Hook', () => {
       expect(kbd?.textContent).toBe('⌘K')
 
       // Simulate navigation - change DOM
-      if (kbd) kbd.textContent = 'OUTDATED'
+      if (kbd) {
+        kbd.textContent = 'OUTDATED'
+      }
 
       // Trigger astro:page-load event
       const event = new Event('astro:page-load')

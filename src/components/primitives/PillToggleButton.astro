@@ -1,9 +1,8 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
-
-import { type PillToggleButtonVariants, pillToggleButtonVariants } from './PillToggle.cva'
-
+import type { PillToggleButtonVariants } from './PillToggle.cva'
 import { cn } from '@/lib/utils'
+import { pillToggleButtonVariants } from './PillToggle.cva'
 
 export interface Props extends HTMLAttributes<'button'>, PillToggleButtonVariants {
   'data-value': string

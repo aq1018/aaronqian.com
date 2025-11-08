@@ -1,20 +1,20 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { initializeDigitalAnalyzer, setupDigitalAnalyzer } from './DigitalAnalyzer.hook'
-
 import { setupTestDOM } from '@test/testHelpers'
+
+import { initializeDigitalAnalyzer, setupDigitalAnalyzer } from './DigitalAnalyzer.hook'
 
 // Mock GSAP
 vi.mock('gsap', () => ({
   default: {
+    set: vi.fn(),
     timeline: vi.fn(() => ({
-      to: vi.fn().mockReturnThis(),
-      set: vi.fn().mockReturnThis(),
       eventCallback: vi.fn().mockReturnThis(),
       kill: vi.fn(),
+      set: vi.fn().mockReturnThis(),
+      to: vi.fn().mockReturnThis(),
     })),
     to: vi.fn(),
-    set: vi.fn(),
   },
 }))
 
@@ -216,7 +216,7 @@ describe('Digital Analyzer Hook', () => {
       const decoderToggle = document.querySelector<HTMLElement>('[data-decoder-toggle]')
 
       // Modify decoder toggle styles
-      if (decoderToggle != null) {
+      if (decoderToggle) {
         decoderToggle.style.opacity = '0.8'
         decoderToggle.style.transform = 'scale(1.5)'
         decoderToggle.style.filter = 'blur(5px)'
@@ -332,8 +332,12 @@ describe('Digital Analyzer Hook', () => {
       )
 
       // Set some content
-      if (binaryBuffer != null) binaryBuffer.textContent = '11110000'
-      if (asciiText != null) asciiText.textContent = 'Hello'
+      if (binaryBuffer) {
+        binaryBuffer.textContent = '11110000'
+      }
+      if (asciiText) {
+        asciiText.textContent = 'Hello'
+      }
 
       // Cleanup should clear display
       cleanup()

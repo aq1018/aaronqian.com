@@ -14,7 +14,7 @@ type Entry<TFn extends CVAFn> = {
 function makeEntries<TFn extends CVAFn, K extends keyof VariantsOf<TFn>>(
   keys: readonly K[],
   combo: readonly VariantsOf<TFn>[K][],
-): ReadonlyArray<Entry<TFn>> {
+): readonly Entry<TFn>[] {
   return keys.map((k, i) => [k, combo[i]] as const)
 }
 
@@ -68,7 +68,7 @@ export async function renderAstroComponent(
  * ```
  */
 export function testBaseClasses(variantFn: CVAFn, baseClasses: string[]): void {
-  describe('Base Classes', () => {
+  describe('base Classes', () => {
     it('should include base classes in all variants', () => {
       const result = variantFn()
       expect(result).toContainClasses(baseClasses)
@@ -91,7 +91,7 @@ export function testBaseClasses(variantFn: CVAFn, baseClasses: string[]): void {
 export function testAllVariants<TFn extends CVAFn, K extends keyof VariantProps<TFn>>(
   variantFn: TFn,
   propName: K,
-  values: ReadonlyArray<VariantProps<TFn>[K]>,
+  values: readonly VariantProps<TFn>[K][],
 ): void {
   describe(`${propName.toString().charAt(0).toUpperCase() + propName.toString().slice(1)} Variants`, () => {
     it(`should generate valid classes for all ${propName.toString()} variants`, () => {
@@ -122,7 +122,7 @@ export function testAllVariants<TFn extends CVAFn, K extends keyof VariantProps<
 export function testCompoundVariants<TFn extends CVAFn>(
   variantFn: TFn,
   variantCombinations: {
-    [K in keyof VariantsOf<TFn>]?: ReadonlyArray<VariantsOf<TFn>[K]>
+    [K in keyof VariantsOf<TFn>]?: readonly VariantsOf<TFn>[K][]
   },
 ): void {
   const keys = Object.keys(variantCombinations)
@@ -133,7 +133,7 @@ export function testCompoundVariants<TFn extends CVAFn>(
     [],
   )
 
-  describe('Variant Combinations', () => {
+  describe('variant Combinations', () => {
     it('should generate valid classes for all variant combinations', () => {
       combos.forEach((combo) => {
         // Build entries with proper key/value relation using `satisfies`
@@ -159,11 +159,12 @@ export function testCompoundVariants<TFn extends CVAFn>(
  * ```
  */
 export function testDefaultVariants(variantFn: CVAFn, expectedClasses: string[]): void {
-  describe('Default Variants', () => {
+  describe('default Variants', () => {
     it('should apply default variants with empty object', () => {
       const result = variantFn({})
       expect(result).toContainClasses(expectedClasses)
     })
+
     it('should apply default variants with no arguments', () => {
       const result = variantFn()
       expect(result).toContainClasses(expectedClasses)
@@ -188,7 +189,7 @@ export function testEdgeCases<TFn extends CVAFn>(
   props: Partial<WithClass<VariantProps<TFn>>>,
   defaultClasses: string[],
 ): void {
-  describe('Edge Cases', () => {
+  describe('edge Cases', () => {
     Object.keys(props).forEach((propName) => {
       it(`should handle undefined ${propName} (use default)`, () => {
         const result = variantFn({ [propName]: undefined })
@@ -202,7 +203,7 @@ export function testEdgeCases<TFn extends CVAFn>(
     })
 
     it('should handle null class gracefully', () => {
-      const result = variantFn({ class: null })
+      const result = variantFn({ class: undefined })
       expect(result).toBeTruthy()
     })
 
@@ -266,7 +267,7 @@ export function expectEventListenersRemoved(
 
   // Dispatch event and verify it doesn't fire
   element.dispatchEvent(new Event(eventType))
-  expect(eventFired).toBe(false)
+  expect(eventFired).toBeFalsy()
 
   // Clean up test listener
   element.removeEventListener(eventType, testHandler)

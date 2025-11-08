@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { initializeDecoderToggles } from './DigitalAnalyzerDecoderToggle.hook'
 
 describe('DigitalAnalyzerDecoderToggle Hook', () => {
-  let cleanup: (() => void) | null = null
+  let cleanup: (() => void) | null
 
   beforeEach(() => {
     // Reset DOM
@@ -13,7 +13,7 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
   afterEach(() => {
     // Clean up after each test
-    if (cleanup != null) {
+    if (cleanup) {
       cleanup()
     }
     document.body.innerHTML = ''
@@ -129,9 +129,9 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
       // Simulate keyboard event with appropriate modifier
       const event = new KeyboardEvent('keydown', {
+        ctrlKey: !isMac,
         key: 'k',
         metaKey: isMac,
-        ctrlKey: !isMac,
       })
       document.dispatchEvent(event)
 

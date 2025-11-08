@@ -1,7 +1,8 @@
 ---
 import type { HTMLTag, Polymorphic } from 'astro/types'
 
-import { type TextStyle, textVariants } from './typography.cva'
+import { textVariants } from './typography.cva'
+import type { TextStyle } from './typography.cva'
 
 import { cn } from '@/lib/utils'
 
@@ -32,20 +33,20 @@ const {
 
 const classes = cn(
   textVariants({
-    size,
     align,
+    break: breakProp,
     color,
     family,
-    uppercase,
-    strong,
     italic,
-    strike,
-    whitespace,
-    truncate,
-    transform,
-    break: breakProp,
     line,
     preset,
+    size,
+    strike,
+    strong,
+    transform,
+    truncate,
+    uppercase,
+    whitespace,
   }),
   className,
 )

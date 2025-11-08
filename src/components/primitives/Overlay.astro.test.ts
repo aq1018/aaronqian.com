@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Overlay from './Overlay.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Overlay from './Overlay.astro'
 
 describe('Overlay.astro', () => {
   describe('Rendering', () => {
@@ -17,7 +17,7 @@ describe('Overlay.astro', () => {
 
     it('should render with variant classes applied', async () => {
       const root = await renderAstroComponent(Overlay, {
-        props: { preset: 'soft', blur: 'md' },
+        props: { blur: 'md', preset: 'soft' },
       })
 
       const div = root.querySelector('div')
@@ -30,7 +30,7 @@ describe('Overlay.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-overlay')).toBe(true)
+      expect(div?.classList.contains('custom-overlay')).toBeTruthy()
       expect(div).toHaveClasses(['absolute']) // Base class still present
     })
   })
@@ -49,7 +49,7 @@ describe('Overlay.astro', () => {
   describe('HTML Attributes', () => {
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Overlay, {
-        props: { id: 'hero-overlay', 'data-testid': 'overlay' },
+        props: { 'data-testid': 'overlay', id: 'hero-overlay' },
       })
 
       const div = root.querySelector('div')

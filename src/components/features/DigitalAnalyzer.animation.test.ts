@@ -2,12 +2,11 @@
  * Tests for DigitalAnalyzer.animation module
  * Validates GSAP timeline creation, parameter passing, and cleanup behavior
  */
-
 import { gsap } from 'gsap'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { createTraceAnimation } from './DigitalAnalyzer.animation'
 import type { TraceAnimationOptions } from './DigitalAnalyzer.animation'
+import { createTraceAnimation } from './DigitalAnalyzer.animation'
 import { DisplayManager } from './DigitalAnalyzer.display'
 
 describe('TraceAnimationManager', () => {
@@ -49,19 +48,19 @@ describe('TraceAnimationManager', () => {
   describe('createTraceAnimation', () => {
     it('should create a valid GSAP timeline', () => {
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData: '10101010',
-        currentChunk: 'A',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: mockLightningBolt,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'config',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
+        currentChunk: 'A',
+        decoderToggle: mockLightningBolt,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       const timeline = createTraceAnimation(options)
@@ -72,19 +71,19 @@ describe('TraceAnimationManager', () => {
 
     it('should energize lightning bolt at position 0', () => {
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData: '10101010',
-        currentChunk: '',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: mockLightningBolt,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
+        currentChunk: '',
+        decoderToggle: mockLightningBolt,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       const timeline = createTraceAnimation(options)
@@ -96,19 +95,19 @@ describe('TraceAnimationManager', () => {
 
     it('should handle lightning bolt brightness animation', () => {
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData: '10101010',
-        currentChunk: '',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: mockLightningBolt,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
+        currentChunk: '',
+        decoderToggle: mockLightningBolt,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       const timeline = createTraceAnimation(options)
@@ -121,19 +120,19 @@ describe('TraceAnimationManager', () => {
       const clearSpy = vi.spyOn(displayManager, 'clearBinaryBuffer')
 
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData: '10101010',
-        currentChunk: '',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
+        currentChunk: '',
+        decoderToggle: null,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       createTraceAnimation(options)
@@ -148,19 +147,19 @@ describe('TraceAnimationManager', () => {
       const binaryData = '10101010'
 
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData,
-        currentChunk: '',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
+        currentChunk: '',
+        decoderToggle: null,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       const timeline = createTraceAnimation(options)
@@ -190,11 +189,11 @@ describe('TraceAnimationManager', () => {
         displayManager,
         decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 2,
           dataSource: 'config',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
       }
 
@@ -221,11 +220,11 @@ describe('TraceAnimationManager', () => {
         displayManager,
         decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
       }
 
@@ -242,19 +241,19 @@ describe('TraceAnimationManager', () => {
       const resetSpy = vi.spyOn(displayManager, 'resetBinaryBuffer')
 
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData: '10101010',
-        currentChunk: '',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
+        currentChunk: '',
+        decoderToggle: null,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       const timeline = createTraceAnimation(options)
@@ -277,11 +276,11 @@ describe('TraceAnimationManager', () => {
         displayManager,
         decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
       }
 
@@ -305,11 +304,11 @@ describe('TraceAnimationManager', () => {
         displayManager,
         decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
       }
 
@@ -330,11 +329,11 @@ describe('TraceAnimationManager', () => {
         displayManager,
         decoderToggle: null, // No lightning bolt element
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
       }
 
@@ -353,11 +352,11 @@ describe('TraceAnimationManager', () => {
         displayManager,
         decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 0,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
       }
 
@@ -380,11 +379,11 @@ describe('TraceAnimationManager', () => {
         displayManager,
         decoderToggle: null,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'config',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
       }
 
@@ -398,19 +397,19 @@ describe('TraceAnimationManager', () => {
 
     it('should allow timeline cleanup with kill()', () => {
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData: '10101010',
-        currentChunk: '',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: mockLightningBolt,
         config: {
-          traceDrawDuration: 1000,
-          traceFadeDelay: 200,
-          traceClearDelay: 100,
           byteCount: 1,
           dataSource: 'random',
+          traceClearDelay: 100,
+          traceDrawDuration: 1000,
+          traceFadeDelay: 200,
         },
+        currentChunk: '',
+        decoderToggle: mockLightningBolt,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       const timeline = createTraceAnimation(options)
@@ -419,17 +418,12 @@ describe('TraceAnimationManager', () => {
       expect(() => timeline.kill()).not.toThrow()
 
       // Timeline should be killed
-      expect(timeline.isActive()).toBe(false)
+      expect(timeline.isActive()).toBeFalsy()
     })
 
     it('should convert milliseconds to seconds correctly for GSAP', () => {
       const options: TraceAnimationOptions = {
-        pathElement: mockPathElement,
         binaryData: '10101010',
-        currentChunk: '',
-        shouldClear: false,
-        displayManager,
-        decoderToggle: null,
         config: {
           traceDrawDuration: 2000, // 2000ms = 2s
           traceFadeDelay: 500, // 500ms = 0.5s
@@ -437,6 +431,11 @@ describe('TraceAnimationManager', () => {
           byteCount: 1,
           dataSource: 'random',
         },
+        currentChunk: '',
+        decoderToggle: null,
+        displayManager,
+        pathElement: mockPathElement,
+        shouldClear: false,
       }
 
       const timeline = createTraceAnimation(options)

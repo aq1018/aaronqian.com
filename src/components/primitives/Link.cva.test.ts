@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { linkVariants } from './Link.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { linkVariants } from './Link.cva'
 
 describe('Link.cva', () => {
   testBaseClasses(linkVariants, ['transition-colors'])
@@ -33,14 +33,14 @@ describe('Link.cva', () => {
     })
 
     it('should render nav variant correctly (inactive)', () => {
-      expect(linkVariants({ variant: 'nav', active: false })).toContainClasses([
+      expect(linkVariants({ active: false, variant: 'nav' })).toContainClasses([
         'hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]',
         'text-muted',
       ])
     })
 
     it('should render nav variant correctly (active)', () => {
-      expect(linkVariants({ variant: 'nav', active: true })).toContainClasses([
+      expect(linkVariants({ active: true, variant: 'nav' })).toContainClasses([
         'hover:[color:color-mix(in_oklab,var(--color-primary),black_10%)]',
         'text-primary',
       ])
@@ -72,8 +72,8 @@ describe('Link.cva', () => {
     })
 
     it('should handle active state for nav variant', () => {
-      const inactive = linkVariants({ variant: 'nav', active: false })
-      const active = linkVariants({ variant: 'nav', active: true })
+      const inactive = linkVariants({ active: false, variant: 'nav' })
+      const active = linkVariants({ active: true, variant: 'nav' })
 
       expect(inactive).toContain('text-muted')
       expect(active).toContain('text-primary')
@@ -81,28 +81,28 @@ describe('Link.cva', () => {
     })
 
     it('should not affect content variant with active prop', () => {
-      const result = linkVariants({ variant: 'content', active: true })
+      const result = linkVariants({ active: true, variant: 'content' })
       expect(result).toContainClasses(['text-link', 'underline'])
     })
 
     it('should not affect back variant with active prop', () => {
-      const result = linkVariants({ variant: 'back', active: true })
+      const result = linkVariants({ active: true, variant: 'back' })
       expect(result).toContainClasses(['text-muted', 'hover:text-link'])
     })
   })
 
   describe('Compound Variants', () => {
     it('should apply nav active compound variant correctly', () => {
-      expect(linkVariants({ variant: 'nav', active: true })).toContain('text-primary')
+      expect(linkVariants({ active: true, variant: 'nav' })).toContain('text-primary')
     })
 
     it('should apply nav inactive compound variant correctly', () => {
-      expect(linkVariants({ variant: 'nav', active: false })).toContain('text-muted')
+      expect(linkVariants({ active: false, variant: 'nav' })).toContain('text-muted')
     })
 
     it('should not have compound variants for content variant', () => {
-      const active = linkVariants({ variant: 'content', active: true })
-      const inactive = linkVariants({ variant: 'content', active: false })
+      const active = linkVariants({ active: true, variant: 'content' })
+      const inactive = linkVariants({ active: false, variant: 'content' })
       expect(active).toContain('text-link')
       expect(inactive).toContain('text-link')
     })
@@ -113,7 +113,7 @@ describe('Link.cva', () => {
     variant: ['content', 'nav', 'back'],
   })
 
-  testEdgeCases(linkVariants, { variant: 'content', active: false }, ['text-link', 'underline'])
+  testEdgeCases(linkVariants, { active: false, variant: 'content' }, ['text-link', 'underline'])
 
   describe('Semantic Usage', () => {
     it('should provide appropriate styles for inline content links', () => {
@@ -135,8 +135,8 @@ describe('Link.cva', () => {
     })
 
     it('should distinguish active navigation clearly', () => {
-      const active = linkVariants({ variant: 'nav', active: true })
-      const inactive = linkVariants({ variant: 'nav', active: false })
+      const active = linkVariants({ active: true, variant: 'nav' })
+      const inactive = linkVariants({ active: false, variant: 'nav' })
 
       expect(active).toContain('text-primary')
       expect(inactive).toContain('text-muted')

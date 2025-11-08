@@ -1,4 +1,5 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 /**
  * NavBarContent: Navigation bar content layout primitive
@@ -14,6 +15,9 @@ import { type VariantProps, cva } from 'class-variance-authority'
  * </NavBar>
  */
 export const navBarContentCva = cva(['flex', 'flex-row', 'items-center', 'justify-between'], {
+  defaultVariants: {
+    height: 'md',
+  },
   variants: {
     height: {
       sm: 'h-12', // 48px
@@ -21,9 +25,6 @@ export const navBarContentCva = cva(['flex', 'flex-row', 'items-center', 'justif
       lg: 'h-20', // 80px
       xl: 'h-24', // 96px
     },
-  },
-  defaultVariants: {
-    height: 'md',
   },
 })
 

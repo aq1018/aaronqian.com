@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Sheet from './Sheet.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Sheet from './Sheet.astro'
 
 describe('Sheet.astro', () => {
   describe('Rendering', () => {
@@ -27,7 +27,7 @@ describe('Sheet.astro', () => {
 
     it('should render with variant classes applied', async () => {
       const root = await renderAstroComponent(Sheet, {
-        props: { variant: 'outline', color: 'primary' },
+        props: { color: 'primary', variant: 'outline' },
       })
 
       const div = root.querySelector('div')
@@ -40,7 +40,7 @@ describe('Sheet.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-sheet')).toBe(true)
+      expect(div?.classList.contains('custom-sheet')).toBeTruthy()
       expect(div).toHaveClasses(['overflow-hidden']) // Base class still present
     })
   })
@@ -70,7 +70,7 @@ describe('Sheet.astro', () => {
   describe('HTML Attributes', () => {
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Sheet, {
-        props: { id: 'project-card', 'data-testid': 'sheet' },
+        props: { 'data-testid': 'sheet', id: 'project-card' },
       })
 
       const div = root.querySelector('div')

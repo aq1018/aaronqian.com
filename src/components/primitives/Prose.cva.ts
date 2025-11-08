@@ -1,4 +1,5 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 /**
  * Prose: Terminal-styled markdown content
@@ -67,14 +68,14 @@ export const proseCva = cva(
     'prose-hr:border-border',
   ],
   {
+    defaultVariants: {
+      size: 'sm',
+    },
     variants: {
       size: {
         sm: 'text-sm', // Default terminal size
         base: 'text-base', // Slightly larger for blog posts
       },
-    },
-    defaultVariants: {
-      size: 'sm',
     },
   },
 )

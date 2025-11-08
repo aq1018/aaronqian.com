@@ -1,23 +1,24 @@
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
 const colorVariants = {
-  inherit: 'text-inherit',
+  accent: 'text-accent',
+  danger: 'text-danger',
   default: 'text-content',
+  info: 'text-info',
+  inherit: 'text-inherit',
   muted: 'text-muted',
   primary: 'text-primary',
   secondary: 'text-secondary',
-  accent: 'text-accent',
   success: 'text-success',
   warning: 'text-warning',
-  danger: 'text-danger',
-  info: 'text-info',
 } as const
 
 const alignVariants = {
-  start: 'text-start',
   center: 'text-center',
   end: 'text-end',
   justify: 'text-justify',
+  start: 'text-start',
 } as const
 
 const whitespaceVariants = {
@@ -26,34 +27,76 @@ const whitespaceVariants = {
 } as const
 
 const truncateVariants = {
-  true: 'typography-truncate',
   false: '',
+  true: 'typography-truncate',
 } as const
 
 const breakVariants = {
+  all: 'break-all',
   normal: 'break-normal',
   words: 'break-words',
-  all: 'break-all',
 } as const
 
 const transformVariants = {
-  none: '',
   capitalize: 'capitalize',
-  uppercase: 'uppercase',
   lowercase: 'lowercase',
+  none: '',
+  uppercase: 'uppercase',
 } as const
 
 const familyVariants = {
   inherit: '',
-  sans: 'font-sans',
   mono: 'font-mono',
+  sans: 'font-sans',
 } as const
 
 export const headingVariants = cva('', {
+  compoundVariants: [
+    // mono display gets the mono tracking
+    {
+      class: 'tracking-heading-display-mono',
+      family: 'mono',
+      size: 'display-2',
+    },
+    {
+      class: 'tracking-heading-display-mono',
+      family: 'mono',
+      size: 'display-1',
+    },
+  ],
+  defaultVariants: {
+    break: 'normal',
+    color: 'inherit',
+    family: 'mono',
+    line: 'auto',
+    preset: 'default',
+    size: 'h2',
+    transform: 'none',
+    truncate: false,
+    whitespace: 'normal',
+  },
   variants: {
+    align: alignVariants,
+    break: breakVariants,
+    color: colorVariants,
+    family: familyVariants,
+    line: {
+      auto: '',
+      none: 'leading-none',
+      normal: 'leading-heading-sm',
+      relaxed: 'leading-relaxed',
+      tight: 'leading-heading-base',
+    },
+    preset: {
+      default: '',
+      hero: 'typography-preset-hero',
+      kicker: 'typography-preset-kicker',
+      longread: 'typography-preset-longread',
+      note: 'typography-preset-note',
+    },
     size: {
-      'display-2': 'typography-heading-display-2',
       'display-1': 'typography-heading-display-1',
+      'display-2': 'typography-heading-display-2',
       h1: 'typography-heading-h1',
       h2: 'typography-heading-h2',
       h3: 'typography-heading-h3',
@@ -61,116 +104,74 @@ export const headingVariants = cva('', {
       h5: 'typography-heading-h5',
       h6: 'typography-heading-h6',
     },
-    line: {
-      auto: '',
-      none: 'leading-none',
-      tight: 'leading-heading-base',
-      normal: 'leading-heading-sm',
-      relaxed: 'leading-relaxed',
-    },
-    preset: {
-      default: '',
-      hero: 'typography-preset-hero',
-      kicker: 'typography-preset-kicker',
-      note: 'typography-preset-note',
-      longread: 'typography-preset-longread',
-    },
-    align: alignVariants,
-    color: colorVariants,
-    family: familyVariants,
-    whitespace: whitespaceVariants,
-    truncate: truncateVariants,
-    break: breakVariants,
     transform: transformVariants,
-  },
-  compoundVariants: [
-    // mono display gets the mono tracking
-    {
-      family: 'mono',
-      size: 'display-2',
-      class: 'tracking-heading-display-mono',
-    },
-    {
-      family: 'mono',
-      size: 'display-1',
-      class: 'tracking-heading-display-mono',
-    },
-  ],
-  defaultVariants: {
-    size: 'h2',
-    line: 'auto',
-    preset: 'default',
-    color: 'inherit',
-    family: 'mono',
-    whitespace: 'normal',
-    truncate: false,
-    break: 'normal',
-    transform: 'none',
+    truncate: truncateVariants,
+    whitespace: whitespaceVariants,
   },
 })
 
 export type HeadingStyle = VariantProps<typeof headingVariants>
 
 export const textVariants = cva('', {
-  variants: {
-    size: {
-      lead: 'typography-text-lead',
-      body: 'typography-text-body',
-      'body-dense': 'typography-text-body-dense',
-      small: 'typography-text-small',
-      'small-dense': 'typography-text-small-dense',
-      micro: 'typography-text-micro',
-      'label-lg': 'typography-text-label-lg',
-      label: 'typography-text-label',
-      'label-sm': 'typography-text-label-sm',
-      xl: 'typography-text-xl',
-      '2xl': 'typography-text-2xl',
-    },
-    line: {
-      auto: '',
-      tight: 'leading-tight',
-      normal: 'leading-normal',
-      relaxed: 'leading-relaxed',
-      loose: 'leading-loose',
-    },
-    preset: {
-      default: '',
-      note: 'typography-preset-note',
-      longread: 'typography-preset-longread',
-      kicker: 'typography-preset-kicker',
-    },
-    align: alignVariants,
-    color: colorVariants,
-    family: familyVariants,
-    uppercase: { true: 'uppercase', false: '' },
-    strong: { true: 'font-semibold', false: '' },
-    italic: { true: 'italic', false: '' },
-    strike: { true: 'line-through', false: '' },
-    whitespace: whitespaceVariants,
-    truncate: truncateVariants,
-    break: breakVariants,
-    transform: transformVariants,
-  },
   compoundVariants: [
     {
-      truncate: true,
       class: 'typography-truncate',
+      truncate: true,
     },
   ],
   defaultVariants: {
-    size: 'body',
-    line: 'auto',
-    preset: 'default',
+    break: 'normal',
     color: 'inherit',
     family: 'inherit',
-    uppercase: false,
-    strong: false,
     italic: false,
+    line: 'auto',
+    preset: 'default',
+    size: 'body',
     strike: false,
-    whitespace: 'normal',
-    truncate: false,
-    break: 'normal',
+    strong: false,
     transform: 'none',
+    truncate: false,
+    uppercase: false,
+    whitespace: 'normal',
+  },
+  variants: {
+    align: alignVariants,
+    break: breakVariants,
+    color: colorVariants,
+    family: familyVariants,
+    italic: { false: '', true: 'italic' },
+    line: {
+      auto: '',
+      loose: 'leading-loose',
+      normal: 'leading-normal',
+      relaxed: 'leading-relaxed',
+      tight: 'leading-tight',
+    },
+    preset: {
+      default: '',
+      kicker: 'typography-preset-kicker',
+      longread: 'typography-preset-longread',
+      note: 'typography-preset-note',
+    },
+    size: {
+      '2xl': 'typography-text-2xl',
+      body: 'typography-text-body',
+      'body-dense': 'typography-text-body-dense',
+      label: 'typography-text-label',
+      'label-lg': 'typography-text-label-lg',
+      'label-sm': 'typography-text-label-sm',
+      lead: 'typography-text-lead',
+      micro: 'typography-text-micro',
+      small: 'typography-text-small',
+      'small-dense': 'typography-text-small-dense',
+      xl: 'typography-text-xl',
+    },
+    strike: { false: '', true: 'line-through' },
+    strong: { false: '', true: 'font-semibold' },
+    transform: transformVariants,
+    truncate: truncateVariants,
+    uppercase: { false: '', true: 'uppercase' },
+    whitespace: whitespaceVariants,
   },
 })
 

@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { proseCva } from './Prose.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { proseCva } from './Prose.cva'
 
 describe('Prose.cva', () => {
   testBaseClasses(proseCva, [
@@ -152,7 +152,7 @@ describe('Prose.cva', () => {
 
       elementPrefixes.forEach((prefix) => {
         const hasStyle = result.split(' ').some((className) => className.startsWith(prefix))
-        expect(hasStyle).toBe(true)
+        expect(hasStyle).toBeTruthy()
       })
     })
   })

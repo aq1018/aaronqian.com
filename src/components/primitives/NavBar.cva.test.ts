@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { navBarCva } from './NavBar.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { navBarCva } from './NavBar.cva'
 
 describe('NavBar.cva', () => {
   testBaseClasses(navBarCva, ['w-full'])
@@ -25,16 +25,16 @@ describe('NavBar.cva', () => {
     })
 
     it('should render sticky position with placement', () => {
-      const top = navBarCva({ position: 'sticky', placement: 'top' })
-      const bottom = navBarCva({ position: 'sticky', placement: 'bottom' })
+      const top = navBarCva({ placement: 'top', position: 'sticky' })
+      const bottom = navBarCva({ placement: 'bottom', position: 'sticky' })
 
       expect(top).toContainClasses(['sticky', 'top-0', 'z-50'])
       expect(bottom).toContainClasses(['sticky', 'bottom-0', 'z-50'])
     })
 
     it('should render fixed position with placement', () => {
-      const top = navBarCva({ position: 'fixed', placement: 'top' })
-      const bottom = navBarCva({ position: 'fixed', placement: 'bottom' })
+      const top = navBarCva({ placement: 'top', position: 'fixed' })
+      const bottom = navBarCva({ placement: 'bottom', position: 'fixed' })
 
       expect(top).toContainClasses(['fixed', 'top-0', 'z-50'])
       expect(bottom).toContainClasses(['fixed', 'bottom-0', 'z-50'])
@@ -96,10 +96,10 @@ describe('NavBar.cva', () => {
     it('should combine sticky top with border and backdrop', () => {
       expect(
         navBarCva({
-          position: 'sticky',
-          placement: 'top',
-          border: 'bottom',
           backdrop: true,
+          border: 'bottom',
+          placement: 'top',
+          position: 'sticky',
         }),
       ).toContainClasses([
         'sticky',
@@ -114,25 +114,25 @@ describe('NavBar.cva', () => {
     it('should combine fixed bottom with border', () => {
       expect(
         navBarCva({
-          position: 'fixed',
-          placement: 'bottom',
-          border: 'top',
           backdrop: false,
+          border: 'top',
+          placement: 'bottom',
+          position: 'fixed',
         }),
       ).toContainClasses(['fixed', 'bottom-0', 'z-50', 'border-t', 'bg-background'])
     })
 
     // Test variant combinations (excluding backdrop boolean prop from testCompoundVariants)
     testCompoundVariants(navBarCva, {
-      position: ['static', 'sticky', 'fixed'],
-      placement: ['top', 'bottom'],
       border: ['none', 'top', 'bottom', 'both'],
+      placement: ['top', 'bottom'],
+      position: ['static', 'sticky', 'fixed'],
     })
   })
 
   testEdgeCases(
     navBarCva,
-    { position: 'static', placement: 'top', border: 'none', backdrop: false },
+    { backdrop: false, border: 'none', placement: 'top', position: 'static' },
     ['w-full', 'bg-background'],
   )
 
@@ -140,10 +140,10 @@ describe('NavBar.cva', () => {
     it('should support typical sticky header navigation', () => {
       expect(
         navBarCva({
-          position: 'sticky',
-          placement: 'top',
-          border: 'bottom',
           backdrop: true,
+          border: 'bottom',
+          placement: 'top',
+          position: 'sticky',
         }),
       ).toContainClasses([
         'sticky',
@@ -157,9 +157,9 @@ describe('NavBar.cva', () => {
 
     it('should support static navigation without border or backdrop', () => {
       const result = navBarCva({
-        position: 'static',
-        border: 'none',
         backdrop: false,
+        border: 'none',
+        position: 'static',
       })
       expect(result).toContainClasses(['w-full', 'bg-background'])
       expect(result).not.toContain('sticky')
@@ -170,10 +170,10 @@ describe('NavBar.cva', () => {
     it('should support fixed footer navigation', () => {
       expect(
         navBarCva({
-          position: 'fixed',
-          placement: 'bottom',
-          border: 'top',
           backdrop: false,
+          border: 'top',
+          placement: 'bottom',
+          position: 'fixed',
         }),
       ).toContainClasses(['fixed', 'bottom-0', 'z-50', 'border-t'])
     })
@@ -191,10 +191,10 @@ describe('NavBar.cva', () => {
     })
 
     it('should maintain z-index for positioned variants', () => {
-      const stickyTop = navBarCva({ position: 'sticky', placement: 'top' })
-      const stickyBottom = navBarCva({ position: 'sticky', placement: 'bottom' })
-      const fixedTop = navBarCva({ position: 'fixed', placement: 'top' })
-      const fixedBottom = navBarCva({ position: 'fixed', placement: 'bottom' })
+      const stickyTop = navBarCva({ placement: 'top', position: 'sticky' })
+      const stickyBottom = navBarCva({ placement: 'bottom', position: 'sticky' })
+      const fixedTop = navBarCva({ placement: 'top', position: 'fixed' })
+      const fixedBottom = navBarCva({ placement: 'bottom', position: 'fixed' })
 
       expect(stickyTop).toContain('z-50')
       expect(stickyBottom).toContain('z-50')

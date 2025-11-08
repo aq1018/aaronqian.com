@@ -17,25 +17,25 @@ type ProjectStatus = 'active' | 'planning' | 'done'
 
 const statusStyles: Record<ProjectStatus, string> = {
   active: 'text-primary',
-  planning: 'text-muted',
   done: 'text-content/60',
+  planning: 'text-muted',
 }
 
 const statusLabels: Record<ProjectStatus, string> = {
   active: 'ACTIVE',
-  planning: 'PLANNING',
   done: 'DONE',
+  planning: 'PLANNING',
 }
 
 export interface Props {
-  projects: Array<CollectionEntry<'projects'>>
+  projects: CollectionEntry<'projects'>[]
   footer?: string
 }
 
 const { projects, footer } = Astro.props
 
 // Type-safe projects array for mapping
-const typedProjects: Array<CollectionEntry<'projects'>> = projects
+const typedProjects: CollectionEntry<'projects'>[] = projects
 ---
 
 <Stack>

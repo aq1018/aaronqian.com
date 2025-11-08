@@ -169,7 +169,7 @@ describe('generateSquareWavePath', () => {
     // Should have multiple L commands for transitions
     const lCommands = path.match(/L/g)
     expect(lCommands).not.toBeNull()
-    if (lCommands != null) {
+    if (lCommands) {
       expect(lCommands.length).toBeGreaterThan(2)
     }
   })

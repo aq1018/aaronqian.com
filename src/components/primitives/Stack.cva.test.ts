@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { stackCva } from './Stack.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { stackCva } from './Stack.cva'
 
 describe('Stack.cva', () => {
   testBaseClasses(stackCva, ['flex'])
@@ -92,15 +92,15 @@ describe('Stack.cva', () => {
   })
 
   testCompoundVariants(stackCva, {
-    direction: ['row', 'column'],
-    space: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
     align: ['start', 'center', 'end', 'stretch'],
+    direction: ['row', 'column'],
     justify: ['start', 'center', 'end', 'between'],
+    space: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
   })
 
   testEdgeCases(
     stackCva,
-    { direction: 'column', space: 'md', align: 'stretch', justify: 'start' },
+    { align: 'stretch', direction: 'column', justify: 'start', space: 'md' },
     ['flex', 'flex-col', 'gap-4'],
   )
 
@@ -108,10 +108,10 @@ describe('Stack.cva', () => {
     it('should support mobile-first responsive direction', () => {
       expect(
         stackCva({
+          align: 'center',
           direction: 'column',
           'direction-lg': 'row',
           space: 'md',
-          align: 'center',
         }),
       ).toContainClasses(['flex', 'flex-col', 'lg:flex-row', 'gap-4', 'items-center'])
     })
@@ -119,11 +119,11 @@ describe('Stack.cva', () => {
     it('should combine all variants correctly', () => {
       expect(
         stackCva({
+          align: 'center',
           direction: 'row',
           'direction-md': 'column',
-          space: 'lg',
-          align: 'center',
           justify: 'between',
+          space: 'lg',
         }),
       ).toContainClasses([
         'flex',

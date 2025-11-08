@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import HeroContent from './HeroContent.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import HeroContent from './HeroContent.astro'
 
 describe('HeroContent', () => {
   describe('Props rendering', () => {
@@ -37,10 +37,10 @@ describe('HeroContent', () => {
     it('should render all props together', async () => {
       const root = await renderAstroComponent(HeroContent, {
         props: {
-          eyebrow: 'EYEBROW',
-          title: 'Title',
           description: 'Description',
+          eyebrow: 'EYEBROW',
           microLine: 'Micro',
+          title: 'Title',
         },
       })
       expect(root.textContent).toContain('EYEBROW')
@@ -61,7 +61,7 @@ describe('HeroContent', () => {
 
     it('should center content when centered=true', async () => {
       const root = await renderAstroComponent(HeroContent, {
-        props: { title: 'Test', centered: true },
+        props: { centered: true, title: 'Test' },
       })
       const heading = root.querySelector('h1')
       expect(heading?.className).toContain('text-center')
@@ -69,7 +69,7 @@ describe('HeroContent', () => {
 
     it('should not center content when centered=false', async () => {
       const root = await renderAstroComponent(HeroContent, {
-        props: { title: 'Test', centered: false },
+        props: { centered: false, title: 'Test' },
       })
       const heading = root.querySelector('h1')
       expect(heading?.className).not.toContain('text-center')

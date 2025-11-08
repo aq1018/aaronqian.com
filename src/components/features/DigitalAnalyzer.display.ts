@@ -58,7 +58,7 @@ export class DisplayManager {
         element.textContent = bit
       } else if (index % 8 === 0) {
         // Add space after every 8 bits (byte boundary)
-        element.textContent += ' ' + bit
+        element.textContent += ` ${bit}`
       } else {
         element.textContent += bit
       }

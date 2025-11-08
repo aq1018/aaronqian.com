@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { headingVariants } from './typography.cva'
-
 import {
   testAllVariants,
   testCompoundVariants,
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { headingVariants } from './typography.cva'
 
 describe('Heading.cva', () => {
   testDefaultVariants(headingVariants, [
@@ -116,37 +116,37 @@ describe('Heading.cva', () => {
 
   describe('Compound Variants', () => {
     it('should apply special tracking for display-2 with mono family', () => {
-      expect(headingVariants({ size: 'display-2', family: 'mono' })).toContain(
+      expect(headingVariants({ family: 'mono', size: 'display-2' })).toContain(
         'tracking-heading-display-mono',
       )
     })
 
     it('should apply special tracking for display-1 with mono family', () => {
-      expect(headingVariants({ size: 'display-1', family: 'mono' })).toContain(
+      expect(headingVariants({ family: 'mono', size: 'display-1' })).toContain(
         'tracking-heading-display-mono',
       )
     })
 
     it('should not apply special tracking for regular headings with mono family', () => {
-      const result = headingVariants({ size: 'h2', family: 'mono' })
+      const result = headingVariants({ family: 'mono', size: 'h2' })
       expect(result).not.toContain('tracking-heading-display-mono')
     })
   })
 
   testCompoundVariants(headingVariants, {
-    size: ['h1', 'h2', 'h3', 'h6'],
     color: ['inherit', 'primary', 'muted'],
     family: ['inherit', 'sans', 'mono'],
+    size: ['h1', 'h2', 'h3', 'h6'],
   })
 
-  testEdgeCases(headingVariants, { size: 'h2', color: 'inherit', family: 'mono' }, [
+  testEdgeCases(headingVariants, { color: 'inherit', family: 'mono', size: 'h2' }, [
     'typography-heading-h2',
     'font-mono',
   ])
 
   describe('Semantic Usage', () => {
     it('should provide appropriate styles for page headings', () => {
-      expect(headingVariants({ size: 'h1', color: 'primary' })).toContainClasses([
+      expect(headingVariants({ color: 'primary', size: 'h1' })).toContainClasses([
         'typography-heading-h1',
         'text-primary',
       ])
@@ -162,8 +162,8 @@ describe('Heading.cva', () => {
 
   describe('Consistency', () => {
     it('should maintain consistent font family across different sizes', () => {
-      const h1Mono = headingVariants({ size: 'h1', family: 'mono' })
-      const h3Mono = headingVariants({ size: 'h3', family: 'mono' })
+      const h1Mono = headingVariants({ family: 'mono', size: 'h1' })
+      const h3Mono = headingVariants({ family: 'mono', size: 'h3' })
 
       expect(h1Mono).toContain('font-mono')
       expect(h3Mono).toContain('font-mono')

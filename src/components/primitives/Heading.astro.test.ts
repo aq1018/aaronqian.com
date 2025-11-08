@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import Heading from './Heading.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import Heading from './Heading.astro'
 
 describe('Heading.astro', () => {
   describe('Rendering', () => {
@@ -27,7 +27,7 @@ describe('Heading.astro', () => {
 
     it('should render with variant classes applied', async () => {
       const root = await renderAstroComponent(Heading, {
-        props: { size: 'h1', color: 'primary' },
+        props: { color: 'primary', size: 'h1' },
       })
 
       const h1 = root.querySelector('h1')
@@ -40,12 +40,12 @@ describe('Heading.astro', () => {
       })
 
       const h2 = root.querySelector('h2')
-      expect(h2?.classList.contains('custom-heading')).toBe(true)
+      expect(h2?.classList.contains('custom-heading')).toBeTruthy()
     })
 
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(Heading, {
-        props: { id: 'test-heading', 'data-testid': 'heading' },
+        props: { 'data-testid': 'heading', id: 'test-heading' },
       })
 
       const h2 = root.querySelector('h2')

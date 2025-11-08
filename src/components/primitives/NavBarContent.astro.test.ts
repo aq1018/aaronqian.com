@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import NavBarContent from './NavBarContent.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+import NavBarContent from './NavBarContent.astro'
 
 describe('NavBarContent.astro', () => {
   describe('Rendering', () => {
@@ -41,7 +41,7 @@ describe('NavBarContent.astro', () => {
       })
 
       const div = root.querySelector('div')
-      expect(div?.classList.contains('custom-nav')).toBe(true)
+      expect(div?.classList.contains('custom-nav')).toBeTruthy()
       expect(div).toHaveClasses(['flex']) // Base class still present
     })
   })
@@ -61,7 +61,7 @@ describe('NavBarContent.astro', () => {
   describe('HTML Attributes', () => {
     it('should pass through HTML attributes', async () => {
       const root = await renderAstroComponent(NavBarContent, {
-        props: { id: 'main-nav', 'data-testid': 'navbar' },
+        props: { 'data-testid': 'navbar', id: 'main-nav' },
       })
 
       const div = root.querySelector('div')

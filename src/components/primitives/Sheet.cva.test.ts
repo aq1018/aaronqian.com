@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { sheetCva } from './Sheet.cva'
-
 import {
   testAllVariants,
   testBaseClasses,
@@ -9,6 +7,8 @@ import {
   testDefaultVariants,
   testEdgeCases,
 } from '@test/testHelpers'
+
+import { sheetCva } from './Sheet.cva'
 
 describe('Sheet.cva', () => {
   testBaseClasses(sheetCva, ['overflow-hidden'])
@@ -80,14 +80,14 @@ describe('Sheet.cva', () => {
 
   describe('Compound Variants - Outline', () => {
     it('should render primary outline without hover', () => {
-      expect(sheetCva({ variant: 'outline', color: 'primary', hover: false })).toContainClasses([
+      expect(sheetCva({ color: 'primary', hover: false, variant: 'outline' })).toContainClasses([
         'border-2',
         'border-primary',
       ])
     })
 
     it('should render primary outline with hover', () => {
-      expect(sheetCva({ variant: 'outline', color: 'primary', hover: true })).toContainClasses([
+      expect(sheetCva({ color: 'primary', hover: true, variant: 'outline' })).toContainClasses([
         'border-primary',
         'hover:bg-primary/5',
         'transition-colors',
@@ -95,7 +95,7 @@ describe('Sheet.cva', () => {
     })
 
     it('should render danger outline with hover', () => {
-      expect(sheetCva({ variant: 'outline', color: 'danger', hover: true })).toContainClasses([
+      expect(sheetCva({ color: 'danger', hover: true, variant: 'outline' })).toContainClasses([
         'border-danger',
         'hover:bg-danger/5',
       ])
@@ -104,13 +104,13 @@ describe('Sheet.cva', () => {
 
   describe('Compound Variants - Soft', () => {
     it('should render primary soft without hover', () => {
-      expect(sheetCva({ variant: 'soft', color: 'primary', hover: false })).toContainClasses([
+      expect(sheetCva({ color: 'primary', hover: false, variant: 'soft' })).toContainClasses([
         'bg-primary/10',
       ])
     })
 
     it('should render primary soft with hover', () => {
-      expect(sheetCva({ variant: 'soft', color: 'primary', hover: true })).toContainClasses([
+      expect(sheetCva({ color: 'primary', hover: true, variant: 'soft' })).toContainClasses([
         'bg-primary/10',
         'hover:bg-primary/15',
         'transition-colors',
@@ -118,7 +118,7 @@ describe('Sheet.cva', () => {
     })
 
     it('should render success soft with hover', () => {
-      expect(sheetCva({ variant: 'soft', color: 'success', hover: true })).toContainClasses([
+      expect(sheetCva({ color: 'success', hover: true, variant: 'soft' })).toContainClasses([
         'bg-success/10',
         'hover:bg-success/15',
       ])
@@ -127,7 +127,7 @@ describe('Sheet.cva', () => {
 
   describe('Compound Variants - Bar', () => {
     it('should render primary bar without hover', () => {
-      expect(sheetCva({ variant: 'bar', color: 'primary', hover: false })).toContainClasses([
+      expect(sheetCva({ color: 'primary', hover: false, variant: 'bar' })).toContainClasses([
         'bg-transparent',
         'border-l-2',
         'border-l-primary/30',
@@ -135,7 +135,7 @@ describe('Sheet.cva', () => {
     })
 
     it('should render primary bar with hover', () => {
-      expect(sheetCva({ variant: 'bar', color: 'primary', hover: true })).toContainClasses([
+      expect(sheetCva({ color: 'primary', hover: true, variant: 'bar' })).toContainClasses([
         'bg-transparent',
         'border-l-2',
         'border-l-neutral/30',
@@ -145,7 +145,7 @@ describe('Sheet.cva', () => {
     })
 
     it('should render danger bar with hover', () => {
-      expect(sheetCva({ variant: 'bar', color: 'danger', hover: true })).toContainClasses([
+      expect(sheetCva({ color: 'danger', hover: true, variant: 'bar' })).toContainClasses([
         'border-l-neutral/30',
         'hover:border-l-danger',
       ])
@@ -154,8 +154,8 @@ describe('Sheet.cva', () => {
 
   // Test variant combinations (excluding hover boolean prop from testCompoundVariants)
   testCompoundVariants(sheetCva, {
-    variant: ['outline', 'soft', 'bar'],
     color: ['primary', 'accent', 'secondary', 'neutral', 'danger', 'success', 'warning', 'info'],
+    variant: ['outline', 'soft', 'bar'],
   })
 
   describe('Hover Variants', () => {
@@ -170,7 +170,7 @@ describe('Sheet.cva', () => {
     })
   })
 
-  testEdgeCases(sheetCva, { variant: 'outline', color: 'neutral', padding: 'md' }, [
+  testEdgeCases(sheetCva, { color: 'neutral', padding: 'md', variant: 'outline' }, [
     'border-neutral',
     'p-6',
   ])
@@ -178,13 +178,13 @@ describe('Sheet.cva', () => {
   describe('Semantic Usage', () => {
     it('should provide appropriate styles for empty states', () => {
       expect(
-        sheetCva({ variant: 'soft', color: 'neutral', padding: 'lg', hover: false }),
+        sheetCva({ color: 'neutral', hover: false, padding: 'lg', variant: 'soft' }),
       ).toContainClasses(['bg-neutral/10', 'p-8'])
     })
 
     it('should provide appropriate styles for project list items', () => {
       expect(
-        sheetCva({ variant: 'bar', color: 'neutral', padding: 'sm', hover: true }),
+        sheetCva({ color: 'neutral', hover: true, padding: 'sm', variant: 'bar' }),
       ).toContainClasses([
         'bg-transparent',
         'border-l-2',
@@ -197,7 +197,7 @@ describe('Sheet.cva', () => {
 
     it('should provide appropriate styles for danger alerts', () => {
       expect(
-        sheetCva({ variant: 'outline', color: 'danger', padding: 'md', hover: false }),
+        sheetCva({ color: 'danger', hover: false, padding: 'md', variant: 'outline' }),
       ).toContainClasses(['border-2', 'border-danger', 'p-6'])
     })
   })
@@ -214,9 +214,9 @@ describe('Sheet.cva', () => {
     })
 
     it('should maintain consistent padding classes across variant types', () => {
-      const outlineLg = sheetCva({ variant: 'outline', padding: 'lg' })
-      const softLg = sheetCva({ variant: 'soft', padding: 'lg' })
-      const barLg = sheetCva({ variant: 'bar', padding: 'lg' })
+      const outlineLg = sheetCva({ padding: 'lg', variant: 'outline' })
+      const softLg = sheetCva({ padding: 'lg', variant: 'soft' })
+      const barLg = sheetCva({ padding: 'lg', variant: 'bar' })
 
       expect(outlineLg).toContain('p-8')
       expect(softLg).toContain('p-8')
@@ -226,9 +226,9 @@ describe('Sheet.cva', () => {
 
   describe('Visual Hierarchy', () => {
     it('should have clear visual distinction between variants', () => {
-      const outline = sheetCva({ variant: 'outline', color: 'primary', hover: true })
-      const soft = sheetCva({ variant: 'soft', color: 'primary', hover: true })
-      const bar = sheetCva({ variant: 'bar', color: 'primary', hover: true })
+      const outline = sheetCva({ color: 'primary', hover: true, variant: 'outline' })
+      const soft = sheetCva({ color: 'primary', hover: true, variant: 'soft' })
+      const bar = sheetCva({ color: 'primary', hover: true, variant: 'bar' })
 
       // Outline: border with hover background
       expect(outline).toContainClasses(['border-2', 'border-primary', 'hover:bg-primary/5'])
@@ -247,8 +247,8 @@ describe('Sheet.cva', () => {
     })
 
     it('should have clear visual distinction between hover states', () => {
-      const noHover = sheetCva({ variant: 'outline', color: 'primary', hover: false })
-      const withHover = sheetCva({ variant: 'outline', color: 'primary', hover: true })
+      const noHover = sheetCva({ color: 'primary', hover: false, variant: 'outline' })
+      const withHover = sheetCva({ color: 'primary', hover: true, variant: 'outline' })
 
       expect(noHover).not.toContain('transition-colors')
       expect(noHover).not.toContain('hover:bg')
@@ -259,16 +259,16 @@ describe('Sheet.cva', () => {
 
   describe('Design Token Integration', () => {
     it('should use semantic color tokens for brand colors', () => {
-      expect(sheetCva({ variant: 'outline', color: 'primary' })).toContain('border-primary')
-      expect(sheetCva({ variant: 'outline', color: 'accent' })).toContain('border-accent')
-      expect(sheetCva({ variant: 'outline', color: 'secondary' })).toContain('border-secondary')
+      expect(sheetCva({ color: 'primary', variant: 'outline' })).toContain('border-primary')
+      expect(sheetCva({ color: 'accent', variant: 'outline' })).toContain('border-accent')
+      expect(sheetCva({ color: 'secondary', variant: 'outline' })).toContain('border-secondary')
     })
 
     it('should use semantic color tokens for status colors', () => {
-      expect(sheetCva({ variant: 'soft', color: 'success' })).toContain('bg-success/10')
-      expect(sheetCva({ variant: 'soft', color: 'warning' })).toContain('bg-warning/10')
-      expect(sheetCva({ variant: 'soft', color: 'danger' })).toContain('bg-danger/10')
-      expect(sheetCva({ variant: 'soft', color: 'info' })).toContain('bg-info/10')
+      expect(sheetCva({ color: 'success', variant: 'soft' })).toContain('bg-success/10')
+      expect(sheetCva({ color: 'warning', variant: 'soft' })).toContain('bg-warning/10')
+      expect(sheetCva({ color: 'danger', variant: 'soft' })).toContain('bg-danger/10')
+      expect(sheetCva({ color: 'info', variant: 'soft' })).toContain('bg-info/10')
     })
   })
 })

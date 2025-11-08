@@ -16,14 +16,16 @@ export interface GiscusMessage {
   }
 }
 
-let cleanup: CleanupFunction | null = null
+let cleanup: CleanupFunction | null
 
 /**
  * Get current theme from document
  * Exported for testing
  */
 export function getCurrentTheme(): 'light' | 'dark' {
-  if (typeof window === 'undefined') return 'light'
+  if (typeof window === 'undefined') {
+    return 'light'
+  }
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
 }
 
@@ -42,7 +44,9 @@ export function getGiscusThemeUrl(theme: 'light' | 'dark'): string {
  */
 export function syncGiscusTheme(theme: 'light' | 'dark'): void {
   const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
-  if (iframe?.contentWindow == null) return
+  if (iframe?.contentWindow == null) {
+    return
+  }
 
   const themeUrl = getGiscusThemeUrl(theme)
 
@@ -85,7 +89,7 @@ export function syncGiscusTheme(theme: 'light' | 'dark'): void {
  */
 export function initializeComments(): CleanupFunction {
   // Clean up previous initialization if it exists
-  if (cleanup != null) {
+  if (cleanup) {
     cleanup()
   }
 
@@ -109,15 +113,15 @@ export function initializeComments(): CleanupFunction {
 
   // Start observing theme changes
   observer.observe(document.documentElement, {
-    attributes: true,
     attributeFilter: ['class'],
+    attributes: true,
   })
 
   // Set initial theme once iframe loads
   // Giscus iframe may not exist immediately, so we wait for it
   const checkIframe = setInterval(() => {
     const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
-    if (iframe != null) {
+    if (iframe) {
       clearInterval(checkIframe)
       // Wait a bit for iframe to be ready
       setTimeout(() => {
@@ -130,7 +134,7 @@ export function initializeComments(): CleanupFunction {
   // Cleanup after 10 seconds if iframe never loads
   const cleanupTimeout = setTimeout(() => {
     clearInterval(checkIframe)
-  }, 10000)
+  }, 10_000)
 
   // Return cleanup function
   cleanup = () => {
@@ -154,7 +158,7 @@ export function setupComments(): void {
 
   // Cleanup before navigation
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup != null) {
+    if (cleanup) {
       cleanup()
     }
   })

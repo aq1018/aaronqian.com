@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import TeethMarks from '@/components/features/CuttingMatTeethMarks.astro'
+
 import { renderAstroComponent } from '@test/testHelpers'
 
 describe('TeethMarks', () => {
@@ -13,7 +14,7 @@ describe('TeethMarks', () => {
 
   it('should create array of line elements', async () => {
     const root = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval, opacity, strokeWidth },
+      props: { height, minorInterval, opacity, strokeWidth, width },
     })
     const teeth = root.querySelectorAll('line')
 
@@ -22,7 +23,7 @@ describe('TeethMarks', () => {
 
   it('should create vertical tick marks on x-axis', async () => {
     const root = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval, opacity, strokeWidth },
+      props: { height, minorInterval, opacity, strokeWidth, width },
     })
     const teeth = root.querySelectorAll('line')
 
@@ -38,7 +39,7 @@ describe('TeethMarks', () => {
 
   it('should apply correct opacity', async () => {
     const root = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval, opacity, strokeWidth },
+      props: { height, minorInterval, opacity, strokeWidth, width },
     })
     const teeth = root.querySelectorAll('line')
 
@@ -49,7 +50,7 @@ describe('TeethMarks', () => {
 
   it('should apply correct stroke width', async () => {
     const root = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval, opacity, strokeWidth },
+      props: { height, minorInterval, opacity, strokeWidth, width },
     })
     const teeth = root.querySelectorAll('line')
 
@@ -60,14 +61,12 @@ describe('TeethMarks', () => {
 
   it('should space teeth at half the minor interval', async () => {
     const root = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval, opacity, strokeWidth },
+      props: { height, minorInterval, opacity, strokeWidth, width },
     })
     const teeth = root.querySelectorAll('line')
 
     // Get x positions
-    const xPositions = Array.from(teeth).map((tooth) =>
-      Number.parseFloat(tooth.getAttribute('x1') ?? '0'),
-    )
+    const xPositions = [...teeth].map((tooth) => Number.parseFloat(tooth.getAttribute('x1') ?? '0'))
 
     // Check spacing between consecutive teeth
     for (let i = 1; i < xPositions.length; i += 1) {
@@ -78,13 +77,11 @@ describe('TeethMarks', () => {
 
   it('should span the full width of canvas', async () => {
     const root = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval, opacity, strokeWidth },
+      props: { height, minorInterval, opacity, strokeWidth, width },
     })
     const teeth = root.querySelectorAll('line')
 
-    const xPositions = Array.from(teeth).map((tooth) =>
-      Number.parseFloat(tooth.getAttribute('x1') ?? '0'),
-    )
+    const xPositions = [...teeth].map((tooth) => Number.parseFloat(tooth.getAttribute('x1') ?? '0'))
 
     // First tooth should be near 0
     expect(xPositions[0]).toBeLessThan(toothInterval)
@@ -95,10 +92,10 @@ describe('TeethMarks', () => {
 
   it('should handle different minor intervals', async () => {
     const root1 = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval: 40, opacity, strokeWidth },
+      props: { height, minorInterval: 40, opacity, strokeWidth, width },
     })
     const root2 = await renderAstroComponent(TeethMarks, {
-      props: { width, height, minorInterval: 80, opacity, strokeWidth },
+      props: { height, minorInterval: 80, opacity, strokeWidth, width },
     })
 
     const teeth1 = root1.querySelectorAll('line')

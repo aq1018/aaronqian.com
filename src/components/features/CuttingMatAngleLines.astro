@@ -31,7 +31,7 @@ const lines = angles.map((angle) => {
   const radians = (angle * Math.PI) / 180
   const endX = centerX + lineLength * Math.cos(radians)
   const endY = bottomY - lineLength * Math.sin(radians)
-  return { startX: centerX, startY: bottomY, endX, endY }
+  return { endX, endY, startX: centerX, startY: bottomY }
 })
 ---
 
