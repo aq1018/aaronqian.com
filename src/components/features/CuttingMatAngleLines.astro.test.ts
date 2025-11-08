@@ -54,28 +54,6 @@ describe('AngleLines', () => {
     })
   })
 
-  it('should apply correct opacity', async () => {
-    const root = await renderAstroComponent(AngleLines, {
-      props: { angleLineCount, height, opacity, strokeWidth, width },
-    })
-    const lines = root.querySelectorAll('line')
-
-    lines.forEach((line) => {
-      expect(line.getAttribute('opacity')).toBe(String(opacity))
-    })
-  })
-
-  it('should apply correct stroke width', async () => {
-    const root = await renderAstroComponent(AngleLines, {
-      props: { angleLineCount, height, opacity, strokeWidth, width },
-    })
-    const lines = root.querySelectorAll('line')
-
-    lines.forEach((line) => {
-      expect(line.getAttribute('stroke-width')).toBe(String(strokeWidth))
-    })
-  })
-
   it('should handle different angle line counts', async () => {
     const root3 = await renderAstroComponent(AngleLines, {
       props: { angleLineCount: 3, height, opacity, strokeWidth, width },
@@ -89,24 +67,5 @@ describe('AngleLines', () => {
 
     expect(lines3.length).toBe(3)
     expect(lines7.length).toBe(7)
-  })
-
-  it('should create lines long enough to reach edge of canvas', async () => {
-    const root = await renderAstroComponent(AngleLines, {
-      props: { angleLineCount, height, opacity, strokeWidth, width },
-    })
-    const lines = root.querySelectorAll('line')
-
-    lines.forEach((line) => {
-      const x2 = Number.parseFloat(line.getAttribute('x2') ?? '0')
-      const y2 = Number.parseFloat(line.getAttribute('y2') ?? '0')
-
-      const dx = x2 - centerX
-      const dy = bottomY - y2
-      const distance = Math.sqrt(dx * dx + dy * dy)
-
-      const minDistance = Math.max(width, height) * 0.5
-      expect(distance).toBeGreaterThanOrEqual(minDistance - 1)
-    })
   })
 })

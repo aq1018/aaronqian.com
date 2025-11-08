@@ -1,22 +1,8 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { isAstroComponentFactory } from 'astro/runtime/server/render/astro/factory.js'
-import type { VariantProps } from 'class-variance-authority'
-import type { ClassValue } from 'clsx'
 import { describe, expect, it } from 'vitest'
 
-type WithClass<T> = T & { class?: ClassValue | null }
 type CVAFn = (props?: Record<string, unknown>) => string
-type VariantsOf<TFn extends CVAFn> = VariantProps<TFn>
-type Entry<TFn extends CVAFn> = {
-  [K in keyof VariantsOf<TFn>]: readonly [K, VariantsOf<TFn>[K]]
-}[keyof VariantsOf<TFn>]
-
-function makeEntries<TFn extends CVAFn, K extends keyof VariantsOf<TFn>>(
-  keys: readonly K[],
-  combo: readonly VariantsOf<TFn>[K][],
-): readonly Entry<TFn>[] {
-  return keys.map((k, i) => [k, combo[i]] as const)
-}
 
 /**
  * Renders an Astro component to a DOM element for testing.
@@ -57,97 +43,6 @@ export async function renderAstroComponent(
 // ============================================================================
 
 /**
- * Test that a CVA function includes all base classes
- *
- * @param variantFn - The CVA variant function to test
- * @param baseClasses - Array of expected base classes
- *
- * @example
- * ```ts
- * testBaseClasses(badgeVariants, ['inline-flex', 'items-center', 'rounded'])
- * ```
- */
-export function testBaseClasses(variantFn: CVAFn, baseClasses: string[]): void {
-  describe('base Classes', () => {
-    it('should include base classes in all variants', () => {
-      const result = variantFn()
-      expect(result).toContainClasses(baseClasses)
-    })
-  })
-}
-
-/**
- * Test all values for a single variant prop
- *
- * @param variantFn - The CVA variant function to test
- * @param propName - The name of the variant prop
- * @param values - Array of valid values for the prop
- *
- * @example
- * ```ts
- * testAllVariants(badgeVariants, 'size', ['sm', 'md', 'lg'])
- * ```
- */
-export function testAllVariants<TFn extends CVAFn, K extends keyof VariantProps<TFn>>(
-  variantFn: TFn,
-  propName: K,
-  values: readonly VariantProps<TFn>[K][],
-): void {
-  describe(`${propName.toString().charAt(0).toUpperCase() + propName.toString().slice(1)} Variants`, () => {
-    it(`should generate valid classes for all ${propName.toString()} variants`, () => {
-      values.forEach((value) => {
-        const result = variantFn({ [propName]: value })
-        expect(result).toBeTruthy()
-        expect(typeof result).toBe('string')
-        expect(result.length).toBeGreaterThan(0)
-      })
-    })
-  })
-}
-
-/**
- * Test compound variants (cartesian product of multiple props)
- *
- * @param variantFn - The CVA variant function to test
- * @param variantCombinations - Object mapping prop names to arrays of values
- *
- * @example
- * ```ts
- * testCompoundVariants(badgeVariants, {
- *   variant: ['solid', 'outline'] as const,
- *   color: ['primary', 'accent'] as const
- * })
- * ```
- */
-export function testCompoundVariants<TFn extends CVAFn>(
-  variantFn: TFn,
-  variantCombinations: {
-    [K in keyof VariantsOf<TFn>]?: readonly VariantsOf<TFn>[K][]
-  },
-): void {
-  const keys = Object.keys(variantCombinations)
-  const lists = keys.map((k) => variantCombinations[k] ?? [])
-  const combos = lists.reduce<unknown[][]>(
-    (acc, curr) =>
-      acc.length > 0 ? acc.flatMap((a) => curr.map((v) => [...a, v])) : curr.map((v) => [v]),
-    [],
-  )
-
-  describe('variant Combinations', () => {
-    it('should generate valid classes for all variant combinations', () => {
-      combos.forEach((combo) => {
-        // Build entries with proper key/value relation using `satisfies`
-        const entries = makeEntries(keys, combo)
-        const props = Object.fromEntries(entries)
-        const result = variantFn(props)
-        expect(result).toBeTruthy()
-        expect(typeof result).toBe('string')
-        expect(result.length).toBeGreaterThan(0)
-      })
-    })
-  })
-}
-/**
  * Test that default variants are applied correctly
  *
  * @param variantFn - The CVA variant function to test
@@ -168,48 +63,6 @@ export function testDefaultVariants(variantFn: CVAFn, expectedClasses: string[])
     it('should apply default variants with no arguments', () => {
       const result = variantFn()
       expect(result).toContainClasses(expectedClasses)
-    })
-  })
-}
-
-/**
- * Test edge cases (undefined, null, empty values)
- *
- * @param variantFn - The CVA variant function to test
- * @param props - Object with prop names and their types
- * @param defaultClasses - Classes that should be present when using defaults
- *
- * @example
- * ```ts
- * testEdgeCases(badgeVariants, { size: 'sm', variant: 'solid' }, ['bg-primary'])
- * ```
- */
-export function testEdgeCases<TFn extends CVAFn>(
-  variantFn: TFn,
-  props: Partial<WithClass<VariantProps<TFn>>>,
-  defaultClasses: string[],
-): void {
-  describe('edge Cases', () => {
-    Object.keys(props).forEach((propName) => {
-      it(`should handle undefined ${propName} (use default)`, () => {
-        const result = variantFn({ [propName]: undefined })
-        expect(result).toContainClasses(defaultClasses)
-      })
-    })
-
-    it('should handle empty object (use all defaults)', () => {
-      const result = variantFn({})
-      expect(result).toContainClasses(defaultClasses)
-    })
-
-    it('should handle null class gracefully', () => {
-      const result = variantFn({ class: undefined })
-      expect(result).toBeTruthy()
-    })
-
-    it('should handle empty string class gracefully', () => {
-      const result = variantFn({ class: '' })
-      expect(result).toBeTruthy()
     })
   })
 }

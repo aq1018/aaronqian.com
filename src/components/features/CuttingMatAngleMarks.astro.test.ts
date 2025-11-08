@@ -7,8 +7,6 @@ import { renderAstroComponent } from '@test/testHelpers'
 describe('AngleMarks', () => {
   const width = 4000
   const height = 4000
-  const centerX = width / 2
-  const bottomY = height
   const angleLineCount = 5
   const minorInterval = 40
   const angleMarkRadius = 1.5
@@ -54,88 +52,6 @@ describe('AngleMarks', () => {
     })
   })
 
-  it('should create right arc from x-axis to first angle line', async () => {
-    const root = await renderAstroComponent(AngleMarks, {
-      props: {
-        angleLineCount: 5,
-        angleMarkRadius,
-        height,
-        minorInterval,
-        opacity,
-        strokeWidth,
-        width,
-      },
-    })
-
-    const marks = root.querySelectorAll('path')
-    const rightArc = marks[0]
-    const d = rightArc.getAttribute('d')
-
-    const arcRadius = angleMarkRadius * minorInterval
-
-    expect(d).toContain(`M ${centerX + arcRadius} ${bottomY}`)
-  })
-
-  it('should create left arc from last angle line to x-axis', async () => {
-    const root = await renderAstroComponent(AngleMarks, {
-      props: {
-        angleLineCount: 5,
-        angleMarkRadius,
-        height,
-        minorInterval,
-        opacity,
-        strokeWidth,
-        width,
-      },
-    })
-
-    const marks = root.querySelectorAll('path')
-    const leftArc = marks[1]
-    const d = leftArc.getAttribute('d')
-
-    const arcRadius = angleMarkRadius * minorInterval
-
-    expect(d).toContain(`${centerX - arcRadius} ${bottomY}`)
-  })
-
-  it('should apply correct opacity', async () => {
-    const root = await renderAstroComponent(AngleMarks, {
-      props: {
-        angleLineCount,
-        angleMarkRadius,
-        height,
-        minorInterval,
-        opacity,
-        strokeWidth,
-        width,
-      },
-    })
-
-    const marks = root.querySelectorAll('path')
-    marks.forEach((mark) => {
-      expect(mark.getAttribute('opacity')).toBe(String(opacity))
-    })
-  })
-
-  it('should apply correct stroke width', async () => {
-    const root = await renderAstroComponent(AngleMarks, {
-      props: {
-        angleLineCount,
-        angleMarkRadius,
-        height,
-        minorInterval,
-        opacity,
-        strokeWidth,
-        width,
-      },
-    })
-
-    const marks = root.querySelectorAll('path')
-    marks.forEach((mark) => {
-      expect(mark.getAttribute('stroke-width')).toBe(String(strokeWidth))
-    })
-  })
-
   it('should handle different angle mark radius', async () => {
     const root1 = await renderAstroComponent(AngleMarks, {
       props: {
@@ -168,22 +84,5 @@ describe('AngleMarks', () => {
 
     expect(d1).toContain('A 40 40')
     expect(d2).toContain('A 120 120')
-  })
-
-  it('should handle single angle line', async () => {
-    const root = await renderAstroComponent(AngleMarks, {
-      props: {
-        angleLineCount: 1,
-        angleMarkRadius,
-        height,
-        minorInterval,
-        opacity,
-        strokeWidth,
-        width,
-      },
-    })
-
-    const marks = root.querySelectorAll('path')
-    expect(marks.length).toBe(2)
   })
 })

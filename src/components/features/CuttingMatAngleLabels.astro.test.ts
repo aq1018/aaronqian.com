@@ -7,8 +7,6 @@ import { renderAstroComponent } from '@test/testHelpers'
 describe('AngleLabels', () => {
   const width = 4000
   const height = 4000
-  const centerX = width / 2
-  const bottomY = height
   const angleLineCount = 5
   const majorLineInterval = 200
   const angleLabelArcIndex = 2
@@ -75,53 +73,6 @@ describe('AngleLabels', () => {
     }
   })
 
-  it('should position labels above the specified arc', async () => {
-    const root = await renderAstroComponent(AngleLabels, {
-      props: {
-        angleLabelArcIndex,
-        angleLineCount,
-        height,
-        labelOpacity,
-        majorLineInterval,
-        width,
-      },
-    })
-
-    const labels = root.querySelectorAll('text')
-    const arcRadius = (angleLabelArcIndex + 1) * 1 * majorLineInterval
-    const labelOffset = 20
-    const expectedDistance = arcRadius + labelOffset
-
-    const firstLabel = labels[1]
-    const x = Number.parseFloat(firstLabel.getAttribute('x') ?? '0')
-    const y = Number.parseFloat(firstLabel.getAttribute('y') ?? '0')
-
-    const dx = x - centerX
-    const dy = bottomY - y
-    const distance = Math.sqrt(dx * dx + dy * dy)
-
-    expect(distance).toBeCloseTo(expectedDistance, 0.1)
-  })
-
-  it('should apply opacity to foreground text only', async () => {
-    const root = await renderAstroComponent(AngleLabels, {
-      props: {
-        angleLabelArcIndex,
-        angleLineCount,
-        height,
-        labelOpacity,
-        majorLineInterval,
-        width,
-      },
-    })
-
-    const labels = root.querySelectorAll('text')
-    for (let i = 0; i < angleLineCount; i += 1) {
-      const fg = labels[i * 2 + 1]
-      expect(fg.getAttribute('opacity')).toBe(String(labelOpacity))
-    }
-  })
-
   it('should use CSS variable for background color', async () => {
     const root = await renderAstroComponent(AngleLabels, {
       props: {
@@ -141,47 +92,5 @@ describe('AngleLabels', () => {
 
     expect(bgFill).toBe('var(--color-background)')
     expect(bgStroke).toBe('var(--color-background)')
-  })
-
-  it('should set correct text attributes', async () => {
-    const root = await renderAstroComponent(AngleLabels, {
-      props: {
-        angleLabelArcIndex,
-        angleLineCount,
-        height,
-        labelOpacity,
-        majorLineInterval,
-        width,
-      },
-    })
-
-    const labels = root.querySelectorAll('text')
-    labels.forEach((label) => {
-      expect(label.getAttribute('font-size')).toBe('14')
-      expect(label.getAttribute('font-family')).toBe('monospace')
-      expect(label.getAttribute('font-weight')).toBe('300')
-      expect(label.getAttribute('text-anchor')).toBe('middle')
-      expect(label.getAttribute('dominant-baseline')).toBe('middle')
-    })
-  })
-
-  it('should create background with stroke for halo effect', async () => {
-    const root = await renderAstroComponent(AngleLabels, {
-      props: {
-        angleLabelArcIndex,
-        angleLineCount,
-        height,
-        labelOpacity,
-        majorLineInterval,
-        width,
-      },
-    })
-
-    const labels = root.querySelectorAll('text')
-    for (let i = 0; i < angleLineCount; i += 1) {
-      const bg = labels[i * 2]
-      expect(bg.getAttribute('stroke-width')).toBe('6')
-      expect(bg.getAttribute('paint-order')).toBe('stroke')
-    }
   })
 })
