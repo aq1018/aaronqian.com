@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
 import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
@@ -12,15 +12,20 @@ export interface Props {
 const { class: className } = Astro.props
 
 // Fetch enabled testimonials, sorted by position, limited to 2
-const testimonials = (await getCollection('testimonials', ({ data }) => data.enabled))
-  .sort((a, b) => a.data.position - b.data.position)
+const testimonials = (
+  await getCollection('testimonials', ({ data }: CollectionEntry<'testimonials'>) => data.enabled)
+)
+  .toSorted(
+    (a: CollectionEntry<'testimonials'>, b: CollectionEntry<'testimonials'>) =>
+      a.data.position - b.data.position,
+  )
   .slice(0, 2)
 ---
 
 {
   testimonials.length > 0 && (
     <Stack space="md" class={className}>
-      {testimonials.map((testimonial) => (
+      {testimonials.map((testimonial: CollectionEntry<'testimonials'>) => (
         <Sheet variant="soft" color="neutral" padding="md">
           <Stack space="sm">
             <Text size="body" preset="longread">

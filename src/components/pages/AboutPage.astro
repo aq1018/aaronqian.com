@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import { getCollection, getEntry } from 'astro:content'
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content'
 
 import SocialsBar from '@/components/features/SocialsBar.astro'
 import TestimonialStrip from '@/components/features/TestimonialStrip.astro'
@@ -20,11 +20,17 @@ if (aboutEntry === undefined) {
   throw new Error('About entry not found')
 }
 
-const devTools = (await getCollection('devTools', ({ data }) => data.enabled)).sort(
-  (a, b) => a.data.position - b.data.position,
+const devTools = (
+  await getCollection('devTools', ({ data }: CollectionEntry<'devTools'>) => data.enabled)
+).toSorted(
+  (a: CollectionEntry<'devTools'>, b: CollectionEntry<'devTools'>) =>
+    a.data.position - b.data.position,
 )
-const benchTools = (await getCollection('benchTools', ({ data }) => data.enabled)).sort(
-  (a, b) => a.data.position - b.data.position,
+const benchTools = (
+  await getCollection('benchTools', ({ data }: CollectionEntry<'benchTools'>) => data.enabled)
+).toSorted(
+  (a: CollectionEntry<'benchTools'>, b: CollectionEntry<'benchTools'>) =>
+    a.data.position - b.data.position,
 )
 
 const { data } = aboutEntry
@@ -78,7 +84,7 @@ const { Content } = await aboutEntry.render()
         <Heading as="h3" size="h3"> How I Work </Heading>
         <ul class="list-disc space-y-2 pl-6">
           {
-            data.workingStyle.map((item) => (
+            data.workingStyle.map((item: string) => (
               <Text as="li" size="body">
                 {item}
               </Text>

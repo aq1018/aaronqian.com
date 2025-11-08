@@ -51,7 +51,7 @@ failures, memory leaks, failed CI/CD, and blocked merges.
 - No `git commit --no-verify`
 - Run `npm run autofix && npm run ci` BEFORE committing
 - `data-*` attributes for hook selectors (never CSS classes)
-- Never modify ESLint config or use disable comments
+- Never modify oxlint config (.oxlintrc.json) or use disable comments
 
 ### P1 Rules (FOLLOW STRICTLY)
 
@@ -87,12 +87,13 @@ failures, memory leaks, failed CI/CD, and blocked merges.
 
 **After EVERY Edit/Write:**
 
-**Automatic (PostToolUse hook):** `eslint --fix` → `prettier --write` → `eslint`
-verification
+**Automatic (PostToolUse hook):** `oxlint --type-aware --fix` →
+`prettier --write` → `oxlint --type-aware` verification
 
 **Manual (YOU must do):**
 
-1. Type check: `npx tsc --noEmit <file>` (`.ts`) or `astro check` (`.astro`)
+1. Type check: `astro check` (checks entire project; `tsc` doesn't work in Astro
+   projects and gives wrong results)
 2. If errors: fix and repeat until clean
 
 **Iterate immediately. Do NOT batch files.**

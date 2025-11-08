@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
 import Icon from '@/components/primitives/Icon.astro'
 import Link from '@/components/primitives/Link.astro'
@@ -13,9 +13,15 @@ export interface Props {
 const { variant = 'compact', class: className } = Astro.props
 
 // Fetch enabled socials sorted by position
-const socials = (await getCollection('socials', ({ data }) => data.enabled)).sort(
-  (a, b) => a.data.position - b.data.position,
+const socials = (
+  await getCollection('socials', ({ data }: CollectionEntry<'socials'>) => data.enabled)
+).toSorted(
+  (a: CollectionEntry<'socials'>, b: CollectionEntry<'socials'>) =>
+    a.data.position - b.data.position,
 )
+
+// Type-safe socials array for mapping
+const typedSocials: Array<CollectionEntry<'socials'>> = socials
 
 // Map social labels to icon names
 function getIconName(label: string): string {
@@ -39,7 +45,7 @@ const showLabels = variant === 'wide'
 
 <Stack direction="row" space="sm" align="center" class={className}>
   {
-    socials.map((social) => (
+    typedSocials.map((social) => (
       <Link
         href={social.data.url}
         rel={social.data.rel}

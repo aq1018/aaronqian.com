@@ -25,17 +25,19 @@ describe('Theme Toggle System', () => {
       })),
     })
 
-    // Mock View Transitions API
-    // View Transitions API not in TypeScript DOM types yet, need to add to document
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- View Transitions API not yet in DOM types
-    ;(document as any).startViewTransition = vi.fn((callback: () => void) => {
+    document.startViewTransition = vi.fn<typeof document.startViewTransition>((callbackOptions) => {
       // Execute callback immediately in tests (no animation)
-      callback()
+      if (typeof callbackOptions === 'function') {
+        callbackOptions()
+      }
+
       return {
         ready: Promise.resolve(),
         finished: Promise.resolve(),
         updateCallbackDone: Promise.resolve(),
-      }
+        types: new Set<string>(),
+        skipTransition: () => {},
+      } satisfies ViewTransition
     })
 
     return () => {
@@ -256,9 +258,9 @@ describe('Theme Toggle System', () => {
 
       // Simulate system theme change to dark
       matchesDark = true
-      const event: Partial<MediaQueryListEvent> = { matches: true }
+      const event = new MediaQueryListEvent('change', { matches: true })
       listeners.forEach((listener) => {
-        listener(event as MediaQueryListEvent)
+        listener(event)
       })
 
       // Should apply dark theme when system theme is dark
@@ -306,9 +308,9 @@ describe('Theme Toggle System', () => {
       expect(document.documentElement.classList.contains('dark')).toBe(false)
 
       // Simulate system theme change to dark
-      const event: Partial<MediaQueryListEvent> = { matches: true }
+      const event = new MediaQueryListEvent('change', { matches: true })
       listeners.forEach((listener) => {
-        listener(event as MediaQueryListEvent)
+        listener(event)
       })
 
       // Should still be light because theme is set to "light", not "system"

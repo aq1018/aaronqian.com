@@ -15,17 +15,17 @@ let cleanup: CleanupFunction | null = null
  */
 export function initializeCollapsibles(): CleanupFunction {
   // Clean up previous initialization if it exists
-  if (cleanup !== null) {
+  if (cleanup != null) {
     cleanup()
   }
 
-  const triggers = document.querySelectorAll('[data-collapsible-trigger]')
-  const handlers = new Map<Element, EventListener>()
+  const triggers = document.querySelectorAll<HTMLElement>('[data-collapsible-trigger]')
+  const handlers = new Map<HTMLElement, EventListener>()
 
   // Set up click handlers for triggers
   triggers.forEach((trigger) => {
-    const targetId = trigger.getAttribute('data-collapsible-trigger')
-    if (targetId === null || targetId === '') return
+    const targetId = trigger.dataset.collapsibleTrigger
+    if (targetId == null || targetId === '') return
 
     const handler = (e: Event) => {
       e.preventDefault()
@@ -53,19 +53,19 @@ export function initializeCollapsibles(): CleanupFunction {
  * Pure CSS handles animation via data-open attribute
  */
 function toggleCollapsible(id: string): void {
-  const collapsible = document.querySelector(`[data-collapsible-id="${id}"]`)
-  if (collapsible === null) return
+  const collapsible = document.querySelector<HTMLElement>(`[data-collapsible-id="${id}"]`)
+  if (collapsible == null) return
 
-  const isOpen = collapsible.getAttribute('data-open') === 'true'
+  const isOpen = collapsible.dataset.open === 'true'
   const newState = !isOpen
 
   // Update state - CSS handles the animation
-  collapsible.setAttribute('data-open', String(newState))
+  collapsible.dataset.open = String(newState)
   collapsible.setAttribute('aria-expanded', String(newState))
 
   // Update trigger state
   const trigger = document.querySelector(`[data-collapsible-trigger="${id}"]`)
-  if (trigger !== null) {
+  if (trigger != null) {
     trigger.setAttribute('aria-expanded', String(newState))
   }
 }
@@ -87,7 +87,7 @@ export function setupCollapsibles(): void {
 
   // Cleanup before page swap to prevent memory leaks
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup !== null) {
+    if (cleanup != null) {
       cleanup()
     }
   })

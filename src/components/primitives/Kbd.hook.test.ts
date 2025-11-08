@@ -4,19 +4,19 @@ import { setupKbd } from './Kbd.hook'
 
 import { setupTestDOM } from '@test/testHelpers'
 
+/**
+ * Helper to mock userAgent
+ */
+function mockUserAgent(userAgent: string): void {
+  Object.defineProperty(navigator, 'userAgent', {
+    value: userAgent,
+    configurable: true,
+  })
+}
+
 describe('Kbd Hook', () => {
   // Store original userAgent before all tests
   const originalUserAgent = navigator.userAgent
-
-  /**
-   * Helper to mock userAgent
-   */
-  function mockUserAgent(userAgent: string): void {
-    Object.defineProperty(navigator, 'userAgent', {
-      value: userAgent,
-      configurable: true,
-    })
-  }
 
   /**
    * Helper to restore original userAgent and cleanup DOM
@@ -38,8 +38,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⌘K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⌘K')
 
       cleanup()
       domCleanup()
@@ -54,8 +54,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Ctrl+K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Ctrl+K')
 
       cleanup()
       domCleanup()
@@ -70,8 +70,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Ctrl+K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Ctrl+K')
 
       cleanup()
       domCleanup()
@@ -88,8 +88,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⌘K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⌘K')
 
       cleanup()
       domCleanup()
@@ -104,8 +104,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Ctrl+K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Ctrl+K')
 
       cleanup()
       domCleanup()
@@ -120,8 +120,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Ctrl+K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Ctrl+K')
 
       cleanup()
       domCleanup()
@@ -138,8 +138,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⌘S')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⌘S')
 
       cleanup()
       domCleanup()
@@ -154,8 +154,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⌃C')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⌃C')
 
       cleanup()
       domCleanup()
@@ -170,8 +170,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⌥F')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⌥F')
 
       cleanup()
       domCleanup()
@@ -186,8 +186,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⇧Tab')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⇧Tab')
 
       cleanup()
       domCleanup()
@@ -202,8 +202,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Ctrl+C')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Ctrl+C')
 
       cleanup()
       domCleanup()
@@ -218,8 +218,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Alt+F4')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Alt+F4')
 
       cleanup()
       domCleanup()
@@ -234,8 +234,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Shift+Delete')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Shift+Delete')
 
       cleanup()
       domCleanup()
@@ -252,8 +252,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Escape')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Escape')
 
       cleanup()
       domCleanup()
@@ -268,8 +268,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Enter')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Enter')
 
       cleanup()
       domCleanup()
@@ -328,9 +328,9 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
       // Should not update if keys is missing
-      expect(kbd.textContent).toBe('')
+      expect(kbd?.textContent).toBe('')
 
       cleanup()
       domCleanup()
@@ -345,8 +345,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('K')
 
       cleanup()
       domCleanup()
@@ -361,9 +361,9 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
       // Unknown modifier should be returned as-is
-      expect(kbd.textContent).toBe('unknownK')
+      expect(kbd?.textContent).toBe('unknownK')
 
       cleanup()
       domCleanup()
@@ -405,18 +405,18 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⌘K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⌘K')
 
       // Simulate navigation - change DOM
-      kbd.textContent = 'OUTDATED'
+      if (kbd) kbd.textContent = 'OUTDATED'
 
       // Trigger astro:page-load event
       const event = new Event('astro:page-load')
       document.dispatchEvent(event)
 
       // Should re-update
-      expect(kbd.textContent).toBe('⌘K')
+      expect(kbd?.textContent).toBe('⌘K')
 
       cleanup()
       domCleanup()
@@ -444,8 +444,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('⌘K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('⌘K')
 
       cleanup()
       domCleanup()
@@ -460,8 +460,8 @@ describe('Kbd Hook', () => {
 
       const cleanup = setupKbd()
 
-      const kbd = document.querySelector('[data-kbd]') as HTMLElement
-      expect(kbd.textContent).toBe('Ctrl+K')
+      const kbd = document.querySelector<HTMLElement>('[data-kbd]')
+      expect(kbd?.textContent).toBe('Ctrl+K')
 
       cleanup()
       domCleanup()

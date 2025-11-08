@@ -16,7 +16,7 @@ interface ProjectWithLatestLog extends CollectionEntry<'projects'> {
 function extractDateFromLogId(logId: string): Date | null {
   // Match pattern: {slug}-YYYY-MM-DD-{rest}
   const dateMatch = /-(\d{4}-\d{2}-\d{2})-/.exec(logId)
-  if (dateMatch === null) return null
+  if (dateMatch == null) return null
 
   const dateStr = dateMatch[1]
   const date = new Date(dateStr)
@@ -55,7 +55,7 @@ export function sortProjectsByLatestLog(
     const projectSlug = extractProjectSlugFromLog(log.id)
     const logDate = extractDateFromLogId(log.id)
 
-    if (logDate !== null) {
+    if (logDate != null) {
       const currentLatest = latestLogDates.get(projectSlug)
       if (currentLatest === undefined || logDate > currentLatest) {
         latestLogDates.set(projectSlug, logDate)
@@ -73,7 +73,7 @@ export function sortProjectsByLatestLog(
   })
 
   // Sort by latest log date (descending), projects without logs go last
-  return projectsWithDates.sort((a, b) => {
+  return projectsWithDates.toSorted((a, b) => {
     if (a.latestLogDate === undefined && b.latestLogDate === undefined) return 0
     if (a.latestLogDate === undefined) return 1
     if (b.latestLogDate === undefined) return -1
@@ -108,7 +108,7 @@ export function markLatestProjectAsLive(
   projectLogs: Array<CollectionEntry<'projectLogs'>>,
 ): Array<CollectionEntry<'projects'>> {
   const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
-  if (latestSlug === null) return projects
+  if (latestSlug == null) return projects
 
   return projects.map((project) => {
     const projectSlug = project.id.replace(/\/index(\.md)?$/, '')

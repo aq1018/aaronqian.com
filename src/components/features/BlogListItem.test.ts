@@ -5,18 +5,27 @@ import BlogListItem from './BlogListItem.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('BlogListItem Component', () => {
-  const mockPost: CollectionEntry<'blog'> = {
+type BlogEntry = CollectionEntry<'blog'>
+
+function createMockPost(overrides?: Partial<BlogEntry['data']>): Partial<BlogEntry> {
+  return {
     id: 'test-post/index.md',
     slug: 'test-post',
     collection: 'blog',
+    body: '',
     data: {
       title: 'Test Blog Post',
       description: 'A test blog post description',
       date: new Date('2023-01-15'),
       tags: ['testing', 'vitest'],
+      draft: false,
+      ...overrides,
     },
-  } as unknown as CollectionEntry<'blog'>
+  }
+}
+
+describe('BlogListItem Component', () => {
+  const mockPost = createMockPost()
 
   describe('Rendering', () => {
     it('should render as a list item (li)', async () => {

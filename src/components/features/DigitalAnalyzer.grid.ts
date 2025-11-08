@@ -114,7 +114,7 @@ export class GridManager {
 
     this.gridLines = generateGridLines(this.height, this.gridSize)
     const gridGroup = this.staticSvg.querySelector('g')
-    if (gridGroup === null) return
+    if (gridGroup == null) return
 
     gridGroup.innerHTML = ''
 
@@ -126,7 +126,7 @@ export class GridManager {
       line.setAttribute('x2', String(this.width))
       line.setAttribute('y2', String(y))
       line.setAttribute('opacity', String(this.config.gridOpacity))
-      gridGroup.appendChild(line)
+      gridGroup.append(line)
     }
 
     // Vertical lines (one per bit/cell boundary, including edges)
@@ -138,7 +138,7 @@ export class GridManager {
       line.setAttribute('x2', String(x))
       line.setAttribute('y2', String(this.height))
       line.setAttribute('opacity', String(this.config.gridOpacity))
-      gridGroup.appendChild(line)
+      gridGroup.append(line)
     }
   }
 

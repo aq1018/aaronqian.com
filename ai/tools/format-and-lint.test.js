@@ -49,7 +49,15 @@ async function runTool(filePath) {
   // Wait for process to close using events.once (promise-based)
   const closeEvent = /** @type {unknown} */ (await once(child, 'close'))
   /** @type {number | null} */
-  const exitCode = /** @type {[number | null]} */ (closeEvent)[0]
+  let exitCode = null
+  if (Array.isArray(closeEvent) && closeEvent.length > 0) {
+    const firstItem = /** @type {unknown} */ (closeEvent[0])
+    if (typeof firstItem === 'number') {
+      exitCode = firstItem
+    } else if (firstItem == null) {
+      exitCode = null
+    }
+  }
 
   return { stdout, stderr, exitCode }
 }
@@ -110,15 +118,17 @@ export function validFunction() {
       /** @type {{hookSpecificOutput: {additionalContext: string}}} */
       const output = parsed
       expect(output.hookSpecificOutput).toBeDefined()
-      expect(output.hookSpecificOutput.additionalContext).toContain('✓ ESLint --fix completed')
+      expect(output.hookSpecificOutput.additionalContext).toContain(
+        '✓ oxlint --type-aware --fix completed',
+      )
       expect(output.hookSpecificOutput.additionalContext).toContain('✓ Prettier completed')
-      expect(output.hookSpecificOutput.additionalContext).toContain('✓ ESLint verification passed')
+      expect(output.hookSpecificOutput.additionalContext).toContain('✓ oxlint verification passed')
       expect(output.hookSpecificOutput.additionalContext).toContain('Next: Verify typecheck only')
     }, 30000)
   })
 
-  describe('ESLint Fails Case', () => {
-    it('should show errors and skip formatting when ESLint fails', async () => {
+  describe('oxlint Fails Case', () => {
+    it('should show errors and skip formatting when oxlint fails', async () => {
       const filePath = createTestFile(
         'eslint-fail.ts',
         `// Unfixable errors
@@ -136,8 +146,10 @@ function unusedFunc() { return 1 }
       const parsed = /** @type {unknown} */ (JSON.parse(result.stdout))
       /** @type {{hookSpecificOutput: {additionalContext: string}}} */
       const output = parsed
-      expect(output.hookSpecificOutput.additionalContext).toContain('✗ ESLint --fix failed')
-      expect(output.hookSpecificOutput.additionalContext).toContain('ESLint errors:')
+      expect(output.hookSpecificOutput.additionalContext).toContain(
+        '✗ oxlint --type-aware --fix failed',
+      )
+      expect(output.hookSpecificOutput.additionalContext).toContain('oxlint errors:')
       expect(output.hookSpecificOutput.additionalContext).toContain('unused_var')
       expect(output.hookSpecificOutput.additionalContext).toContain('⊘ Formatting skipped')
       expect(output.hookSpecificOutput.additionalContext).toContain('Next: Fix the errors above')
@@ -227,7 +239,15 @@ function unusedFunc() { return 1 }
 
       const closeEvent = /** @type {unknown} */ (await once(child, 'close'))
       /** @type {number | null} */
-      const exitCode = /** @type {[number | null]} */ (closeEvent)[0]
+      let exitCode = null
+      if (Array.isArray(closeEvent) && closeEvent.length > 0) {
+        const firstItem = /** @type {unknown} */ (closeEvent[0])
+        if (typeof firstItem === 'number') {
+          exitCode = firstItem
+        } else if (firstItem == null) {
+          exitCode = null
+        }
+      }
 
       // Should exit with error code 1
       expect(exitCode).toBe(1)

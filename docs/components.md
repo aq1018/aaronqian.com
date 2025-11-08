@@ -110,8 +110,8 @@ export const textVariants = cva('', {
 - More maintainable than inline Tailwind classes
 - Follows Tailwind v4 custom `@theme` patterns
 
-**ESLint Note:** Files using `@apply` with custom utilities must be added to
-ESLint ignores (CSS parser cannot handle Tailwind directives).
+**oxlint Note:** Files using `@apply` with custom utilities must be added to
+oxlint ignores (CSS parser cannot handle Tailwind directives).
 
 **Search for examples:** `Glob: **/typography.{cva.ts,css}`
 

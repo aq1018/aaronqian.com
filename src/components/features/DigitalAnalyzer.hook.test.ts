@@ -118,11 +118,11 @@ describe('Digital Analyzer Hook', () => {
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
-      global.ResizeObserver = class ResizeObserver {
+      global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
         observe = mockObserve
         disconnect = mockDisconnect
         unobserve = vi.fn()
-      } as unknown as typeof ResizeObserver
+      } as typeof ResizeObserver
 
       const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
@@ -146,11 +146,11 @@ describe('Digital Analyzer Hook', () => {
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
-      global.ResizeObserver = class ResizeObserver {
+      global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
         observe = mockObserve
         disconnect = mockDisconnect
         unobserve = vi.fn()
-      } as unknown as typeof ResizeObserver
+      } as typeof ResizeObserver
 
       const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
@@ -183,12 +183,12 @@ describe('Digital Analyzer Hook', () => {
 
       const cleanup = initializeDigitalAnalyzer()
 
-      const svg = document.getElementById('digital-analyzer-svg') as unknown as SVGSVGElement
+      const svg = document.querySelector<SVGSVGElement>('#digital-analyzer-svg')!
 
       // Add a trace path
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
       path.setAttribute('d', 'M0,0 L100,100')
-      svg.appendChild(path)
+      svg.append(path)
 
       expect(svg.children.length).toBeGreaterThan(0)
 
@@ -216,7 +216,7 @@ describe('Digital Analyzer Hook', () => {
       const decoderToggle = document.querySelector<HTMLElement>('[data-decoder-toggle]')
 
       // Modify decoder toggle styles
-      if (decoderToggle !== null) {
+      if (decoderToggle != null) {
         decoderToggle.style.opacity = '0.8'
         decoderToggle.style.transform = 'scale(1.5)'
         decoderToggle.style.filter = 'blur(5px)'
@@ -244,7 +244,9 @@ describe('Digital Analyzer Hook', () => {
       const cleanup = initializeDigitalAnalyzer()
 
       // Should not throw error even without lightning bolt
-      expect(() => cleanup()).not.toThrow()
+      expect(() => {
+        cleanup()
+      }).not.toThrow()
 
       domCleanup()
       timerCleanup()
@@ -255,11 +257,11 @@ describe('Digital Analyzer Hook', () => {
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
-      global.ResizeObserver = class ResizeObserver {
+      global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
         observe = mockObserve
         disconnect = mockDisconnect
         unobserve = vi.fn()
-      } as unknown as typeof ResizeObserver
+      } as typeof ResizeObserver
 
       const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
@@ -330,8 +332,8 @@ describe('Digital Analyzer Hook', () => {
       )
 
       // Set some content
-      if (binaryBuffer !== null) binaryBuffer.textContent = '11110000'
-      if (asciiText !== null) asciiText.textContent = 'Hello'
+      if (binaryBuffer != null) binaryBuffer.textContent = '11110000'
+      if (asciiText != null) asciiText.textContent = 'Hello'
 
       // Cleanup should clear display
       cleanup()
@@ -388,11 +390,11 @@ describe('Digital Analyzer Hook', () => {
     it('should call cleanup when astro:before-preparation event fires', () => {
       const mockDisconnect = vi.fn()
 
-      global.ResizeObserver = class ResizeObserver {
+      global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
         observe = vi.fn()
         disconnect = mockDisconnect
         unobserve = vi.fn()
-      } as unknown as typeof ResizeObserver
+      } as typeof ResizeObserver
 
       const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
@@ -422,11 +424,11 @@ describe('Digital Analyzer Hook', () => {
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
-      global.ResizeObserver = class ResizeObserver {
+      global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
         observe = mockObserve
         disconnect = mockDisconnect
         unobserve = vi.fn()
-      } as unknown as typeof ResizeObserver
+      } as typeof ResizeObserver
 
       const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
@@ -453,11 +455,11 @@ describe('Digital Analyzer Hook', () => {
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
-      global.ResizeObserver = class ResizeObserver {
+      global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
         observe = mockObserve
         disconnect = mockDisconnect
         unobserve = vi.fn()
-      } as unknown as typeof ResizeObserver
+      } as typeof ResizeObserver
 
       const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">
@@ -486,11 +488,11 @@ describe('Digital Analyzer Hook', () => {
       const mockObserve = vi.fn()
       const mockDisconnect = vi.fn()
 
-      global.ResizeObserver = class ResizeObserver {
+      global.ResizeObserver = class MockResizeObserver implements ResizeObserver {
         observe = mockObserve
         disconnect = mockDisconnect
         unobserve = vi.fn()
-      } as unknown as typeof ResizeObserver
+      } as typeof ResizeObserver
 
       const domCleanup = setupTestDOM(`
         <div data-digital-analyzer style="width: 800px; height: 600px;">

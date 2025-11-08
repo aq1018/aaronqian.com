@@ -1,0 +1,74 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    ".astro/",
+    ".husky/",
+    ".playwright-mcp/",
+    ".wrangler/",
+    "dist/",
+    "node_modules/",
+    "public/"
+  ],
+  "plugins": [
+    "eslint",
+    "unicorn",
+    "typescript",
+    "oxc",
+    "import",
+    "jsx-a11y",
+    "node",
+    "promise",
+    "vitest",
+    "regex"
+  ],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "perf": "error",
+    // "style": "error",
+    "nursery": "error"
+  },
+  "rules": {
+    "no-useless-undefined": "off",
+    "no-undefined": "off",
+    "no-console": "off",
+    "max-lines-per-function": [
+      "error",
+      {
+        "max": 50,
+        "skipComments": true,
+        "skipBlankLines": true
+      }
+    ],
+    "max-lines": [
+      "error",
+      {
+        "max": 300,
+        "skipComments": true,
+        "skipBlankLines": true
+      }
+    ],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "max-dependencies": "off",
+    "no-unassigned-import": "off"
+  },
+  "globals": {
+    "Astro": "readonly"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.test.{ts,js}"],
+      "rules": {
+        "no-await-in-loop": "off",
+        "max-lines-per-function": "off",
+        "max-lines": "off",
+        "max-classes-per-file": "off"
+      }
+    }
+  ]
+}

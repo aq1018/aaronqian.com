@@ -1,10 +1,11 @@
-import '@testing-library/jest-dom/vitest'
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import ProjectList from './ProjectList.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
+
+type ProjectEntry = CollectionEntry<'projects'>
 
 // Mock project data
 const createMockProject = (
@@ -12,21 +13,21 @@ const createMockProject = (
   title: string,
   status: 'active' | 'planning' | 'done',
   live = false,
-): CollectionEntry<'projects'> =>
-  ({
-    id,
-    collection: 'projects',
-    data: {
-      title,
-      description: `Description for ${title}`,
-      aside: `Aside for ${title}`,
-      status,
-      live,
-      order: 1,
-      tags: [],
-    },
-    slug: id.replace(/\/index(\.md)?$/, ''),
-  }) as unknown as CollectionEntry<'projects'>
+): ProjectEntry => ({
+  id,
+  collection: 'projects',
+  data: {
+    title,
+    description: `Description for ${title}`,
+    aside: `Aside for ${title}`,
+    status,
+    live,
+    order: 1,
+  },
+  slug: id.replace(/\/index(\.md)?$/, ''),
+  render: vi.fn(),
+  body: '',
+})
 
 const defaultStatusStyles = {
   active: 'text-primary',
@@ -139,7 +140,7 @@ describe('ProjectList', () => {
       // Count occurrences of 'LIVE' - should only appear in status if at all
       const textContent = root.textContent
       const liveMatches = textContent.match(/LIVE/g)
-      const liveCount = liveMatches === null ? 0 : liveMatches.length
+      const liveCount = liveMatches == null ? 0 : liveMatches.length
       expect(liveCount).toBe(0)
     })
   })

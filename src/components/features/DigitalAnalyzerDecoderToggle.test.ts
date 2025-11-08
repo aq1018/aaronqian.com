@@ -13,7 +13,7 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
   afterEach(() => {
     // Clean up after each test
-    if (cleanup !== null) {
+    if (cleanup != null) {
       cleanup()
     }
     document.body.innerHTML = ''
@@ -29,11 +29,14 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
       cleanup = initializeDecoderToggles()
 
-      const button = document.querySelector('button')
-      expect(button?.getAttribute('data-collapsible-trigger')).toBe('test-target')
+      const button = document.querySelector<HTMLElement>('button')
+      expect(button?.dataset.collapsibleTrigger).toBe('test-target')
     })
 
     it('should only inject into first child when multiple children exist', () => {
+      // Mock console.warn to suppress expected warning
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
       document.body.innerHTML = `
         <div data-decoder-wrapper data-decoder-target="test-target">
           <button id="first">First</button>
@@ -43,11 +46,17 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
       cleanup = initializeDecoderToggles()
 
-      const firstButton = document.getElementById('first')
-      const secondButton = document.getElementById('second')
+      const firstButton = document.querySelector<HTMLElement>('#first')
+      const secondButton = document.querySelector<HTMLElement>('#second')
 
-      expect(firstButton?.getAttribute('data-collapsible-trigger')).toBe('test-target')
-      expect(secondButton?.getAttribute('data-collapsible-trigger')).toBeNull()
+      expect(firstButton?.dataset.collapsibleTrigger).toBe('test-target')
+      expect(secondButton?.dataset.collapsibleTrigger).toBeUndefined()
+
+      // Verify the warning was called as expected
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        '[DecoderToggle] Multiple children detected in wrapper. Only the first element will receive toggle behavior.',
+        expect.any(HTMLDivElement),
+      )
     })
 
     it('should handle multiple decoder wrappers', () => {
@@ -62,11 +71,11 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
       cleanup = initializeDecoderToggles()
 
-      const btn1 = document.getElementById('btn-1')
-      const btn2 = document.getElementById('btn-2')
+      const btn1 = document.querySelector<HTMLElement>('#btn-1')
+      const btn2 = document.querySelector<HTMLElement>('#btn-2')
 
-      expect(btn1?.getAttribute('data-collapsible-trigger')).toBe('target-1')
-      expect(btn2?.getAttribute('data-collapsible-trigger')).toBe('target-2')
+      expect(btn1?.dataset.collapsibleTrigger).toBe('target-1')
+      expect(btn2?.dataset.collapsibleTrigger).toBe('target-2')
     })
   })
 
@@ -95,14 +104,14 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
       cleanup = initializeDecoderToggles()
 
-      const collapsible = document.querySelector('[data-collapsible-id="test-target"]')
-      expect(collapsible?.getAttribute('data-open')).toBe('false')
+      const collapsible = document.querySelector<HTMLElement>('[data-collapsible-id="test-target"]')
+      expect(collapsible?.dataset.open).toBe('false')
 
       // Simulate keyboard event
       const event = new KeyboardEvent('keydown', { key: 'k' })
       document.dispatchEvent(event)
 
-      expect(collapsible?.getAttribute('data-open')).toBe('true')
+      expect(collapsible?.dataset.open).toBe('true')
     })
 
     it('should handle Cmd/Ctrl modifier based on OS', () => {
@@ -115,7 +124,7 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
       cleanup = initializeDecoderToggles()
 
-      const collapsible = document.querySelector('[data-collapsible-id="test-target"]')
+      const collapsible = document.querySelector<HTMLElement>('[data-collapsible-id="test-target"]')
       const isMac = navigator.userAgent.toUpperCase().includes('MAC')
 
       // Simulate keyboard event with appropriate modifier
@@ -126,7 +135,7 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
       })
       document.dispatchEvent(event)
 
-      expect(collapsible?.getAttribute('data-open')).toBe('true')
+      expect(collapsible?.dataset.open).toBe('true')
     })
 
     it('should not toggle without required modifier key', () => {
@@ -139,13 +148,12 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
 
       cleanup = initializeDecoderToggles()
 
-      const collapsible = document.querySelector('[data-collapsible-id="test-target"]')
+      const collapsible = document.querySelector<HTMLElement>('[data-collapsible-id="test-target"]')
 
       // Simulate keyboard event WITHOUT modifier
       const event = new KeyboardEvent('keydown', { key: 'k' })
       document.dispatchEvent(event)
-
-      expect(collapsible?.getAttribute('data-open')).toBe('false')
+      expect(collapsible?.dataset.open).toBe('false')
     })
   })
 

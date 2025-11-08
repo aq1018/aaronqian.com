@@ -5,11 +5,14 @@ import ProjectListItem from './ProjectListItem.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('ProjectListItem Component', () => {
-  const mockProject: CollectionEntry<'projects'> = {
+function createMockProject(
+  overrides?: Partial<CollectionEntry<'projects'>['data']>,
+): Partial<CollectionEntry<'projects'>> {
+  return {
     id: 'test-project/index.md',
     slug: 'test-project',
     collection: 'projects',
+    body: '',
     data: {
       title: 'Test Project',
       description: 'A test project description',
@@ -17,8 +20,13 @@ describe('ProjectListItem Component', () => {
       status: 'active',
       live: false,
       order: 1,
+      ...overrides,
     },
-  } as unknown as CollectionEntry<'projects'>
+  }
+}
+
+describe('ProjectListItem Component', () => {
+  const mockProject = createMockProject()
 
   describe('Rendering', () => {
     it('should render as a list item (li)', async () => {

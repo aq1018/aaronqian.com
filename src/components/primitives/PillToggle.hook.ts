@@ -5,31 +5,28 @@
  */
 
 type CleanupFunction = () => void
+interface ToggleState {
+  toggleButtons: Set<HTMLElement>
+  menuMap: WeakMap<HTMLElement, HTMLElement>
+}
 
 let cleanup: CleanupFunction | null = null
 
 /**
- * Initialize toggle button behavior for all buttons on the page
- * Uses event delegation to avoid multiple listeners
+ * Build map of toggle buttons and their associated menus
  */
-export function initializeToggles(): CleanupFunction {
-  // Clean up previous initialization if it exists
-  if (cleanup !== null) {
-    cleanup()
-  }
-
+function buildToggleMap(): ToggleState {
   const toggleButtons = new Set<HTMLElement>()
   const menuMap = new WeakMap<HTMLElement, HTMLElement>()
 
-  // Find all toggle buttons and their associated menus
   document.querySelectorAll<HTMLElement>('[data-toggle-button]').forEach((button) => {
     toggleButtons.add(button)
 
     // Check for explicit target via data-toggle-target attribute
-    const targetId = button.getAttribute('data-toggle-target')
-    if (targetId !== null && targetId !== '') {
-      const targetMenu = document.getElementById(targetId)
-      if (targetMenu !== null) {
+    const targetId = button.dataset.toggleTarget
+    if (targetId !== undefined && targetId != null && targetId !== '') {
+      const targetMenu = document.querySelector<HTMLElement>(`#${targetId}`)
+      if (targetMenu != null) {
         menuMap.set(button, targetMenu)
       }
     } else {
@@ -41,56 +38,72 @@ export function initializeToggles(): CleanupFunction {
     }
   })
 
-  // Event handler for button clicks
-  const handleButtonClick = (e: Event): void => {
+  return { toggleButtons, menuMap }
+}
+
+/**
+ * Create handler for toggle button clicks
+ */
+function createButtonClickHandler(state: ToggleState): EventListener {
+  return (e: Event): void => {
     const target = e.target
-    // Accept both HTMLElement and SVGElement (Element is the base class)
     if (!(target instanceof Element)) return
 
     const button = target.closest<HTMLElement>('[data-toggle-button]')
-
-    if (button === null || !toggleButtons.has(button)) return
+    if (button == null || !state.toggleButtons.has(button)) return
 
     e.stopPropagation()
 
-    const menu = menuMap.get(button)
+    const menu = state.menuMap.get(button)
     if (menu === undefined) return
 
-    // Toggle menu visibility
     const isHidden = menu.classList.contains('hidden')
     menu.classList.toggle('hidden')
     button.setAttribute('aria-expanded', String(isHidden))
   }
+}
 
-  // Event handler for closing menus when clicking outside
-  const handleDocumentClick = (e: Event): void => {
+/**
+ * Create handler for closing menus when clicking outside
+ */
+function createDocumentClickHandler(state: ToggleState): EventListener {
+  return (e: Event): void => {
     const target = e.target
-    // Accept both HTMLElement and SVGElement (Element is the base class)
     if (!(target instanceof Element)) return
 
-    // Don't close if clicking on a toggle button (handled by handleButtonClick)
     const clickedButton = target.closest<HTMLElement>('[data-toggle-button]')
-    if (clickedButton !== null && toggleButtons.has(clickedButton)) return
+    if (clickedButton != null && state.toggleButtons.has(clickedButton)) return
 
-    // Close all menus
-    toggleButtons.forEach((button) => {
-      const menu = menuMap.get(button)
+    state.toggleButtons.forEach((button) => {
+      const menu = state.menuMap.get(button)
       if (menu !== undefined) {
         menu.classList.add('hidden')
         button.setAttribute('aria-expanded', 'false')
       }
     })
   }
+}
 
-  // Attach event listeners
+/**
+ * Initialize toggle button behavior for all buttons on the page
+ * Uses event delegation to avoid multiple listeners
+ */
+export function initializeToggles(): CleanupFunction {
+  if (cleanup != null) {
+    cleanup()
+  }
+
+  const state = buildToggleMap()
+  const handleButtonClick = createButtonClickHandler(state)
+  const handleDocumentClick = createDocumentClickHandler(state)
+
   document.addEventListener('click', handleButtonClick)
   document.addEventListener('click', handleDocumentClick)
 
-  // Return cleanup function
   cleanup = () => {
     document.removeEventListener('click', handleButtonClick)
     document.removeEventListener('click', handleDocumentClick)
-    toggleButtons.clear()
+    state.toggleButtons.clear()
     cleanup = null
   }
 
@@ -108,7 +121,7 @@ export function setupToggles(): void {
 
   // Cleanup before navigation
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup !== null) {
+    if (cleanup != null) {
       cleanup()
     }
   })

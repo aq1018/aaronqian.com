@@ -12,8 +12,10 @@ Pre-commit hooks are mandatory.
 
 **After EVERY file Edit/Write, validate immediately:**
 
-1. Hook auto-runs: `eslint --fix` → `prettier --write` → `eslint` verification
-2. YOU verify: `npx tsc --noEmit <file>` or `astro check`
+1. Hook auto-runs: `oxlint --type-aware --fix` → `prettier --write` →
+   `oxlint --type-aware` verification
+2. YOU verify: `astro check` (checks entire project; `tsc` doesn't work in Astro
+   projects)
 3. If errors: fix and repeat
 
 See AGENTS.md Per-File Validation section.
@@ -52,7 +54,7 @@ Automatically run on staged files when you `git commit`.
 
 1. Prettier (format)
 2. Astro check (type-check)
-3. ESLint (lint)
+3. oxlint (lint)
 
 **For `*.{css,json,md}` files:**
 
@@ -76,8 +78,8 @@ npm run autofix      # Auto-fix formatting + linting
 npm run ci           # Full CI pipeline (REQUIRED)
 
 # Individual Checks (use ci instead)
-npm run lint         # Check linting
-npm run lint:fix     # Fix linting
+npm run lint         # Check linting (oxlint)
+npm run lint:fix     # Fix linting (oxlint)
 npm run format       # Format code
 npm run format:check # Check formatting
 npm run type-check   # Check TypeScript
@@ -157,7 +159,7 @@ See docs/troubleshooting.md for:
 
 - Pre-commit hook failing repeatedly
 - Tests pass locally but fail in CI
-- ESLint errors
+- oxlint errors
 - Build failing but dev works
 
 ## Best Practices

@@ -14,7 +14,7 @@
 | When to create .config.ts, .types.ts?    | If 3+ items. See docs/components.md                      |
 | Tailwind classes not applying            | Use `cn()` utility. See docs/components.md               |
 | Tests failing in CI but pass locally     | Run `npm run ci` (not `npm run test`)                    |
-| ESLint errors                            | Use type guards from `src/utils/typeGuards.ts`           |
+| oxlint errors                            | Use type guards from `src/utils/typeGuards.ts`           |
 | Build failing but dev works              | Run `npm run build` locally. Fix import case sensitivity |
 | Type 'X' not assignable to type 'Y'      | Use type guards or narrow the type                       |
 | Module not found                         | Use `@/*` aliases. Check file path case sensitivity      |
@@ -136,11 +136,11 @@ npm run ci
 
 ### Can't test TypeScript type errors
 
-**Don't test compile-time type checking.** ESLint and `tsc` handle this.
+**Don't test compile-time type checking.** oxlint and `astro check` handle this.
 
 **Test instead:** Runtime type guards, validation functions, error handling
 
-## ESLint Issues
+## oxlint Issues
 
 ### Unsafe member access / unsafe assignment
 
@@ -167,7 +167,7 @@ export function isMyType(value: unknown): value is MyType {
 }
 ```
 
-**Never:** Modify ESLint config or use disable comments (P0)
+**Never:** Modify oxlint config (.oxlintrc.json) or use disable comments (P0)
 
 ## Build Issues
 

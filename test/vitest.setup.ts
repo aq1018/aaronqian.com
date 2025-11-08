@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom/vitest'
 import { expect } from 'vitest'
 
 interface MatcherResult {
@@ -56,7 +57,7 @@ expect.extend({
    */
   toRenderElement(received: HTMLElement, selector: string): MatcherResult {
     const element = received.querySelector(selector)
-    const exists = element !== null
+    const exists = element != null
 
     return {
       pass: exists,
@@ -78,7 +79,7 @@ expect.extend({
     attribute: string,
     expectedValue?: string,
   ): MatcherResult {
-    if (received === null) {
+    if (received == null) {
       return {
         pass: false,
         message: () => `Expected element to exist, but got null`,
@@ -88,7 +89,7 @@ expect.extend({
     }
 
     const actualValue = received.getAttribute(attribute)
-    const hasAttribute = actualValue !== null
+    const hasAttribute = actualValue != null
     const valueMatches = expectedValue === undefined || actualValue === expectedValue
 
     return {
@@ -112,7 +113,7 @@ expect.extend({
    * @example expect(element).toHaveClasses(['flex', 'items-center'])
    */
   toHaveClasses(received: Element | null, expected: string[]): MatcherResult {
-    if (received === null) {
+    if (received == null) {
       return {
         pass: false,
         message: () => `Expected element to exist, but got null`,

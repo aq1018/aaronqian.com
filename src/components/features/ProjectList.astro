@@ -13,13 +13,15 @@ import Heading from '@/components/primitives/Heading.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
 
-const statusStyles = {
+type ProjectStatus = 'active' | 'planning' | 'done'
+
+const statusStyles: Record<ProjectStatus, string> = {
   active: 'text-primary',
   planning: 'text-muted',
   done: 'text-content/60',
 }
 
-const statusLabels = {
+const statusLabels: Record<ProjectStatus, string> = {
   active: 'ACTIVE',
   planning: 'PLANNING',
   done: 'DONE',
@@ -31,6 +33,9 @@ export interface Props {
 }
 
 const { projects, footer } = Astro.props
+
+// Type-safe projects array for mapping
+const typedProjects: Array<CollectionEntry<'projects'>> = projects
 ---
 
 <Stack>
@@ -49,13 +54,16 @@ const { projects, footer } = Astro.props
   <!-- Projects list -->
   <ul class="flex flex-col gap-3">
     {
-      projects.map((project) => (
-        <ProjectListItem
-          project={project}
-          statusStyle={statusStyles[project.data.status]}
-          statusLabel={statusLabels[project.data.status]}
-        />
-      ))
+      typedProjects.map((project) => {
+        const status: ProjectStatus = project.data.status
+        return (
+          <ProjectListItem
+            project={project}
+            statusStyle={statusStyles[status]}
+            statusLabel={statusLabels[status]}
+          />
+        )
+      })
     }
   </ul>
 

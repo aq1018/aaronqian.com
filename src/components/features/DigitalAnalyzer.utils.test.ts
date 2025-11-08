@@ -55,7 +55,7 @@ describe('generateGridLines', () => {
 
     // Starts at 100, extends to 400 (close to height=500)
     expect(lines[0]).toBe(100)
-    expect(lines[lines.length - 1]).toBe(400)
+    expect(lines.at(-1)).toBe(400)
   })
 
   it('should handle small heights', () => {
@@ -169,7 +169,7 @@ describe('generateSquareWavePath', () => {
     // Should have multiple L commands for transitions
     const lCommands = path.match(/L/g)
     expect(lCommands).not.toBeNull()
-    if (lCommands !== null) {
+    if (lCommands != null) {
       expect(lCommands.length).toBeGreaterThan(2)
     }
   })

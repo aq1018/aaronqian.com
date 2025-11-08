@@ -50,12 +50,10 @@ function isItemProps(p: ContainerProps | ItemProps): p is ItemProps {
   return 'size' in p && p.size !== undefined
 }
 
-// Build classes based on mode
-let classes = ''
-let restProps = {}
-
-if (isItemProps(props)) {
-  // Item mode
+/**
+ * Process item props and generate variant classes
+ */
+function processItemProps(p: ItemProps) {
   const {
     size,
     'size-sm': sizeSm,
@@ -71,9 +69,9 @@ if (isItemProps(props)) {
     alignSelf,
     class: className = '',
     ...rest
-  } = props
+  } = p
 
-  const itemVariantClasses = gridItemCva({
+  const variantClasses = gridItemCva({
     size,
     'size-sm': sizeSm,
     'size-md': sizeMd,
@@ -88,13 +86,16 @@ if (isItemProps(props)) {
     alignSelf,
   })
 
-  classes = cn(itemVariantClasses, className)
-  restProps = rest
-} else {
-  // Container mode - TypeScript now knows props is ContainerProps
-  const { columns, spacing, direction, justify, align, class: className = '', ...rest } = props
+  return { variantClasses, className, restProps: rest }
+}
 
-  const containerVariantClasses = gridContainerCva({
+/**
+ * Process container props and generate variant classes
+ */
+function processContainerProps(p: ContainerProps) {
+  const { columns, spacing, direction, justify, align, class: className = '', ...rest } = p
+
+  const variantClasses = gridContainerCva({
     columns,
     spacing,
     direction,
@@ -102,9 +103,15 @@ if (isItemProps(props)) {
     align,
   })
 
-  classes = cn(containerVariantClasses, className)
-  restProps = rest
+  return { variantClasses, className, restProps: rest }
 }
+
+// Build classes based on mode
+const { variantClasses, className, restProps } = isItemProps(props)
+  ? processItemProps(props)
+  : processContainerProps(props)
+
+const classes = cn(variantClasses, className)
 ---
 
 <div class={classes} {...restProps}>

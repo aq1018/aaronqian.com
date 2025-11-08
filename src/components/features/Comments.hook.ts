@@ -5,6 +5,17 @@
 
 type CleanupFunction = () => void
 
+/**
+ * Message structure for Giscus theme configuration
+ */
+export interface GiscusMessage {
+  giscus: {
+    setConfig: {
+      theme: string
+    }
+  }
+}
+
 let cleanup: CleanupFunction | null = null
 
 /**
@@ -52,17 +63,16 @@ export function syncGiscusTheme(theme: 'light' | 'dark'): void {
     }
   }
 
-  try {
-    iframe.contentWindow.postMessage(
-      {
-        giscus: {
-          setConfig: {
-            theme: themeUrl,
-          },
-        },
+  const message: GiscusMessage = {
+    giscus: {
+      setConfig: {
+        theme: themeUrl,
       },
-      targetOrigin,
-    )
+    },
+  }
+
+  try {
+    iframe.contentWindow.postMessage(message, targetOrigin)
   } catch (error) {
     // Silently fail - theme syncing is non-critical
     console.debug('Failed to sync Giscus theme:', error)
@@ -75,7 +85,7 @@ export function syncGiscusTheme(theme: 'light' | 'dark'): void {
  */
 export function initializeComments(): CleanupFunction {
   // Clean up previous initialization if it exists
-  if (cleanup !== null) {
+  if (cleanup != null) {
     cleanup()
   }
 
@@ -83,7 +93,7 @@ export function initializeComments(): CleanupFunction {
   const commentsContainer = document.querySelector('[data-comments]')
 
   // Return early if comments don't exist on this page
-  if (commentsContainer === null) {
+  if (commentsContainer == null) {
     return () => {}
   }
 
@@ -107,7 +117,7 @@ export function initializeComments(): CleanupFunction {
   // Giscus iframe may not exist immediately, so we wait for it
   const checkIframe = setInterval(() => {
     const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
-    if (iframe !== null) {
+    if (iframe != null) {
       clearInterval(checkIframe)
       // Wait a bit for iframe to be ready
       setTimeout(() => {
@@ -144,7 +154,7 @@ export function setupComments(): void {
 
   // Cleanup before navigation
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup !== null) {
+    if (cleanup != null) {
       cleanup()
     }
   })

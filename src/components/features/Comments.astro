@@ -25,28 +25,37 @@ const ORIGIN = Astro.url.origin
         (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
       // Build theme URL
+      // oxlint-disable-next-line no-undef
       const themeUrl = `${ORIGIN}/giscus-${isDark ? 'dark' : 'light'}.generated.css`
+
+      const dataset = {
+        // oxlint-disable-next-line no-undef
+        repo: REPO,
+        // oxlint-disable-next-line no-undef
+        repoId: REPO_ID,
+        // oxlint-disable-next-line no-undef
+        category: CATEGORY,
+        // oxlint-disable-next-line no-undef
+        categoryId: CATEGORY_ID,
+        mapping: 'pathname',
+        strict: '1',
+        reactionsEnabled: '1',
+        emitMetadata: '0',
+        inputPosition: 'top',
+        theme: themeUrl,
+        lang: 'en',
+        loading: 'lazy',
+      }
 
       // Create and configure Giscus script
       const script = document.createElement('script')
       script.src = 'https://giscus.app/client.js'
-      script.setAttribute('data-repo', REPO)
-      script.setAttribute('data-repo-id', REPO_ID)
-      script.setAttribute('data-category', CATEGORY)
-      script.setAttribute('data-category-id', CATEGORY_ID)
-      script.setAttribute('data-mapping', 'pathname')
-      script.setAttribute('data-strict', '1')
-      script.setAttribute('data-reactions-enabled', '1')
-      script.setAttribute('data-emit-metadata', '0')
-      script.setAttribute('data-input-position', 'top')
-      script.setAttribute('data-theme', themeUrl)
-      script.setAttribute('data-lang', 'en')
-      script.setAttribute('data-loading', 'lazy')
+      script.dataset = dataset
       script.setAttribute('crossorigin', 'anonymous')
       script.async = true
 
       // Append to comments container
-      document.currentScript.parentElement.appendChild(script)
+      document.currentScript.parentElement.append(script)
     })()
   </script>
 </div>

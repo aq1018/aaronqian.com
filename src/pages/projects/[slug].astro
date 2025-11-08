@@ -8,7 +8,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 export async function getStaticPaths() {
   const projects = await getCollection('projects')
 
-  return projects.map((project) => {
+  return projects.map((project: CollectionEntry<'projects'>) => {
     // Normalize slug: remove '/index.md' or '/index' suffix if present
     const slug = project.id.replace(/\/index(\.md)?$/, '')
     return {
@@ -30,8 +30,11 @@ const projectSlug = project.id.replace(/\/index(\.md)?$/, '')
 // Fetch all logs for this project, sorted by date descending
 const allLogs = await getCollection('projectLogs')
 const projectLogs = allLogs
-  .filter((log) => log.data.project === projectSlug)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .filter((log: CollectionEntry<'projectLogs'>) => log.data.project === projectSlug)
+  .toSorted(
+    (a: CollectionEntry<'projectLogs'>, b: CollectionEntry<'projectLogs'>) =>
+      b.data.date.getTime() - a.data.date.getTime(),
+  )
 
 // Status badge styles
 const statusStyles = {

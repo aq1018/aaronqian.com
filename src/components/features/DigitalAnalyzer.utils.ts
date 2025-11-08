@@ -21,7 +21,7 @@ export function generateGridLines(height: number, gridSize: number): number[] {
 export function stringToBinary(input: string): string {
   return input
     .split('')
-    .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
+    .map((char) => char.codePointAt(0)?.toString(2).padStart(8, '0'))
     .join('')
 }
 
@@ -31,7 +31,7 @@ export function stringToBinary(input: string): string {
  */
 export function hexToBinary(hex: string): string {
   return hex
-    .replace(/[^0-9A-Fa-f]/g, '')
+    .replaceAll(/[^0-9A-Fa-f]/g, '')
     .split('')
     .map((char) => parseInt(char, 16).toString(2).padStart(4, '0'))
     .join('')

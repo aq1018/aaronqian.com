@@ -20,12 +20,12 @@ describe('DisplayManager', () => {
     `
 
     // Get element references
-    binaryBuffer = document.querySelector(
+    binaryBuffer = document.querySelector<HTMLElement>(
       '[data-buffer-target="test-analyzer"][data-buffer-type="binary"]',
-    ) as HTMLElement
-    asciiDisplay = document.querySelector(
+    )!
+    asciiDisplay = document.querySelector<HTMLElement>(
       '[data-buffer-target="test-analyzer"][data-buffer-type="ascii"]',
-    ) as HTMLElement
+    )!
 
     // Create display manager instance
     displayManager = new DisplayManager('test-analyzer')
@@ -38,24 +38,28 @@ describe('DisplayManager', () => {
   describe('constructor', () => {
     it('should find and store binary buffer element', () => {
       expect(binaryBuffer).toBeTruthy()
-      expect(binaryBuffer.getAttribute('data-buffer-type')).toBe('binary')
+      expect(binaryBuffer.dataset['buffer-type']).toBe('binary')
     })
 
     it('should find and store ASCII display element', () => {
       expect(asciiDisplay).toBeTruthy()
-      expect(asciiDisplay.getAttribute('data-buffer-type')).toBe('ascii')
+      expect(asciiDisplay.dataset['buffer-type']).toBe('ascii')
     })
 
     it('should handle missing binary buffer element', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
       // Should not throw when no elements match
-      expect(() => manager.clearBinaryBuffer()).not.toThrow()
+      expect(() => {
+        manager.clearBinaryBuffer()
+      }).not.toThrow()
     })
 
     it('should handle missing ASCII display element', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
       // Should not throw when no elements match
-      expect(() => manager.setAsciiText('test')).not.toThrow()
+      expect(() => {
+        manager.setAsciiText('test')
+      }).not.toThrow()
     })
 
     it('should handle both elements missing', () => {
@@ -88,7 +92,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.clearBinaryBuffer()).not.toThrow()
+      expect(() => {
+        manager.clearBinaryBuffer()
+      }).not.toThrow()
     })
   })
 
@@ -149,7 +155,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.revealBit('1', 0)).not.toThrow()
+      expect(() => {
+        manager.revealBit('1', 0)
+      }).not.toThrow()
     })
   })
 
@@ -167,7 +175,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.fadeBinaryBuffer()).not.toThrow()
+      expect(() => {
+        manager.fadeBinaryBuffer()
+      }).not.toThrow()
     })
   })
 
@@ -186,7 +196,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.resetBinaryBuffer()).not.toThrow()
+      expect(() => {
+        manager.resetBinaryBuffer()
+      }).not.toThrow()
     })
   })
 
@@ -227,7 +239,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.appendCharacter('A')).not.toThrow()
+      expect(() => {
+        manager.appendCharacter('A')
+      }).not.toThrow()
     })
   })
 
@@ -258,7 +272,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.setAsciiText('test')).not.toThrow()
+      expect(() => {
+        manager.setAsciiText('test')
+      }).not.toThrow()
     })
   })
 
@@ -276,7 +292,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.fadeAsciiDisplay()).not.toThrow()
+      expect(() => {
+        manager.fadeAsciiDisplay()
+      }).not.toThrow()
     })
   })
 
@@ -302,7 +320,9 @@ describe('DisplayManager', () => {
 
     it('should handle missing element gracefully', () => {
       const manager = new DisplayManager('nonexistent-analyzer')
-      expect(() => manager.clearAsciiDisplay()).not.toThrow()
+      expect(() => {
+        manager.clearAsciiDisplay()
+      }).not.toThrow()
     })
   })
 

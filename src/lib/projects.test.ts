@@ -1,5 +1,5 @@
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import {
   getLatestActiveProjectSlug,
@@ -7,30 +7,40 @@ import {
   sortProjectsByLatestLog,
 } from './projects'
 
+type ProjectEntry = CollectionEntry<'projects'>
+type ProjectLogEntry = CollectionEntry<'projectLogs'>
+
 // Mock project data
-const createProject = (id: string, title: string): CollectionEntry<'projects'> =>
-  ({
-    id,
-    collection: 'projects',
-    data: {
-      title,
-      description: 'Test project',
-      status: 'active',
-      tags: [],
-    },
-    slug: id.replace(/\/index(\.md)?$/, ''),
-  }) as unknown as CollectionEntry<'projects'>
+const createProject = (id: string, title: string): ProjectEntry => ({
+  id,
+  collection: 'projects',
+  data: {
+    title,
+    description: 'Test project',
+    status: 'active',
+    aside: '',
+    live: false,
+    order: 0,
+  },
+  slug: id.replace(/\/index(\.md)?$/, ''),
+  render: vi.fn(),
+  body: '',
+})
 
 // Mock project log data
-const createProjectLog = (id: string): CollectionEntry<'projectLogs'> =>
-  ({
-    id,
-    collection: 'projectLogs',
-    data: {
-      title: 'Test log',
-    },
-    slug: id.replace(/\.md$/, ''),
-  }) as unknown as CollectionEntry<'projectLogs'>
+const createProjectLog = (id: string): ProjectLogEntry => ({
+  id,
+  collection: 'projectLogs',
+  data: {
+    title: 'Test log',
+    date: new Date(),
+    tags: [],
+    project: '',
+  },
+  slug: id.replace(/\.md$/, ''),
+  render: vi.fn(),
+  body: '',
+})
 
 describe('sortProjectsByLatestLog', () => {
   it('should sort projects by latest log date (most recent first)', () => {
@@ -242,7 +252,7 @@ describe('markLatestProjectAsLive', () => {
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
-    expect(marked[0].data.live).toBeUndefined() // project-a not marked
+    expect(marked[0].data.live).toBe(false) // project-a not marked
     expect(marked[1].data.live).toBe(true) // project-b is latest
   })
 
@@ -254,8 +264,8 @@ describe('markLatestProjectAsLive', () => {
 
     const marked = markLatestProjectAsLive(projects, [])
 
-    expect(marked[0].data.live).toBeUndefined()
-    expect(marked[1].data.live).toBeUndefined()
+    expect(marked[0].data.live).toBe(false)
+    expect(marked[1].data.live).toBe(false)
   })
 
   it('should not modify projects if projects array is empty', () => {
@@ -277,12 +287,12 @@ describe('markLatestProjectAsLive', () => {
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
     // Original should not be modified
-    expect(projects[0].data.live).toBeUndefined()
-    expect(projects[1].data.live).toBeUndefined()
+    expect(projects[0].data.live).toBe(false)
+    expect(projects[1].data.live).toBe(false)
 
     // New array should have marked project
     expect(marked[0].data.live).toBe(true)
-    expect(marked[1].data.live).toBeUndefined()
+    expect(marked[1].data.live).toBe(false)
   })
 
   it('should preserve other project data properties', () => {
@@ -328,8 +338,8 @@ describe('markLatestProjectAsLive', () => {
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
-    expect(marked[0].data.live).toBeUndefined()
+    expect(marked[0].data.live).toBe(false)
     expect(marked[1].data.live).toBe(true) // project-b/index matched
-    expect(marked[2].data.live).toBeUndefined()
+    expect(marked[2].data.live).toBe(false)
   })
 })

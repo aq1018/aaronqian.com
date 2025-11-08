@@ -30,6 +30,7 @@ pnpm-debug.log*
 # AI files - ignore all except shared settings and hooks
 .claude/*
 !.claude/settings.json
+.playwright-mcp
 
 # generated files
 *.generated.*

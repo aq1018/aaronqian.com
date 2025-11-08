@@ -55,7 +55,7 @@ const getTagProps = (tag: string) => tagColorMap[tag.toLowerCase()] ?? { color: 
   {
     log.data.tags.length > 0 && (
       <Stack direction="row" space="xs" class="mb-4 flex-wrap">
-        {log.data.tags.map((tag) => (
+        {log.data.tags.map((tag: string) => (
           <Badge
             color={getTagProps(tag).color}
             size="xs"

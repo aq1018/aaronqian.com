@@ -1,17 +1,15 @@
-import '@testing-library/jest-dom/vitest'
 import type { CollectionEntry } from 'astro:content'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
+import { getCollection } from 'astro:content'
 import SocialsBar from './SocialsBar.astro'
-
 import { renderAstroComponent } from '@test/testHelpers'
+
+type SocialEntry = CollectionEntry<'socials'>
 
 // Mock getCollection
 vi.mock('astro:content', () => ({
   getCollection: vi.fn(),
 }))
-
-const { getCollection } = await import('astro:content')
 
 // Mock social data
 interface MockSocialParams {
@@ -23,7 +21,7 @@ interface MockSocialParams {
   rel?: string
 }
 
-const createMockSocial = (params: MockSocialParams): CollectionEntry<'socials'> => {
+const createMockSocial = (params: MockSocialParams): SocialEntry => {
   const result = {
     id: params.id,
     collection: 'socials',
@@ -34,8 +32,9 @@ const createMockSocial = (params: MockSocialParams): CollectionEntry<'socials'> 
       enabled: params.enabled,
       rel: params.rel,
     },
-  }
-  return result as CollectionEntry<'socials'>
+  } satisfies SocialEntry
+
+  return result
 }
 
 describe('SocialsBar', () => {
@@ -45,7 +44,7 @@ describe('SocialsBar', () => {
 
   describe('Social link rendering', () => {
     it('should render enabled social links', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -61,25 +60,16 @@ describe('SocialsBar', () => {
           position: 2,
           enabled: true,
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
-
       const links = root.querySelectorAll('a')
+
       expect(links.length).toBe(2)
     })
 
     it('should not render disabled social links', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -87,23 +77,7 @@ describe('SocialsBar', () => {
           position: 1,
           enabled: true,
         }),
-        createMockSocial({
-          id: 'twitter',
-          label: 'Twitter',
-          url: 'https://twitter.com/user',
-          position: 2,
-          enabled: false,
-        }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
@@ -113,7 +87,7 @@ describe('SocialsBar', () => {
     })
 
     it('should render social links in position order', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'linkedin',
           label: 'LinkedIn',
@@ -135,16 +109,7 @@ describe('SocialsBar', () => {
           position: 3,
           enabled: true,
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
@@ -159,7 +124,7 @@ describe('SocialsBar', () => {
 
   describe('Link attributes', () => {
     it('should include correct href attributes', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -167,27 +132,18 @@ describe('SocialsBar', () => {
           position: 1,
           enabled: true,
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
       const link = root.querySelector('a')
-      if (link !== null) {
+      if (link != null) {
         expect(link.getAttribute('href')).toBe('https://github.com/user')
       }
     })
 
     it('should include aria-label for accessibility', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -195,27 +151,18 @@ describe('SocialsBar', () => {
           position: 1,
           enabled: true,
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
       const link = root.querySelector('a')
-      if (link !== null) {
+      if (link != null) {
         expect(link.getAttribute('aria-label')).toBe('GitHub profile')
       }
     })
 
     it('should apply rel attribute when provided', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -224,21 +171,12 @@ describe('SocialsBar', () => {
           enabled: true,
           rel: 'me noopener',
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
       const link = root.querySelector('a')
-      if (link !== null) {
+      if (link != null) {
         expect(link.getAttribute('rel')).toBe('me noopener')
       }
     })
@@ -246,7 +184,7 @@ describe('SocialsBar', () => {
 
   describe('Variants', () => {
     it('should render compact variant without labels by default', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -254,16 +192,7 @@ describe('SocialsBar', () => {
           position: 1,
           enabled: true,
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
@@ -271,13 +200,13 @@ describe('SocialsBar', () => {
       const link = root.querySelector('a')
       expect(link).toBeTruthy()
       // In compact mode, label is not rendered in the link
-      if (link !== null) {
+      if (link != null) {
         expect(link.textContent.trim()).not.toBe('GitHub')
       }
     })
 
     it('should render wide variant with labels', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -285,21 +214,12 @@ describe('SocialsBar', () => {
           position: 1,
           enabled: true,
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: { variant: 'wide' } })
 
       const link = root.querySelector('a')
-      if (link !== null) {
+      if (link != null) {
         expect(link.textContent).toContain('GitHub')
       }
     })
@@ -307,7 +227,7 @@ describe('SocialsBar', () => {
 
   describe('Empty state', () => {
     it('should render without errors when no socials are enabled', async () => {
-      vi.mocked(getCollection).mockResolvedValue([] as never)
+      vi.mocked(getCollection).mockResolvedValue([])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 
@@ -319,7 +239,7 @@ describe('SocialsBar', () => {
 
   describe('Icon rendering', () => {
     it('should render icons for all social links', async () => {
-      const socials = [
+      vi.mocked(getCollection).mockResolvedValueOnce([
         createMockSocial({
           id: 'github',
           label: 'GitHub',
@@ -334,16 +254,7 @@ describe('SocialsBar', () => {
           position: 2,
           enabled: true,
         }),
-      ]
-
-      vi.mocked(getCollection).mockImplementation(
-        async (collection: string, filter?: (entry: { data: unknown }) => boolean) => {
-          if (collection === 'socials' && filter !== undefined) {
-            return await Promise.resolve(socials.filter((s) => filter({ data: s.data })) as never)
-          }
-          return await Promise.resolve([] as never)
-        },
-      )
+      ])
 
       const root = await renderAstroComponent(SocialsBar, { props: {} })
 

@@ -1,55 +1,29 @@
 {
   "format_on_save": "on",
-
-  "lsp": {
-    "eslint": { "initialization_options": { "useFlatConfig": true } }
-  },
-
   "languages": {
     "Astro": {
-      "formatter": {
-        "external": {
-          "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      },
-      "code_actions_on_format": { "source.fixAll.eslint": true }
+      "formatter": "prettier",
+      "code_actions_on_format": { "source.fixAll.oxlint": true }
     },
 
     "TypeScript": {
-      "formatter": {
-        "external": {
-          "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      },
-      "code_actions_on_format": { "source.fixAll.eslint": true }
+      "formatter": "prettier",
+      "code_actions_on_format": { "source.fixAll.oxlint": true }
     },
 
     "JavaScript": {
-      "formatter": {
-        "external": {
-          "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
-      },
-      "code_actions_on_format": { "source.fixAll.eslint": true }
+      "formatter": "prettier",
+      "code_actions_on_format": { "source.fixAll.oxlint": true }
     },
 
     "Markdown": {
-      "formatter": {
-        "external": { "command": "prettier", "arguments": ["--stdin-filepath", "{buffer_path}"] }
-      }
+      "formatter": "prettier"
     },
     "JSON": {
-      "formatter": {
-        "external": { "command": "prettier", "arguments": ["--stdin-filepath", "{buffer_path}"] }
-      }
+      "formatter": "prettier"
     },
     "CSS": {
-      "formatter": {
-        "external": { "command": "prettier", "arguments": ["--stdin-filepath", "{buffer_path}"] }
-      }
+      "formatter": "prettier"
     }
   }
 }

@@ -32,28 +32,10 @@ export interface TraceAnimationOptions {
 }
 
 /**
- * Create GSAP timeline for trace animation with synchronized display updates
- * Orchestrates: decoder toggle glow, path drawing, bit/character reveal, fades, clears
- * @param options - Configuration and elements for animation
- * @returns GSAP timeline (call .kill() for cleanup)
+ * Add decoder toggle energize animation to timeline
  */
-export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.Timeline {
-  const {
-    pathElement,
-    binaryData,
-    currentChunk,
-    shouldClear,
-    displayManager,
-    decoderToggle,
-    config,
-  } = options
-
-  const timeline = gsap.timeline()
-  const bitCount = binaryData.length
-
-  // 1. Decoder toggle energize (immediate, at position 0)
-  if (decoderToggle !== null) {
-    // Use brightness filter instead of opacity for consistent "bright" effect in both modes
+function addDecoderEnergize(timeline: gsap.core.Timeline, decoderToggle: HTMLElement | null): void {
+  if (decoderToggle != null) {
     timeline.to(
       decoderToggle,
       {
@@ -65,27 +47,44 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
       0,
     )
   }
+}
 
-  // 2. Path drawing animation (synchronized with bit reveals)
+/**
+ * Add path drawing animation to timeline
+ */
+function addPathDrawing(
+  timeline: gsap.core.Timeline,
+  pathElement: SVGPathElement,
+  duration: number,
+): void {
   const pathLength = pathElement.getTotalLength()
   timeline.fromTo(
     pathElement,
     { strokeDashoffset: pathLength },
     {
       strokeDashoffset: 0,
-      duration: config.traceDrawDuration / 1000, // Convert ms to seconds for GSAP
+      duration: duration / 1000,
       ease: 'none',
     },
     0,
   )
+}
 
-  // 3. Progressive bit reveal (synchronized with path drawing)
-  // Note: clearBinaryBuffer() is called in hook.ts before creating timeline to prevent race conditions
-  const msPerBit = config.traceDrawDuration / bitCount
+/**
+ * Add progressive bit reveal animations to timeline
+ */
+function addBitReveals(
+  timeline: gsap.core.Timeline,
+  binaryData: string,
+  displayManager: DisplayManager,
+  duration: number,
+): void {
+  const bitCount = binaryData.length
+  const msPerBit = duration / bitCount
 
   for (let i = 0; i < bitCount; i += 1) {
     const bit = binaryData[i]
-    const revealTime = ((i + 1) * msPerBit) / 1000 // Convert to seconds for GSAP
+    const revealTime = ((i + 1) * msPerBit) / 1000
     timeline.call(
       () => {
         displayManager.revealBit(bit, i)
@@ -94,14 +93,23 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
       revealTime,
     )
   }
+}
 
-  // 4. Progressive character reveal (config mode only)
+/**
+ * Add progressive character reveal animations to timeline (config mode only)
+ */
+function addCharacterReveals(
+  timeline: gsap.core.Timeline,
+  currentChunk: string,
+  displayManager: DisplayManager,
+  config: TraceAnimationConfig,
+): void {
   if (config.dataSource === 'config' && currentChunk.length > 0) {
     const msPerByte = config.traceDrawDuration / config.byteCount
 
     for (let i = 0; i < currentChunk.length; i += 1) {
       const char = currentChunk[i]
-      const revealTime = ((i + 1) * msPerByte) / 1000 // Convert to seconds for GSAP
+      const revealTime = ((i + 1) * msPerByte) / 1000
       timeline.call(
         () => {
           displayManager.appendCharacter(char)
@@ -111,10 +119,18 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
       )
     }
   }
+}
 
-  // 5. Decoder toggle reset (after draw completes)
-  if (decoderToggle !== null) {
-    const resetTime = config.traceDrawDuration / 1000
+/**
+ * Add decoder toggle reset animation to timeline
+ */
+function addDecoderReset(
+  timeline: gsap.core.Timeline,
+  decoderToggle: HTMLElement | null,
+  duration: number,
+): void {
+  if (decoderToggle != null) {
+    const resetTime = duration / 1000
     timeline.to(
       decoderToggle,
       {
@@ -126,8 +142,16 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
       resetTime,
     )
   }
+}
 
-  // 6. Binary buffer fade and clear
+/**
+ * Add binary buffer fade and clear animations to timeline
+ */
+function addBinaryFadeAndClear(
+  timeline: gsap.core.Timeline,
+  displayManager: DisplayManager,
+  config: TraceAnimationConfig,
+): number {
   const fadeTime = (config.traceDrawDuration + config.traceFadeDelay) / 1000
   timeline.call(
     () => {
@@ -146,25 +170,65 @@ export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.
     clearTime,
   )
 
-  // 7. ASCII display fade (if shouldClear)
-  if (shouldClear) {
-    const asciiFadeTime = fadeTime + 0.5
-    timeline.call(
-      () => {
-        displayManager.fadeAsciiDisplay()
-      },
-      undefined,
-      asciiFadeTime,
-    )
+  return fadeTime
+}
 
-    const asciiClearTime = asciiFadeTime + (200 + config.traceClearDelay) / 1000
-    timeline.call(
-      () => {
-        displayManager.clearAsciiDisplay()
-      },
-      undefined,
-      asciiClearTime,
-    )
+/**
+ * Add ASCII display fade and clear animations to timeline (if shouldClear)
+ */
+function addAsciiFadeAndClear(
+  timeline: gsap.core.Timeline,
+  displayManager: DisplayManager,
+  fadeTime: number,
+  traceClearDelay: number,
+): void {
+  const asciiFadeTime = fadeTime + 0.5
+  timeline.call(
+    () => {
+      displayManager.fadeAsciiDisplay()
+    },
+    undefined,
+    asciiFadeTime,
+  )
+
+  const asciiClearTime = asciiFadeTime + (200 + traceClearDelay) / 1000
+  timeline.call(
+    () => {
+      displayManager.clearAsciiDisplay()
+    },
+    undefined,
+    asciiClearTime,
+  )
+}
+
+/**
+ * Create GSAP timeline for trace animation with synchronized display updates
+ * Orchestrates: decoder toggle glow, path drawing, bit/character reveal, fades, clears
+ * @param options - Configuration and elements for animation
+ * @returns GSAP timeline (call .kill() for cleanup)
+ */
+export function createTraceAnimation(options: TraceAnimationOptions): gsap.core.Timeline {
+  const {
+    pathElement,
+    binaryData,
+    currentChunk,
+    shouldClear,
+    displayManager,
+    decoderToggle,
+    config,
+  } = options
+
+  const timeline = gsap.timeline()
+
+  addDecoderEnergize(timeline, decoderToggle)
+  addPathDrawing(timeline, pathElement, config.traceDrawDuration)
+  addBitReveals(timeline, binaryData, displayManager, config.traceDrawDuration)
+  addCharacterReveals(timeline, currentChunk, displayManager, config)
+  addDecoderReset(timeline, decoderToggle, config.traceDrawDuration)
+
+  const fadeTime = addBinaryFadeAndClear(timeline, displayManager, config)
+  if (shouldClear) {
+    addAsciiFadeAndClear(timeline, displayManager, fadeTime, config.traceClearDelay)
   }
 
   return timeline

@@ -1,11 +1,14 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
 import BlogIndex from '@/components/pages/BlogIndex.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 
 const posts = await getCollection('blog')
-const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+const sortedPosts = posts.toSorted(
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+    b.data.date.valueOf() - a.data.date.valueOf(),
+)
 ---
 
 <BaseLayout

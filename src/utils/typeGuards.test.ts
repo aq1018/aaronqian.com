@@ -49,7 +49,7 @@ describe('typeGuards', () => {
     })
 
     it('should return false for undefined', () => {
-      expect(isHTMLElement(undefined)).toBe(false)
+      expect(isHTMLElement()).toBe(false)
     })
 
     it('should return false for non-HTMLElement objects', () => {
@@ -107,8 +107,8 @@ describe('typeGuards', () => {
   describe('queryElement', () => {
     it('should return HTMLElement when element exists', () => {
       const div = document.createElement('div')
-      div.setAttribute('data-test', 'foo')
-      document.body.appendChild(div)
+      div.dataset.test = 'foo'
+      document.body.append(div)
 
       const result = queryElement<HTMLDivElement>('[data-test="foo"]')
       expect(result).toBe(div)
@@ -123,7 +123,7 @@ describe('typeGuards', () => {
     it('should return null when querySelector finds SVG element', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       svg.classList.add('test-svg')
-      document.body.appendChild(svg)
+      document.body.append(svg)
 
       // queryElement expects HTMLElement, should return null for SVG
       const result = queryElement('.test-svg')
@@ -134,8 +134,8 @@ describe('typeGuards', () => {
       const parent = document.createElement('div')
       const child = document.createElement('span')
       child.classList.add('child')
-      parent.appendChild(child)
-      document.body.appendChild(parent)
+      parent.append(child)
+      document.body.append(parent)
 
       const result = queryElement<HTMLSpanElement>('div > .child')
       expect(result).toBe(child)
@@ -146,7 +146,7 @@ describe('typeGuards', () => {
     it('should return SVGSVGElement when element exists', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       svg.classList.add('test-svg')
-      document.body.appendChild(svg)
+      document.body.append(svg)
 
       const result = querySVGElement('.test-svg')
       expect(result).toBe(svg)
@@ -161,7 +161,7 @@ describe('typeGuards', () => {
     it('should return null when querySelector finds HTMLElement', () => {
       const div = document.createElement('div')
       div.classList.add('not-svg')
-      document.body.appendChild(div)
+      document.body.append(div)
 
       const result = querySVGElement('.not-svg')
       expect(result).toBeNull()
@@ -171,8 +171,8 @@ describe('typeGuards', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
       circle.classList.add('circle')
-      svg.appendChild(circle)
-      document.body.appendChild(svg)
+      svg.append(circle)
+      document.body.append(svg)
 
       // querySVGElement specifically checks for SVGSVGElement
       const result = querySVGElement('.circle')
@@ -184,7 +184,7 @@ describe('typeGuards', () => {
     it('should return HTMLElement when element exists', () => {
       const div = document.createElement('div')
       div.id = 'test-id'
-      document.body.appendChild(div)
+      document.body.append(div)
 
       const result = getElementById('test-id')
       expect(result).toBe(div)
@@ -199,7 +199,7 @@ describe('typeGuards', () => {
     it('should return SVG element (as HTMLElement is parent of SVGElement)', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       svg.id = 'test-svg'
-      document.body.appendChild(svg)
+      document.body.append(svg)
 
       const result = getElementById('test-svg')
       expect(result).toBe(svg)

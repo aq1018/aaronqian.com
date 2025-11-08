@@ -17,6 +17,131 @@ import fs from 'node:fs'
  * @property {{hookEventName: string, additionalContext: string}} hookSpecificOutput
  */
 
+/**
+ * Parse and validate input data
+ * @param {string} inputData - Raw JSON string
+ * @returns {{filePath: string} | null} Parsed file path or null if invalid
+ */
+function parseInput(inputData) {
+  /** @type {unknown} */
+  let parsedData = null
+  try {
+    parsedData = JSON.parse(inputData)
+  } catch (error) {
+    console.error('ERROR: Bad JSON input')
+    console.error('Input received:', inputData)
+    console.error('Parse error:', String(error))
+    process.exit(1)
+  }
+
+  if (
+    typeof parsedData !== 'object' ||
+    parsedData == null ||
+    !('tool_input' in parsedData) ||
+    typeof parsedData.tool_input !== 'object' ||
+    parsedData.tool_input == null ||
+    !('file_path' in parsedData.tool_input)
+  ) {
+    return null
+  }
+
+  /** @type {ToolInput} */
+  const data = parsedData
+  const filePath = data.tool_input.file_path
+
+  if (typeof filePath !== 'string' || filePath === '' || !fs.existsSync(filePath)) {
+    return null
+  }
+
+  return { filePath }
+}
+
+/**
+ * Run oxlint --fix and return feedback
+ * @param {string} filePath - File to lint
+ * @param {HookFeedback} feedback - Feedback object to update
+ * @returns {boolean} True if successful, false if errors
+ */
+function runOxlintFix(filePath, feedback) {
+  try {
+    execSync(`npx oxlint --type-aware --fix "${filePath}"`, {
+      stdio: 'pipe',
+      cwd: process.env.CLAUDE_PROJECT_DIR,
+    })
+    feedback.hookSpecificOutput.additionalContext += `✓ oxlint --type-aware --fix completed\n`
+    return true
+  } catch {
+    feedback.hookSpecificOutput.additionalContext += `✗ oxlint --type-aware --fix failed (unfixable errors detected)\n\n`
+    try {
+      execSync(`npx oxlint --type-aware "${filePath}"`, {
+        encoding: 'utf8',
+        stdio: 'pipe',
+        cwd: process.env.CLAUDE_PROJECT_DIR,
+      })
+    } catch (verifyError) {
+      /** @type {{stdout?: string, stderr?: string}} */
+      const err = verifyError
+      const output = err.stdout ?? err.stderr ?? ''
+      feedback.hookSpecificOutput.additionalContext += `oxlint errors:\n${output}\n\n`
+    }
+    feedback.hookSpecificOutput.additionalContext += `⊘ Formatting skipped (fix errors first)\n`
+    feedback.hookSpecificOutput.additionalContext += `\nNext: Fix the errors above`
+    return false
+  }
+}
+
+/**
+ * Run Prettier and return feedback
+ * @param {string} filePath - File to format
+ * @param {HookFeedback} feedback - Feedback object to update
+ * @returns {boolean} True if successful, false if catastrophic error
+ */
+function runPrettier(filePath, feedback) {
+  try {
+    execSync(`npx prettier --write "${filePath}"`, {
+      stdio: 'pipe',
+      cwd: process.env.CLAUDE_PROJECT_DIR,
+    })
+    feedback.hookSpecificOutput.additionalContext += `✓ Prettier completed (formatted)\n`
+    return true
+  } catch (error) {
+    /** @type {{message?: string}} */
+    const err = error
+    const prettierError = err.message ?? 'Unknown error'
+    feedback.decision = 'block'
+    feedback.reason = '🚨 CATASTROPHIC ERROR: Prettier failed after oxlint passed'
+    feedback.hookSpecificOutput.additionalContext += `✗ Prettier failed (CATASTROPHIC)\n\n`
+    feedback.hookSpecificOutput.additionalContext += `This should never happen. Prettier failed on code that passed oxlint.\n`
+    feedback.hookSpecificOutput.additionalContext += `Error: ${prettierError}\n\n`
+    feedback.hookSpecificOutput.additionalContext += `Action required: User intervention needed. Check system configuration.`
+    return false
+  }
+}
+
+/**
+ * Verify no oxlint errors remain
+ * @param {string} filePath - File to verify
+ * @param {HookFeedback} feedback - Feedback object to update
+ */
+function verifyOxlint(filePath, feedback) {
+  try {
+    execSync(`npx oxlint --type-aware "${filePath}"`, {
+      encoding: 'utf8',
+      stdio: 'pipe',
+      cwd: process.env.CLAUDE_PROJECT_DIR,
+    })
+    feedback.hookSpecificOutput.additionalContext += `✓ oxlint verification passed (no errors)\n`
+    feedback.hookSpecificOutput.additionalContext += `\nNext: Verify typecheck only (${filePath.endsWith('.ts') ? 'npx tsc --noEmit' : 'astro check'})`
+  } catch (error) {
+    /** @type {{stdout?: string, stderr?: string}} */
+    const err = error
+    const output = err.stdout ?? err.stderr ?? ''
+    feedback.hookSpecificOutput.additionalContext += `⚠ oxlint verification found errors (unexpected)\n\n`
+    feedback.hookSpecificOutput.additionalContext += `${output}\n`
+    feedback.hookSpecificOutput.additionalContext += `\nNext: Fix the errors above, then verify typecheck`
+  }
+}
+
 // Read JSON input from stdin
 let inputData = ''
 process.stdin.on('data', (/** @type {Buffer} */ chunk) => {
@@ -24,46 +149,13 @@ process.stdin.on('data', (/** @type {Buffer} */ chunk) => {
 })
 
 process.stdin.on('end', () => {
-  // Parse JSON input
-  /** @type {unknown} */
-  let parsedData = null
   try {
-    parsedData = JSON.parse(inputData)
-  } catch (error) {
-    // Bad JSON format - exit with error
-    console.error('ERROR: Bad JSON input')
-    console.error('Input received:', inputData)
-    console.error('Parse error:', String(error))
-    process.exit(1)
-  }
-
-  try {
-    // Type guard to ensure we have the expected structure
-    if (
-      typeof parsedData !== 'object' ||
-      parsedData === null ||
-      !('tool_input' in parsedData) ||
-      typeof parsedData.tool_input !== 'object' ||
-      parsedData.tool_input === null ||
-      !('file_path' in parsedData.tool_input)
-    ) {
+    const result = parseInput(inputData)
+    if (result == null) {
       process.exit(0)
     }
 
-    /** @type {ToolInput} */
-    const data = parsedData
-    const filePath = data.tool_input.file_path
-
-    // Exit if no file path found
-    if (typeof filePath !== 'string' || filePath === '') {
-      process.exit(0)
-    }
-
-    // Exit if file doesn't exist (might be deleted)
-    if (!fs.existsSync(filePath)) {
-      process.exit(0)
-    }
-
+    const { filePath } = result
     /** @type {HookFeedback} */
     const feedback = {
       hookSpecificOutput: {
@@ -72,81 +164,17 @@ process.stdin.on('end', () => {
       },
     }
 
-    // Run eslint --fix on the file
-    try {
-      execSync(`npx eslint --fix "${filePath}"`, {
-        stdio: 'pipe',
-        cwd: process.env.CLAUDE_PROJECT_DIR,
-      })
-      feedback.hookSpecificOutput.additionalContext += `✓ ESLint --fix completed\n`
-    } catch {
-      // ESLint --fix failed, meaning unfixable errors exist
-      feedback.hookSpecificOutput.additionalContext += `✗ ESLint --fix failed (unfixable errors detected)\n\n`
-
-      // Get all errors by running eslint without --fix
-      try {
-        execSync(`npx eslint "${filePath}"`, {
-          encoding: 'utf8',
-          stdio: 'pipe',
-          cwd: process.env.CLAUDE_PROJECT_DIR,
-        })
-      } catch (verifyError) {
-        /** @type {{stdout?: string, stderr?: string}} */
-        const err = verifyError
-        const output = err.stdout ?? err.stderr ?? ''
-        feedback.hookSpecificOutput.additionalContext += `ESLint errors:\n${output}\n\n`
-      }
-
-      feedback.hookSpecificOutput.additionalContext += `⊘ Formatting skipped (fix errors first)\n`
-      feedback.hookSpecificOutput.additionalContext += `\nNext: Fix the errors above`
-
+    if (!runOxlintFix(filePath, feedback)) {
       console.log(JSON.stringify(feedback))
       process.exit(0)
     }
 
-    // ESLint --fix passed, now run prettier
-    try {
-      execSync(`npx prettier --write "${filePath}"`, {
-        stdio: 'pipe',
-        cwd: process.env.CLAUDE_PROJECT_DIR,
-      })
-      feedback.hookSpecificOutput.additionalContext += `✓ Prettier completed (formatted)\n`
-    } catch (error) {
-      // CATASTROPHIC: Prettier should never fail on valid code
-      /** @type {{message?: string}} */
-      const err = error
-      const prettierError = err.message ?? 'Unknown error'
-      feedback.decision = 'block'
-      feedback.reason = '🚨 CATASTROPHIC ERROR: Prettier failed after ESLint passed'
-      feedback.hookSpecificOutput.additionalContext += `✗ Prettier failed (CATASTROPHIC)\n\n`
-      feedback.hookSpecificOutput.additionalContext += `This should never happen. Prettier failed on code that passed ESLint.\n`
-      feedback.hookSpecificOutput.additionalContext += `Error: ${prettierError}\n\n`
-      feedback.hookSpecificOutput.additionalContext += `Action required: User intervention needed. Check system configuration.`
-
+    if (!runPrettier(filePath, feedback)) {
       console.log(JSON.stringify(feedback))
       process.exit(0)
     }
 
-    // Both eslint and prettier passed, verify no errors remain
-    try {
-      execSync(`npx eslint "${filePath}"`, {
-        encoding: 'utf8',
-        stdio: 'pipe',
-        cwd: process.env.CLAUDE_PROJECT_DIR,
-      })
-
-      feedback.hookSpecificOutput.additionalContext += `✓ ESLint verification passed (no errors)\n`
-      feedback.hookSpecificOutput.additionalContext += `\nNext: Verify typecheck only (${filePath.endsWith('.ts') ? 'npx tsc --noEmit' : 'astro check'})`
-    } catch (error) {
-      // Unexpected: errors after eslint --fix passed
-      /** @type {{stdout?: string, stderr?: string}} */
-      const err = error
-      const output = err.stdout ?? err.stderr ?? ''
-      feedback.hookSpecificOutput.additionalContext += `⚠ ESLint verification found errors (unexpected)\n\n`
-      feedback.hookSpecificOutput.additionalContext += `${output}\n`
-      feedback.hookSpecificOutput.additionalContext += `\nNext: Fix the errors above, then verify typecheck`
-    }
-
+    verifyOxlint(filePath, feedback)
     console.log(JSON.stringify(feedback))
     process.exit(0)
   } catch (error) {

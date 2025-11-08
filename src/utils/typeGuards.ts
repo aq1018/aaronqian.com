@@ -18,7 +18,7 @@
  *   el.style.color = 'red' // TypeScript knows el is HTMLElement
  * }
  */
-export function isHTMLElement(el: unknown): el is HTMLElement {
+export function isHTMLElement(el?: unknown): el is HTMLElement {
   return el instanceof HTMLElement
 }
 
@@ -48,14 +48,13 @@ export function isSVGSVGElement(el: unknown): el is SVGSVGElement {
  *   button.disabled = true // TypeScript knows it's HTMLButtonElement
  * }
  */
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters -- T allows callers to specify exact HTMLElement subtype
 export function queryElement<T extends HTMLElement>(selector: string): T | null {
   const element = document.querySelector(selector)
-  if (element === null) {
+  if (element == null) {
     return null
   }
   if (element instanceof HTMLElement) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Runtime check ensures HTMLElement, T is caller-specified subtype
+    // oxlint-disable-next-line no-unsafe-type-assertion
     return element as T
   }
   return null
@@ -72,7 +71,7 @@ export function queryElement<T extends HTMLElement>(selector: string): T | null 
  */
 export function querySVGElement(selector: string): SVGSVGElement | null {
   const element = document.querySelector(selector)
-  if (element === null) {
+  if (element == null) {
     return null
   }
   if (element instanceof SVGSVGElement) {
@@ -94,6 +93,7 @@ export function querySVGElement(selector: string): SVGSVGElement | null {
  * }
  */
 export function getElementById(id: string): HTMLElement | null {
+  // oxlint-disable-next-line prefer-query-selector
   return document.getElementById(id)
 }
 
@@ -111,7 +111,7 @@ export function getElementById(id: string): HTMLElement | null {
  * }
  */
 export function isNonNull<T>(value: T | null | undefined): value is NonNullable<T> {
-  return value !== null && value !== undefined
+  return value != null && value !== undefined
 }
 
 /**
@@ -146,7 +146,7 @@ export function assertNonNull<T>(
   value: T | null | undefined,
   message = 'Expected non-null value',
 ): asserts value is NonNullable<T> {
-  if (value === null || value === undefined) {
+  if (value == null || value === undefined) {
     throw new Error(message)
   }
 }

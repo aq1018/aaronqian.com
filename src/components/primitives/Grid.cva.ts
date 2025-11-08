@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- Grid requires extensive responsive size/offset variants for 12-column system */
 import { type VariantProps, cva } from 'class-variance-authority'
 
 /**

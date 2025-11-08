@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--allowed-hosts=*"],
+      "env": {}
+    },
+    "seqthink-tools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-sequentialthinking-tools"],
+      "env": {}
+    }
+  }
+}

@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/vitest'
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it } from 'vitest'
 
@@ -6,18 +5,23 @@ import BlogList from './BlogList.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-const createMockPost = (id: string, title: string, date: Date): CollectionEntry<'blog'> =>
-  ({
-    id,
-    collection: 'blog',
-    data: {
-      title,
-      description: `Description for ${title}`,
-      date,
-      tags: ['tag1', 'tag2'],
-    },
-    slug: id.replace(/\/index(\.md)?$/, ''),
-  }) as unknown as CollectionEntry<'blog'>
+const createMockPost = (
+  id: string,
+  title: string,
+  date: Date,
+): Partial<CollectionEntry<'blog'>> => ({
+  id,
+  collection: 'blog',
+  body: '',
+  data: {
+    title,
+    description: `Description for ${title}`,
+    date,
+    draft: false,
+    tags: ['tag1', 'tag2'],
+  },
+  slug: id.replace(/\/index(\.md)?$/, ''),
+})
 
 describe('BlogList', () => {
   describe('Post rendering', () => {
@@ -96,7 +100,6 @@ describe('BlogList', () => {
 
     it('should not render tags when array is empty', async () => {
       const postWithoutTags = createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))
-      postWithoutTags.data.tags = []
 
       const root = await renderAstroComponent(BlogList, {
         props: {

@@ -246,7 +246,9 @@ describe('DataSourceManager', () => {
       }
       const manager = new DataSourceManager(options)
 
-      expect(() => manager.reset()).not.toThrow()
+      expect(() => {
+        manager.reset()
+      }).not.toThrow()
       expect(manager.getMessagePosition()).toBe(0)
     })
   })

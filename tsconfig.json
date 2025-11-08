@@ -1,6 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
+    "moduleResolution": "Bundler",
     "verbatimModuleSyntax": true,
     "plugins": [
       {
@@ -10,8 +11,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@test/*": ["./test/*"]
-    }
+    },
+    "incremental": true,
+    "types": ["astro/client", "vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src/env.d.ts", ".astro/types.d.ts", ".prettierrc.mjs", "**/*"],
+  "include": ["src/env.d.ts", ".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
 }

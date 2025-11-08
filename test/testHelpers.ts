@@ -11,12 +11,11 @@ type Entry<TFn extends CVAFn> = {
   [K in keyof VariantsOf<TFn>]: readonly [K, VariantsOf<TFn>[K]]
 }[keyof VariantsOf<TFn>]
 
-function makeEntries<TFn extends CVAFn>(
-  keys: Array<keyof VariantsOf<TFn>>,
-  combo: unknown[],
+function makeEntries<TFn extends CVAFn, K extends keyof VariantsOf<TFn>>(
+  keys: readonly K[],
+  combo: readonly VariantsOf<TFn>[K][],
 ): ReadonlyArray<Entry<TFn>> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- audited cast
-  return keys.map((k, i) => [k, combo[i]] as const) as ReadonlyArray<Entry<TFn>>
+  return keys.map((k, i) => [k, combo[i]] as const)
 }
 
 /**
@@ -271,22 +270,4 @@ export function expectEventListenersRemoved(
 
   // Clean up test listener
   element.removeEventListener(eventType, testHandler)
-}
-
-/**
- * Simulate a DOM event with custom event init
- *
- * @param element - Element to dispatch event on
- * @param eventType - Type of event (click, input, etc.)
- * @param eventInit - Optional EventInit properties
- *
- * @example
- * ```ts
- * simulateEvent(button, 'click')
- * simulateEvent(input, 'input', { bubbles: true })
- * ```
- */
-export function simulateEvent(element: Element, eventType: string, eventInit?: EventInit): void {
-  const event = new Event(eventType, { bubbles: true, cancelable: true, ...eventInit })
-  element.dispatchEvent(event)
 }

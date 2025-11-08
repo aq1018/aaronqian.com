@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
+import { fireEvent, screen } from '@testing-library/dom'
 
 import { initializeToggles, setupToggles } from './PillToggle.hook'
 
-import { setupTestDOM, simulateEvent } from '@test/testHelpers'
+import { setupTestDOM } from '@test/testHelpers'
 
 describe('Toggle Button System', () => {
   describe('initializeToggles', () => {
@@ -18,12 +19,12 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle')
-      const menu = document.getElementById('test-menu')
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const menu = screen.getByText('Menu Content')
 
-      expect(button).toBeTruthy()
-      expect(menu).toBeTruthy()
-      expect(menu?.classList.contains('hidden')).toBe(true)
+      expect(button).toBeInTheDocument()
+      expect(menu).toBeInTheDocument()
+      expect(menu).toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -41,22 +42,22 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const menu = screen.getByText('Menu Content')
 
       // Initially hidden
-      expect(menu.classList.contains('hidden')).toBe(true)
-      expect(button.getAttribute('aria-expanded')).toBe('false')
+      expect(menu).toHaveClass('hidden')
+      expect(button).toHaveAttribute('aria-expanded', 'false')
 
       // Click to open
       button.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
-      expect(button.getAttribute('aria-expanded')).toBe('true')
+      expect(menu).not.toHaveClass('hidden')
+      expect(button).toHaveAttribute('aria-expanded', 'true')
 
       // Click to close
-      button.click()
-      expect(menu.classList.contains('hidden')).toBe(true)
-      expect(button.getAttribute('aria-expanded')).toBe('false')
+      button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+      expect(menu).toHaveClass('hidden')
+      expect(button).toHaveAttribute('aria-expanded', 'false')
 
       cleanup()
       domCleanup()
@@ -75,18 +76,18 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
-      const menu = document.getElementById('test-menu') as HTMLElement
-      const outside = document.getElementById('outside') as HTMLElement
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const menu = screen.getByText('Menu Content')
+      const outside = screen.getByText('Outside')
 
       // Open menu
       button.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
+      expect(menu).not.toHaveClass('hidden')
 
       // Click outside
       outside.click()
-      expect(menu.classList.contains('hidden')).toBe(true)
-      expect(button.getAttribute('aria-expanded')).toBe('false')
+      expect(menu).toHaveClass('hidden')
+      expect(button).toHaveAttribute('aria-expanded', 'false')
 
       cleanup()
       domCleanup()
@@ -110,19 +111,19 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button1 = document.getElementById('toggle-1') as HTMLButtonElement
-      const menu1 = document.getElementById('menu-1') as HTMLElement
-      const button2 = document.getElementById('toggle-2') as HTMLButtonElement
-      const menu2 = document.getElementById('menu-2') as HTMLElement
+      const button1 = screen.getByRole('button', { name: /toggle 1/i })
+      const menu1 = screen.getByText('Menu 1')
+      const button2 = screen.getByRole('button', { name: /toggle 2/i })
+      const menu2 = screen.getByText('Menu 2')
 
       // Open first menu
       button1.click()
-      expect(menu1.classList.contains('hidden')).toBe(false)
-      expect(menu2.classList.contains('hidden')).toBe(true)
+      expect(menu1).not.toHaveClass('hidden')
+      expect(menu2).toHaveClass('hidden')
 
       // Open second menu
       button2.click()
-      expect(menu2.classList.contains('hidden')).toBe(false)
+      expect(menu2).not.toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -140,12 +141,12 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const menu = screen.getByText('Menu Content')
 
       // Open menu
       button.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
+      expect(menu).not.toHaveClass('hidden')
 
       // Call cleanup
       cleanup()
@@ -157,7 +158,7 @@ describe('Toggle Button System', () => {
       // Click should not toggle anymore (listeners removed)
       button.click()
       // Menu should still be hidden since listeners are removed
-      expect(menu.classList.contains('hidden')).toBe(true)
+      expect(menu).toHaveClass('hidden')
 
       domCleanup()
     })
@@ -175,12 +176,12 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const icon = document.getElementById('icon') as HTMLElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const icon = screen.getByText('Icon')
+      const menu = screen.getByText('Menu Content')
 
       // Click on nested element
       icon.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
+      expect(menu).not.toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -190,7 +191,7 @@ describe('Toggle Button System', () => {
       const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
-            <svg id="icon" width="20" height="20">
+            <svg id="icon" width="20" height="20" data-testid="icon">
               <path id="icon-path" d="M10 10"></path>
             </svg>
           </button>
@@ -200,15 +201,17 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const icon = document.getElementById('icon') as unknown as SVGElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const icon = screen.getByTestId('icon')
+      const menu = screen.getByText('Menu Content')
 
       // Initially hidden
-      expect(menu.classList.contains('hidden')).toBe(true)
+      expect(menu).toHaveClass('hidden')
 
-      // Click on SVG icon using simulateEvent
-      simulateEvent(icon, 'click')
-      expect(menu.classList.contains('hidden')).toBe(false)
+      // Click on SVG icon
+      // SVG elements do not respond to .click()
+      // we simulate the click using fireEvent
+      fireEvent.click(icon)
+      expect(menu).not.toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -219,7 +222,7 @@ describe('Toggle Button System', () => {
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
             <svg id="icon" width="20" height="20">
-              <path id="icon-path" d="M10 10"></path>
+              <path id="icon-path" d="M10 10" data-testid="icon-path"></path>
             </svg>
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
@@ -228,15 +231,15 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const iconPath = document.getElementById('icon-path') as unknown as SVGPathElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const iconPath = screen.getByTestId('icon-path')
+      const menu = screen.getByText('Menu Content')
 
       // Initially hidden
-      expect(menu.classList.contains('hidden')).toBe(true)
+      expect(menu).toHaveClass('hidden')
 
-      // Click on deeply nested SVG path element using simulateEvent
-      simulateEvent(iconPath, 'click')
-      expect(menu.classList.contains('hidden')).toBe(false)
+      // Click on deeply nested SVG path element
+      fireEvent.click(iconPath)
+      expect(menu).not.toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -246,11 +249,11 @@ describe('Toggle Button System', () => {
       const domCleanup = setupTestDOM(`
         <div>
           <button id="test-toggle" data-toggle-button aria-expanded="false">
-            <svg id="theme-icon" width="20" height="20">
+            <svg id="theme-icon" width="20" height="20" data-testid="theme-icon">
               <path d="M10 10"></path>
             </svg>
             <svg id="chevron" width="16" height="16">
-              <path id="chevron-path" d="M5 8"></path>
+              <path id="chevron-path" d="M5 8" data-testid="chevron-path"></path>
             </svg>
           </button>
           <div id="test-menu" class="hidden">Menu Content</div>
@@ -259,23 +262,23 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const themeIcon = document.getElementById('theme-icon') as unknown as SVGElement
-      const chevronPath = document.getElementById('chevron-path') as unknown as SVGPathElement
-      const menu = document.getElementById('test-menu') as HTMLElement
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
+      const themeIcon = screen.getByTestId('theme-icon')
+      const chevronPath = screen.getByTestId('chevron-path')
+      const menu = screen.getByText('Menu Content')
+      const button = screen.getByRole('button')
 
       // Initially hidden
-      expect(menu.classList.contains('hidden')).toBe(true)
+      expect(menu).toHaveClass('hidden')
 
-      // Click on first SVG icon using simulateEvent
-      simulateEvent(themeIcon, 'click')
-      expect(menu.classList.contains('hidden')).toBe(false)
-      expect(button.getAttribute('aria-expanded')).toBe('true')
+      // Click on first SVG icon
+      fireEvent.click(themeIcon)
+      expect(menu).not.toHaveClass('hidden')
+      expect(button).toHaveAttribute('aria-expanded', 'true')
 
       // Click on nested path in second SVG to close
-      simulateEvent(chevronPath, 'click')
-      expect(menu.classList.contains('hidden')).toBe(true)
-      expect(button.getAttribute('aria-expanded')).toBe('false')
+      fireEvent.click(chevronPath)
+      expect(menu).toHaveClass('hidden')
+      expect(button).toHaveAttribute('aria-expanded', 'false')
 
       cleanup()
       domCleanup()
@@ -303,10 +306,12 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
+      const button = screen.getByRole('button', { name: /toggle/i })
 
       // Should not throw error when clicked
-      expect(() => button.click()).not.toThrow()
+      expect(() => {
+        button.click()
+      }).not.toThrow()
 
       cleanup()
       domCleanup()
@@ -326,16 +331,16 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const menu = screen.getByText('Menu Content')
 
       // Initially hidden
-      expect(menu.classList.contains('hidden')).toBe(true)
+      expect(menu).toHaveClass('hidden')
 
       // Click to open (menu is not adjacent sibling, but found via target)
       button.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
-      expect(button.getAttribute('aria-expanded')).toBe('true')
+      expect(menu).not.toHaveClass('hidden')
+      expect(button).toHaveAttribute('aria-expanded', 'true')
 
       cleanup()
       domCleanup()
@@ -355,11 +360,11 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('nav-toggle') as HTMLButtonElement
-      const menu = document.getElementById('nav-menu') as HTMLElement
+      const button = screen.getByRole('button', { name: /menu/i })
+      const menu = screen.getByText('Navigation Menu')
 
       button.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
+      expect(menu).not.toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -374,10 +379,12 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
+      const button = screen.getByRole('button', { name: /toggle/i })
 
       // Should not throw error when clicked
-      expect(() => button.click()).not.toThrow()
+      expect(() => {
+        button.click()
+      }).not.toThrow()
 
       cleanup()
       domCleanup()
@@ -395,12 +402,12 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const menu = screen.getByText('Menu Content')
 
       // Should still work with nextElementSibling (backwards compatibility)
       button.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
+      expect(menu).not.toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -419,13 +426,13 @@ describe('Toggle Button System', () => {
 
       const cleanup = initializeToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
-      const correctMenu = document.getElementById('correct-menu') as HTMLElement
-      const wrongMenu = document.getElementById('wrong-menu') as HTMLElement
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const correctMenu = screen.getByText('Correct Menu')
+      const wrongMenu = screen.getByText('Wrong Menu')
 
       button.click()
-      expect(correctMenu.classList.contains('hidden')).toBe(false)
-      expect(wrongMenu.classList.contains('hidden')).toBe(true)
+      expect(correctMenu).not.toHaveClass('hidden')
+      expect(wrongMenu).toHaveClass('hidden')
 
       cleanup()
       domCleanup()
@@ -445,12 +452,12 @@ describe('Toggle Button System', () => {
 
       setupToggles()
 
-      const button = document.getElementById('test-toggle') as HTMLButtonElement
-      const menu = document.getElementById('test-menu') as HTMLElement
+      const button = screen.getByRole('button', { name: /toggle/i })
+      const menu = screen.getByText('Menu Content')
 
       // Should work immediately
       button.click()
-      expect(menu.classList.contains('hidden')).toBe(false)
+      expect(menu).not.toHaveClass('hidden')
 
       domCleanup()
     })

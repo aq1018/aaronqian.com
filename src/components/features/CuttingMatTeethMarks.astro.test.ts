@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/vitest'
 import { describe, expect, it } from 'vitest'
 
 import TeethMarks from '@/components/features/CuttingMatTeethMarks.astro'
@@ -91,7 +90,7 @@ describe('TeethMarks', () => {
     expect(xPositions[0]).toBeLessThan(toothInterval)
 
     // Last tooth should be near width
-    expect(xPositions[xPositions.length - 1]).toBeGreaterThanOrEqual(width - toothInterval)
+    expect(xPositions.at(-1)).toBeGreaterThanOrEqual(width - toothInterval)
   })
 
   it('should handle different minor intervals', async () => {

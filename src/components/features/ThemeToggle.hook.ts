@@ -62,121 +62,135 @@ type CleanupFunction = () => void
 let cleanup: CleanupFunction | null = null
 
 /**
- * Initialize theme toggle behavior
- * Manages button selection and theme switching
+ * Calculate slider offset for a theme
  */
-export function initializeThemeToggle(): CleanupFunction {
-  // Clean up previous initialization if it exists
-  if (cleanup !== null) {
-    cleanup()
+function calculateSliderOffset(theme: Theme, themeButtons: NodeListOf<HTMLButtonElement>): number {
+  let offset = 0
+  themeButtons.forEach((button, index) => {
+    const buttonValue = button.dataset.value
+    if (buttonValue === theme) {
+      offset = index * 32
+    }
+  })
+  return offset
+}
+
+/**
+ * Apply slider position
+ */
+function applySliderPosition(
+  sliderElement: HTMLElement,
+  offset: number,
+  skipTransition: boolean,
+): void {
+  if (skipTransition) {
+    const currentTransition = sliderElement.style.transition
+    sliderElement.style.transition = 'none'
+    sliderElement.style.transform = `translateX(${offset}px)`
+    void sliderElement.offsetHeight
+    sliderElement.style.transition = currentTransition
+  } else {
+    sliderElement.style.transform = `translateX(${offset}px)`
   }
+}
 
-  // Get DOM elements
-  const themeButtons = document.querySelectorAll<HTMLButtonElement>(
-    '#theme-toggle button[data-value]',
-  )
-  const slider = document.querySelector<HTMLElement>('#theme-toggle [data-slider]')
+/**
+ * Update slider position to match selected button
+ */
+function updateSliderPosition(
+  sliderElement: HTMLElement | null,
+  theme: Theme,
+  themeButtons: NodeListOf<HTMLButtonElement>,
+  skipTransition = false,
+): void {
+  if (sliderElement == null) return
+  const offset = calculateSliderOffset(theme, themeButtons)
+  applySliderPosition(sliderElement, offset, skipTransition)
+}
 
-  // Return early if required elements don't exist
-  if (themeButtons.length === 0) {
-    return () => {}
-  }
+/**
+ * Update which button is selected
+ */
+function updateButtonSelection(
+  themeButtons: NodeListOf<HTMLButtonElement>,
+  slider: HTMLElement | null,
+  theme: Theme,
+  skipTransition = false,
+): void {
+  themeButtons.forEach((button) => {
+    const buttonValue = button.dataset.value
+    if (buttonValue === theme) {
+      button.classList.add('selected')
+    } else {
+      button.classList.remove('selected')
+    }
+  })
+  updateSliderPosition(slider, theme, themeButtons, skipTransition)
+}
 
-  /**
-   * Update slider position to match selected button
-   */
-  function updateSliderPosition(theme: Theme, skipTransition = false): void {
-    if (slider === null) return
-
-    themeButtons.forEach((button, index) => {
-      const buttonValue = button.getAttribute('data-value')
-      if (buttonValue === theme) {
-        // Calculate position: each button is 32px (w-8)
-        const offset = index * 32
-
-        if (skipTransition) {
-          // Disable transition for instant positioning
-          const currentTransition = slider.style.transition
-          slider.style.transition = 'none'
-          slider.style.transform = `translateX(${offset}px)`
-          // Force reflow to apply the change
-          void slider.offsetHeight
-          slider.style.transition = currentTransition
-        } else {
-          slider.style.transform = `translateX(${offset}px)`
-        }
-      }
-    })
-  }
-
-  /**
-   * Update which button is selected
-   */
-  function updateButtonSelection(theme: Theme, skipTransition = false): void {
-    themeButtons.forEach((button) => {
-      const buttonValue = button.getAttribute('data-value')
-      if (buttonValue === theme) {
-        button.classList.add('selected')
-      } else {
-        button.classList.remove('selected')
-      }
-    })
-    updateSliderPosition(theme, skipTransition)
-  }
-
-  // Initialize theme on page load
-  const theme = getTheme()
-  applyTheme(theme)
-
-  // Position slider instantly (no transition) and then show it
-  updateButtonSelection(theme, true)
-
-  // Show the slider after positioning it
-  if (slider !== null) {
-    // Use requestAnimationFrame to ensure position is applied first
-    requestAnimationFrame(() => {
-      slider.style.opacity = '1'
-    })
-  }
-
-  // Handle button clicks
+/**
+ * Setup button click handlers
+ */
+function setupButtonClickHandlers(
+  themeButtons: NodeListOf<HTMLButtonElement>,
+  slider: HTMLElement | null,
+): Map<HTMLButtonElement, EventListener> {
   const clickHandlers = new Map<HTMLButtonElement, EventListener>()
   themeButtons.forEach((button) => {
     const handler = (e: Event): void => {
       e.stopPropagation()
-      const selectedTheme = button.getAttribute('data-value')
+      const selectedTheme = button.dataset.value
 
       if (selectedTheme === 'light' || selectedTheme === 'dark' || selectedTheme === 'system') {
         setTheme(selectedTheme)
         applyTheme(selectedTheme)
-        updateButtonSelection(selectedTheme)
+        updateButtonSelection(themeButtons, slider, selectedTheme)
       }
     }
     button.addEventListener('click', handler)
     clickHandlers.set(button, handler)
   })
+  return clickHandlers
+}
 
-  // Listen for system theme changes
+/**
+ * Initialize theme toggle behavior
+ * Manages button selection and theme switching
+ */
+export function initializeThemeToggle(): CleanupFunction {
+  if (cleanup != null) cleanup()
+
+  const themeButtons = document.querySelectorAll<HTMLButtonElement>(
+    '#theme-toggle button[data-value]',
+  )
+  const slider = document.querySelector<HTMLElement>('#theme-toggle [data-slider]')
+
+  if (themeButtons.length === 0) return () => {}
+
+  const theme = getTheme()
+  applyTheme(theme)
+  updateButtonSelection(themeButtons, slider, theme, true)
+
+  if (slider != null) {
+    requestAnimationFrame(() => {
+      slider.style.opacity = '1'
+    })
+  }
+
+  const clickHandlers = setupButtonClickHandlers(themeButtons, slider)
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
   const mediaQueryHandler = (): void => {
     const currentTheme = getTheme()
-    if (currentTheme === 'system') {
-      applyTheme(currentTheme)
-    }
+    if (currentTheme === 'system') applyTheme(currentTheme)
   }
   mediaQuery.addEventListener('change', mediaQueryHandler)
 
-  // Return cleanup function
   cleanup = () => {
-    // Remove click handlers
     clickHandlers.forEach((handler, button) => {
       button.removeEventListener('click', handler)
     })
     clickHandlers.clear()
-
-    // Remove media query listener
     mediaQuery.removeEventListener('change', mediaQueryHandler)
-
     cleanup = null
   }
 
@@ -200,7 +214,7 @@ export function setupThemeToggle(): void {
 
   // Cleanup before navigation
   document.addEventListener('astro:before-preparation', () => {
-    if (cleanup !== null) {
+    if (cleanup != null) {
       cleanup()
     }
   })

@@ -37,7 +37,7 @@ async function buildTheme(theme) {
 }
 
 async function generateGiscusTheme() {
-  await Promise.all(themes.map(buildTheme))
+  await Promise.all(themes.map((theme) => buildTheme(theme)))
 }
 
 /**
@@ -48,4 +48,8 @@ function handleGenerationError(error) {
   process.exitCode = 1
 }
 
-generateGiscusTheme().catch(handleGenerationError)
+try {
+  await generateGiscusTheme()
+} catch (error) {
+  handleGenerationError(error)
+}

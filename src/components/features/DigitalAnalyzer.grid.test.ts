@@ -19,7 +19,7 @@ describe('GridManager', () => {
 
     // Create grid group for static SVG
     gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-    staticSvg.appendChild(gridGroup)
+    staticSvg.append(gridGroup)
 
     // Standard config
     config = {

@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom/vitest'
 import { describe, expect, it } from 'vitest'
 
 import Arcs from '@/components/features/CuttingMatArcs.astro'

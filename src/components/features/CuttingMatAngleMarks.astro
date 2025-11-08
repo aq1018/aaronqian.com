@@ -34,7 +34,7 @@ let leftArc: { d: string } | null = null
 
 if (angles.length > 0) {
   const firstAngle = angles[0]
-  const lastAngle = angles[angles.length - 1]
+  const lastAngle = angles.at(-1)!
 
   // Right arc: from x-axis (0°) to first angle line
   const rightStartX = centerX + angleMarkArcRadius
@@ -54,5 +54,5 @@ if (angles.length > 0) {
 }
 ---
 
-{rightArc !== null && <path d={rightArc.d} opacity={opacity} stroke-width={strokeWidth} />}
-{leftArc !== null && <path d={leftArc.d} opacity={opacity} stroke-width={strokeWidth} />}
+{rightArc != null && <path d={rightArc.d} opacity={opacity} stroke-width={strokeWidth} />}
+{leftArc != null && <path d={leftArc.d} opacity={opacity} stroke-width={strokeWidth} />}

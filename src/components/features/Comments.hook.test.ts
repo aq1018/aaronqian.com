@@ -6,9 +6,55 @@ import {
   initializeComments,
   setupComments,
   syncGiscusTheme,
+  type GiscusMessage,
 } from './Comments.hook'
 
 import { setupTestDOM } from '@test/testHelpers'
+
+// Type guard for GiscusMessage
+function isGiscusMessage(value: unknown): value is GiscusMessage {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'giscus' in value &&
+    typeof value.giscus === 'object' &&
+    value.giscus !== null &&
+    'setConfig' in value.giscus &&
+    typeof value.giscus.setConfig === 'object' &&
+    value.giscus.setConfig !== null &&
+    'theme' in value.giscus.setConfig &&
+    typeof value.giscus.setConfig.theme === 'string'
+  )
+}
+
+// Type guard for postMessage call arguments
+function isPostMessageCall(value: unknown): value is [GiscusMessage, string] {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    isGiscusMessage(value[0]) &&
+    typeof value[1] === 'string'
+  )
+}
+
+// Helper to create a complete MutationRecord for testing
+function createMutationRecord(partial: {
+  type: MutationRecordType
+  target: Node
+  attributeName?: string | null
+}): MutationRecord {
+  return {
+    type: partial.type,
+    target: partial.target,
+    addedNodes: document.createDocumentFragment().childNodes,
+    removedNodes: document.createDocumentFragment().childNodes,
+    previousSibling: null,
+    nextSibling: null,
+    attributeName: partial.attributeName ?? null,
+    attributeNamespace: null,
+    oldValue: null,
+  }
+}
 
 describe('Comments System', () => {
   // Helper to setup and teardown fake timers
@@ -58,9 +104,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe === null) return
+      if (iframe == null) return
 
-      const postMessageSpy = vi.fn()
+      const postMessageSpy = vi.fn<Window['postMessage']>()
       Object.defineProperty(iframe, 'contentWindow', {
         value: {
           postMessage: postMessageSpy,
@@ -70,16 +116,14 @@ describe('Comments System', () => {
 
       syncGiscusTheme('dark')
 
-      expect(postMessageSpy).toHaveBeenCalledWith(
-        {
-          giscus: {
-            setConfig: {
-              theme: expect.stringContaining('giscus-dark.generated.css') as string,
-            },
-          },
-        },
-        '*',
-      )
+      expect(postMessageSpy).toHaveBeenCalledTimes(1)
+      const message: unknown = postMessageSpy.mock.calls[0]?.[0]
+      if (isGiscusMessage(message)) {
+        expect(message.giscus.setConfig.theme).toContain('giscus-dark.generated.css')
+      } else {
+        throw new Error('Expected postMessage to be called with GiscusMessage')
+      }
+      expect(postMessageSpy.mock.calls[0]?.[1]).toBe('*')
 
       domCleanup()
     })
@@ -88,7 +132,9 @@ describe('Comments System', () => {
       const domCleanup = setupTestDOM(`<div>No iframe here</div>`)
 
       // Should not throw
-      expect(() => syncGiscusTheme('light')).not.toThrow()
+      expect(() => {
+        syncGiscusTheme('light')
+      }).not.toThrow()
 
       domCleanup()
     })
@@ -99,7 +145,7 @@ describe('Comments System', () => {
       `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
-      if (iframe === null) return
+      if (iframe == null) return
 
       Object.defineProperty(iframe, 'contentWindow', {
         value: null,
@@ -107,7 +153,9 @@ describe('Comments System', () => {
       })
 
       // Should not throw
-      expect(() => syncGiscusTheme('dark')).not.toThrow()
+      expect(() => {
+        syncGiscusTheme('dark')
+      }).not.toThrow()
 
       domCleanup()
     })
@@ -118,7 +166,7 @@ describe('Comments System', () => {
       `)
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
-      if (iframe === null) return
+      if (iframe == null) return
 
       const postMessageSpy = vi.fn()
       Object.defineProperty(iframe, 'contentWindow', {
@@ -196,9 +244,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe === null) return
+      if (iframe == null) return
 
-      const postMessageSpy = vi.fn()
+      const postMessageSpy = vi.fn<Window['postMessage']>()
 
       // Mock iframe contentWindow
       Object.defineProperty(iframe, 'contentWindow', {
@@ -222,27 +270,26 @@ describe('Comments System', () => {
       // Manually trigger the MutationObserver callback
       expect(observerCallback).toBeDefined()
       if (observerCallback !== undefined) {
-        const mockMutations: Array<Partial<MutationRecord>> = [
-          {
+        const mockMutations: MutationRecord[] = [
+          createMutationRecord({
             type: 'attributes',
             attributeName: 'class',
             target: document.documentElement,
-          },
+          }),
         ]
-        observerCallback(mockMutations as MutationRecord[], new OriginalMutationObserver(() => {}))
+        observerCallback(mockMutations, new OriginalMutationObserver(() => {}))
       }
 
       // Should have sent message to set dark theme
-      expect(postMessageSpy).toHaveBeenCalledWith(
-        {
-          giscus: {
-            setConfig: {
-              theme: expect.stringContaining('giscus-dark.generated.css') as string,
-            },
-          },
-        },
-        '*',
-      )
+      expect(postMessageSpy).toHaveBeenCalledTimes(1)
+      const callArgs: unknown = postMessageSpy.mock.calls[0]
+      if (isPostMessageCall(callArgs)) {
+        const [message, origin] = callArgs
+        expect(message.giscus.setConfig.theme).toContain('giscus-dark.generated.css')
+        expect(origin).toBe('*')
+      } else {
+        throw new Error('Expected postMessage to be called with valid arguments')
+      }
 
       // Restore original MutationObserver
       window.MutationObserver = OriginalMutationObserver
@@ -276,9 +323,9 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe === null) return
+      if (iframe == null) return
 
-      const postMessageSpy = vi.fn()
+      const postMessageSpy = vi.fn<Window['postMessage']>()
 
       Object.defineProperty(iframe, 'contentWindow', {
         value: {
@@ -301,27 +348,26 @@ describe('Comments System', () => {
       // Manually trigger the MutationObserver callback
       expect(observerCallback).toBeDefined()
       if (observerCallback !== undefined) {
-        const mockMutations: Array<Partial<MutationRecord>> = [
-          {
+        const mockMutations: MutationRecord[] = [
+          createMutationRecord({
             type: 'attributes',
             attributeName: 'class',
             target: document.documentElement,
-          },
+          }),
         ]
-        observerCallback(mockMutations as MutationRecord[], new OriginalMutationObserver(() => {}))
+        observerCallback(mockMutations, new OriginalMutationObserver(() => {}))
       }
 
       // Should have sent message to set light theme
-      expect(postMessageSpy).toHaveBeenCalledWith(
-        {
-          giscus: {
-            setConfig: {
-              theme: expect.stringContaining('giscus-light.generated.css') as string,
-            },
-          },
-        },
-        '*',
-      )
+      expect(postMessageSpy).toHaveBeenCalledTimes(1)
+      const callArgs: unknown = postMessageSpy.mock.calls[0]
+      if (isPostMessageCall(callArgs)) {
+        const [message, origin] = callArgs
+        expect(message.giscus.setConfig.theme).toContain('giscus-light.generated.css')
+        expect(origin).toBe('*')
+      } else {
+        throw new Error('Expected postMessage to be called with valid arguments')
+      }
 
       // Restore original MutationObserver
       window.MutationObserver = OriginalMutationObserver
@@ -354,8 +400,8 @@ describe('Comments System', () => {
       })
       const container = document.querySelector('[data-comments]')
       expect(container).not.toBeNull()
-      if (container === null) return
-      container.appendChild(iframe)
+      if (container == null) return
+      container.append(iframe)
 
       // Fast-forward past the interval check and initial theme sync
       vi.advanceTimersByTime(300)
@@ -390,7 +436,9 @@ describe('Comments System', () => {
       vi.advanceTimersByTime(11000)
 
       // Should not throw error even though iframe never loaded
-      expect(() => cleanup()).not.toThrow()
+      expect(() => {
+        cleanup()
+      }).not.toThrow()
 
       cleanup()
       domCleanup()
@@ -444,7 +492,7 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe === null) return
+      if (iframe == null) return
 
       const postMessageSpy = vi.fn()
 
@@ -510,7 +558,7 @@ describe('Comments System', () => {
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
-      if (iframe === null) return
+      if (iframe == null) return
 
       const postMessageSpy = vi.fn()
 

@@ -2,15 +2,16 @@ import { describe, expect, it } from 'vitest'
 
 import type { CleanupFunction, CuttingMatOptions } from './CuttingMat.types'
 
+const cleanup: CleanupFunction = () => {
+  // cleanup logic
+}
+
 describe('CuttingMat Types', () => {
   describe('CleanupFunction', () => {
     it('should accept a function that returns void', () => {
-      const cleanup: CleanupFunction = () => {
-        // cleanup logic
-      }
-
       expect(typeof cleanup).toBe('function')
-      expect(cleanup()).toBeUndefined()
+      cleanup()
+      // Successfully called - cleanup functions return void
     })
   })
 

@@ -13,7 +13,7 @@ component architecture, and comprehensive testing.
 - **✅ Type-Safe** - Full TypeScript coverage with strict mode
 - **🧪 Comprehensive Testing** - Vitest + Testing Library (698 passing tests)
 - **📐 Layout Primitives** - Section, Container, Stack for consistent spacing
-- **🎯 ESLint + Prettier** - Enforced code quality and formatting
+- **🎯 oxlint + Prettier** - Enforced code quality and formatting
 - **🔄 View Transitions** - Smooth page transitions with proper lifecycle
   management
 - **♿ Accessible** - WCAG AA compliant with semantic HTML
@@ -189,7 +189,7 @@ working.
 - **Styling**: Tailwind CSS v4
 - **Type Safety**: TypeScript 5+
 - **Testing**: Vitest + Testing Library
-- **Code Quality**: ESLint + Prettier + Husky
+- **Code Quality**: oxlint + Prettier + Husky
 - **Component Variants**: class-variance-authority (CVA)
 
 ## 🚢 Deployment

@@ -1,23 +1,25 @@
 {
   "files.associations": {
-    "wrangler.json": "jsonc"
+    "wrangler.json": "jsonc",
+    ".oxlintrc.json": "jsonc"
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.oxc": "explicit"
   },
-  "eslint.useFlatConfig": true,
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "astro"],
+  "oxc.fmt.experimental": true,
   "cSpell.words": [
     "aaronqian",
     "Collapsibles",
     "giscus",
     "gridline",
+    "gsap",
     "heroicons",
     "iconify",
     "longread",
     "oklch",
+    "oxlint",
     "Qian",
     "Subcomponent",
     "TSES"
