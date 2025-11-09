@@ -295,7 +295,7 @@ export function initializeDigitalAnalyzer(): CleanupFunction {
   }
 
   const { container, svg, staticSvg, decoderToggle } = elements
-  const analyzerName = container.dataset['digital-analyzer'] ?? 'default'
+  const analyzerName = container.dataset.digitalAnalyzer ?? 'default'
   const config: DigitalAnalyzerConfig = defaultOptions
 
   let currentTimeline: gsap.core.Timeline | null
