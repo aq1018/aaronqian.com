@@ -1,9 +1,0 @@
-{
-  "name": "Vitest",
-  "category": "Tools",
-  "blurb": "Vite-native testing with instant feedback",
-  "url": "https://vitest.dev/",
-  "position": 23,
-  "enabled": true,
-  "tags": ["testing", "unit-tests"]
-}

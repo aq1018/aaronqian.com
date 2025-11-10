@@ -1,9 +1,0 @@
-{
-  "name": "ESLint",
-  "category": "Tools",
-  "blurb": "Catches code smells before they ship",
-  "url": "https://eslint.org/",
-  "position": 24,
-  "enabled": true,
-  "tags": ["linting", "code-quality"]
-}

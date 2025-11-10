@@ -1,8 +1,0 @@
-{
-  "name": "Multimeter",
-  "category": "Measurement",
-  "blurb": "Essential for voltage, current, and resistance checks",
-  "position": 2,
-  "enabled": true,
-  "tags": ["electronics", "basics"]
-}

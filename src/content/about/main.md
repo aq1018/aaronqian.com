@@ -1,14 +1,11 @@
 ---
-name: Aaron Qian
-tagline: I ship things, then make them sturdier
-heroImage: ./hero.jpg
-heroImageAlt:
-  Aaron Qian working at a desk with electronics and development tools
+title: Aaron Qian
+description: Father · Software Engineering Consultant · Hardware Hobbyist
 workingStyle:
   - Ship in small, testable increments—early feedback beats perfect plans
   - Design tokens first, ad-hoc styles never—systems scale, shortcuts don't
   - Measure before optimizing—hunches waste time, data drives decisions
-availability: Currently available for select projects starting Q2 2025
+# availability: Currently available for select projects starting Q2 2025
 ---
 
 I'm a developer and maker who builds web applications and hardware prototypes. I

@@ -1,8 +1,0 @@
-{
-  "name": "3D Printer",
-  "category": "Fabrication",
-  "blurb": "Rapid prototyping for enclosures and brackets",
-  "position": 30,
-  "enabled": true,
-  "tags": ["fabrication", "prototyping"]
-}

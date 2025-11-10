@@ -1,8 +1,0 @@
-{
-  "name": "Digital Oscilloscope",
-  "category": "Measurement",
-  "blurb": "See what's really happening in your circuits",
-  "position": 1,
-  "enabled": true,
-  "tags": ["electronics", "debugging"]
-}

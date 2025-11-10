@@ -46,7 +46,7 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
 ---
 
 <Container {width} class={cn(className)}>
-  <Stack space="lg">
+  <Stack space="lg" align={centered ? 'center' : 'start'}>
     {
       (hasEyebrowSlot || (eyebrow ?? '') !== '') && (
         <Text

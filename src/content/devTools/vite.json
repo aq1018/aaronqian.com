@@ -1,9 +1,0 @@
-{
-  "name": "Vite",
-  "category": "Tools",
-  "blurb": "Lightning-fast dev server and build tool",
-  "url": "https://vitejs.dev/",
-  "position": 20,
-  "enabled": true,
-  "tags": ["build-tool", "dev-server"]
-}

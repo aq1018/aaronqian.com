@@ -1,8 +1,0 @@
-{
-  "name": "Digital Calipers",
-  "category": "Fabrication",
-  "blurb": "Precision measurements for mechanical work",
-  "position": 31,
-  "enabled": true,
-  "tags": ["measurement", "mechanical"]
-}

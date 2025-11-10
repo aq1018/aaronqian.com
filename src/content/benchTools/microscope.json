@@ -1,8 +1,0 @@
-{
-  "name": "Digital Microscope",
-  "category": "Inspection",
-  "blurb": "Inspect SMD components and solder joints",
-  "position": 40,
-  "enabled": true,
-  "tags": ["inspection", "quality"]
-}

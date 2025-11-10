@@ -48,32 +48,6 @@ const socials = defineCollection({
   type: 'data',
 })
 
-const devTools = defineCollection({
-  schema: z.object({
-    blurb: z.string(),
-    category: z.string(),
-    enabled: z.boolean(),
-    name: z.string(),
-    position: z.number(),
-    tags: z.array(z.string()).optional(),
-    url: z.string().url().optional(),
-  }),
-  type: 'data',
-})
-
-const benchTools = defineCollection({
-  schema: z.object({
-    blurb: z.string(),
-    category: z.string(),
-    enabled: z.boolean(),
-    name: z.string(),
-    position: z.number(),
-    tags: z.array(z.string()).optional(),
-    url: z.string().url().optional(),
-  }),
-  type: 'data',
-})
-
 const testimonials = defineCollection({
   schema: z.object({
     author: z.string(),
@@ -86,23 +60,19 @@ const testimonials = defineCollection({
 })
 
 const about = defineCollection({
-  schema: ({ image }) =>
-    z.object({
-      availability: z.string().optional(),
-      heroImage: image(),
-      heroImageAlt: z.string(),
-      name: z.string(),
-      tagline: z.string(),
-      workingStyle: z.array(z.string()),
-    }),
+  schema: z.object({
+    availability: z.string().optional(),
+    description: z.string(),
+    microLine: z.string().optional(),
+    title: z.string(),
+    workingStyle: z.array(z.string()),
+  }),
   type: 'content',
 })
 
 export const collections = {
   about,
-  benchTools,
   blog,
-  devTools,
   projectLogs,
   projects,
   socials,

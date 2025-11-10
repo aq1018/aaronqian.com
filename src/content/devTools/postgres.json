@@ -1,9 +1,0 @@
-{
-  "name": "PostgreSQL",
-  "category": "Infrastructure",
-  "blurb": "Reliable relational database with powerful features",
-  "url": "https://www.postgresql.org/",
-  "position": 32,
-  "enabled": true,
-  "tags": ["database", "sql"]
-}

@@ -1,9 +1,0 @@
-{
-  "name": "Cloudflare",
-  "category": "Infrastructure",
-  "blurb": "Global edge network with instant deployments",
-  "url": "https://www.cloudflare.com/",
-  "position": 31,
-  "enabled": true,
-  "tags": ["hosting", "edge", "cdn"]
-}

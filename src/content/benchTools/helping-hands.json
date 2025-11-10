@@ -1,8 +1,0 @@
-{
-  "name": "Helping Hands",
-  "category": "Assembly",
-  "blurb": "Hold components steady during soldering",
-  "position": 12,
-  "enabled": true,
-  "tags": ["assembly", "fixtures"]
-}

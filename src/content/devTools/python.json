@@ -1,9 +1,0 @@
-{
-  "name": "Python",
-  "category": "Languages",
-  "blurb": "Fast prototyping and data processing workhorse",
-  "url": "https://www.python.org/",
-  "position": 3,
-  "enabled": true,
-  "tags": ["language", "scripting"]
-}
