@@ -2,7 +2,6 @@
 import ThemeToggle from './ThemeToggle.astro'
 
 import Container from '@/components/primitives/Container.astro'
-import Icon from '@/components/primitives/Icon.astro'
 import Link from '@/components/primitives/Link.astro'
 import NavBar from '@/components/primitives/NavBar.astro'
 import NavBarContent from '@/components/primitives/NavBarContent.astro'
@@ -14,9 +13,15 @@ const currentPath = Astro.url.pathname
 <NavBar position="sticky" border="bottom" backdrop>
   <Container width="wide">
     <NavBarContent>
-      <!-- Home Icon (Left) -->
-      <Link variant="nav" href="/" active={currentPath === '/'} aria-label="Home">
-        <Icon name="heroicons:home-solid" size="md" />
+      <!-- Home Link (Left) -->
+      <Link
+        variant="nav"
+        href="/"
+        active={currentPath === '/'}
+        aria-label="Home"
+        class="font-mono text-xl"
+      >
+        λϙ
       </Link>
 
       <!-- Nav Links (Right) -->
