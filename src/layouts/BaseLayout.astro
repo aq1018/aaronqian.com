@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions'
 
+import Footer from '@/components/features/Footer.astro'
 import Navigation from '@/components/features/Navigation.astro'
 import '@/styles/global.css'
 
@@ -78,6 +79,7 @@ const {
   <body class="flex min-h-full flex-col bg-background font-sans text-content">
     <Navigation />
     <slot />
+    <Footer />
 
     <!-- Initialize component hooks after DOM is ready -->
     <script>
