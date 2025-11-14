@@ -1,14 +1,13 @@
 ---
 import { getEntry } from 'astro:content'
 
+import PrinciplesList from '@/components/features/PrinciplesList.astro'
 import SocialsBar from '@/components/features/SocialsBar.astro'
-import ButtonLink from '@/components/primitives/ButtonLink.astro'
 import Container from '@/components/primitives/Container.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Prose from '@/components/primitives/Prose.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Surface from '@/components/primitives/Surface.astro'
-import Text from '@/components/primitives/Text.astro'
 import HeroContent from '../patterns/HeroContent.astro'
 
 // Fetch all data
@@ -21,68 +20,32 @@ const { data } = aboutEntry
 const { Content } = await aboutEntry.render()
 ---
 
-<!-- Hero Section -->
-<Surface padY="lg">
+<Surface padY="md">
   <Container width="narrow" class="text-center">
-    <HeroContent title={data.title} description={data.description} microLine={data.microLine}>
-      <SocialsBar variant="wide" />
-    </HeroContent>
-  </Container>
-</Surface>
-
-<!-- About & Working Style Section -->
-<Surface padY="lg">
-  <Container width="narrow">
-    <Stack space="xl">
-      <Stack space="md">
-        <Heading as="h2" size="h2"> About </Heading>
-        <Prose>
-          <Content />
-        </Prose>
-      </Stack>
-
-      <Stack space="md">
-        <Heading as="h3" size="h3"> How I Work </Heading>
-        <ul class="list-disc space-y-2 pl-6">
-          {
-            data.workingStyle.map((item: string) => (
-              <Text as="li" size="body">
-                {item}
-              </Text>
-            ))
-          }
-        </ul>
-      </Stack>
+    <Stack space="md" align="center">
+      <HeroContent title={data.title} description={data.description} microLine={data.microLine} />
+      <SocialsBar />
     </Stack>
   </Container>
 </Surface>
 
-<!-- CTA Section -->
-{
-  data.availability && (
-    <Surface padY="lg" class="bg-accent/5">
-      <Container width="narrow">
-        <Stack space="md" align="center">
-          <Heading as="h2" size="h2" align="center">
-            {' '}
-            Let's Work Together{' '}
-          </Heading>
-          {data.availability && (
-            <Text size="body" align="center" color="muted">
-              {data.availability}
-            </Text>
-          )}
-          <ButtonLink
-            href="https://launchpath.tech/services"
-            variant="solid"
-            color="primary"
-            size="lg"
-            external
-          >
-            Work with me →
-          </ButtonLink>
-        </Stack>
-      </Container>
-    </Surface>
-  )
-}
+<Surface padY="md">
+  <Container width="narrow">
+    <Stack space="md">
+      <Heading as="h2" size="h2">About</Heading>
+      <Prose>
+        <Content />
+      </Prose>
+    </Stack>
+  </Container>
+</Surface>
+
+<Surface padY="md">
+  <Container width="narrow">
+    <Stack space="md">
+      <Heading as="h2" size="h2">Principles</Heading>
+      <Prose> These are the beliefs I hold dear — compass in work and in life. </Prose>
+      <PrinciplesList />
+    </Stack>
+  </Container>
+</Surface>

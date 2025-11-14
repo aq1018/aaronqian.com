@@ -5,7 +5,7 @@ import { testDefaultVariants } from '@test/testHelpers'
 import { surfaceCva } from './Surface.cva'
 
 describe('Surface.cva', () => {
-  testDefaultVariants(surfaceCva, ['relative', 'w-full', 'py-16', 'sm:py-20', 'lg:py-24'])
+  testDefaultVariants(surfaceCva, ['relative', 'w-full', 'py-14', 'sm:py-16', 'lg:py-18'])
 
   describe('Edge Cases', () => {
     it('should handle undefined props gracefully', () => {

@@ -12,10 +12,10 @@ export const surfaceCva = cva('relative w-full', {
   variants: {
     padY: {
       none: 'py-0',
-      sm: 'py-12 sm:py-14 lg:py-16', // 48 → 56 → 64px
-      md: 'py-16 sm:py-20 lg:py-24', // 64 → 80 → 96px (default)
-      lg: 'py-20 sm:py-24 lg:py-28', // 80 → 96 → 112px
-      xl: 'py-24 sm:py-28 lg:py-32', // 96 → 112 → 128px
+      sm: 'py-12 sm:py-14 lg:py-16',
+      md: 'py-14 sm:py-16 lg:py-18',
+      lg: 'py-16 sm:py-18 lg:py-20',
+      xl: 'py-18 sm:py-20 lg:py-22',
     },
   },
 })

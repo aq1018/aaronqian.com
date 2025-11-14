@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
+import Prose from '@/components/primitives/Prose.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Text from '@/components/primitives/Text.astro'
+
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+// Fetch enabled principles, sorted by position
+const principlesCollection = await getCollection(
+  'principles',
+  ({ data }: CollectionEntry<'principles'>) => data.enabled,
+)
+const principles = principlesCollection.toSorted(
+  (a: CollectionEntry<'principles'>, b: CollectionEntry<'principles'>) =>
+    a.data.position - b.data.position,
+)
+
+// Render all principle content
+const principlesWithContent = await Promise.all(
+  principles.map(async (principle: CollectionEntry<'principles'>) => {
+    const rendered = await principle.render()
+    return {
+      principle,
+      Content: rendered.Content,
+    }
+  }),
+)
+---
+
+{
+  principlesWithContent.length > 0 && (
+    <Stack space="md" class={className}>
+      {principlesWithContent.map((item) => (
+        <Stack space="xs">
+          <Text size="body" strong>
+            {item.principle.data.title}
+          </Text>
+          <Prose>
+            <item.Content />
+          </Prose>
+        </Stack>
+      ))}
+    </Stack>
+  )
+}

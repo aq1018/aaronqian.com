@@ -59,6 +59,15 @@ const testimonials = defineCollection({
   type: 'data',
 })
 
+const principles = defineCollection({
+  schema: z.object({
+    enabled: z.boolean(),
+    position: z.number(),
+    title: z.string(),
+  }),
+  type: 'content',
+})
+
 const about = defineCollection({
   schema: z.object({
     availability: z.string().optional(),
@@ -73,6 +82,7 @@ const about = defineCollection({
 export const collections = {
   about,
   blog,
+  principles,
   projectLogs,
   projects,
   socials,
