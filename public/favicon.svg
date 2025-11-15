@@ -1,32 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <rect width="128" height="128" fill="#000" rx="16" />
-  <text
-    x="64"
-    y="64"
-    font-family="monospace"
-    font-size="56"
-    font-weight="700"
-    fill="#FFF"
-    text-anchor="middle"
-    dominant-baseline="central"
-    letter-spacing="2"
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  role="img"
+  aria-label="Aaron Qian mark: Lambda Theta"
+>
+  <!-- Rounded black background -->
+  <rect
+    x="4"
+    y="4"
+    width="56"
+    height="56"
+    rx="12"
+    ry="12"
+    fill="#000000"
+  />
+
+  <!-- ΛΘ mark -->
+  <g
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="4.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
   >
-    ΛΘ
-  </text>
-  <style>
-    rect {
-      fill: #000;
-    }
-    text {
-      fill: #fff;
-    }
-    @media (prefers-color-scheme: dark) {
-      rect {
-        fill: #fff;
-      }
-      text {
-        fill: #000;
-      }
-    }
-  </style>
+    <!-- Lambda (Λ) -->
+    <path d="M11 42 L21 22 L31 42" />
+
+    <!-- Theta (Θ) outline -->
+    <path d="
+      M43 22
+      C48 22 52 26 52 32
+      C52 38 48 42 43 42
+      C38 42 34 38 34 32
+      C34 26 38 22 43 22 Z
+    " />
+
+    <!-- Theta (Θ) inner bar (not touching) -->
+    <path d="M39 32 H47" />
+  </g>
 </svg>

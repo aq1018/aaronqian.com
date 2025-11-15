@@ -14,7 +14,7 @@ export interface Props {
 const {
   title = 'Aaron Qian - Input Coffee, Output Code',
   description = 'Software Engineer, Freelancer, Father. Building projects and sharing tech insights.',
-  image = '/og-image.png',
+  image,
 } = Astro.props
 ---
 
@@ -52,14 +52,14 @@ const {
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.url)} />
+    {image && <meta property="og:image" content={new URL(image, Astro.url)} />}
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+    {image && <meta property="twitter:image" content={new URL(image, Astro.url)} />}
 
     <!-- Client Router for SPA-like navigation -->
     <ClientRouter />

@@ -18,8 +18,13 @@ export interface Props {
 }
 
 const { post } = Astro.props
+const ogImage = `/og/blog/${post.slug}.png`
 ---
 
-<BaseLayout title={`${post.data.title} - Aaron Qian`} description={post.data.description}>
+<BaseLayout
+  title={`${post.data.title} - Aaron Qian`}
+  description={post.data.description}
+  image={ogImage}
+>
   <BlogPost {post} />
 </BaseLayout>

@@ -4,6 +4,7 @@ import { markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getCollection } from 'astro:content'
 import ProjectsIndex from '@/components/pages/ProjectsIndex.astro'
+import { staticPages } from '@/config/pages'
 
 // Fetch and sort projects by latest log
 const projects = await getCollection('projects')
@@ -11,11 +12,11 @@ const projectLogs = await getCollection('projectLogs')
 
 const sortedProjects = sortProjectsByLatestLog(projects, projectLogs)
 const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
+
+const { title, description } = staticPages.projects
+const ogImage = '/og/projects.png'
 ---
 
-<BaseLayout
-  title="Projects — Aaron Qian"
-  description="Current projects, experiments, and build logs. Engineering lab in progress."
->
+<BaseLayout {title} {description} image={ogImage}>
   <ProjectsIndex projects={projectsWithLive} />
 </BaseLayout>

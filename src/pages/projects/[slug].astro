@@ -49,8 +49,10 @@ const statusLabels = {
   done: 'DONE',
   planning: 'PLANNING',
 }
+
+const ogImage = `/og/projects/${projectSlug}.png`
 ---
 
-<BaseLayout title={project.data.title} description={project.data.description}>
+<BaseLayout title={project.data.title} description={project.data.description} image={ogImage}>
   <ProjectDetail {project} {projectLogs} {statusStyles} {statusLabels} />
 </BaseLayout>

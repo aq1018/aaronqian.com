@@ -8,6 +8,7 @@ dist/
 
 # dependencies
 node_modules/
+node_modules/.astro-og-canvas/
 
 # logs
 npm-debug.log*

@@ -4,17 +4,18 @@ import { getCollection } from 'astro:content'
 
 import BlogIndex from '@/components/pages/BlogIndex.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import { staticPages } from '@/config/pages'
 
 const posts = await getCollection('blog')
 const sortedPosts = posts.toSorted(
   (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
     b.data.date.valueOf() - a.data.date.valueOf(),
 )
+
+const { title, description } = staticPages.blog
+const ogImage = '/og/blog.png'
 ---
 
-<BaseLayout
-  title="Blog - Aaron Qian"
-  description="Software engineering insights, tutorials, and thoughts from Aaron Qian."
->
+<BaseLayout {title} {description} image={ogImage}>
   <BlogIndex posts={sortedPosts} />
 </BaseLayout>

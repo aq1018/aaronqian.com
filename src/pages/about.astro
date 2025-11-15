@@ -1,11 +1,12 @@
 ---
 import AboutPage from '@/components/pages/AboutPage.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import { staticPages } from '@/config/pages'
+
+const { title, description } = staticPages.about
+const ogImage = '/og/about.png'
 ---
 
-<BaseLayout
-  title="About - Aaron Qian"
-  description="Developer, maker, and technical consultant. I ship things, then make them sturdier."
->
+<BaseLayout {title} {description} image={ogImage}>
   <AboutPage />
 </BaseLayout>

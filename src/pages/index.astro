@@ -1,8 +1,12 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Home from '@/components/pages/Home.astro'
+import { staticPages } from '@/config/pages'
+
+const { title, description } = staticPages.home
+const ogImage = '/og/home.png'
 ---
 
-<BaseLayout>
+<BaseLayout {title} {description} image={ogImage}>
   <Home />
 </BaseLayout>
