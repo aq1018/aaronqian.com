@@ -29,6 +29,9 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
+      - name: 🔄 Sync Astro Types
+        run: npm run astro sync
+
       - name: 🧪 Run tests
         run: npm run test:run
 
