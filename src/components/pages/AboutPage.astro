@@ -23,7 +23,12 @@ const { Content } = await aboutEntry.render()
 <Surface padY="md">
   <Container width="narrow" class="text-center">
     <Stack space="md" align="center">
-      <HeroContent title={data.title} description={data.description} microLine={data.microLine} />
+      <HeroContent
+        eyebrow="ABOUT"
+        title={data.title}
+        description={data.description}
+        microLine={data.microLine}
+      />
       <SocialsBar />
     </Stack>
   </Container>
