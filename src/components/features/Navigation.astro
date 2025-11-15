@@ -52,29 +52,13 @@ const currentPath = Astro.url.pathname
 
       <!-- Nav Links (Right) -->
       <Stack direction="row" space="sm" align="center">
-        <Link
-          variant="nav"
-          href="/projects"
-          active={currentPath === '/projects' || currentPath.startsWith('/projects/')}
-        >
+        <Link variant="nav" href="/projects" active={currentPath.startsWith('/projects')}>
           Projects
         </Link>
 
-        <Link
-          variant="nav"
-          href="/blog"
-          active={currentPath === '/blog' || currentPath.startsWith('/blog/')}
-        >
-          Blog
-        </Link>
+        <Link variant="nav" href="/blog" active={currentPath.startsWith('/blog')}> Blog </Link>
 
-        <Link
-          variant="nav"
-          href="/about"
-          active={currentPath === '/about' || currentPath.startsWith('/about/')}
-        >
-          About
-        </Link>
+        <Link variant="nav" href="/about" active={currentPath.startsWith('/about')}> About </Link>
 
         <!-- Theme Toggle -->
         <ThemeToggle />
