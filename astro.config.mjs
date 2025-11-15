@@ -5,6 +5,8 @@ import { defineConfig, envField } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://aaronqian.com',
+  base: '/',
   env: {
     schema: {
       GISCUS_CATEGORY: envField.string({
