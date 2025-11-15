@@ -1,0 +1,21 @@
+---
+/**
+ * Person JSON-LD schema component
+ * Generates structured data for the author/person profile
+ */
+
+import { author, site } from '@/config/site'
+import { generatePersonSchema } from '@/lib/jsonld/generators'
+import JsonLd from './JsonLd.astro'
+
+const schema = generatePersonSchema({
+  name: author.name,
+  url: author.url,
+  description: author.description,
+  email: author.email,
+  image: `${site.url}/favicon.svg`,
+  sameAs: [author.twitter.url, author.github.url],
+})
+---
+
+<JsonLd {schema} />

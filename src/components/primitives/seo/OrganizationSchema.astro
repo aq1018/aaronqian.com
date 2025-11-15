@@ -1,0 +1,18 @@
+---
+/**
+ * Organization JSON-LD schema component
+ * Generates structured data for the organization/business entity
+ */
+
+import { organization } from '@/config/site'
+import { generateOrganizationSchema } from '@/lib/jsonld/generators'
+import JsonLd from './JsonLd.astro'
+
+const schema = generateOrganizationSchema({
+  name: organization.name,
+  url: organization.url,
+  logo: organization.logo,
+})
+---
+
+<JsonLd {schema} />

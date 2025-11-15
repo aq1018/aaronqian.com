@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content'
 import { getCollection } from 'astro:content'
 
 import BlogIndex from '@/components/pages/BlogIndex.astro'
+import ItemListSchema from '@/components/primitives/seo/ItemListSchema.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { staticPages } from '@/config/pages'
 
@@ -14,8 +15,15 @@ const sortedPosts = posts.toSorted(
 
 const { title, description } = staticPages.blog
 const ogImage = '/og/blog.png'
+
+const blogListItems = sortedPosts.map((post: CollectionEntry<'blog'>) => ({
+  name: post.data.title,
+  url: `/blog/${post.slug}`,
+  description: post.data.description,
+}))
 ---
 
 <BaseLayout {title} {description} image={ogImage}>
+  <ItemListSchema slot="head" name="Blog Posts" items={blogListItems} />
   <BlogIndex posts={sortedPosts} />
 </BaseLayout>

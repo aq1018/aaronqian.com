@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions'
 
 import Footer from '@/components/features/Footer.astro'
 import Navigation from '@/components/features/Navigation.astro'
+import WebSiteSchema from '@/components/primitives/seo/WebSiteSchema.astro'
 import '@/styles/global.css'
 
 export interface Props {
@@ -60,6 +61,10 @@ const {
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     {image && <meta property="twitter:image" content={new URL(image, Astro.url)} />}
+
+    <!-- Structured Data -->
+    <WebSiteSchema />
+    <slot name="head" />
 
     <!-- Client Router for SPA-like navigation -->
     <ClientRouter />

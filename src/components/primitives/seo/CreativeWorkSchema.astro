@@ -1,0 +1,35 @@
+---
+/**
+ * CreativeWork JSON-LD schema component
+ * Generates structured data for creative works and projects
+ */
+
+import { author, site } from '@/config/site'
+import { generateCreativeWorkSchema } from '@/lib/jsonld/generators'
+import type { CreativeWorkProps } from '@/lib/jsonld/types'
+import JsonLd from './JsonLd.astro'
+
+type Props = CreativeWorkProps
+
+const { name, description, dateCreated, author: propAuthor, url, image, keywords } = Astro.props
+
+const workProps = {
+  name,
+  description,
+  dateCreated,
+  author: propAuthor,
+  url,
+  image,
+  keywords,
+}
+
+const config = {
+  baseUrl: site.url,
+  authorName: author.name,
+  authorUrl: author.url,
+}
+
+const schema = generateCreativeWorkSchema(workProps, config)
+---
+
+<JsonLd {schema} />

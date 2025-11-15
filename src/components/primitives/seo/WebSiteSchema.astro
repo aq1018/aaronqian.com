@@ -1,0 +1,18 @@
+---
+/**
+ * WebSite JSON-LD schema component
+ * Generates structured data for the entire website
+ */
+
+import { site } from '@/config/site'
+import { generateWebSiteSchema } from '@/lib/jsonld/generators'
+import JsonLd from './JsonLd.astro'
+
+const schema = generateWebSiteSchema({
+  name: site.name,
+  url: site.url,
+  description: site.description,
+})
+---
+
+<JsonLd {schema} />

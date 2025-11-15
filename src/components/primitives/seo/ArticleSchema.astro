@@ -1,0 +1,49 @@
+---
+/**
+ * Article/BlogPosting JSON-LD schema component
+ * Generates structured data for blog posts and articles
+ */
+
+import { author, site } from '@/config/site'
+import { generateArticleSchema, generateBlogPostingSchema } from '@/lib/jsonld/generators'
+import type { ArticleProps } from '@/lib/jsonld/types'
+import JsonLd from './JsonLd.astro'
+
+export interface Props extends ArticleProps {
+  type?: 'article' | 'blog'
+}
+
+const {
+  title,
+  description,
+  datePublished,
+  dateModified,
+  author: propAuthor,
+  image,
+  url,
+  type = 'blog',
+} = Astro.props
+
+const articleProps = {
+  title,
+  description,
+  datePublished,
+  dateModified,
+  author: propAuthor,
+  image,
+  url,
+}
+
+const config = {
+  baseUrl: site.url,
+  authorName: author.name,
+  authorUrl: author.url,
+}
+
+const schema =
+  type === 'article'
+    ? generateArticleSchema(articleProps, config)
+    : generateBlogPostingSchema(articleProps, config)
+---
+
+<JsonLd {schema} />

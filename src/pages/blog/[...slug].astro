@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
+import ArticleSchema from '@/components/primitives/seo/ArticleSchema.astro'
+import BreadcrumbSchema from '@/components/primitives/seo/BreadcrumbSchema.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import BlogPost from '@/components/pages/BlogPost.astro'
 
@@ -19,6 +21,12 @@ export interface Props {
 
 const { post } = Astro.props
 const ogImage = `/og/blog/${post.slug}.png`
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Blog', url: '/blog' },
+  { name: post.data.title, url: `/blog/${post.slug}` },
+]
 ---
 
 <BaseLayout
@@ -26,5 +34,14 @@ const ogImage = `/og/blog/${post.slug}.png`
   description={post.data.description}
   image={ogImage}
 >
+  <ArticleSchema
+    slot="head"
+    title={post.data.title}
+    description={post.data.description}
+    datePublished={post.data.date}
+    url={`/blog/${post.slug}`}
+    image={ogImage}
+  />
+  <BreadcrumbSchema slot="head" items={breadcrumbItems} />
   <BlogPost {post} />
 </BaseLayout>

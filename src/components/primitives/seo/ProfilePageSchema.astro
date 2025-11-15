@@ -1,0 +1,21 @@
+---
+/**
+ * ProfilePage JSON-LD schema component
+ * Wraps Person schema to indicate a profile page
+ */
+
+import { author, site } from '@/config/site'
+import { generateProfilePageSchema } from '@/lib/jsonld/generators'
+import JsonLd from './JsonLd.astro'
+
+const schema = generateProfilePageSchema({
+  name: author.name,
+  url: author.url,
+  description: author.description,
+  email: author.email,
+  image: `${site.url}/favicon.svg`,
+  sameAs: [author.twitter.url, author.github.url],
+})
+---
+
+<JsonLd {schema} />

@@ -4,6 +4,8 @@ import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
 import ProjectDetail from '@/components/pages/ProjectDetail.astro'
+import BreadcrumbSchema from '@/components/primitives/seo/BreadcrumbSchema.astro'
+import CreativeWorkSchema from '@/components/primitives/seo/CreativeWorkSchema.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 
 export async function getStaticPaths() {
@@ -51,8 +53,26 @@ const statusLabels = {
 }
 
 const ogImage = `/og/projects/${projectSlug}.png`
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Projects', url: '/projects' },
+  { name: project.data.title, url: `/projects/${projectSlug}` },
+]
+
+// Use earliest log date as creation date, or current date if no logs
+const creationDate = projectLogs.length > 0 ? projectLogs.at(-1).data.date : new Date()
 ---
 
 <BaseLayout title={project.data.title} description={project.data.description} image={ogImage}>
+  <BreadcrumbSchema slot="head" items={breadcrumbItems} />
+  <CreativeWorkSchema
+    slot="head"
+    name={project.data.title}
+    description={project.data.description}
+    dateCreated={creationDate}
+    url={`/projects/${projectSlug}`}
+    image={ogImage}
+  />
   <ProjectDetail {project} {projectLogs} {statusStyles} {statusLabels} />
 </BaseLayout>

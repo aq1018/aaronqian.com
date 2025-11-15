@@ -1,5 +1,7 @@
 ---
 import AboutPage from '@/components/pages/AboutPage.astro'
+import ProfilePageSchema from '@/components/primitives/seo/ProfilePageSchema.astro'
+import OrganizationSchema from '@/components/primitives/seo/OrganizationSchema.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { staticPages } from '@/config/pages'
 
@@ -8,5 +10,7 @@ const ogImage = '/og/about.png'
 ---
 
 <BaseLayout {title} {description} image={ogImage}>
+  <ProfilePageSchema slot="head" />
+  <OrganizationSchema slot="head" />
   <AboutPage />
 </BaseLayout>
