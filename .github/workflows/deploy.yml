@@ -1,7 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
     branches: [main]
   workflow_dispatch:
 
@@ -17,6 +20,14 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    env:
+      GISCUS_CATEGORY: ${{ vars.GISCUS_CATEGORY }}
+      GISCUS_CATEGORY_ID: ${{ vars.GISCUS_CATEGORY_ID }}
+      GISCUS_REPO: ${{ vars.GISCUS_REPO }}
+      GISCUS_REPO_ID: ${{ vars.GISCUS_REPO_ID }}
+
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
