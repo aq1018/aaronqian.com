@@ -2,6 +2,10 @@
   "name": "aaronqian-com",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=22.20.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "lint": "oxlint --type-aware",
     "lint:fix": "oxlint --type-aware --fix",
