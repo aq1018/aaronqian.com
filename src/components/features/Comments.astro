@@ -38,7 +38,7 @@ const ORIGIN = Astro.url.origin
         // oxlint-disable-next-line no-undef
         categoryId: CATEGORY_ID,
         mapping: 'pathname',
-        strict: '1',
+        strict: '0',
         reactionsEnabled: '1',
         emitMetadata: '0',
         inputPosition: 'top',
@@ -50,7 +50,12 @@ const ORIGIN = Astro.url.origin
       // Create and configure Giscus script
       const script = document.createElement('script')
       script.src = 'https://giscus.app/client.js'
-      script.dataset = dataset
+
+      // Set each data attribute individually
+      Object.keys(dataset).forEach((key) => {
+        script.dataset[key] = dataset[key]
+      })
+
       script.setAttribute('crossorigin', 'anonymous')
       script.async = true
 
