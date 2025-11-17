@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions'
 
 import Footer from '@/components/features/Footer.astro'
+import GoogleAnalytics from '@/components/features/GoogleAnalytics.astro'
 import Navigation from '@/components/features/Navigation.astro'
 import WebSiteSchema from '@/components/primitives/seo/WebSiteSchema.astro'
 import '@/styles/global.css'
@@ -27,7 +28,6 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Preload fonts to prevent FOUT -->
     <link
       rel="preload"
       href="/fonts/inter-latin-wght-normal.woff2"
@@ -42,34 +42,27 @@ const {
       type="font/woff2"
       crossorigin="anonymous"
     />
-
-    <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {image && <meta property="og:image" content={new URL(image, Astro.url)} />}
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     {image && <meta property="twitter:image" content={new URL(image, Astro.url)} />}
 
-    <!-- Structured Data -->
     <WebSiteSchema />
     <slot name="head" />
 
-    <!-- Client Router for SPA-like navigation -->
     <ClientRouter />
 
-    <!-- Dark mode script - runs before page render to prevent flash -->
     <script is:inline>
       ;(function () {
         const theme = localStorage.getItem('theme') || 'system'
@@ -80,13 +73,14 @@ const {
         document.documentElement.classList.toggle('dark', isDark)
       })()
     </script>
+
+    <GoogleAnalytics />
   </head>
   <body class="flex min-h-full flex-col bg-background font-sans text-content">
     <Navigation />
     <slot />
     <Footer />
 
-    <!-- Initialize component hooks after DOM is ready -->
     <script>
       import { initComponentHooks } from '@/components/hooks'
 

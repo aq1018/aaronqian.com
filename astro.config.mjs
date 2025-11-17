@@ -30,6 +30,11 @@ export default defineConfig({
         context: 'client',
         optional: false,
       }),
+      GA_MEASUREMENT_ID: envField.string({
+        access: 'public',
+        context: 'client',
+        optional: true,
+      }),
     },
   },
   integrations: [icon(), sitemap()],

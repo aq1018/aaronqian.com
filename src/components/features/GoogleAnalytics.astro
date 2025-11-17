@@ -1,0 +1,47 @@
+---
+import { GA_MEASUREMENT_ID } from 'astro:env/client'
+---
+
+{
+  GA_MEASUREMENT_ID && (
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+      data-ga-id={GA_MEASUREMENT_ID}
+    />
+  )
+}
+
+<script>
+  // Only run if we have a GA ID configured
+  const gaScript = document.querySelector('script[data-ga-id]') as HTMLScriptElement | null
+  const GA_ID = gaScript?.dataset?.gaId
+
+  if (GA_ID) {
+    /* oxlint-disable */
+    // @ts-ignore - Google Analytics global
+    window.dataLayer = window.dataLayer || []
+    // @ts-ignore - Google Analytics global
+    function gtag() {
+      // @ts-ignore - Google Analytics global
+      dataLayer.push(arguments)
+    }
+    // @ts-ignore - Google Analytics global
+    gtag('js', new Date())
+    // @ts-ignore - Google Analytics global
+    gtag('config', GA_ID)
+
+    // Handle Astro View Transitions
+    document.addEventListener('astro:page-load', () => {
+      // @ts-ignore - Google Analytics global
+      if (typeof gtag !== 'undefined') {
+        // @ts-ignore - Google Analytics global
+        gtag('config', GA_ID, {
+          page_path: window.location.pathname,
+        })
+      }
+    })
+    /* oxlint-enable */
+  }
+</script>

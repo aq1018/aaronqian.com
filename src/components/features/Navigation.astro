@@ -13,7 +13,6 @@ const currentPath = Astro.url.pathname
 <NavBar position="sticky" border="bottom" backdrop>
   <Container width="wide">
     <NavBarContent>
-      <!-- Home Link (Left) -->
       <Link variant="nav" href="/" active={currentPath === '/'} aria-label="Home">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -30,10 +29,9 @@ const currentPath = Astro.url.pathname
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <!-- Lambda (Λ) -->
+            {/* Lambda (Λ) */}
             <path d="M16 44 L26 24 L36 44"></path>
-
-            <!-- Theta (Θ) outline -->
+            {/* Theta (Θ) outline */}
             <path
               d="
               M48 24
@@ -43,14 +41,12 @@ const currentPath = Astro.url.pathname
               C39 28 43 24 48 24 Z
             "
             ></path>
-
-            <!-- Theta (Θ) inner bar -->
+            {/* Theta (Θ) inner bar */}
             <path d="M44 34 H52"></path>
           </g>
         </svg>
       </Link>
 
-      <!-- Nav Links (Right) -->
       <Stack direction="row" space="sm" align="center">
         <Link variant="nav" href="/projects" active={currentPath.startsWith('/projects')}>
           Projects
@@ -60,7 +56,6 @@ const currentPath = Astro.url.pathname
 
         <Link variant="nav" href="/about" active={currentPath.startsWith('/about')}> About </Link>
 
-        <!-- Theme Toggle -->
         <ThemeToggle />
       </Stack>
     </NavBarContent>

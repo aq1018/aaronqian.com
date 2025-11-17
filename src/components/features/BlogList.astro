@@ -34,7 +34,6 @@ const { posts, footer } = Astro.props
     </Grid>
   </Grid>
 
-  <!-- Blog posts list -->
   <ul class="flex flex-col gap-3">
     {posts.map((post) => <BlogListItem {post} />)}
   </ul>
