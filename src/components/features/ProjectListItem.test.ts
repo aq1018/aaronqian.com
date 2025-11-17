@@ -21,7 +21,6 @@ function createMockProject(
       ...overrides,
     },
     id: 'test-project/index.md',
-    slug: 'test-project',
   }
 }
 

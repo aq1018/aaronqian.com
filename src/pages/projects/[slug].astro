@@ -33,7 +33,7 @@ const projectSlug = project.id.replace(/\/index(\.md)?$/, '')
 // Fetch all logs for this project, sorted by date descending
 const allLogs = await getCollection('projectLogs')
 const projectLogs = allLogs
-  .filter((log: CollectionEntry<'projectLogs'>) => log.data.project === projectSlug)
+  .filter((log: CollectionEntry<'projectLogs'>) => log.id.startsWith(`${projectSlug}/logs/`))
   .toSorted(
     (a: CollectionEntry<'projectLogs'>, b: CollectionEntry<'projectLogs'>) =>
       b.data.date.getTime() - a.data.date.getTime(),

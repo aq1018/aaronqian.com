@@ -6,7 +6,10 @@ import { borderColors, ogImageConfig } from '@/config/og'
 
 const projects = await getCollection('projects')
 const pages = Object.fromEntries(
-  projects.map((project: CollectionEntry<'projects'>) => [project.slug, project]),
+  projects.map((project: CollectionEntry<'projects'>) => [
+    project.id.replace(/\/index\.md$/, ''),
+    project,
+  ]),
 )
 
 // eslint-disable-next-line new-cap -- OGImageRoute is a factory function, not a constructor

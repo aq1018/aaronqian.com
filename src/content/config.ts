@@ -1,3 +1,4 @@
+import { glob } from 'astro/loaders'
 import { defineCollection, z } from 'astro:content'
 
 const blog = defineCollection({
@@ -13,6 +14,7 @@ const blog = defineCollection({
 })
 
 const projects = defineCollection({
+  loader: glob({ pattern: '*/index.md', base: './src/content/projects' }),
   schema: z.object({
     aside: z.string(),
     description: z.string(),
@@ -22,17 +24,16 @@ const projects = defineCollection({
     title: z.string(),
     url: z.string().url().optional(),
   }),
-  type: 'content',
 })
 
 const projectLogs = defineCollection({
+  loader: glob({ pattern: '*/logs/*.md', base: './src/content/projects' }),
   schema: z.object({
     date: z.coerce.date(),
     project: z.string(),
     tags: z.array(z.string()),
     title: z.string(), // slug reference to parent project
   }),
-  type: 'content',
 })
 
 const socials = defineCollection({

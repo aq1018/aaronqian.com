@@ -9,12 +9,17 @@ interface ProjectWithLatestLog extends CollectionEntry<'projects'> {
 
 /**
  * Extract date from project log filename
- * Format: {project-slug}-YYYY-MM-DD-{title}.md
- * Example: spider-bot-2025-01-13-mg90-upgrade.md -> 2025-01-13
+ * Format: {project-slug}/logs/YYYY-MM-DD-{title}.md
+ * Example: spider-bot/logs/2025-01-13-mg90-upgrade.md -> 2025-01-13
  */
 function extractDateFromLogId(logId: string): Date | null {
-  // Match pattern: {slug}-YYYY-MM-DD-{rest}
-  const dateMatch = /-(\d{4}-\d{2}-\d{2})-/.exec(logId)
+  // Extract filename from path
+  const filename = logId.split('/').pop()
+  if (filename == null || filename === '') {
+    return null
+  }
+  // Match pattern: YYYY-MM-DD at start of filename
+  const dateMatch = /^(\d{4}-\d{2}-\d{2})-/.exec(filename)
   if (dateMatch == null) {
     return null
   }
@@ -32,15 +37,12 @@ function extractDateFromLogId(logId: string): Date | null {
 
 /**
  * Extract project slug from log entry
- * Log format: {project-slug}-YYYY-MM-DD-{title}.md
- * Example: spider-bot-2025-01-13-mg90-upgrade.md -> spider-bot
+ * Log format: {project-slug}/logs/YYYY-MM-DD-{title}.md
+ * Example: spider-bot/logs/2025-01-13-mg90-upgrade.md -> spider-bot
  */
 function extractProjectSlugFromLog(logId: string): string {
-  // Remove file extension first
-  const withoutExt = logId.replace(/\.md$/, '')
-  // Split by date pattern and take first part
-  const parts = withoutExt.split(/-\d{4}-\d{2}-\d{2}-/)
-  return parts[0]
+  // Take first segment of path (before /logs/)
+  return logId.split('/')[0]
 }
 
 /**

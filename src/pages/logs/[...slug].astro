@@ -1,0 +1,86 @@
+---
+// Individual Project Log Page - Shows full log entry with breadcrumbs
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
+import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
+import Container from '@/components/primitives/Container.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Link from '@/components/primitives/Link.astro'
+import BreadcrumbSchema from '@/components/primitives/seo/BreadcrumbSchema.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+
+export async function getStaticPaths() {
+  const [projectLogs, projects] = await Promise.all([
+    getCollection('projectLogs'),
+    getCollection('projects'),
+  ])
+
+  return projectLogs.map((log: CollectionEntry<'projectLogs'>) => {
+    // Convert log ID from "ai-ams/logs/2024-12-28-surelc-api.md" to "ai-ams/2024-12-28-surelc-api"
+    const slug = log.id.replace(/\.md$/, '').replace('/logs/', '/')
+
+    // Extract project slug from log ID
+    const projectSlug = log.id.split('/')[0]
+    const project = projects.find((p) => p.id.startsWith(`${projectSlug}/`))
+
+    return {
+      params: { slug },
+      props: { log, project },
+    }
+  })
+}
+
+export interface Props {
+  log: CollectionEntry<'projectLogs'>
+  project?: CollectionEntry<'projects'>
+}
+
+const { log, project } = Astro.props
+
+// Extract project slug for links
+const projectSlug = log.id.split('/')[0]
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Projects', url: '/projects' },
+  ...(project
+    ? [
+        { name: project.data.title, url: `/projects/${projectSlug}` },
+        { name: log.data.title, url: Astro.url.pathname },
+      ]
+    : [{ name: log.data.title, url: Astro.url.pathname }]),
+]
+
+const pageTitle = `${log.data.title} | ${project?.data.title ?? 'Project Log'}`
+---
+
+<BaseLayout title={pageTitle} description={log.data.title}>
+  <BreadcrumbSchema slot="head" items={breadcrumbItems} />
+
+  <main>
+    <Surface>
+      <Container>
+        <!-- Back link -->
+        <div class="mb-6">
+          <Link href={`/projects/${projectSlug}`} variant="back">
+            ← Back to {project?.data.title ?? 'project'}
+          </Link>
+        </div>
+
+        <!-- Page title -->
+        {
+          project && (
+            <Heading size="h1" class="mb-6 text-2xl sm:text-3xl">
+              {project.data.title}
+            </Heading>
+          )
+        }
+
+        <!-- Full log entry -->
+        <ProjectLogEntry {log} showExcerpt={false} />
+      </Container>
+    </Surface>
+  </main>
+</BaseLayout>

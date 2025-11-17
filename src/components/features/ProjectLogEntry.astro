@@ -1,9 +1,12 @@
 ---
 // ProjectLogEntry - Terminal-style log entry component
+import { render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
+import { marked } from 'marked'
 
 import Badge from '@/components/primitives/Badge.astro'
 import Heading from '@/components/primitives/Heading.astro'
+import Link from '@/components/primitives/Link.astro'
 import Prose from '@/components/primitives/Prose.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
@@ -11,10 +14,34 @@ import Text from '@/components/primitives/Text.astro'
 
 export interface Props {
   log: CollectionEntry<'projectLogs'>
+  showExcerpt?: boolean
 }
 
-const { log } = Astro.props
-const { Content } = await log.render()
+const { log, showExcerpt = false } = Astro.props
+
+// Extract excerpt with smart fallback
+const getExcerpt = (body: string) => {
+  if (body.includes('<!-- excerpt -->')) {
+    return body.split('<!-- excerpt -->')[0]
+  }
+  // Fallback to first paragraph
+  return body.split('\n\n')[0]
+}
+
+// Generate log URL from log ID: ai-ams/logs/2024-12-28-surelc-api.md -> /logs/ai-ams/2024-12-28-surelc-api
+const logUrl = `/logs/${log.id.replace(/\.md$/, '').replace('/logs/', '/')}`
+
+// Render content or excerpt
+let contentHtml = ''
+let Content: any = null
+
+if (showExcerpt) {
+  const excerptMarkdown = getExcerpt(log.body ?? '')
+  contentHtml = await marked.parse(excerptMarkdown)
+} else {
+  const rendered = await render(log)
+  Content = rendered.Content
+}
 
 // Format date as [YYYY-MM-DD HH:MM]
 const formatTimestamp = (date: Date) => {
@@ -70,6 +97,17 @@ const getTagProps = (tag: string) => tagColorMap[tag.toLowerCase()] ?? { color: 
 
   <!-- Log content (markdown) -->
   <Prose>
-    <Content />
+    {showExcerpt ? <Fragment set:html={contentHtml} /> : <Content />}
   </Prose>
+
+  <!-- Read more link for excerpts -->
+  {
+    showExcerpt && (
+      <div class="mt-4">
+        <Link href={logUrl} variant="content">
+          Read more →
+        </Link>
+      </div>
+    )
+  }
 </Sheet>

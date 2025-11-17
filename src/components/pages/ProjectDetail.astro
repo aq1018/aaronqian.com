@@ -104,7 +104,7 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
           projectLogs.length > 0 ? (
             <Stack space="md">
               {projectLogs.map((log) => (
-                <ProjectLogEntry log={log} />
+                <ProjectLogEntry log={log} showExcerpt={true} />
               ))}
             </Stack>
           ) : (

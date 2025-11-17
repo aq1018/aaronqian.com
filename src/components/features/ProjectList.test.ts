@@ -1,5 +1,5 @@
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
@@ -25,8 +25,6 @@ const createMockProject = (
     title,
   },
   id,
-  render: vi.fn(),
-  slug: id.replace(/\/index(\.md)?$/, ''),
 })
 
 const defaultStatusStyles = {

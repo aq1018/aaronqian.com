@@ -1,5 +1,5 @@
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import {
   getLatestActiveProjectSlug,
@@ -23,8 +23,6 @@ const createProject = (id: string, title: string): ProjectEntry => ({
     title,
   },
   id,
-  render: vi.fn(),
-  slug: id.replace(/\/index(\.md)?$/, ''),
 })
 
 // Mock project log data
@@ -38,8 +36,6 @@ const createProjectLog = (id: string): ProjectLogEntry => ({
     title: 'Test log',
   },
   id,
-  render: vi.fn(),
-  slug: id.replace(/\.md$/, ''),
 })
 
 describe('sortProjectsByLatestLog', () => {
@@ -51,9 +47,9 @@ describe('sortProjectsByLatestLog', () => {
     ]
 
     const projectLogs = [
-      createProjectLog('project-a-2025-01-10-first-log.md'),
-      createProjectLog('project-b-2025-01-15-update.md'),
-      createProjectLog('project-c-2025-01-05-start.md'),
+      createProjectLog('project-a/logs/2025-01-10-first-log.md'),
+      createProjectLog('project-b/logs/2025-01-15-update.md'),
+      createProjectLog('project-c/logs/2025-01-05-start.md'),
     ]
 
     const sorted = sortProjectsByLatestLog(projects, projectLogs)
@@ -67,7 +63,7 @@ describe('sortProjectsByLatestLog', () => {
   it('should attach latestLogDate to each project', () => {
     const projects = [createProject('project-a/index.md', 'Project A')]
 
-    const projectLogs = [createProjectLog('project-a-2025-01-10-log.md')]
+    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
 
     const sorted = sortProjectsByLatestLog(projects, projectLogs)
 
@@ -79,9 +75,9 @@ describe('sortProjectsByLatestLog', () => {
     const projects = [createProject('project-a/index.md', 'Project A')]
 
     const projectLogs = [
-      createProjectLog('project-a-2025-01-10-old-log.md'),
-      createProjectLog('project-a-2025-01-20-newer-log.md'),
-      createProjectLog('project-a-2025-01-15-middle-log.md'),
+      createProjectLog('project-a/logs/2025-01-10-old-log.md'),
+      createProjectLog('project-a/logs/2025-01-20-newer-log.md'),
+      createProjectLog('project-a/logs/2025-01-15-middle-log.md'),
     ]
 
     const sorted = sortProjectsByLatestLog(projects, projectLogs)
@@ -97,8 +93,8 @@ describe('sortProjectsByLatestLog', () => {
     ]
 
     const projectLogs = [
-      createProjectLog('project-a-2025-01-10-log.md'),
-      createProjectLog('project-c-2025-01-05-log.md'),
+      createProjectLog('project-a/logs/2025-01-10-log.md'),
+      createProjectLog('project-c/logs/2025-01-05-log.md'),
       // project-b has no logs
     ]
 
@@ -124,7 +120,7 @@ describe('sortProjectsByLatestLog', () => {
   })
 
   it('should handle empty projects array', () => {
-    const projectLogs = [createProjectLog('project-a-2025-01-10-log.md')]
+    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
 
     const sorted = sortProjectsByLatestLog([], projectLogs)
 
@@ -134,7 +130,7 @@ describe('sortProjectsByLatestLog', () => {
   it('should handle log filenames with hyphens in project slug', () => {
     const projects = [createProject('my-cool-project/index.md', 'My Cool Project')]
 
-    const projectLogs = [createProjectLog('my-cool-project-2025-01-10-update.md')]
+    const projectLogs = [createProjectLog('my-cool-project/logs/2025-01-10-update.md')]
 
     const sorted = sortProjectsByLatestLog(projects, projectLogs)
 
@@ -145,7 +141,7 @@ describe('sortProjectsByLatestLog', () => {
   it('should handle log filenames without .md extension', () => {
     const projects = [createProject('project-a/index', 'Project A')]
 
-    const projectLogs = [createProjectLog('project-a-2025-01-10-log')]
+    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log')]
 
     const sorted = sortProjectsByLatestLog(projects, projectLogs)
 
@@ -157,7 +153,7 @@ describe('sortProjectsByLatestLog', () => {
 
     const projectLogs = [
       createProjectLog('project-a-invalid-date-log.md'),
-      createProjectLog('project-a-2025-99-99-bad-date.md'),
+      createProjectLog('project-a/logs/2025-99-99-bad-date.md'),
     ]
 
     const sorted = sortProjectsByLatestLog(projects, projectLogs)
@@ -174,8 +170,8 @@ describe('getLatestActiveProjectSlug', () => {
     ]
 
     const projectLogs = [
-      createProjectLog('project-a-2025-01-10-log.md'),
-      createProjectLog('project-b-2025-01-20-log.md'),
+      createProjectLog('project-a/logs/2025-01-10-log.md'),
+      createProjectLog('project-b/logs/2025-01-20-log.md'),
     ]
 
     const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
@@ -203,7 +199,7 @@ describe('getLatestActiveProjectSlug', () => {
   it('should remove /index.md suffix from project id', () => {
     const projects = [createProject('my-project/index.md', 'My Project')]
 
-    const projectLogs = [createProjectLog('my-project-2025-01-10-log.md')]
+    const projectLogs = [createProjectLog('my-project/logs/2025-01-10-log.md')]
 
     const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
 
@@ -213,7 +209,7 @@ describe('getLatestActiveProjectSlug', () => {
   it('should remove /index suffix without .md', () => {
     const projects = [createProject('my-project/index', 'My Project')]
 
-    const projectLogs = [createProjectLog('my-project-2025-01-10-log.md')]
+    const projectLogs = [createProjectLog('my-project/logs/2025-01-10-log.md')]
 
     const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
 
@@ -227,9 +223,9 @@ describe('getLatestActiveProjectSlug', () => {
     ]
 
     const projectLogs = [
-      createProjectLog('project-a-2025-01-10-old.md'),
-      createProjectLog('project-a-2025-01-25-newer.md'),
-      createProjectLog('project-b-2025-01-20-log.md'),
+      createProjectLog('project-a/logs/2025-01-10-old.md'),
+      createProjectLog('project-a/logs/2025-01-25-newer.md'),
+      createProjectLog('project-b/logs/2025-01-20-log.md'),
     ]
 
     const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
@@ -246,8 +242,8 @@ describe('markLatestProjectAsLive', () => {
     ]
 
     const projectLogs = [
-      createProjectLog('project-a-2025-01-10-log.md'),
-      createProjectLog('project-b-2025-01-20-log.md'),
+      createProjectLog('project-a/logs/2025-01-10-log.md'),
+      createProjectLog('project-b/logs/2025-01-20-log.md'),
     ]
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
@@ -269,7 +265,7 @@ describe('markLatestProjectAsLive', () => {
   })
 
   it('should not modify projects if projects array is empty', () => {
-    const projectLogs = [createProjectLog('project-a-2025-01-10-log.md')]
+    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
 
     const marked = markLatestProjectAsLive([], projectLogs)
 
@@ -282,7 +278,7 @@ describe('markLatestProjectAsLive', () => {
       createProject('project-b/index.md', 'Project B'),
     ]
 
-    const projectLogs = [createProjectLog('project-a-2025-01-10-log.md')]
+    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
@@ -297,7 +293,7 @@ describe('markLatestProjectAsLive', () => {
 
   it('should preserve other project data properties', () => {
     const projects = [createProject('project-a/index.md', 'Project A')]
-    const projectLogs = [createProjectLog('project-a-2025-01-10-log.md')]
+    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
@@ -315,9 +311,9 @@ describe('markLatestProjectAsLive', () => {
     ]
 
     const projectLogs = [
-      createProjectLog('project-a-2025-01-10-log.md'),
-      createProjectLog('project-b-2025-01-20-log.md'),
-      createProjectLog('project-c-2025-01-05-log.md'),
+      createProjectLog('project-a/logs/2025-01-10-log.md'),
+      createProjectLog('project-b/logs/2025-01-20-log.md'),
+      createProjectLog('project-c/logs/2025-01-05-log.md'),
     ]
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
@@ -334,7 +330,7 @@ describe('markLatestProjectAsLive', () => {
       createProject('project-c', 'Project C'),
     ]
 
-    const projectLogs = [createProjectLog('project-b-2025-01-20-log.md')]
+    const projectLogs = [createProjectLog('project-b/logs/2025-01-20-log.md')]
 
     const marked = markLatestProjectAsLive(projects, projectLogs)
 
