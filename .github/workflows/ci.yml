@@ -15,6 +15,7 @@ jobs:
       GISCUS_CATEGORY_ID: ${{ vars.GISCUS_CATEGORY_ID }}
       GISCUS_REPO: ${{ vars.GISCUS_REPO }}
       GISCUS_REPO_ID: ${{ vars.GISCUS_REPO_ID }}
+      GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
 
     steps:
       - name: 📥 Checkout code
@@ -32,14 +33,14 @@ jobs:
       - name: 💅 Check formatting
         run: npm run format:check
 
+      - name: 🔍 Type check
+        run: npm run type-check
+
       - name: ⚡ Lint code
-        run: npm run astro sync && npm run lint
+        run: npm run lint
 
       - name: 🧪 Run tests
         run: npm run test:run
-
-      - name: 🔍 Type check
-        run: npm run type-check
 
       - name: 🏗️ Build project
         run: npm run build

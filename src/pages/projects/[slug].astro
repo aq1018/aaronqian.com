@@ -61,7 +61,7 @@ const breadcrumbItems = [
 ]
 
 // Use earliest log date as creation date, or current date if no logs
-const creationDate = projectLogs.length > 0 ? projectLogs.at(-1).data.date : new Date()
+const creationDate = projectLogs.length > 0 ? projectLogs.at(-1)!.data.date : new Date()
 ---
 
 <BaseLayout title={project.data.title} description={project.data.description} image={ogImage}>

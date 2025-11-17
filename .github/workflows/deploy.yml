@@ -27,6 +27,7 @@ jobs:
       GISCUS_CATEGORY_ID: ${{ vars.GISCUS_CATEGORY_ID }}
       GISCUS_REPO: ${{ vars.GISCUS_REPO }}
       GISCUS_REPO_ID: ${{ vars.GISCUS_REPO_ID }}
+      GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
 
     steps:
       - name: 📥 Checkout
