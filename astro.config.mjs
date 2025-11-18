@@ -1,11 +1,16 @@
 // @ts-check
+import cloudflare from '@astrojs/cloudflare'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import icon from 'astro-icon'
 import { defineConfig, envField } from 'astro/config'
 
+const isTest = process.env.VITEST === 'true'
+
 // https://astro.build/config
 export default defineConfig({
+  output: 'server',
+  adapter: isTest ? undefined : cloudflare(),
   site: 'https://aaronqian.com',
   base: '/',
   env: {

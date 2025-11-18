@@ -20,7 +20,8 @@
     "dev": "astro dev",
     "prebuild": "npm run generate:giscus-themes",
     "build": "astro check && astro build",
-    "preview": "astro preview",
+    "preview": "npx wrangler dev",
+    "deploy": "npm run build && npx wrangler deploy",
     "astro": "astro",
     "prepare": "husky",
     "postinstall": "npm run generate:giscus-themes",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
+    "@astrojs/cloudflare": "^12.6.11",
     "@astrojs/ts-plugin": "^1.10.5",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/dom": "^10.4.1",
@@ -75,6 +77,7 @@
     "prettier-plugin-tailwindcss": "^0.7.1",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.1"
+    "vitest": "^4.0.1",
+    "wrangler": "^4.49.0"
   }
 }
