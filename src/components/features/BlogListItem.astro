@@ -10,6 +10,7 @@ import Cluster from '@/components/primitives/Cluster.astro'
 import Grid from '@/components/primitives/Grid.astro'
 import Link from '@/components/primitives/Link.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
+import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
 
 export interface Props {
@@ -22,15 +23,24 @@ const { post } = Astro.props
 <Sheet as="li" variant="bar" color="primary" padding="sm" hover>
   <Grid spacing="md">
     <Grid size={12} size-md={2} class="justify-self-start md:justify-self-end">
-      <Text color="muted" size="small">
+      <Stack space="xs">
+        <Text color="muted" size="small">
+          {
+            post.data.date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
+          }
+        </Text>
         {
-          post.data.date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          })
+          post.data.draft && (
+            <Badge color="danger" size="sm" uppercase>
+              DRAFT
+            </Badge>
+          )
         }
-      </Text>
+      </Stack>
     </Grid>
 
     <Grid size={12} size-md={4}>

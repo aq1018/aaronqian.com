@@ -1,0 +1,17 @@
+---
+// DraftBanner - Full-width warning banner for draft content
+import Bleed from '@/components/primitives/Bleed.astro'
+import Container from '@/components/primitives/Container.astro'
+import Sheet from '@/components/primitives/Sheet.astro'
+import Text from '@/components/primitives/Text.astro'
+---
+
+<Bleed size="lg" class="sticky top-0 z-50">
+  <Sheet variant="fill" color="danger" padding="sm" class="border-y border-danger/20">
+    <Container>
+      <Text size="small" class="text-center font-semibold">
+        📝 Draft — This content is a work in progress
+      </Text>
+    </Container>
+  </Sheet>
+</Bleed>

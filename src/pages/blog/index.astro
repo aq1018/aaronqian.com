@@ -7,7 +7,8 @@ import ItemListSchema from '@/components/primitives/seo/ItemListSchema.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { staticPages } from '@/config/pages'
 
-const posts = await getCollection('blog')
+// Filter out drafts in production
+const posts = await getCollection('blog', ({ data }) => !import.meta.env.PROD || !data.draft)
 const sortedPosts = posts.toSorted(
   (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
     b.data.date.valueOf() - a.data.date.valueOf(),

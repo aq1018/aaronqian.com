@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content'
 
 import Comments from '@/components/features/Comments.astro'
+import DraftBanner from '@/components/features/DraftBanner.astro'
 import Badge from '@/components/primitives/Badge.astro'
 import Cluster from '@/components/primitives/Cluster.astro'
 import Container from '@/components/primitives/Container.astro'
@@ -20,6 +21,8 @@ export interface Props {
 const { post } = Astro.props
 const { Content } = await post.render()
 ---
+
+{post.data.draft && <DraftBanner />}
 
 <Surface>
   <Container width="narrow">

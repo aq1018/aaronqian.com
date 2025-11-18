@@ -26,6 +26,7 @@ const colors = [
  * - outline: Border with hover background
  * - soft: Subtle background with hover
  * - bar: Left border with opacity shift on hover
+ * - fill: Solid background with hover
  */
 export const sheetCva = cva(['overflow-hidden'], {
   compoundVariants: [
@@ -76,6 +77,22 @@ export const sheetCva = cva(['overflow-hidden'], {
         variant: 'bar' as const,
       },
     ]),
+
+    // Fill variant with hover
+    ...colors.flatMap((color) => [
+      {
+        class: `bg-${color} text-${color}-content hover:bg-${color}/90`,
+        color,
+        hover: true,
+        variant: 'fill' as const,
+      },
+      {
+        class: `bg-${color} text-${color}-content`,
+        color,
+        hover: false,
+        variant: 'fill' as const,
+      },
+    ]),
   ],
   defaultVariants: {
     color: 'neutral',
@@ -106,6 +123,7 @@ export const sheetCva = cva(['overflow-hidden'], {
     },
     variant: {
       bar: 'bg-transparent border-l-2',
+      fill: '',
       outline: 'border-2 rounded',
       soft: '',
     },

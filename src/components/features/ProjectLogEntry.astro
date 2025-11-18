@@ -70,9 +70,20 @@ const getTagProps = (tag: string) => tagColorMap[tag.toLowerCase()] ?? { color: 
 <Sheet as="article" variant="bar" color="neutral" padding="none" hover class="pl-6">
   <!-- Timestamp and title -->
   <header class="mb-3">
-    <Text as="time" color="muted" datetime={log.data.date.toISOString()}>
-      [{formatTimestamp(log.data.date)}]
-    </Text>
+    <Stack space="xs">
+      <Text as="time" color="muted" datetime={log.data.date.toISOString()}>
+        [{formatTimestamp(log.data.date)}]
+      </Text>
+      {
+        log.data.draft && (
+          <div class="w-fit">
+            <Badge color="danger" size="sm" uppercase>
+              DRAFT
+            </Badge>
+          </div>
+        )
+      }
+    </Stack>
     <Heading size="h3" class="mt-1 text-lg">
       {log.data.title}
     </Heading>

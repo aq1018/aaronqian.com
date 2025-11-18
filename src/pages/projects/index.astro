@@ -10,7 +10,11 @@ import { staticPages } from '@/config/pages'
 
 // Fetch and sort projects by latest log
 const projects = await getCollection('projects')
-const projectLogs = await getCollection('projectLogs')
+// Filter out drafts in production
+const projectLogs = await getCollection(
+  'projectLogs',
+  ({ data }) => !import.meta.env.PROD || !data.draft,
+)
 
 const sortedProjects = sortProjectsByLatestLog(projects, projectLogs)
 const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)

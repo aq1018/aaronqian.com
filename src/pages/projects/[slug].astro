@@ -31,7 +31,11 @@ const { project } = Astro.props
 const projectSlug = project.id.replace(/\/index(\.md)?$/, '')
 
 // Fetch all logs for this project, sorted by date descending
-const allLogs = await getCollection('projectLogs')
+// Filter out drafts in production
+const allLogs = await getCollection(
+  'projectLogs',
+  ({ data }) => !import.meta.env.PROD || !data.draft,
+)
 const projectLogs = allLogs
   .filter((log: CollectionEntry<'projectLogs'>) => log.id.startsWith(`${projectSlug}/logs/`))
   .toSorted(

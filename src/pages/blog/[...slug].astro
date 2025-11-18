@@ -8,7 +8,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import BlogPost from '@/components/pages/BlogPost.astro'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog')
+  // Filter out drafts in production
+  const posts = await getCollection('blog', ({ data }) => !import.meta.env.PROD || !data.draft)
   return posts.map((post: CollectionEntry<'blog'>) => ({
     params: { slug: post.slug },
     props: { post },

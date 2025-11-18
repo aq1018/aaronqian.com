@@ -3,6 +3,7 @@
 import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
+import DraftBanner from '@/components/features/DraftBanner.astro'
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
 import Container from '@/components/primitives/Container.astro'
 import Heading from '@/components/primitives/Heading.astro'
@@ -13,7 +14,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 
 export async function getStaticPaths() {
   const [projectLogs, projects] = await Promise.all([
-    getCollection('projectLogs'),
+    // Filter out drafts in production
+    getCollection('projectLogs', ({ data }) => !import.meta.env.PROD || !data.draft),
     getCollection('projects'),
   ])
 
@@ -60,6 +62,7 @@ const pageTitle = `${log.data.title} | ${project?.data.title ?? 'Project Log'}`
   <BreadcrumbSchema slot="head" items={breadcrumbItems} />
 
   <main>
+    {log.data.draft && <DraftBanner />}
     <Surface>
       <Container>
         <!-- Back link -->
