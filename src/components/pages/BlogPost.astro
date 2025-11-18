@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content'
+import { render } from 'astro:content'
 
 import Comments from '@/components/features/Comments.astro'
 import DraftBanner from '@/components/features/DraftBanner.astro'
@@ -13,13 +14,20 @@ import Prose from '@/components/primitives/Prose.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Surface from '@/components/primitives/Surface.astro'
 import Text from '@/components/primitives/Text.astro'
+import { getBlogDate } from '@/lib/blog'
 
 export interface Props {
   post: CollectionEntry<'blog'>
 }
 
 const { post } = Astro.props
-const { Content } = await post.render()
+const publishDate = getBlogDate(post.id)
+const lastUpdatedOn = post.data.lastUpdatedOn
+
+// Check if last updated date is different from publish date
+const showLastUpdated = publishDate.toDateString() !== lastUpdatedOn.toDateString()
+
+const { Content } = await render(post)
 ---
 
 {post.data.draft && <DraftBanner />}
@@ -34,15 +42,41 @@ const { Content } = await post.render()
       </Heading>
 
       <Stack space="xs">
-        <Text color="muted">
+        <Cluster space="md">
+          <Cluster space="xs">
+            <Text as="span" color="muted" size="small">Published on</Text>
+            <Text as="span" color="muted" size="small">
+              {
+                publishDate.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })
+              }
+            </Text>
+          </Cluster>
           {
-            post.data.date.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
+            showLastUpdated && (
+              <>
+                <Text as="span" color="muted" size="small">
+                  •
+                </Text>
+                <Cluster space="xs">
+                  <Text as="span" color="muted" size="small">
+                    Updated on
+                  </Text>
+                  <Text as="span" color="muted" size="small">
+                    {lastUpdatedOn.toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </Text>
+                </Cluster>
+              </>
+            )
           }
-        </Text>
+        </Cluster>
         {
           post.data.tags && post.data.tags.length > 0 && (
             <Cluster space="xs">

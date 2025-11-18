@@ -3,9 +3,12 @@ import type { CollectionEntry } from 'astro:content'
 import { getCollection } from 'astro:content'
 
 import { borderColors, ogImageConfig } from '@/config/og'
+import { getBlogSlug } from '@/lib/blog'
 
 const posts = await getCollection('blog')
-const pages = Object.fromEntries(posts.map((post: CollectionEntry<'blog'>) => [post.slug, post]))
+const pages = Object.fromEntries(
+  posts.map((post: CollectionEntry<'blog'>) => [getBlogSlug(post.id), post]),
+)
 
 // eslint-disable-next-line new-cap -- OGImageRoute is a factory function, not a constructor
 export const { getStaticPaths, GET } = OGImageRoute({

@@ -8,25 +8,24 @@ import BlogList from './BlogList.astro'
 const createMockPost = (
   id: string,
   title: string,
-  date: Date,
+  lastUpdatedOn: Date,
 ): Partial<CollectionEntry<'blog'>> => ({
   body: '',
   collection: 'blog',
   data: {
-    date,
+    lastUpdatedOn,
     description: `Description for ${title}`,
     draft: false,
     tags: ['tag1', 'tag2'],
     title,
   },
   id,
-  slug: id.replace(/\/index(\.md)?$/, ''),
 })
 
 describe('BlogList', () => {
   describe('Post rendering', () => {
     it('should render post title as link', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const root = await renderAstroComponent(BlogList, {
         props: {
           posts,
@@ -42,7 +41,7 @@ describe('BlogList', () => {
     })
 
     it('should render post date', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const root = await renderAstroComponent(BlogList, {
         props: {
           posts,
@@ -55,7 +54,7 @@ describe('BlogList', () => {
     })
 
     it('should render post description', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const root = await renderAstroComponent(BlogList, {
         props: {
           posts,
@@ -67,9 +66,9 @@ describe('BlogList', () => {
 
     it('should render multiple posts', async () => {
       const posts = [
-        createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15')),
-        createMockPost('post-b/index.md', 'Post B', new Date('2023-02-20')),
-        createMockPost('post-c/index.md', 'Post C', new Date('2023-03-25')),
+        createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15')),
+        createMockPost('2023-02-20-post-b', 'Post B', new Date('2023-02-20')),
+        createMockPost('2023-03-25-post-c', 'Post C', new Date('2023-03-25')),
       ]
       const root = await renderAstroComponent(BlogList, {
         props: {
@@ -87,7 +86,7 @@ describe('BlogList', () => {
 
   describe('Tags', () => {
     it('should render post tags', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const root = await renderAstroComponent(BlogList, {
         props: {
           posts,
@@ -99,7 +98,7 @@ describe('BlogList', () => {
     })
 
     it('should not render tags when array is empty', async () => {
-      const postWithoutTags = createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))
+      const postWithoutTags = createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))
 
       const root = await renderAstroComponent(BlogList, {
         props: {
@@ -113,7 +112,7 @@ describe('BlogList', () => {
 
   describe('Footer', () => {
     it('should render footer when provided', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const footerText = 'New posts whenever inspiration strikes.'
       const root = await renderAstroComponent(BlogList, {
         props: {
@@ -126,7 +125,7 @@ describe('BlogList', () => {
     })
 
     it('should render custom footer text', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const customFooter = 'Custom footer message'
       const root = await renderAstroComponent(BlogList, {
         props: {
@@ -139,7 +138,7 @@ describe('BlogList', () => {
     })
 
     it('should not render footer when not provided', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const root = await renderAstroComponent(BlogList, {
         props: {
           posts,
@@ -176,9 +175,9 @@ describe('BlogList', () => {
   describe('Post links', () => {
     it('should create correct link URLs', async () => {
       const posts = [
-        createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15')),
-        createMockPost('post-b/index', 'Post B', new Date('2023-02-20')),
-        createMockPost('post-c', 'Post C', new Date('2023-03-25')),
+        createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15')),
+        createMockPost('2023-02-20-post-b', 'Post B', new Date('2023-02-20')),
+        createMockPost('2023-03-25-post-c', 'Post C', new Date('2023-03-25')),
       ]
       const root = await renderAstroComponent(BlogList, {
         props: {
@@ -201,7 +200,7 @@ describe('BlogList', () => {
 
   describe('Column headers', () => {
     it('should render column headers', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const root = await renderAstroComponent(BlogList, {
         props: {
           posts,
@@ -216,7 +215,7 @@ describe('BlogList', () => {
 
   describe('Semantic markup', () => {
     it('should use ul element for post list', async () => {
-      const posts = [createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15'))]
+      const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
       const root = await renderAstroComponent(BlogList, {
         props: {
           posts,
@@ -229,8 +228,8 @@ describe('BlogList', () => {
 
     it('should use li elements for each post', async () => {
       const posts = [
-        createMockPost('post-a/index.md', 'Post A', new Date('2023-01-15')),
-        createMockPost('post-b/index.md', 'Post B', new Date('2023-02-20')),
+        createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15')),
+        createMockPost('2023-02-20-post-b', 'Post B', new Date('2023-02-20')),
       ]
       const root = await renderAstroComponent(BlogList, {
         props: {

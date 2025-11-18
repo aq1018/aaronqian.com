@@ -2,8 +2,7 @@
 title: Flutter Tutorial Part 1 - Development Environment Setup
 description:
   Setup Flutter on your local environment and make cross-platform mobile apps.
-date: 2022-10-30
-draft: true
+lastUpdatedOn: 2022-10-30
 categories:
   - frontend
 tags:

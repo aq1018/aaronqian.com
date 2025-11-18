@@ -6,12 +6,13 @@ import ArticleSchema from '@/components/primitives/seo/ArticleSchema.astro'
 import BreadcrumbSchema from '@/components/primitives/seo/BreadcrumbSchema.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import BlogPost from '@/components/pages/BlogPost.astro'
+import { getBlogDate, getBlogSlug } from '@/lib/blog'
 
 export async function getStaticPaths() {
   // Filter out drafts in production
   const posts = await getCollection('blog', ({ data }) => !import.meta.env.PROD || !data.draft)
   return posts.map((post: CollectionEntry<'blog'>) => ({
-    params: { slug: post.slug },
+    params: { slug: getBlogSlug(post.id) },
     props: { post },
   }))
 }
@@ -21,12 +22,15 @@ export interface Props {
 }
 
 const { post } = Astro.props
-const ogImage = `/og/blog/${post.slug}.png`
+const cleanSlug = getBlogSlug(post.id)
+const publishDate = getBlogDate(post.id)
+
+const ogImage = `/og/blog/${cleanSlug}.png`
 
 const breadcrumbItems = [
   { name: 'Home', url: '/' },
   { name: 'Blog', url: '/blog' },
-  { name: post.data.title, url: `/blog/${post.slug}` },
+  { name: post.data.title, url: `/blog/${cleanSlug}` },
 ]
 ---
 
@@ -39,8 +43,8 @@ const breadcrumbItems = [
     slot="head"
     title={post.data.title}
     description={post.data.description}
-    datePublished={post.data.date}
-    url={`/blog/${post.slug}`}
+    datePublished={publishDate}
+    url={`/blog/${cleanSlug}`}
     image={ogImage}
   />
   <BreadcrumbSchema slot="head" items={breadcrumbItems} />

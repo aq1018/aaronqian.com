@@ -14,13 +14,12 @@ function createMockPost(overrides?: Partial<BlogEntry['data']>): Partial<BlogEnt
     data: {
       title: 'Test Blog Post',
       description: 'A test blog post description',
-      date: new Date('2023-01-15'),
+      lastUpdatedOn: new Date('2023-01-15'),
       tags: ['testing', 'vitest'],
       draft: false,
       ...overrides,
     },
-    id: 'test-post/index.md',
-    slug: 'test-post',
+    id: '2023-01-15-test-post',
   }
 }
 

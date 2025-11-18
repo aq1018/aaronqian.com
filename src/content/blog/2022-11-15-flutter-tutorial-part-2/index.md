@@ -1,7 +1,7 @@
 ---
 title: Flutter Tutorial Part 2 - Understanding The Basics
 description: Walk through how the basic demo app works.
-date: 2022-11-15
+lastUpdatedOn: 2025-11-15
 categories:
   - frontend
 tags:

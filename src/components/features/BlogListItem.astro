@@ -12,12 +12,15 @@ import Link from '@/components/primitives/Link.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
+import { getBlogDate, getBlogSlug } from '@/lib/blog'
 
 export interface Props {
   post: CollectionEntry<'blog'>
 }
 
 const { post } = Astro.props
+const publishDate = getBlogDate(post.id)
+const cleanSlug = getBlogSlug(post.id)
 ---
 
 <Sheet as="li" variant="bar" color="primary" padding="sm" hover>
@@ -26,7 +29,7 @@ const { post } = Astro.props
       <Stack space="xs">
         <Text color="muted" size="small">
           {
-            post.data.date.toLocaleDateString('en-US', {
+            publishDate.toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
@@ -44,7 +47,7 @@ const { post } = Astro.props
     </Grid>
 
     <Grid size={12} size-md={4}>
-      <Link href={`/blog/${post.slug}`} class="font-semibold">
+      <Link href={`/blog/${cleanSlug}`} class="font-semibold">
         {post.data.title}
       </Link>
     </Grid>

@@ -2,15 +2,16 @@ import { glob } from 'astro/loaders'
 import { defineCollection, z } from 'astro:content'
 
 const blog = defineCollection({
+  loader: glob({ pattern: '*/index.md', base: './src/content/blog' }),
   schema: z.object({
     categories: z.array(z.string()).optional(),
-    date: z.coerce.date(),
+    lastUpdatedOn: z.coerce.date(),
     description: z.string(),
     draft: z.boolean().optional().default(false),
+    slug: z.string().optional(),
     tags: z.array(z.string()).optional(),
     title: z.string(),
   }),
-  type: 'content',
 })
 
 const projects = defineCollection({

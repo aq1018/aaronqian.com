@@ -3,7 +3,7 @@ title: Streaming GeoJSON with GDAL, Rack::Chunked, and Rails Live Streaming
 description:
   Optimize Rails API performance with streaming techniques for large GeoJSON
   responses.
-date: 2014-08-22
+lastUpdatedOn: 2014-08-22
 tags:
   - ruby
   - rails

@@ -6,12 +6,14 @@ import BlogIndex from '@/components/pages/BlogIndex.astro'
 import ItemListSchema from '@/components/primitives/seo/ItemListSchema.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { staticPages } from '@/config/pages'
+import { getBlogDate, getBlogSlug } from '@/lib/blog'
 
 // Filter out drafts in production
 const posts = await getCollection('blog', ({ data }) => !import.meta.env.PROD || !data.draft)
+// Sort by date (parsed from folder name: YYYY-MM-DD-slug-name)
 const sortedPosts = posts.toSorted(
   (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
-    b.data.date.valueOf() - a.data.date.valueOf(),
+    getBlogDate(b.id).valueOf() - getBlogDate(a.id).valueOf(),
 )
 
 const { title, description } = staticPages.blog
@@ -19,7 +21,7 @@ const ogImage = '/og/blog.png'
 
 const blogListItems = sortedPosts.map((post: CollectionEntry<'blog'>) => ({
   name: post.data.title,
-  url: `/blog/${post.slug}`,
+  url: `/blog/${getBlogSlug(post.id)}`,
   description: post.data.description,
 }))
 ---
