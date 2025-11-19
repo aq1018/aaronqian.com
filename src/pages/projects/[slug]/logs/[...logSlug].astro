@@ -20,15 +20,15 @@ export async function getStaticPaths() {
   ])
 
   return projectLogs.map((log: CollectionEntry<'projectLogs'>) => {
-    // Convert log ID from "ai-ams/logs/2024-12-28-surelc-api.md" to "ai-ams/2024-12-28-surelc-api"
-    const slug = log.id.replace(/\.md$/, '').replace('/logs/', '/')
-
-    // Extract project slug from log ID
+    // Extract project slug and log slug from log ID
+    // Log ID format: "ai-ams/logs/2024-12-28-surelc-api.md"
     const projectSlug = log.id.split('/')[0]
+    const logSlug = log.id.split('/logs/')[1].replace(/\.md$/, '')
+
     const project = projects.find((p) => p.id === projectSlug)
 
     return {
-      params: { slug },
+      params: { slug: projectSlug, logSlug },
       props: { log, project },
     }
   })

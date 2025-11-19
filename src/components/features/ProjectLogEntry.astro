@@ -28,8 +28,8 @@ const getExcerpt = (body: string) => {
   return body.split('\n\n')[0]
 }
 
-// Generate log URL from log ID: ai-ams/logs/2024-12-28-surelc-api.md -> /logs/ai-ams/2024-12-28-surelc-api
-const logUrl = `/logs/${log.id.replace(/\.md$/, '').replace('/logs/', '/')}`
+// Generate log URL from log ID: ai-ams/logs/2024-12-28-surelc-api.md -> /projects/ai-ams/logs/2024-12-28-surelc-api
+const logUrl = `/projects/${log.id.replace(/\.md$/, '')}`
 
 // Render content or excerpt
 let contentHtml = ''
