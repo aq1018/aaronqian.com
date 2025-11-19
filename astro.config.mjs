@@ -17,6 +17,7 @@ export default defineConfig({
       }),
   site: 'https://aaronqian.com',
   base: '/',
+  trailingSlash: 'never',
   env: {
     schema: {
       GISCUS_CATEGORY: envField.string({
