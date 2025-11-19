@@ -9,8 +9,12 @@ const isTest = process.env.VITEST === 'true'
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: isTest ? undefined : cloudflare(),
+  output: 'static',
+  adapter: isTest
+    ? undefined
+    : cloudflare({
+        imageService: 'compile',
+      }),
   site: 'https://aaronqian.com',
   base: '/',
   env: {
@@ -45,6 +49,9 @@ export default defineConfig({
   integrations: [icon(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    define: {
+      __dirname: JSON.stringify(new URL('.', import.meta.url).pathname),
+    },
     server: {
       headers: {
         'Access-Control-Allow-Origin': '*',

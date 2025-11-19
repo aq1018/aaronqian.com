@@ -25,7 +25,7 @@ export async function getStaticPaths() {
 
     // Extract project slug from log ID
     const projectSlug = log.id.split('/')[0]
-    const project = projects.find((p) => p.id.startsWith(`${projectSlug}/`))
+    const project = projects.find((p) => p.id === projectSlug)
 
     return {
       params: { slug },

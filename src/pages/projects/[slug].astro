@@ -11,14 +11,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 export async function getStaticPaths() {
   const projects = await getCollection('projects')
 
-  return projects.map((project: CollectionEntry<'projects'>) => {
-    // Normalize slug: remove '/index.md' or '/index' suffix if present
-    const slug = project.id.replace(/\/index(\.md)?$/, '')
-    return {
-      params: { slug },
-      props: { project },
-    }
-  })
+  return projects.map((project: CollectionEntry<'projects'>) => ({
+    params: { slug: project.id },
+    props: { project },
+  }))
 }
 
 export interface Props {
@@ -26,9 +22,7 @@ export interface Props {
 }
 
 const { project } = Astro.props
-
-// Normalize project slug for log filtering
-const projectSlug = project.id.replace(/\/index(\.md)?$/, '')
+const projectSlug = project.id
 
 // Fetch all logs for this project, sorted by date descending
 // Filter out drafts in production

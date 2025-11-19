@@ -22,15 +22,11 @@ const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
 const { title, description } = staticPages.projects
 const ogImage = '/og/projects.png'
 
-const projectListItems = projectsWithLive.map((project: CollectionEntry<'projects'>) => {
-  // Normalize slug: remove '/index.md' or '/index' suffix if present
-  const slug = project.id.replace(/\/index(\.md)?$/, '')
-  return {
-    name: project.data.title,
-    url: `/projects/${slug}`,
-    description: project.data.description,
-  }
-})
+const projectListItems = projectsWithLive.map((project: CollectionEntry<'projects'>) => ({
+  name: project.data.title,
+  url: `/projects/${project.id}`,
+  description: project.data.description,
+}))
 ---
 
 <BaseLayout {title} {description} image={ogImage}>
