@@ -7,6 +7,13 @@
     "binding": "ASSETS",
     "directory": "./dist"
   },
+  // Create with: npx wrangler kv namespace create SESSION
+  "kv_namespaces": [
+    {
+      "binding": "SESSION",
+      "id": "a50ca60384fa40fb89153296cc3ba3a1"
+    }
+  ],
   "observability": {
     "enabled": true
   },
