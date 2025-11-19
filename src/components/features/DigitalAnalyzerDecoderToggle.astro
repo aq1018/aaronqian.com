@@ -32,7 +32,7 @@ export interface Props {
 const { target, keyboardKey = 'k', keyboardModifier = 'cmd|ctrl' } = Astro.props
 ---
 
-<div
+<span
   data-decoder-wrapper
   data-decoder-target={target}
   data-keyboard-key={keyboardKey}
@@ -40,4 +40,4 @@ const { target, keyboardKey = 'k', keyboardModifier = 'cmd|ctrl' } = Astro.props
   style="display: contents;"
 >
   <slot />
-</div>
+</span>

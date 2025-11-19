@@ -3,13 +3,9 @@
  * HeroContent - Reusable hero section content layout
  * Block-safe slot wrappers so consumers can pass complex markup.
  * - Eyebrow: small uppercase line above the title
- * - Title: main hero heading
+ * - Title: main hero heading (always renders as <h1>)
  * - Description: subhead (a.k.a. "kicker" text under title)
  * - microLine: tiny helper line under everything
- *
- * Accessibility:
- * - When `title` prop is used → semantic <h1>
- * - When `title` slot is used (may contain blocks) → <div role="heading" aria-level="1">
  */
 
 import Stack from '../primitives/Stack.astro'
@@ -62,30 +58,17 @@ const hasMicroLineSlot = Astro.slots.has('microLine')
     }
 
     {
-      (hasTitleSlot || (title ?? '') !== '') &&
-        (hasTitleSlot ? (
-          <Heading
-            as="div"
-            role="heading"
-            aria-level="1"
-            size="display-1"
-            preset="hero"
-            line="none"
-            align={centered ? 'center' : undefined}
-          >
-            <slot name="title" />
-          </Heading>
-        ) : (
-          <Heading
-            as="h1"
-            size="display-1"
-            preset="hero"
-            line="none"
-            align={centered ? 'center' : undefined}
-          >
-            {title}
-          </Heading>
-        ))
+      (hasTitleSlot || (title ?? '') !== '') && (
+        <Heading
+          as="h1"
+          size="display-1"
+          preset="hero"
+          line="none"
+          align={centered ? 'center' : undefined}
+        >
+          {hasTitleSlot ? <slot name="title" /> : title}
+        </Heading>
+      )
     }
 
     {

@@ -6,6 +6,7 @@ import DigitalAnalyzerDecoderToggle from '@/components/features/DigitalAnalyzerD
 import HeroContent from '@/components/patterns/HeroContent.astro'
 import Button from '@/components/primitives/Button.astro'
 import ButtonLink from '@/components/primitives/ButtonLink.astro'
+import Cluster from '@/components/primitives/Cluster.astro'
 import Collapsible from '@/components/primitives/Collapsible.astro'
 import Icon from '@/components/primitives/Icon.astro'
 import Kbd from '@/components/primitives/Kbd.astro'
@@ -25,7 +26,7 @@ import Text from '@/components/primitives/Text.astro'
     centered
   >
     <Fragment slot="title">
-      <Stack direction="column" direction-xl="row" align="center" justify="center" space="xs">
+      <Cluster direction="column" direction-xl="row" align="center" justify="center" space="xs">
         <span>Input coffee</span>
 
         <DigitalAnalyzerDecoderToggle
@@ -33,13 +34,13 @@ import Text from '@/components/primitives/Text.astro'
           keyboardKey="k"
           keyboardModifier="cmd|ctrl"
         >
-          <Button variant="link" color="primary" aria-label="Toggle secret message" type="button">
+          <Button as="span" variant="link" color="primary" aria-label="Toggle secret message">
             <Icon name="heroicons:bolt-solid" size="xl" />
           </Button>
         </DigitalAnalyzerDecoderToggle>
 
         <span>Output code</span>
-      </Stack>
+      </Cluster>
     </Fragment>
 
     <Collapsible data-collapsible-id="secret-message">

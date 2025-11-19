@@ -7,12 +7,15 @@ import type { ButtonVariants } from './Button.cva'
 import { cn } from '@/lib/utils'
 
 export interface Props extends Omit<HTMLAttributes<'button'>, 'color'>, ButtonVariants {
+  /** Render as button or span (span adds role="button" and tabindex="0") */
+  as?: 'button' | 'span'
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
   class?: string
 }
 
 const {
+  as = 'button',
   variant,
   color,
   size,
@@ -22,13 +25,18 @@ const {
   disabled,
   ...rest
 } = Astro.props
+
+const classes = cn(buttonVariants({ variant, color, size, fullWidth }), className)
 ---
 
-<button
-  {type}
-  {disabled}
-  class={cn(buttonVariants({ variant, color, size, fullWidth }), className)}
-  {...rest}
->
-  <slot />
-</button>
+{
+  as === 'span' ? (
+    <span role="button" tabindex="0" class={classes} {...rest}>
+      <slot />
+    </span>
+  ) : (
+    <button {type} {disabled} class={classes} {...rest}>
+      <slot />
+    </button>
+  )
+}

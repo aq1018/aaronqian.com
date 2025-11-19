@@ -10,9 +10,35 @@ export interface Props extends HTMLAttributes<'span'>, ClusterStyle {
   class?: string
 }
 
-const { space, align, class: className = '', ...rest } = Astro.props
+const {
+  direction,
+  'direction-sm': directionSm,
+  'direction-md': directionMd,
+  'direction-lg': directionLg,
+  'direction-xl': directionXl,
+  space,
+  align,
+  justify,
+  class: className = '',
+  ...rest
+} = Astro.props
 ---
 
-<span class={cn(clusterCva({ space, align }), className)} {...rest}>
+<span
+  class={cn(
+    clusterCva({
+      direction,
+      'direction-sm': directionSm,
+      'direction-md': directionMd,
+      'direction-lg': directionLg,
+      'direction-xl': directionXl,
+      space,
+      align,
+      justify,
+    }),
+    className,
+  )}
+  {...rest}
+>
   <slot />
 </span>
