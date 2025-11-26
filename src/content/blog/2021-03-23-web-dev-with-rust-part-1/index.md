@@ -13,7 +13,7 @@ tags:
 This is article is part of a series. They are:
 
 - **Part 1 - Simple GraphQL Server with Juniper And Actix**
-- [Part 2 - Persisting Data To Database](../web-dev-with-rust-part-2)
+- [Part 2 - Persisting Data To Database](/blog/web-dev-with-rust-part-2)
 
 ---
 
@@ -296,4 +296,4 @@ ecosystem is still relatively new and APIs can change. Check out the
 [GraphQL using Juniper Actix Example](https://github.com/actix/examples/tree/main/graphql/juniper).
 
 To see how to hook up Juniper with a Postgres database,
-[click here for part 2](../web-dev-with-rust-part-2).
+[click here for part 2](/blog/web-dev-with-rust-part-2).

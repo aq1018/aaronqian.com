@@ -11,13 +11,13 @@ tags:
 
 This is article is part of a series. They are:
 
-- [Part 1 - Simple GraphQL Server with Juniper And Actix](../web-dev-with-rust-part-1)
+- [Part 1 - Simple GraphQL Server with Juniper And Actix](/blog/web-dev-with-rust-part-1)
 - **Part 2 - Persisting Data To Database**
 
 ---
 
-In the [previous blog post](../web-dev-with-rust-part-1), we showed how easy it
-is to create a GraphQL server in Rust. In this post, we will hook it up to a
+In the [previous blog post](/blog/web-dev-with-rust-part-1), we showed how easy
+it is to create a GraphQL server in Rust. In this post, we will hook it up to a
 Postgres database. To do this we will use the `tokio-postgres` package. While it
 is possible to use an ORM in Rust (the most popular choice being
 [diesel](https://docs.rs/diesel/latest/diesel/)), that topic is very dense on
