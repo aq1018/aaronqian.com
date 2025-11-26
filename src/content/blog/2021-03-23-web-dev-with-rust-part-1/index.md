@@ -13,7 +13,7 @@ tags:
 This is article is part of a series. They are:
 
 - **Part 1 - Simple GraphQL Server with Juniper And Actix**
-- [Part 2 - Persisting Data To Database](../part-2)
+- [Part 2 - Persisting Data To Database](../web-dev-with-rust-part-2)
 
 ---
 
@@ -29,7 +29,7 @@ Some prior knowledge of web frameworks, GraphQL, and the Rust programming
 language are assumed in this article.
 
 If you are looking for complete example code, I recommend looking at the
-[GraphQL using Juniper Actix Example](https://github.com/actix/examples/tree/master/graphql/juniper).
+[GraphQL using Juniper Actix Example](https://github.com/actix/examples/tree/main/graphql/juniper).
 
 ## Why Rust?
 
@@ -293,7 +293,7 @@ http://localhost:8080/graphiql
 
 This was a look at the simplicity of creating a GraphQL server in Rust, but the
 ecosystem is still relatively new and APIs can change. Check out the
-[GraphQL using Juniper Actix Example](https://github.com/actix/examples/tree/master/graphql/juniper).
+[GraphQL using Juniper Actix Example](https://github.com/actix/examples/tree/main/graphql/juniper).
 
 To see how to hook up Juniper with a Postgres database,
-[click here for part 2](../part-2).
+[click here for part 2](../web-dev-with-rust-part-2).

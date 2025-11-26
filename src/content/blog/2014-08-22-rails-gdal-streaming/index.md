@@ -19,16 +19,16 @@ For you busy folks who just want it to work, here is the
 
 ## Background
 
-A few weeks ago, I was at [NationBuilder](http://nationbuilder.com/) building a
-[GeoJSON](http://geojson.org/) API for organizers. The end goal for this project
-is to provide accurate political districting information through this API and
-exposes a map management interface for district updates.
+A few weeks ago, I was at [NationBuilder](https://nationbuilder.com/) building a
+[GeoJSON](https://geojson.org/) API for organizers. The end goal for this
+project is to provide accurate political districting information through this
+API and exposes a map management interface for district updates.
 
 ## Application Architecture
 
 This application is built on top of the popular
-[Ruby On Rails](http://rubyonrails.org/) framework, and uses
-[PostGIS](http://postgis.net/) as geographic data storage backend. GeoJSON
+[Ruby On Rails](https://rubyonrails.org/) framework, and uses
+[PostGIS](https://postgis.net/) as geographic data storage backend. GeoJSON
 conversion is done by using [rgeo-geojson](https://github.com/rgeo/rgeo-geojson)
 gem since it fits nicely with
 [activerecord-postgis-adapter](https://github.com/rgeo/activerecord-postgis-adapter).
@@ -58,7 +58,7 @@ clime. Upon closer inspection, I found out that `rgeo-geojson` gem does the
 conversion entirely in Ruby! When the dataset gets too big, the browser or our
 proxy will either run out of patience and issue timeouts or our application
 process will have consumed so much memory it was killed by
-[monit](http://mmonit.com/monit/).
+[monit](https://mmonit.com/monit/).
 
 ### Understanding Root Cause
 
@@ -85,9 +85,9 @@ be a better way!
 ### GDAL
 
 After some more research I found out a little commandline tool called `ogr2ogr`
-from the wonderful [GDAL](http://www.gdal.org/) library. This tool can execute
-supplied SQL statements and convert the results into GeoJSON FeatureCollection.
-This is perfect!
+from the wonderful [GDAL](https://gdal.org/en/stable/) library. This tool can
+execute supplied SQL statements and convert the results into GeoJSON
+FeatureCollection. This is perfect!
 
 Here is an example on how to use it:
 
@@ -229,7 +229,7 @@ stream object to something that `#response_body=` expects.
 
 #### Ruby IO Interface
 
-Ruby [IO](http://www.ruby-doc.org/core-2.1.2/IO.html) class already implements
+Ruby [IO](https://ruby-doc.org/core-2.1.2/IO.html) class already implements
 `#each` and `#close` methods. However the behavior of `#each` is not ideal in
 our use case. `IO#each` is an alias to `IO#each_line` which yields data line by
 line. `ogr2ogr` generates the GeoJSON in a single gigantic line. We need to
@@ -302,7 +302,7 @@ end
 ### Bonus Stage: On The Fly Compression for Chunked Encoding
 
 Somewhere during the research, I came across
-[Rack::Deflater](http://robots.thoughtbot.com/content-compression-with-rack-deflater).
+[Rack::Deflater](https://thoughtbot.com/blog/content-compression-with-rack-deflater).
 This is a middleware that checks for `Accept-Encoding` in request headers, and
 compresses your response on the fly!
 

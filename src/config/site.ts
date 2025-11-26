@@ -18,7 +18,7 @@ export const author = {
   email: 'aaron@aaronqian.com',
   twitter: {
     username: 'aq1018',
-    url: 'https://twitter.com/aq1018',
+    url: 'https://x.com/aq1018',
   },
   github: {
     username: 'aq1018',

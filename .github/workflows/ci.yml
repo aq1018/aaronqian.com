@@ -44,3 +44,6 @@ jobs:
 
       - name: 🏗️ Build project
         run: npm run build
+
+      - name: 🔗 Check links
+        run: npm run check:links

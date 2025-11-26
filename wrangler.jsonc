@@ -5,7 +5,8 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist"
+    "directory": "./dist",
+    "html_handling": "drop-trailing-slash"
   },
   // Create with: npx wrangler kv namespace create SESSION
   "kv_namespaces": [

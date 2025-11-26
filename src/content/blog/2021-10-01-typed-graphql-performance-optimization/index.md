@@ -12,9 +12,9 @@ tags:
 
 While working on a project for a client, we came across an interesting twist to
 a common problem. We were tasked with making the API backend that powers a
-mobile app called [Playhouse](https://www.playhouse.so/), a mobile app that
-displays real estate listings to its users in a nice little video package. We
-decided to make a [GraphQL](https://graphql.org/) API and got to building.
+mobile app called [Playhouse](https://onplayhouse.webflow.io/), a mobile app
+that displays real estate listings to its users in a nice little video package.
+We decided to make a [GraphQL](https://graphql.org/) API and got to building.
 During the design process, we made a point of keeping it maintainable for the
 long run.
 
@@ -113,7 +113,7 @@ also increase. This is a huge performance issue.
 
 Using the example above, Data Loaders will collect the individual user IDs in
 the resolver and fetch the collected user IDs in one SQL query after
-[nextTick](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/).
+[nextTick](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick).
 It will then return the appropriate User object based on the supplied user ID.
 
 We decided to use the excellent and well supported
@@ -183,7 +183,7 @@ export class UserLoader extends SimpleLoader<Domain.User> {
 We are using [`typedi`](https://github.com/typestack/typedi) for
 [Dependency Injection](https://www.jamesshore.com/v2/blog/2006/dependency-injection-demystified).
 We also used a feature in `typedi`, called
-[Scoped Containers](https://docs.typestack.community/typedi/v/develop/#using-multiple-containers-and-scoped-containers)
+[Scoped Containers](https://docs.typestack.community/typedi/develop#using-multiple-containers-and-scoped-containers)
 to ensure each new GraphQL request will have its own empty container for
 dependency injections. This is a topic for another time. The TL;DR reason for
 this setup is to ensure a new instance of `UserLoader` is created in the

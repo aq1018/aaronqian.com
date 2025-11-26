@@ -1,0 +1,23 @@
+{
+  "recurse": true,
+  "timeout": 10000,
+  "concurrency": 100,
+  "checkCss": true,
+  "checkFragments": true,
+  "redirects": "error",
+  "requireHttps": "error",
+  "allowInsecureCerts": true,
+  "retry": true,
+  "retryErrors": true,
+  "retryErrorsCount": 3,
+  "verbosity": "error",
+  "urlRewriteSearch": "https://aaronqian\\.com",
+  "urlRewriteReplace": "https://localhost:9787",
+  "skip": [
+    "http://localhost:8080/.*",
+    "https://trends.google.com/.*",
+    "https://insurrly.com/.*",
+    "https://launchpath.tech/.*",
+    "https://developer.microsoft.com/.*"
+  ]
+}

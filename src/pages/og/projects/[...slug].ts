@@ -3,10 +3,11 @@ import type { CollectionEntry } from 'astro:content'
 import { getCollection } from 'astro:content'
 
 import { borderColors, ogImageConfig } from '@/config/og'
+import { getProjectSlug } from '@/lib/projects'
 
 const projects = await getCollection('projects')
 const pages = Object.fromEntries(
-  projects.map((project: CollectionEntry<'projects'>) => [project.id, project]),
+  projects.map((project: CollectionEntry<'projects'>) => [getProjectSlug(project), project]),
 )
 
 // eslint-disable-next-line new-cap -- OGImageRoute is a factory function, not a constructor

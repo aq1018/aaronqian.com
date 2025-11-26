@@ -1,6 +1,6 @@
 ---
 // Projects Index Page - Full listing of all projects
-import { markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects'
+import { getProjectSlug, markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
@@ -24,7 +24,7 @@ const ogImage = '/og/projects.png'
 
 const projectListItems = projectsWithLive.map((project: CollectionEntry<'projects'>) => ({
   name: project.data.title,
-  url: `/projects/${project.id}`,
+  url: `/projects/${getProjectSlug(project)}`,
   description: project.data.description,
 }))
 ---

@@ -72,8 +72,8 @@ import 'package:flutter/material.dart';
 ```
 
 This is package for Google's
-[Material Components](https://docs.flutter.dev/development/ui/widgets/material).
-We use this package to render components such as FABs and Texts.
+[Material Components](https://docs.flutter.dev/ui/widgets/material). We use this
+package to render components such as FABs and Texts.
 
 More importantly, this code demonstrates the use of dependencies. Just like
 `npm` for `node`, the equivalent package manager for Dart is `pub`. For example,
@@ -263,5 +263,5 @@ customize the theme color. Or perhaps, add another button to decrease click
 counts. These hands on exercises will help you learn faster.
 
 In our next session, we will make a simple app with routes, pages, and
-[bloc](https://www.didierboelens.com/2018/08/reactive-programming-streams-bloc/),
-making the demo app one step closer to a real application.
+[bloc](https://pub.dev/packages/flutter_bloc), making the demo app one step
+closer to a real application.

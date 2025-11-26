@@ -78,9 +78,8 @@ communicate efficiently.
 
 Some well known Design Systems includes:
 
-- [Material Design](https://material.io/components) by Google
-- [Fluent](https://developer.microsoft.com/en-us/fluentui#/) by Microsoft
-- [Lightning](https://www.lightningdesignsystem.com/) by Salesforce
+- [Material Design](https://m3.material.io/components) by Google
+- [Fluent](https://developer.microsoft.com/en-us/fluentui/) by Microsoft
 - [Bootstrap](https://getbootstrap.com/docs/5.1/getting-started/introduction/)
   by Twitter
 - [Bulma](https://bulma.io/) by Jeremy Thomas
@@ -94,9 +93,9 @@ development efficiency by adopting a Design System for my teams?
 ## Adoption And Implementation
 
 From here on, I'm going to assume an existing Design System, such as
-[Material Design](https://material.io/components), is used as the basis for your
-company. You can also create a new Design System from scratch, but that will
-take much longer.
+[Material Design](https://m3.material.io/components), is used as the basis for
+your company. You can also create a new Design System from scratch, but that
+will take much longer.
 
 The Design Team needs to decide on which Design Language or Design Framework to
 use. The Development Team needs to weigh in on that decision because they will
@@ -104,15 +103,16 @@ need to decide on an existing component library implementing the chosen Design
 Language to customize to fit into the Design Language.
 
 For example, the Design Team decides to use
-[Material Design](https://material.io/components) as the base. The Development
-Team primarily uses React as the front end framework, and thus chose
+[Material Design](https://m3.material.io/components) as the base. The
+Development Team primarily uses React as the front end framework, and thus chose
 [material-ui](https://mui.com/) as the basis for their Component Library. It is
 a good choice because it offers
-[global theme support](https://mui.com/customization/theming/). It also allows
-[customization on the component level](https://mui.com/customization/how-to-customize/).
+[global theme support](https://mui.com/material-ui/customization/theming/). It
+also allows
+[customization on the component level](https://mui.com/material-ui/customization/how-to-customize/).
 It also offers a large set of
-[components](https://mui.com/customization/how-to-customize/), as well as
-[many](https://github.com/gregnb/mui-datatables)
+[components](https://mui.com/material-ui/customization/how-to-customize/), as
+well as [many](https://github.com/gregnb/mui-datatables)
 [extensions](https://www.npmjs.com/package/@mui/lab).
 
 Whatever component library your team ends up choosing, there are limits to how
@@ -136,7 +136,7 @@ be based off of those components.
 After components are categorized, the designer can now create those components
 in their design tools. [Figma](https://www.figma.com/) is a popular used by
 design teams to collaborate on design work. It has
-[reusable component support](https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-Components-in-Figma),
+[reusable component support](https://help.figma.com/hc/en-us/articles/360038662654-Guide-to-components-in-Figma),
 allowing designers to design and reuse components collaboratively.
 
 **_Reuse Components_**

@@ -46,6 +46,15 @@ function extractProjectSlugFromLog(logId: string): string {
 }
 
 /**
+ * Get clean project slug from project entry ID
+ * Strips /index.md or /index suffix from content collection ID
+ * Example: ai-ams/index.md -> ai-ams
+ */
+export function getProjectSlug(project: CollectionEntry<'projects'>): string {
+  return project.id.replace(/\/index(\.md)?$/, '')
+}
+
+/**
  * Sort projects by their latest log date (most recent first)
  * Also attaches latestLogDate to each project for reference
  */
