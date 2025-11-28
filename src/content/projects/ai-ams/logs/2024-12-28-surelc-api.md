@@ -4,7 +4,6 @@ title: 'SureLC API exploration'
 tags:
   - api
   - integration
-project: 'ai-ams'
 ---
 
 Digging into SureLC's API docs. Not great. REST-ish, but inconsistent.

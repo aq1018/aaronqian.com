@@ -4,7 +4,6 @@ title: 'Multi-step form experiment deployed'
 tags:
   - ux
   - experiment
-project: 'insurrly'
 ---
 
 Replaced single-page form with 4-step wizard:

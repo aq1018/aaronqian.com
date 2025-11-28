@@ -4,7 +4,6 @@ title: 'Notion CMS integrated'
 tags:
   - cms
   - content
-project: 'linweisbruch'
 ---
 
 Client wanted to edit listings without touching code. Built Notion → Next.js

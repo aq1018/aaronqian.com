@@ -4,7 +4,6 @@ title: 'Agency interviews complete — workflow mapped'
 tags:
   - research
   - user-interviews
-project: 'ai-ams'
 ---
 
 Interviewed 5 agencies. Common pain points:

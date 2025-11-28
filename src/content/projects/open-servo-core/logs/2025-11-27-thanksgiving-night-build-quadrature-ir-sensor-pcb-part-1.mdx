@@ -4,19 +4,20 @@ title: 'Thanksgiving Night Build: Dual ITR1204 IR Sensor Test Module'
 tags:
   - hardware
   - sensor
-project: 'smart-servo'
 draft: true
 ---
 
-Thanksgiving night isn’t usually when people open KiCad… but the house got quiet
-for a bit, and that was enough of an excuse for me to start a small hardware
-project that’s been sitting in the queue.
+import GltfViewer from '@/components/features/GltfViewer.astro'
 
-This is Part 1 of a tiny reflective IR sensor system I’m building. This PCB
+Thanksgiving night isn't usually when people open KiCad… but the house got quiet
+for a bit, and that was enough of an excuse for me to start a small hardware
+project that's been sitting in the queue.
+
+This is Part 1 of a tiny reflective IR sensor system I'm building. This PCB
 represents roughly half of the full sensor — the detection + comparator stage.
 Part 2 will cover real-world testing once the boards arrive.
 
-So without further ado, let’s dive into the details of this project.
+So without further ado, let's dive into the details of this project.
 
 ## TL;DR
 
@@ -35,8 +36,11 @@ So without further ado, let’s dive into the details of this project.
 
 ## Render / Photo
 
-<!-- prettier-ignore -->
-::3d[3D model of the dual ITR1204 IR sensor PCB]{src="/src/content/projects/open-servo-core/logs/encoder-board.glb" aspectRatio="1/1"}
+<GltfViewer
+  src="/models/open-servo-core/encoder-board.glb"
+  aspectRatio="1/1"
+  alt="3D model of the dual ITR1204 IR sensor PCB"
+/>
 
 ---
 
@@ -127,18 +131,18 @@ We run:
 
 Using:
 
-\[ I*{LED} = \frac{V*{CC} - V_F}{R} \]
+$$I_{LED} = \frac{V_{CC} - V_F}{R}$$
 
 At VF = 1.25 V:
 
-\[ I\_{LED} \approx \frac{5 - 1.25}{390} = 9.6 \text{ mA} \]
+$$I_{LED} \approx \frac{5 - 1.25}{390} = 9.6 \text{ mA}$$
 
 At VF = 1.5 V:
 
-\[ I\_{LED} \approx \frac{5 - 1.5}{390} = 9.0 \text{ mA} \]
+$$I_{LED} \approx \frac{5 - 1.5}{390} = 9.0 \text{ mA}$$
 
 So we are safely at **~9–10 mA**, about **2.2–2.5×** the test current used in
-the datasheet’s IC(on) spec.
+the datasheet's IC(on) spec.
 
 ### Why this matters
 
@@ -156,11 +160,11 @@ Datasheet gives for **IF = 4 mA**:
 
 We drive the LED at ~9–10 mA → scaling factor ~2.25–2.5×:
 
-\[ I_C \approx 160–320\ \\mu\text{A (expected)} \]
+$$I_C \approx 160–320\ \mu\text{A (expected)}$$
 
 With a **680 Ω** pull-down:
 
-\[ V = I_C \cdot R \]
+$$V = I_C \cdot R$$
 
 - At 160 µA → **0.11 V**
 - At 220 µA (typ-estimate) → **0.15 V**
@@ -178,7 +182,7 @@ Because:
 - consistent with datasheet RL = 1 kΩ for ~15 µs rise/fall times (we are
   slightly faster due to RL = 680 Ω)
 
-This board’s job is to produce **clean small analog deltas** → external board
+This board's job is to produce **clean small analog deltas** → external board
 amplifies.
 
 ---
@@ -186,7 +190,7 @@ amplifies.
 ## Intended use of A/B channels
 
 - A and B are placed with a small spatial offset
-- When read over a multi-mark encoder disk, you get “quadrature-ish” signals:
+- When read over a multi-mark encoder disk, you get "quadrature-ish" signals:
   - A leads B in one direction
   - B leads A in the reverse direction
 

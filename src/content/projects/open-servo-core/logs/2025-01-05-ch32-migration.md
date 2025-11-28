@@ -4,7 +4,6 @@ title: 'CH32 migration started'
 tags:
   - hardware
   - cost-reduction
-project: 'smart-servo'
 ---
 
 Switching from STM32F301 to CH32V303 to cut BOM cost.

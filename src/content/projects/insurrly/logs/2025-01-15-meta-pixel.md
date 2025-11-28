@@ -5,7 +5,6 @@ tags:
   - analytics
   - conversion-tracking
 draft: true
-project: 'insurrly'
 ---
 
 Integrated Meta Pixel on all funnel pages. Tracking:

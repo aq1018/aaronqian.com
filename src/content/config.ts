@@ -33,13 +33,12 @@ const projects = defineCollection({
 })
 
 const projectLogs = defineCollection({
-  loader: glob({ pattern: '*/logs/*.md', base: './src/content/projects' }),
+  loader: glob({ pattern: '*/logs/*.{md,mdx}', base: './src/content/projects' }),
   schema: z.object({
     date: z.coerce.date(),
     draft: z.boolean().optional().default(false),
-    project: z.string(),
     tags: z.array(z.string()),
-    title: z.string(), // slug reference to parent project
+    title: z.string(),
   }),
 })
 

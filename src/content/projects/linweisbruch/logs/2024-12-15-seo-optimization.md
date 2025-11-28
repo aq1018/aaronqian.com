@@ -4,7 +4,6 @@ title: 'SEO optimization deployed'
 tags:
   - seo
   - performance
-project: 'linweisbruch'
 ---
 
 Implemented local SEO improvements:

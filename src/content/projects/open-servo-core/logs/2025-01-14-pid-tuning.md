@@ -4,7 +4,6 @@ title: 'PID tuning breakthrough — cascaded loop working'
 tags:
   - control-systems
   - milestone
-project: 'smart-servo'
 ---
 
 Finally got cascaded PID stable:

@@ -35,6 +35,7 @@
     "*.{css,json,md}": ["prettier --check"]
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.12",
     "@astrojs/sitemap": "^3.6.0",
     "@clack/prompts": "^0.11.0",
     "@fontsource-variable/inter": "^5.2.8",

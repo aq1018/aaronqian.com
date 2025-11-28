@@ -4,7 +4,6 @@ title: 'Power board v1 tested'
 tags:
   - hardware
   - power-systems
-project: 'spider-bot'
 ---
 
 Built power distribution board:

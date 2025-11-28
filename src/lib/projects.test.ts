@@ -27,7 +27,6 @@ const createProjectLog = (id: string): ProjectLogEntry => ({
   data: {
     date: new Date(),
     draft: false,
-    project: '',
     tags: [],
     title: 'Test log',
   },
