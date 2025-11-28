@@ -1,0 +1,176 @@
+---
+export interface Props {
+  src: string
+  width?: string | number
+  height?: string | number
+  aspectRatio?: string
+  fallbackImage?: string
+  alt?: string
+  class?: string
+}
+
+const {
+  src,
+  width = '100%',
+  height,
+  aspectRatio = '16/9',
+  fallbackImage,
+  alt = '3D Model',
+  class: className,
+} = Astro.props
+
+// Calculate dimensions based on aspect ratio or explicit height
+const normalizedWidth = typeof width === 'number' ? `${width}px` : width
+
+let containerStyle: string
+if (height) {
+  // Explicit height provided
+  const normalizedHeight = typeof height === 'number' ? `${height}px` : height
+  containerStyle = `width: ${normalizedWidth}; height: ${normalizedHeight};`
+} else {
+  // Use aspect ratio for responsive sizing
+  containerStyle = `width: ${normalizedWidth}; aspect-ratio: ${aspectRatio};`
+}
+---
+
+<div
+  class={className}
+  data-gltf-viewer
+  data-gltf-src={src}
+  data-fallback-image={fallbackImage}
+  style={containerStyle}
+>
+  <!-- Loading State -->
+  <div data-gltf-loading class="gltf-viewer-loading">
+    <div class="gltf-viewer-spinner"></div>
+    <p class="gltf-viewer-loading-text">Loading 3D model...</p>
+  </div>
+
+  <!-- Error State -->
+  <div data-gltf-error class="gltf-viewer-error" style="display: none;">
+    <div class="gltf-viewer-error-content">
+      <p class="gltf-viewer-error-text">Failed to load 3D model</p>
+      {
+        fallbackImage && (
+          <img src={fallbackImage} alt={alt} class="gltf-viewer-fallback-image" loading="lazy" />
+        )
+      }
+    </div>
+  </div>
+
+  <!-- 3D Canvas Container -->
+  <canvas data-gltf-canvas style="display: none; width: 100%; height: 100%;" aria-label={alt}
+  ></canvas>
+
+  <!-- Fallback for no JS -->
+  <noscript>
+    {
+      fallbackImage ? (
+        <img src={fallbackImage} alt={alt} style={containerStyle + '; object-fit: contain;'} />
+      ) : (
+        <div
+          class="gltf-viewer-no-js"
+          style={
+            containerStyle +
+            '; display: flex; align-items: center; justify-content: center; background: var(--color-surface-2); color: var(--color-content-muted);'
+          }
+        >
+          <p>3D model requires JavaScript to view</p>
+        </div>
+      )
+    }
+  </noscript>
+</div>
+
+<style>
+  [data-gltf-viewer] {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+  }
+
+  .gltf-viewer-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    background: var(--color-surface-1);
+  }
+
+  .gltf-viewer-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .gltf-viewer-loading-text {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-content-muted);
+  }
+
+  .gltf-viewer-error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface-1);
+  }
+
+  .gltf-viewer-error-content {
+    text-align: center;
+    max-width: 80%;
+  }
+
+  .gltf-viewer-error-text {
+    margin: 0 0 var(--space-3) 0;
+    font-size: var(--text-sm);
+    color: var(--color-content-muted);
+  }
+
+  .gltf-viewer-fallback-image {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+  }
+
+  .gltf-viewer-no-js {
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+
+  [data-gltf-canvas] {
+    display: block;
+    cursor: grab;
+  }
+
+  [data-gltf-canvas]:active {
+    cursor: grabbing;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Dark theme adjustments */
+  :global(.dark) [data-gltf-viewer] {
+    background: var(--color-surface-1);
+  }
+
+  :global(.dark) .gltf-viewer-loading,
+  :global(.dark) .gltf-viewer-error {
+    background: var(--color-surface-2);
+  }
+</style>

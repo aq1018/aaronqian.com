@@ -1,6 +1,6 @@
 ---
 date: '2025-11-28T04:50:23.084Z'
-title: 'Thanksgiving Night Build: Quadrature IR Sensor PCB (Part 1)'
+title: 'Thanksgiving Night Build: Dual ITR1204 IR Sensor Test Module'
 tags:
   - hardware
   - sensor
@@ -16,14 +16,279 @@ This is Part 1 of a tiny reflective IR sensor system I’m building. This PCB
 represents roughly half of the full sensor — the detection + comparator stage.
 Part 2 will cover real-world testing once the boards arrive.
 
-## What I Did
+So without further ado, let’s dive into the details of this project.
 
-Describe what you worked on today.
+## TL;DR
 
-## Challenges
+- Built a compact dual-channel IR reflective sensor board using
+  **ITR1204SR10A_TR(BY)**.
+- Tuned resistor values to test **extended sensing distance (~2 mm)** for
+  external system-ID rigs.
+- Outputs produce **small analog deltas (~0–0.2 V)** designed to feed into a
+  **separate MCU + comparator/op-amp** board.
+- Secondary goal: experiment with **pure analog encoder approaches** for
+  potential future integration inside a servo.
+- Intended for evaluating reflective sensing robustness before committing to a
+  **tight internal servo encoder**.
 
-Any blockers or issues encountered?
+---
 
-## Next Steps
+## Render / Photo
 
-What's coming up next?
+<!-- prettier-ignore -->
+::3d[3D model of the dual ITR1204 IR sensor PCB]{src="/src/content/projects/open-servo-core/logs/encoder-board.glb" aspectRatio="1/1"}
+
+---
+
+## Why this board exists
+
+OpenServoCore needs a reliable way to measure **motor speed and dynamic
+response** during system identification and early control development.
+
+This board exists to:
+
+### A) Serve as an external system identification sensor
+
+- Mount over a patterned disk or strip
+- Produce stable A/B signals
+- Feed into an amplifier/comparator
+- Capture accurate speed traces for system modeling
+
+### B) Prototype a future integrated encoder
+
+Before designing a flex-PCB encoder under the gearbox inside a servo (extremely
+tight space), I need to:
+
+- Characterize distances
+- Optimize LED current
+- Understand real-world reflectivity
+- Measure output deltas
+- Determine if a **minimal BOM analog encoder** is feasible
+
+This board is the **exploratory platform** for both.
+
+---
+
+## Schematic
+
+> 🖼️ **Insert Schematic Screenshot**
+>
+> `<!-- IMAGE:schematic -->`
+
+---
+
+## Circuit Overview
+
+**Sensors:**
+
+- U1, U2: **ITR1204SR10A_TR(BY)** reflective IR pairs (LCSC: C475373)
+
+**LED current-limit resistors:**
+
+- R2, R4 = **390 Ω** (IR LEDs)
+
+**Phototransistor pull-downs:**
+
+- R1, R3 = **680 Ω**
+
+**Filtering:**
+
+- C1, C2 = **100 nF** local decoupling
+- C3 = **10 µF** bulk decoupling
+
+**Connector:**
+
+- J1: 4-pin header (VCC, GND, A, B)
+
+The output signals are **low-level analog**, not cleaned or thresholded. This is
+intentional.
+
+---
+
+## PCB Layout
+
+> 🖼️ **Insert Top/Bottom Layout Images**
+>
+> `<!-- IMAGE:pcb-top -->` `<!-- IMAGE:pcb-bottom -->`
+
+---
+
+## LED current (datasheet-based calculation)
+
+The ITR1204 datasheet gives:
+
+- Forward voltage **VF ≈ 1.25 V typ @ IF = 4 mA**, 1.5 V max
+- Maximum continuous current **IF(max) = 50 mA**
+
+We run:
+
+- VCC = 5 V
+- R_LED = 390 Ω
+
+Using:
+
+\[ I*{LED} = \frac{V*{CC} - V_F}{R} \]
+
+At VF = 1.25 V:
+
+\[ I\_{LED} \approx \frac{5 - 1.25}{390} = 9.6 \text{ mA} \]
+
+At VF = 1.5 V:
+
+\[ I\_{LED} \approx \frac{5 - 1.5}{390} = 9.0 \text{ mA} \]
+
+So we are safely at **~9–10 mA**, about **2.2–2.5×** the test current used in
+the datasheet’s IC(on) spec.
+
+### Why this matters
+
+More LED current → more IR flux → more reflected photocurrent → **usable
+distance moves toward ~2 mm**, compared to the typical ~1 mm. We remain far
+below the 50 mA absolute max.
+
+---
+
+## Phototransistor output swing (datasheet-based)
+
+Datasheet gives for **IF = 4 mA**:
+
+- **IC(ON) = 70–130 µA** (reflective target, standard distance)
+
+We drive the LED at ~9–10 mA → scaling factor ~2.25–2.5×:
+
+\[ I_C \approx 160–320\ \\mu\text{A (expected)} \]
+
+With a **680 Ω** pull-down:
+
+\[ V = I_C \cdot R \]
+
+- At 160 µA → **0.11 V**
+- At 220 µA (typ-estimate) → **0.15 V**
+- At 320 µA → **0.22 V**
+
+So the output swings **~0–0.2 V**, just as designed.
+
+### Why not increase R?
+
+Because:
+
+- lower R → lower impedance → **faster edges**
+- reduced susceptibility to noise
+- better behavior with cable capacitance
+- consistent with datasheet RL = 1 kΩ for ~15 µs rise/fall times (we are
+  slightly faster due to RL = 680 Ω)
+
+This board’s job is to produce **clean small analog deltas** → external board
+amplifies.
+
+---
+
+## Intended use of A/B channels
+
+- A and B are placed with a small spatial offset
+- When read over a multi-mark encoder disk, you get “quadrature-ish” signals:
+  - A leads B in one direction
+  - B leads A in the reverse direction
+
+These are **not** digital quadrature signals yet — they are **analog
+reflectivity deltas** to be cleaned externally.
+
+---
+
+## Secondary goal: analog-only encoder path
+
+A future experiment (not main goal for this revision):
+
+- Use **larger pull-down resistors** (1–4.7 kΩ)
+- Tune LED current + distance
+- Feed output directly into **MCU ADC** or possibly **Schmitt-trigger GPIO**
+- Aim for a **minimal-BOM encoder** (sensor + 2 resistors)
+- Useful for ultra-tight servo integration where no op-amp fits
+
+This revision provides the raw data needed to evaluate feasibility.
+
+---
+
+## BOM (from JLCPCB BOM CSV)
+
+> 🖼️ **Insert BOM table screenshot (optional)**
+>
+> `<!-- IMAGE:bom -->`
+
+| Value               | Designators | LCSC     | Qty |
+| ------------------- | ----------- | -------- | --- |
+| 100nF               | C1, C2      | C28233   | 2   |
+| 10uF                | C3          | C15850   | 1   |
+| 390 Ω               | R2, R4      | C17655   | 2   |
+| 680 Ω               | R1, R3      | C17798   | 2   |
+| Conn_01x04          | J1          | C2905435 | 1   |
+| ITR1204SR10A_TR(BY) | U1, U2      | C475373  | 2   |
+
+Approx BOM cost (LCSC small quantity): **~$0.60 per board**.
+
+---
+
+## Folder structure (from repo)
+
+```text
+hardware/encoder-board/
+  ├─ jlcpcb/
+  │    └─ production-files/
+  │         ├─ GERBER-encoder-board.zip
+  │         ├─ BOM-encoder-board.csv
+  │         └─ CPL-encoder-board.csv
+```
+
+---
+
+## Ordering from JLCPCB
+
+### Option A — Bare PCB (recommended for prototyping)
+
+1. Upload `GERBER-encoder-board.zip`.
+2. Select:
+   - 1.6 mm PCB, 1 oz copper
+   - Any solder mask color
+3. Order a set of 5 or 10.
+4. Buy components from LCSC (using LCSC codes above).
+5. Hand-solder (optos are small but doable with flux and tweezers).
+
+### Option B — Full PCBA
+
+1. Start SMT Assembly order.
+2. Upload **GERBER**.
+3. Add **BOM** + **CPL** files.
+4. Review rotation and side for U1, U2.
+5. Confirm top/bottom placement.
+6. Place the order.
+
+Because the design is simple, assembly is cheap.
+
+---
+
+## How to use the board
+
+1. Supply **+5 V** to J1.
+2. Observe outputs **A/B** on a scope or logic analyzer.
+3. Mount over a test disk or strip at **1–2 mm** distance.
+4. Sweep distance to characterize range and contrast.
+5. Feed into external **op-amp/comparator board** for digital cleanup.
+
+---
+
+## Next steps
+
+- Build the **MCU + comparator** front-end board.
+- Log oscilloscope traces at distances 1.0 / 1.5 / 2.0 / 2.5 mm.
+- Tune comparator thresholds and hysteresis.
+- Experiment with **larger pull-down resistors** for analog-only encoder path.
+- Evaluate feasibility of integrating a miniaturized version inside future
+  OpenServoCore servo housings.
+
+---
+
+## Earlier / later in this project
+
+> Insert your timeline cards here.
+>
+> `<!-- TIMELINE:previous -->` `<!-- TIMELINE:next -->`

@@ -28,6 +28,7 @@ Thumbs.db
 # Config files
 .gitignore
 .prettierignore
+.remarkignore
 
 # Temporary files
 *.tmp

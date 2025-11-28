@@ -81,7 +81,8 @@
     "promise/prefer-await-to-callbacks": "off",
     "unicorn/filename-case": "off",
     "unicorn/prefer-global-this": "off",
-    "unicorn/no-null": "off"
+    "unicorn/no-null": "off",
+    "unicorn/number-literal-case": "off"
   },
   "globals": {
     "Astro": "readonly"

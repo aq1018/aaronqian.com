@@ -17,7 +17,7 @@
     },
 
     "Markdown": {
-      "formatter": "prettier"
+      "formatter": null
     },
     "JSON": {
       "formatter": "prettier"

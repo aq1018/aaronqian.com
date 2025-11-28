@@ -5,6 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 import icon from 'astro-icon'
 import { defineConfig, envField } from 'astro/config'
 import rehypeExternalLinks from 'rehype-external-links'
+import rehypeKatex from 'rehype-katex'
+import remarkDirective from 'remark-directive'
+import remarkMath from 'remark-math'
+
+import { remark3dDirective } from './src/lib/remark-3d-directive.ts'
 
 const isTest = process.env.VITEST === 'true'
 
@@ -50,6 +55,7 @@ export default defineConfig({
   },
   integrations: [icon(), sitemap()],
   markdown: {
+    remarkPlugins: [remarkDirective, remarkMath, remark3dDirective],
     rehypePlugins: [
       [
         rehypeExternalLinks,
@@ -58,6 +64,7 @@ export default defineConfig({
           rel: ['noopener', 'noreferrer'],
         },
       ],
+      rehypeKatex,
     ],
   },
   vite: {
@@ -65,9 +72,14 @@ export default defineConfig({
     define: {
       __dirname: JSON.stringify(new URL('.', import.meta.url).pathname),
     },
+    optimizeDeps: {
+      exclude: ['occt-import-js'],
+    },
     server: {
       headers: {
         'Access-Control-Allow-Origin': '*',
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+        'Cross-Origin-Opener-Policy': 'same-origin',
       },
       watch: {
         ignored: ['**/*.test.ts', '**/*.spec.ts'],
