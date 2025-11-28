@@ -46,21 +46,6 @@ const projectLogs = allLogs
       b.data.date.getTime() - a.data.date.getTime(),
   )
 
-// Status badge styles
-const statusStyles = {
-  'in-development': 'bg-muted/20 text-muted border-border',
-  active: 'bg-primary/20 text-primary border-primary/40',
-  completed: 'bg-content/20 text-content/60 border-content/40',
-  'up-for-adoption': 'bg-warning/20 text-warning border-warning/40',
-}
-
-const statusLabels = {
-  'in-development': 'IN DEVELOPMENT',
-  active: 'ACTIVE',
-  completed: 'COMPLETED',
-  'up-for-adoption': 'UP FOR ADOPTION',
-}
-
 const ogImage = `/og/projects/${projectSlug}.png`
 
 const breadcrumbItems = [
@@ -83,7 +68,7 @@ const creationDate = projectLogs.length > 0 ? projectLogs.at(-1)!.data.date : ne
     url={`/projects/${projectSlug}`}
     image={ogImage}
   />
-  <ProjectDetail {project} {projectLogs} {statusStyles} {statusLabels}>
+  <ProjectDetail {project} {projectLogs}>
     {Content && <Content />}
   </ProjectDetail>
 </BaseLayout>

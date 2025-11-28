@@ -1,0 +1,101 @@
+---
+// Project Logs Index Page - Shows all log entries for a project
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
+import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
+import Container from '@/components/primitives/Container.astro'
+import Divider from '@/components/primitives/Divider.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Link from '@/components/primitives/Link.astro'
+import BreadcrumbSchema from '@/components/primitives/seo/BreadcrumbSchema.astro'
+import Sheet from '@/components/primitives/Sheet.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Text from '@/components/primitives/Text.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getProjectSlug } from '@/lib/projects'
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects')
+
+  return projects.map((project: CollectionEntry<'projects'>) => ({
+    params: { slug: getProjectSlug(project) },
+    props: { project },
+  }))
+}
+
+export interface Props {
+  project: CollectionEntry<'projects'>
+}
+
+const { project } = Astro.props
+const projectSlug = getProjectSlug(project)
+
+// Fetch all logs for this project, sorted by date descending
+// Filter out drafts in production
+const allLogs = await getCollection(
+  'projectLogs',
+  ({ data }) => !import.meta.env.PROD || !data.draft,
+)
+const projectLogs = allLogs
+  .filter((log: CollectionEntry<'projectLogs'>) => log.id.startsWith(`${projectSlug}/logs/`))
+  .toSorted(
+    (a: CollectionEntry<'projectLogs'>, b: CollectionEntry<'projectLogs'>) =>
+      b.data.date.getTime() - a.data.date.getTime(),
+  )
+
+const pageTitle = `${project.data.title} - Build Log`
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Projects', url: '/projects' },
+  { name: project.data.title, url: `/projects/${projectSlug}` },
+  { name: 'Build Log', url: `/projects/${projectSlug}/logs` },
+]
+---
+
+<BaseLayout title={pageTitle} description={`Build log for ${project.data.title}`}>
+  <BreadcrumbSchema slot="head" items={breadcrumbItems} />
+
+  <main>
+    <Surface>
+      <Container>
+        <Stack space="md">
+          <!-- Back link -->
+          <Link href={`/projects/${projectSlug}`} variant="back">
+            ← Back to {project.data.title}
+          </Link>
+
+          <!-- Log header -->
+          <div>
+            <Heading size="h1" class="text-2xl sm:text-3xl">
+              {project.data.title} - Build Log
+            </Heading>
+            <Text class="mt-2" color="muted">
+              {projectLogs.length}
+              {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
+            </Text>
+          </div>
+
+          <Divider />
+
+          <!-- Log entries -->
+          {
+            projectLogs.length > 0 ? (
+              <Stack space="md">
+                {projectLogs.map((log) => (
+                  <ProjectLogEntry log={log} showExcerpt={true} />
+                ))}
+              </Stack>
+            ) : (
+              <Sheet variant="soft" color="neutral" padding="lg" class="text-center">
+                <Text color="muted">No log entries yet. Check back soon.</Text>
+              </Sheet>
+            )
+          }
+        </Stack>
+      </Container>
+    </Surface>
+  </main>
+</BaseLayout>

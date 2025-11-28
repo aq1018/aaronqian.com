@@ -32,8 +32,11 @@ describe('BlogList', () => {
         },
       })
 
+      // Debug: check what's being rendered
+      // console.log('RENDERED HTML:', root.innerHTML)
+
       const links = root.querySelectorAll('a')
-      const postLink = [...links].find((link) => link.textContent.trim() === 'Post A')
+      const postLink = [...links].find((link) => link.textContent?.includes('Post A'))
       expect(postLink).toBeDefined()
       if (postLink) {
         expect(postLink.getAttribute('href')).toBe('/blog/post-a')

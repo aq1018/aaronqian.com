@@ -16,7 +16,6 @@ function createMockProject(
       description: 'A test project description',
       aside: 'Additional context',
       status: 'active',
-      live: false,
       order: 1,
       ...overrides,
     },
@@ -28,7 +27,7 @@ describe('ProjectListItem Component', () => {
   const mockProject = createMockProject()
 
   describe('Rendering', () => {
-    it('should render as a list item (li)', async () => {
+    it('should render as a link element', async () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
@@ -37,15 +36,13 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(root.innerHTML).toContain('<li')
+      expect(root.innerHTML).toContain('<a')
     })
 
     it('should render project title as a link', async () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusLabel: 'Active',
-          statusStyle: 'text-green-500',
         },
       })
 
@@ -57,8 +54,6 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: { ...mockProject, id: 'another-project/index.md' },
-          statusLabel: 'Active',
-          statusStyle: 'text-green-500',
         },
       })
 
@@ -70,20 +65,16 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusLabel: 'In Progress',
-          statusStyle: 'text-blue-500',
         },
       })
 
-      expect(root.innerHTML).toContain('In Progress')
+      expect(root.innerHTML).toContain('ACTIVE')
     })
 
     it('should render project description', async () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusLabel: 'Active',
-          statusStyle: 'text-green-500',
         },
       })
 
@@ -94,8 +85,6 @@ describe('ProjectListItem Component', () => {
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
           project: mockProject,
-          statusLabel: 'Active',
-          statusStyle: 'text-green-500',
         },
       })
 
@@ -103,34 +92,35 @@ describe('ProjectListItem Component', () => {
     })
   })
 
-  describe('Live Badge', () => {
-    it('should render LIVE badge when project is live', async () => {
-      const liveProject = {
+  describe('Status Badge', () => {
+    it('should render ACTIVE badge when project is active', async () => {
+      const activeProject = {
         ...mockProject,
-        data: { ...mockProject.data, live: true },
+        data: { ...mockProject.data, status: 'active' },
       }
 
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
-          project: liveProject,
-          statusLabel: 'Active',
-          statusStyle: 'text-green-500',
+          project: activeProject,
         },
       })
 
-      expect(root.innerHTML).toContain('LIVE')
+      expect(root.innerHTML).toContain('ACTIVE')
     })
 
-    it('should not render LIVE badge when project is not live', async () => {
+    it('should render COMPLETED badge when project is completed', async () => {
+      const completedProject = {
+        ...mockProject,
+        data: { ...mockProject.data, status: 'completed' as const },
+      }
+
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
-          project: mockProject,
-          statusLabel: 'Active',
-          statusStyle: 'text-green-500',
+          project: completedProject,
         },
       })
 
-      expect(root.innerHTML).not.toContain('LIVE')
+      expect(root.innerHTML).toContain('COMPLETED')
     })
   })
 
@@ -149,41 +139,37 @@ describe('ProjectListItem Component', () => {
         },
       })
 
-      expect(root.innerHTML).toContain('Completed')
+      expect(root.innerHTML).toContain('COMPLETED')
     })
 
-    it('should render paused status', async () => {
-      const pausedProject = {
+    it('should render up-for-adoption status', async () => {
+      const upForAdoptionProject = {
         ...mockProject,
-        data: { ...mockProject.data, status: 'paused' },
+        data: { ...mockProject.data, status: 'up-for-adoption' as const },
       }
 
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
-          project: pausedProject,
-          statusLabel: 'Paused',
-          statusStyle: 'text-yellow-500',
+          project: upForAdoptionProject,
         },
       })
 
-      expect(root.innerHTML).toContain('Paused')
+      expect(root.innerHTML).toContain('UP FOR ADOPTION')
     })
 
-    it('should render archived status', async () => {
-      const archivedProject = {
+    it('should render in-development status', async () => {
+      const inDevelopmentProject = {
         ...mockProject,
-        data: { ...mockProject.data, status: 'archived' },
+        data: { ...mockProject.data, status: 'in-development' as const },
       }
 
       const root = await renderAstroComponent(ProjectListItem, {
         props: {
-          project: archivedProject,
-          statusLabel: 'Archived',
-          statusStyle: 'text-gray-400',
+          project: inDevelopmentProject,
         },
       })
 
-      expect(root.innerHTML).toContain('Archived')
+      expect(root.innerHTML).toContain('IN DEVELOPMENT')
     })
   })
 

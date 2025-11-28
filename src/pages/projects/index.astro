@@ -1,6 +1,6 @@
 ---
 // Projects Index Page - Full listing of all projects
-import { getProjectSlug, markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects'
+import { getProjectSlug, sortProjectsByLatestLog } from '@/lib/projects'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
@@ -17,12 +17,11 @@ const projectLogs = await getCollection(
 )
 
 const sortedProjects = sortProjectsByLatestLog(projects, projectLogs)
-const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
 
 const { title, description } = staticPages.projects
 const ogImage = '/og/projects.png'
 
-const projectListItems = projectsWithLive.map((project: CollectionEntry<'projects'>) => ({
+const projectListItems = sortedProjects.map((project: CollectionEntry<'projects'>) => ({
   name: project.data.title,
   url: `/projects/${getProjectSlug(project)}`,
   description: project.data.description,
@@ -31,5 +30,5 @@ const projectListItems = projectsWithLive.map((project: CollectionEntry<'project
 
 <BaseLayout {title} {description} image={ogImage}>
   <ItemListSchema slot="head" name="Projects" items={projectListItems} />
-  <ProjectsIndex projects={projectsWithLive} />
+  <ProjectsIndex projects={sortedProjects} />
 </BaseLayout>

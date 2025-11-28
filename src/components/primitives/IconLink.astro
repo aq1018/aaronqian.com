@@ -1,0 +1,53 @@
+---
+import Icon from './Icon.astro'
+import Link from './Link.astro'
+import Tooltip from './Tooltip.astro'
+import type { IconVariants } from './Icon.cva'
+import type { LinkVariants } from './Link.cva'
+
+import { cn } from '@/lib/utils'
+
+export interface Props extends LinkVariants, IconVariants {
+  href: string
+  icon: string
+  tooltip?: string
+  external?: boolean
+  class?: string
+  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right'
+}
+
+const {
+  href,
+  icon,
+  tooltip,
+  external = true,
+  size = 'md',
+  variant = 'nav',
+  tooltipPosition = 'top',
+  class: className,
+} = Astro.props
+---
+
+{
+  tooltip ? (
+    <Tooltip text={tooltip} position={tooltipPosition}>
+      <Link
+        {href}
+        {external}
+        {variant}
+        class={cn('inline-flex items-center justify-center', className)}
+      >
+        <Icon name={icon} {size} />
+      </Link>
+    </Tooltip>
+  ) : (
+    <Link
+      {href}
+      {external}
+      {variant}
+      class={cn('inline-flex items-center justify-center', className)}
+    >
+      <Icon name={icon} {size} />
+    </Link>
+  )
+}

@@ -1,53 +1,87 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 
+import Comments from '@/components/features/Comments.astro'
 import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
-import Badge from '@/components/primitives/Badge.astro'
-import ButtonLink from '@/components/primitives/ButtonLink.astro'
 import Container from '@/components/primitives/Container.astro'
 import Divider from '@/components/primitives/Divider.astro'
 import Heading from '@/components/primitives/Heading.astro'
+import IconLink from '@/components/primitives/IconLink.astro'
 import Link from '@/components/primitives/Link.astro'
 import Prose from '@/components/primitives/Prose.astro'
-import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
+import StatusBadge from '@/components/primitives/StatusBadge.astro'
 import Surface from '@/components/primitives/Surface.astro'
 import Text from '@/components/primitives/Text.astro'
+import { getProjectSlug } from '@/lib/projects'
 
 export interface Props {
   project: CollectionEntry<'projects'>
   projectLogs: CollectionEntry<'projectLogs'>[]
-  statusStyles: Record<string, string>
-  statusLabels: Record<string, string>
 }
 
-const { project, projectLogs, statusStyles, statusLabels } = Astro.props
+const { project, projectLogs } = Astro.props
 const hasContent = Astro.slots.has('default')
+const projectSlug = getProjectSlug(project)
+
+// Get latest 3 logs for compact display
+const latestLogs = projectLogs.slice(0, 3)
+
+// Format date for compact display
+const formatDate = (date: Date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 ---
 
 <!-- Project Header -->
 <header>
   <Surface>
     <Container>
-      <Stack space="sm">
+      <Stack space="md">
         <!-- Back link -->
         <Link href="/projects" variant="back"> ← Back to projects </Link>
 
         <!-- Title and status -->
-        <Stack direction="row" space="sm" class="flex-wrap" align="baseline">
+        <Stack space="md" class="flex-wrap" align="baseline">
           <Heading size="h1" class="text-3xl sm:text-4xl">
             {project.data.title}
           </Heading>
-          <Badge size="md" uppercase class={statusStyles[project.data.status]}>
-            {statusLabels[project.data.status]}
+          <Stack direction="row" space="sm">
+            <StatusBadge status={project.data.status} size="sm" />
             {
-              project.data.live && (
-                <Badge color="primary" class="ml-2">
-                  LIVE
-                </Badge>
+              project.data.links && (
+                <Stack direction="row" space="xs">
+                  {project.data.links.site && (
+                    <IconLink
+                      href={project.data.links.site}
+                      icon="heroicons:globe-alt"
+                      tooltip="Visit site"
+                      size="md"
+                    />
+                  )}
+                  {project.data.links.github && (
+                    <IconLink
+                      href={project.data.links.github}
+                      icon="simple-icons:github"
+                      tooltip="View on GitHub"
+                      size="md"
+                    />
+                  )}
+                  {project.data.links.docs && (
+                    <IconLink
+                      href={project.data.links.docs}
+                      icon="heroicons:document-text"
+                      tooltip="Documentation"
+                      size="md"
+                    />
+                  )}
+                </Stack>
               )
             }
-          </Badge>
+          </Stack>
         </Stack>
 
         <!-- Description -->
@@ -60,77 +94,88 @@ const hasContent = Astro.slots.has('default')
           {project.data.aside}
         </Text>
 
-        <!-- External link if available -->
+        <Divider />
+
+        <!-- Recent Activity -->
         {
-          project.data.url && project.data.url !== '' && (
-            <div class="mt-6">
-              <ButtonLink href={project.data.url} external color="primary" class="text-sm">
-                <span>Visit Site</span>
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </ButtonLink>
-            </div>
+          projectLogs.length > 0 && (
+            <Stack space="sm">
+              <Heading size="h6" color="muted">
+                Recent activity
+              </Heading>
+              <Stack space="xs">
+                {latestLogs.slice(0, 2).map((log) => {
+                  const logUrl = `/projects/${log.id.replace(/\.md$/, '')}`
+                  return (
+                    <div class="flex items-baseline gap-2">
+                      <Text size="small" color="muted">
+                        {formatDate(log.data.date)}
+                      </Text>
+                      <Link href={logUrl} variant="content" class="truncate text-sm">
+                        {log.data.title}
+                      </Link>
+                    </div>
+                  )
+                })}
+              </Stack>
+              <Link href={`/projects/${projectSlug}/logs`} variant="content" class="text-sm">
+                View all logs →
+              </Link>
+              <Divider />
+            </Stack>
           )
         }
-
-        <Divider />
       </Stack>
     </Container>
   </Surface>
 </header>
 
 <!-- Project Content -->
-{
-  hasContent && (
-    <section>
-      <Surface>
-        <Container>
-          <Prose size="base">
-            <slot />
-          </Prose>
-        </Container>
-      </Surface>
-    </section>
-  )
-}
-
-<!-- Build Log -->
-<main>
-  <Surface>
+<section>
+  <Surface padY="sm">
     <Container>
-      <Stack space="md">
-        <!-- Log header -->
-        <div>
-          <Heading size="h2">Build Log</Heading>
-          <Text class="mt-2" color="muted">
-            {projectLogs.length}
-            {projectLogs.length === 1 ? 'entry' : 'entries'} · Newest first
-          </Text>
-        </div>
-
-        <Divider />
-
-        <!-- Log entries -->
+      <Stack space="lg">
         {
-          projectLogs.length > 0 ? (
-            <Stack space="md">
-              {projectLogs.map((log) => (
-                <ProjectLogEntry log={log} showExcerpt={true} />
-              ))}
-            </Stack>
-          ) : (
-            <Sheet variant="soft" color="neutral" padding="lg" class="text-center">
-              <Text color="muted">No log entries yet. Check back soon.</Text>
-            </Sheet>
+          hasContent && (
+            <Prose size="base">
+              <slot />
+            </Prose>
+          )
+        }
+
+        {
+          projectLogs.length > 0 && (
+            <>
+              {hasContent && <Divider />}
+              <Stack space="sm">
+                <Heading size="h6" color="muted">
+                  Latest logs
+                </Heading>
+                {projectLogs.slice(0, 2).map((log) => (
+                  <ProjectLogEntry log={log} showExcerpt={true} />
+                ))}
+              </Stack>
+              {projectLogs.length > 2 && (
+                <Link href={`/projects/${projectSlug}/logs`} variant="content" class="text-sm">
+                  View all {projectLogs.length} logs →
+                </Link>
+              )}
+            </>
           )
         }
       </Stack>
     </Container>
   </Surface>
-</main>
+</section>
+
+<!-- Comments -->
+<section>
+  <Surface>
+    <Container>
+      <Stack space="md">
+        <Heading size="h2">Comments</Heading>
+        <Comments />
+      </Stack>
+    </Container>
+  </Surface>
+</section>

@@ -11,56 +11,15 @@ export interface Props {
 }
 
 const { class: className } = Astro.props
-const ORIGIN = Astro.url.origin
 ---
 
-<div class={className} data-comments>
-  <!-- Dynamically load Giscus with correct initial theme -->
-  <script is:inline define:vars={{ REPO, REPO_ID, CATEGORY, CATEGORY_ID, ORIGIN }}>
-    ;(function () {
-      // Determine current theme using same logic as BaseLayout.astro
-      const theme = localStorage.getItem('theme') || 'system'
-      const isDark =
-        theme === 'dark' ||
-        (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-
-      // Build theme URL
-      // oxlint-disable-next-line no-undef
-      const themeUrl = `${ORIGIN}/giscus-${isDark ? 'dark' : 'light'}.generated.css`
-
-      const dataset = {
-        // oxlint-disable-next-line no-undef
-        repo: REPO,
-        // oxlint-disable-next-line no-undef
-        repoId: REPO_ID,
-        // oxlint-disable-next-line no-undef
-        category: CATEGORY,
-        // oxlint-disable-next-line no-undef
-        categoryId: CATEGORY_ID,
-        mapping: 'pathname',
-        strict: '0',
-        reactionsEnabled: '1',
-        emitMetadata: '0',
-        inputPosition: 'top',
-        theme: themeUrl,
-        lang: 'en',
-        loading: 'lazy',
-      }
-
-      // Create and configure Giscus script
-      const script = document.createElement('script')
-      script.src = 'https://giscus.app/client.js'
-
-      // Set each data attribute individually
-      Object.keys(dataset).forEach((key) => {
-        script.dataset[key] = dataset[key]
-      })
-
-      script.setAttribute('crossorigin', 'anonymous')
-      script.async = true
-
-      // Append to comments container
-      document.currentScript.parentElement.append(script)
-    })()
-  </script>
+<div
+  class={className}
+  data-comments
+  data-giscus-repo={REPO}
+  data-giscus-repo-id={REPO_ID}
+  data-giscus-category={CATEGORY}
+  data-giscus-category-id={CATEGORY_ID}
+>
+  <!-- Giscus will be initialized by Comments.hook.ts -->
 </div>

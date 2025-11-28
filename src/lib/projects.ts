@@ -122,31 +122,3 @@ export function getLatestActiveProjectSlug(
 
   return latest.id.replace(/\/index(\.md)?$/, '')
 }
-
-/**
- * Mark the project with the latest log as "live"
- * Returns a new array with the live flag set
- */
-export function markLatestProjectAsLive(
-  projects: CollectionEntry<'projects'>[],
-  projectLogs: CollectionEntry<'projectLogs'>[],
-): CollectionEntry<'projects'>[] {
-  const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
-  if (latestSlug == null) {
-    return projects
-  }
-
-  return projects.map((project) => {
-    const projectSlug = project.id.replace(/\/index(\.md)?$/, '')
-    if (projectSlug === latestSlug) {
-      return {
-        ...project,
-        data: {
-          ...project.data,
-          live: true,
-        },
-      }
-    }
-    return project
-  })
-}

@@ -1,0 +1,59 @@
+---
+import Grid from '@/components/primitives/Grid.astro'
+import Link from '@/components/primitives/Link.astro'
+
+export interface Props {
+  projectSlug: string
+  previousLog?: {
+    title: string
+    url: string
+  }
+  nextLog?: {
+    title: string
+    url: string
+  }
+}
+
+const { projectSlug, previousLog, nextLog } = Astro.props
+---
+
+<nav aria-label="Log navigation">
+  <Grid columns={3} spacing="md" class="items-center">
+    <!-- Previous Log -->
+    <div class="text-left">
+      {
+        previousLog ? (
+          <Link href={previousLog.url} variant="back" title={previousLog.title}>
+            ← Previous
+          </Link>
+        ) : (
+          <span class="text-muted/30">← Previous</span>
+        )
+      }
+    </div>
+
+    <!-- View All Logs -->
+    <div class="text-center">
+      <Link
+        href={`/projects/${projectSlug}/logs`}
+        variant="back"
+        title="View all logs for this project"
+      >
+        View all logs
+      </Link>
+    </div>
+
+    <!-- Next Log -->
+    <div class="text-right">
+      {
+        nextLog ? (
+          <Link href={nextLog.url} variant="back" title={nextLog.title}>
+            Next →
+          </Link>
+        ) : (
+          <span class="text-muted/30">Next →</span>
+        )
+      }
+    </div>
+  </Grid>
+</nav>

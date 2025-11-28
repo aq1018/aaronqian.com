@@ -5,51 +5,48 @@
  */
 import type { CollectionEntry } from 'astro:content'
 
-import Badge from '@/components/primitives/Badge.astro'
 import Grid from '@/components/primitives/Grid.astro'
-import Link from '@/components/primitives/Link.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
+import StatusBadge from '@/components/primitives/StatusBadge.astro'
 import Text from '@/components/primitives/Text.astro'
 
 export interface Props {
   project: CollectionEntry<'projects'>
-  statusStyle: string
-  statusLabel: string
 }
 
-const { project, statusStyle, statusLabel } = Astro.props
+const { project } = Astro.props
+const projectUrl = `/projects/${project.id.replace(/\/index(\.md)?$/, '')}`
 ---
 
-<Sheet as="li" variant="bar" color="primary" padding="sm" hover>
-  <Grid spacing="md">
-    <Grid size={12} size-md={4}>
-      <Link href={`/projects/${project.id.replace(/\/index(\.md)?$/, '')}`} class="font-semibold">
-        {project.data.title}
-      </Link>
-    </Grid>
-
-    <Grid size={12} size-md={2} class="justify-self-start md:justify-self-end">
-      <div class="flex flex-col items-start md:items-end">
-        <span class={`font-bold uppercase tracking-wider ${statusStyle}`}>
-          {statusLabel}
+<li class="list-none">
+  <Sheet
+    as="a"
+    href={projectUrl}
+    variant="bar"
+    color="primary"
+    padding="sm"
+    hover
+    class="block no-underline hover:no-underline"
+  >
+    <Grid spacing="md">
+      <Grid size={12} size-md={4}>
+        <span class="font-semibold text-link">
+          {project.data.title}
         </span>
-        {
-          project.data.live && (
-            <Badge color="primary" pulse={true} class="mt-1">
-              LIVE
-            </Badge>
-          )
-        }
-      </div>
-    </Grid>
+      </Grid>
 
-    <Grid size={12} size-md={6}>
-      <div>
-        <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
-        <Text size="micro" color="muted" class="italic">
-          {project.data.aside}
-        </Text>
-      </div>
+      <Grid size={12} size-md={2} class="justify-self-start md:justify-self-end">
+        <StatusBadge status={project.data.status} size="md" />
+      </Grid>
+
+      <Grid size={12} size-md={6}>
+        <div>
+          <Text class="mb-2 leading-relaxed">{project.data.description}</Text>
+          <Text size="micro" color="muted" class="italic">
+            {project.data.aside}
+          </Text>
+        </div>
+      </Grid>
     </Grid>
-  </Grid>
-</Sheet>
+  </Sheet>
+</li>

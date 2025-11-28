@@ -19,11 +19,16 @@ const projects = defineCollection({
   schema: z.object({
     aside: z.string(),
     description: z.string(),
-    live: z.boolean().optional().default(false),
+    links: z
+      .object({
+        site: z.string().url().optional(),
+        github: z.string().url().optional(),
+        docs: z.string().url().optional(),
+      })
+      .optional(),
     order: z.number(),
     status: z.enum(['in-development', 'active', 'completed', 'up-for-adoption']),
     title: z.string(),
-    url: z.string().url().optional(),
   }),
 })
 

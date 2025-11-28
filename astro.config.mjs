@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import icon from 'astro-icon'
 import { defineConfig, envField } from 'astro/config'
+import rehypeExternalLinks from 'rehype-external-links'
 
 const isTest = process.env.VITEST === 'true'
 
@@ -48,6 +49,17 @@ export default defineConfig({
     },
   },
   integrations: [icon(), sitemap()],
+  markdown: {
+    rehypePlugins: [
+      [
+        rehypeExternalLinks,
+        {
+          target: '_blank',
+          rel: ['noopener', 'noreferrer'],
+        },
+      ],
+    ],
+  },
   vite: {
     plugins: [tailwindcss()],
     define: {

@@ -1,11 +1,7 @@
 import type { CollectionEntry } from 'astro:content'
 import { describe, expect, it } from 'vitest'
 
-import {
-  getLatestActiveProjectSlug,
-  markLatestProjectAsLive,
-  sortProjectsByLatestLog,
-} from './projects'
+import { getLatestActiveProjectSlug, sortProjectsByLatestLog } from './projects'
 
 type ProjectEntry = CollectionEntry<'projects'>
 type ProjectLogEntry = CollectionEntry<'projectLogs'>
@@ -17,7 +13,6 @@ const createProject = (id: string, title: string): ProjectEntry => ({
   data: {
     aside: '',
     description: 'Test project',
-    live: false,
     order: 0,
     status: 'active',
     title,
@@ -232,111 +227,5 @@ describe('getLatestActiveProjectSlug', () => {
     const latestSlug = getLatestActiveProjectSlug(projects, projectLogs)
 
     expect(latestSlug).toBe('project-a') // Has log from 2025-01-25
-  })
-})
-
-describe('markLatestProjectAsLive', () => {
-  it('should mark the project with latest log as live', () => {
-    const projects = [
-      createProject('project-a/index.md', 'Project A'),
-      createProject('project-b/index.md', 'Project B'),
-    ]
-
-    const projectLogs = [
-      createProjectLog('project-a/logs/2025-01-10-log.md'),
-      createProjectLog('project-b/logs/2025-01-20-log.md'),
-    ]
-
-    const marked = markLatestProjectAsLive(projects, projectLogs)
-
-    expect(marked[0].data.live).toBeFalsy() // project-a not marked
-    expect(marked[1].data.live).toBeTruthy() // project-b is latest
-  })
-
-  it('should not modify projects if none have logs', () => {
-    const projects = [
-      createProject('project-a/index.md', 'Project A'),
-      createProject('project-b/index.md', 'Project B'),
-    ]
-
-    const marked = markLatestProjectAsLive(projects, [])
-
-    expect(marked[0].data.live).toBeFalsy()
-    expect(marked[1].data.live).toBeFalsy()
-  })
-
-  it('should not modify projects if projects array is empty', () => {
-    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
-
-    const marked = markLatestProjectAsLive([], projectLogs)
-
-    expect(marked).toHaveLength(0)
-  })
-
-  it('should return new array without modifying original', () => {
-    const projects = [
-      createProject('project-a/index.md', 'Project A'),
-      createProject('project-b/index.md', 'Project B'),
-    ]
-
-    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
-
-    const marked = markLatestProjectAsLive(projects, projectLogs)
-
-    // Original should not be modified
-    expect(projects[0].data.live).toBeFalsy()
-    expect(projects[1].data.live).toBeFalsy()
-
-    // New array should have marked project
-    expect(marked[0].data.live).toBeTruthy()
-    expect(marked[1].data.live).toBeFalsy()
-  })
-
-  it('should preserve other project data properties', () => {
-    const projects = [createProject('project-a/index.md', 'Project A')]
-    const projectLogs = [createProjectLog('project-a/logs/2025-01-10-log.md')]
-
-    const marked = markLatestProjectAsLive(projects, projectLogs)
-
-    expect(marked[0].data.title).toBe('Project A')
-    expect(marked[0].data.description).toBe('Test project')
-    expect(marked[0].data.status).toBe('active')
-    expect(marked[0].data.live).toBeTruthy()
-  })
-
-  it('should only mark one project as live (the latest)', () => {
-    const projects = [
-      createProject('project-a/index.md', 'Project A'),
-      createProject('project-b/index.md', 'Project B'),
-      createProject('project-c/index.md', 'Project C'),
-    ]
-
-    const projectLogs = [
-      createProjectLog('project-a/logs/2025-01-10-log.md'),
-      createProjectLog('project-b/logs/2025-01-20-log.md'),
-      createProjectLog('project-c/logs/2025-01-05-log.md'),
-    ]
-
-    const marked = markLatestProjectAsLive(projects, projectLogs)
-
-    const liveProjects = marked.filter((p) => p.data.live)
-    expect(liveProjects).toHaveLength(1)
-    expect(liveProjects[0].id).toBe('project-b/index.md')
-  })
-
-  it('should handle project slug matching with various id formats', () => {
-    const projects = [
-      createProject('project-a/index.md', 'Project A'),
-      createProject('project-b/index', 'Project B'),
-      createProject('project-c', 'Project C'),
-    ]
-
-    const projectLogs = [createProjectLog('project-b/logs/2025-01-20-log.md')]
-
-    const marked = markLatestProjectAsLive(projects, projectLogs)
-
-    expect(marked[0].data.live).toBeFalsy()
-    expect(marked[1].data.live).toBeTruthy() // project-b/index matched
-    expect(marked[2].data.live).toBeFalsy()
   })
 })

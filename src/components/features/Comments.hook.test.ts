@@ -83,15 +83,12 @@ describe('Comments System', () => {
     it('should return light theme URL', () => {
       const url = getGiscusThemeUrl('light')
       expect(url).toMatch(/\/giscus-light\.generated\.css$/)
+      expect(url).toContain(window.location.origin)
     })
 
     it('should return dark theme URL', () => {
       const url = getGiscusThemeUrl('dark')
       expect(url).toMatch(/\/giscus-dark\.generated\.css$/)
-    })
-
-    it('should include current origin', () => {
-      const url = getGiscusThemeUrl('light')
       expect(url).toContain(window.location.origin)
     })
   })
@@ -195,8 +192,28 @@ describe('Comments System', () => {
     it('should initialize comments when container exists', () => {
       const timerCleanup = setupFakeTimers()
       const domCleanup = setupTestDOM(`
-        <div data-comments></div>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        ></div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        // Filter out Giscus scripts but append everything else normally
+        for (const node of nodes) {
+          if (!(node instanceof HTMLScriptElement && node.src?.includes('giscus.app'))) {
+            // Use appendChild for non-script nodes (works with both Node and string)
+            if (typeof node === 'string') {
+              this.insertAdjacentHTML('beforeend', node)
+            } else {
+              this.append(node)
+            }
+          }
+        }
+      })
 
       const cleanup = initializeComments()
 
@@ -243,10 +260,25 @@ describe('Comments System', () => {
 
       // Setup DOM with comments container and giscus iframe
       const domCleanup = setupTestDOM(`
-        <div data-comments>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        >
           <iframe class="giscus-frame"></iframe>
         </div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -324,10 +356,25 @@ describe('Comments System', () => {
       }
 
       const domCleanup = setupTestDOM(`
-        <div data-comments>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        >
           <iframe class="giscus-frame"></iframe>
         </div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -389,47 +436,64 @@ describe('Comments System', () => {
 
     it('should set initial theme when iframe loads', () => {
       const timerCleanup = setupFakeTimers()
+
+      // Start with Giscus iframe already loaded (simulating after Giscus script loads)
       const domCleanup = setupTestDOM(`
-        <div data-comments></div>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        >
+          <iframe class="giscus-frame"></iframe>
+        </div>
       `)
 
-      const cleanup = initializeComments()
+      // Mock the iframe's contentWindow.postMessage
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
+      expect(iframe).not.toBeNull()
+      if (iframe == null) {
+        return
+      }
 
-      // Iframe doesn't exist yet
-      expect(document.querySelector('iframe.giscus-frame')).toBeNull()
-
-      // Simulate iframe being added by Giscus script
-      const iframe = document.createElement('iframe')
-      iframe.className = 'giscus-frame'
       const postMessageSpy = vi.fn()
       Object.defineProperty(iframe, 'contentWindow', {
         value: {
           postMessage: postMessageSpy,
         },
         writable: true,
+        configurable: true,
       })
-      const container = document.querySelector('[data-comments]')
-      expect(container).not.toBeNull()
-      if (container == null) {
-        return
+
+      // Mock script append to prevent external script loading
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src?.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
+
+      // Initialize comments - should detect existing iframe and set initial theme
+      const cleanup = initializeComments()
+
+      // Fast-forward to trigger the interval check
+      vi.advanceTimersByTime(200)
+
+      // Should have sent initial theme message (may be called more than once due to interval + timeout)
+      expect(postMessageSpy).toHaveBeenCalled()
+
+      // Check the first call
+      const callArgs: unknown = postMessageSpy.mock.calls[0]
+      if (isPostMessageCall(callArgs)) {
+        const [message, origin] = callArgs
+        // Default theme is light (no dark class on documentElement)
+        expect(message.giscus.setConfig.theme).toContain('giscus-light.generated.css')
+        expect(origin).toBe('*') // Uses wildcard in dev environment
+      } else {
+        throw new Error('Expected postMessage to be called with valid arguments')
       }
-      container.append(iframe)
-
-      // Fast-forward past the interval check and initial theme sync
-      vi.advanceTimersByTime(300)
-
-      // Should have sent initial theme
-      // In test environment (localhost), targetOrigin is '*' for CORS flexibility
-      expect(postMessageSpy).toHaveBeenCalledWith(
-        {
-          giscus: {
-            setConfig: {
-              theme: 'http://localhost:3000/giscus-light.generated.css',
-            },
-          },
-        },
-        '*',
-      )
 
       cleanup()
       domCleanup()
@@ -439,8 +503,23 @@ describe('Comments System', () => {
     it('should handle iframe not loading within timeout', () => {
       const timerCleanup = setupFakeTimers()
       const domCleanup = setupTestDOM(`
-        <div data-comments></div>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        ></div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
 
       const cleanup = initializeComments()
 
@@ -474,8 +553,23 @@ describe('Comments System', () => {
       }
 
       const domCleanup = setupTestDOM(`
-        <div data-comments></div>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        ></div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
 
       const cleanup = initializeComments()
 
@@ -497,10 +591,25 @@ describe('Comments System', () => {
     it('should clean up MutationObserver when cleanup is called', () => {
       const timerCleanup = setupFakeTimers()
       const domCleanup = setupTestDOM(`
-        <div data-comments>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        >
           <iframe class="giscus-frame"></iframe>
         </div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -565,10 +674,25 @@ describe('Comments System', () => {
       }
 
       const domCleanup = setupTestDOM(`
-        <div data-comments>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        >
           <iframe class="giscus-frame"></iframe>
         </div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
 
       const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
       expect(iframe).not.toBeNull()
@@ -620,8 +744,23 @@ describe('Comments System', () => {
     it('should initialize comments immediately', () => {
       const timerCleanup = setupFakeTimers()
       const domCleanup = setupTestDOM(`
-        <div data-comments></div>
+        <div data-comments
+          data-giscus-repo="test/repo"
+          data-giscus-repo-id="test-repo-id"
+          data-giscus-category="test-category"
+          data-giscus-category-id="test-category-id"
+        ></div>
       `)
+
+      // Mock script append to prevent Happy DOM from trying to load external scripts
+      vi.spyOn(Element.prototype, 'append').mockImplementation(function (this: Element, ...nodes) {
+        for (const node of nodes) {
+          if (node instanceof HTMLScriptElement && node.src.includes('giscus.app')) {
+            return
+          }
+        }
+        // Otherwise, do nothing (we're just preventing the script load error)
+      })
 
       setupComments()
 

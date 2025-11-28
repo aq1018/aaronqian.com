@@ -6,7 +6,6 @@ import { marked } from 'marked'
 
 import Badge from '@/components/primitives/Badge.astro'
 import Heading from '@/components/primitives/Heading.astro'
-import Link from '@/components/primitives/Link.astro'
 import Prose from '@/components/primitives/Prose.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
@@ -67,7 +66,15 @@ const tagColorMap: Record<
 const getTagProps = (tag: string) => tagColorMap[tag.toLowerCase()] ?? { color: 'muted' }
 ---
 
-<Sheet as="article" variant="bar" color="neutral" padding="none" hover class="pl-6">
+<Sheet
+  as="a"
+  href={logUrl}
+  variant="bar"
+  color="neutral"
+  padding="none"
+  hover
+  class="block pl-6 no-underline hover:no-underline"
+>
   <!-- Timestamp and title -->
   <header class="mb-3">
     <Stack space="xs">
@@ -115,9 +122,7 @@ const getTagProps = (tag: string) => tagColorMap[tag.toLowerCase()] ?? { color: 
   {
     showExcerpt && (
       <div class="mt-4">
-        <Link href={logUrl} variant="content">
-          Read more →
-        </Link>
+        <span class="text-link underline">Read more →</span>
       </div>
     )
   }

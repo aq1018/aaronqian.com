@@ -8,7 +8,6 @@ import type { CollectionEntry } from 'astro:content'
 import Badge from '@/components/primitives/Badge.astro'
 import Cluster from '@/components/primitives/Cluster.astro'
 import Grid from '@/components/primitives/Grid.astro'
-import Link from '@/components/primitives/Link.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
@@ -21,52 +20,63 @@ export interface Props {
 const { post } = Astro.props
 const publishDate = getBlogDate(post.id)
 const cleanSlug = getBlogSlug(post.id)
+const blogUrl = `/blog/${cleanSlug}`
 ---
 
-<Sheet as="li" variant="bar" color="primary" padding="sm" hover>
-  <Grid spacing="md">
-    <Grid size={12} size-md={2} class="justify-self-start md:justify-self-end">
-      <Stack space="xs">
-        <Text color="muted" size="small">
+<li class="list-none">
+  <Sheet
+    as="a"
+    href={blogUrl}
+    variant="bar"
+    color="primary"
+    padding="sm"
+    hover
+    class="block no-underline hover:no-underline"
+  >
+    <Grid spacing="md">
+      <Grid size={12} size-md={2} class="justify-self-start md:justify-self-end">
+        <Stack space="xs">
+          <Text color="muted" size="small">
+            {
+              publishDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })
+            }
+          </Text>
           {
-            publishDate.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })
+            post.data.draft && (
+              <Badge color="danger" size="sm" uppercase>
+                DRAFT
+              </Badge>
+            )
           }
-        </Text>
-        {
-          post.data.draft && (
-            <Badge color="danger" size="sm" uppercase>
-              DRAFT
-            </Badge>
-          )
-        }
-      </Stack>
-    </Grid>
+        </Stack>
+      </Grid>
 
-    <Grid size={12} size-md={4}>
-      <Link href={`/blog/${cleanSlug}`} class="font-semibold">
-        {post.data.title}
-      </Link>
-    </Grid>
+      <Grid size={12} size-md={4}>
+        <span class="font-semibold text-link">
+          {post.data.title}
+        </span>
+      </Grid>
 
-    <Grid size={12} size-md={6}>
-      <div>
-        <Text class="mb-2 leading-relaxed">{post.data.description}</Text>
-        {
-          post.data.tags && post.data.tags.length > 0 && (
-            <Cluster space="xs">
-              {post.data.tags.map((tag: string) => (
-                <Badge color="neutral" size="sm">
-                  {tag}
-                </Badge>
-              ))}
-            </Cluster>
-          )
-        }
-      </div>
+      <Grid size={12} size-md={6}>
+        <div>
+          <Text class="mb-2 leading-relaxed">{post.data.description}</Text>
+          {
+            post.data.tags && post.data.tags.length > 0 && (
+              <Cluster space="xs">
+                {post.data.tags.map((tag: string) => (
+                  <Badge color="neutral" size="sm">
+                    {tag}
+                  </Badge>
+                ))}
+              </Cluster>
+            )
+          }
+        </div>
+      </Grid>
     </Grid>
-  </Grid>
-</Sheet>
+  </Sheet>
+</li>

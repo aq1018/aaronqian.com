@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+import ProjectLogEntry from './ProjectLogEntry.astro'
+
+import Heading from '@/components/primitives/Heading.astro'
+import Stack from '@/components/primitives/Stack.astro'
+
+export interface Props {
+  previousLog?: CollectionEntry<'projectLogs'>
+  nextLog?: CollectionEntry<'projectLogs'>
+}
+
+const { previousLog, nextLog } = Astro.props
+
+// Only show if there's at least one navigation option
+const hasNavigation = previousLog || nextLog
+---
+
+{
+  hasNavigation && (
+    <section aria-label="Related logs">
+      <Stack space="lg">
+        {previousLog && (
+          <Stack space="sm">
+            <Heading size="h6" color="muted">
+              Earlier in this project
+            </Heading>
+            <ProjectLogEntry log={previousLog} showExcerpt={true} />
+          </Stack>
+        )}
+
+        {nextLog && (
+          <Stack space="sm">
+            <Heading size="h6" color="muted">
+              Later in this project
+            </Heading>
+            <ProjectLogEntry log={nextLog} showExcerpt={true} />
+          </Stack>
+        )}
+      </Stack>
+    </section>
+  )
+}

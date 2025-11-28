@@ -27,14 +27,14 @@ describe('BlogListItem Component', () => {
   const mockPost = createMockPost()
 
   describe('Rendering', () => {
-    it('should render as a list item (li)', async () => {
+    it('should render as a link element', async () => {
       const root = await renderAstroComponent(BlogListItem, {
         props: {
           post: mockPost,
         },
       })
 
-      expect(root.innerHTML).toContain('<li')
+      expect(root.innerHTML).toContain('<a')
     })
 
     it('should render post title as a link', async () => {

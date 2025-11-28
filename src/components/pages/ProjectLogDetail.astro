@@ -1,0 +1,121 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { render } from 'astro:content'
+
+import Comments from '@/components/features/Comments.astro'
+import DraftBanner from '@/components/features/DraftBanner.astro'
+import LogBreadcrumb from '@/components/features/LogBreadcrumb.astro'
+import LogNavigationCards from '@/components/features/LogNavigationCards.astro'
+import Badge from '@/components/primitives/Badge.astro'
+import Cluster from '@/components/primitives/Cluster.astro'
+import Container from '@/components/primitives/Container.astro'
+import Divider from '@/components/primitives/Divider.astro'
+import Heading from '@/components/primitives/Heading.astro'
+import Prose from '@/components/primitives/Prose.astro'
+import Stack from '@/components/primitives/Stack.astro'
+import Surface from '@/components/primitives/Surface.astro'
+import Text from '@/components/primitives/Text.astro'
+import { getProjectSlug } from '@/lib/projects'
+
+export interface Props {
+  log: CollectionEntry<'projectLogs'>
+  project?: CollectionEntry<'projects'>
+  previousLog?: CollectionEntry<'projectLogs'>
+  nextLog?: CollectionEntry<'projectLogs'>
+}
+
+const { log, project, previousLog, nextLog } = Astro.props
+
+// Extract project slug for links
+const projectSlug = project ? getProjectSlug(project) : log.id.split('/')[0]
+
+// Format navigation data for simple breadcrumb
+const previousLogData = previousLog
+  ? {
+      title: previousLog.data.title,
+      url: `/projects/${previousLog.id.replace(/\.md$/, '')}`,
+    }
+  : undefined
+
+const nextLogData = nextLog
+  ? {
+      title: nextLog.data.title,
+      url: `/projects/${nextLog.id.replace(/\.md$/, '')}`,
+    }
+  : undefined
+
+// Render log content
+const { Content } = await render(log)
+
+// Format date as readable string
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+
+// Tag color mappings for Badge component
+const tagColorMap: Record<
+  string,
+  { color: 'primary' | 'danger' | 'info' | 'muted'; customClass?: string }
+> = {
+  bug: { color: 'danger' },
+  experiment: { color: 'info' },
+  milestone: { color: 'primary' },
+  ux: { color: 'info' },
+}
+
+const getTagProps = (tag: string) => tagColorMap[tag.toLowerCase()] ?? { color: 'muted' }
+---
+
+{log.data.draft && <DraftBanner />}
+
+<Surface>
+  <Container width="narrow">
+    <Stack space="lg">
+      <!-- Simple navigation breadcrumb -->
+      <LogBreadcrumb {projectSlug} previousLog={previousLogData} nextLog={nextLogData} />
+
+      <!-- Log title -->
+      <Heading size="h1">
+        {log.data.title}
+      </Heading>
+
+      <!-- Date and tags -->
+      <Stack space="xs">
+        <Text as="time" color="muted" size="small" datetime={log.data.date.toISOString()}>
+          {formatDate(log.data.date)}
+        </Text>
+        {
+          log.data.tags && log.data.tags.length > 0 && (
+            <Cluster space="xs">
+              {log.data.tags.map((tag: string) => (
+                <Badge color={getTagProps(tag).color} size="sm">
+                  {tag}
+                </Badge>
+              ))}
+            </Cluster>
+          )
+        }
+      </Stack>
+
+      <Divider />
+
+      <!-- Main content -->
+      <Prose size="base">
+        <Content />
+      </Prose>
+
+      <Divider />
+
+      <!-- Navigation cards -->
+      <LogNavigationCards {previousLog} {nextLog} />
+
+      <Divider />
+
+      <!-- Comments -->
+      <Comments />
+    </Stack>
+  </Container>
+</Surface>

@@ -12,14 +12,12 @@ const createMockProject = (
   id: string,
   title: string,
   status: 'in-development' | 'active' | 'completed' | 'up-for-adoption',
-  live = false,
 ): ProjectEntry => ({
   body: '',
   collection: 'projects',
   data: {
     aside: `Aside for ${title}`,
     description: `Description for ${title}`,
-    live,
     order: 1,
     status,
     title,
@@ -53,7 +51,7 @@ describe('ProjectList', () => {
 
       // Find the project link (skip header links)
       const links = root.querySelectorAll('a')
-      const projectLink = [...links].find((link) => link.textContent.trim() === 'Project A')
+      const projectLink = [...links].find((link) => link.textContent?.includes('Project A'))
       expect(projectLink).toBeDefined()
       if (projectLink) {
         expect(projectLink.getAttribute('href')).toBe('/projects/project-a')
@@ -111,9 +109,9 @@ describe('ProjectList', () => {
     })
   })
 
-  describe('Live badge', () => {
-    it('should render LIVE badge for live projects', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'active', true)]
+  describe('Status badge', () => {
+    it('should render ACTIVE badge for active projects', async () => {
+      const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
@@ -122,11 +120,11 @@ describe('ProjectList', () => {
         },
       })
 
-      expect(root.textContent).toContain('LIVE')
+      expect(root.textContent).toContain('ACTIVE')
     })
 
-    it('should not render LIVE badge for non-live projects', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'active', false)]
+    it('should not render LIVE badge for active projects', async () => {
+      const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
@@ -135,7 +133,7 @@ describe('ProjectList', () => {
         },
       })
 
-      // Count occurrences of 'LIVE' - should only appear in status if at all
+      // Count occurrences of 'LIVE' - should not appear
       const textContent = root.textContent
       const liveMatches = textContent.match(/LIVE/g)
       const liveCount = liveMatches == null ? 0 : liveMatches.length

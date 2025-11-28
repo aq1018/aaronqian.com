@@ -2,6 +2,7 @@
  * Centralized comments manager
  * Syncs Giscus theme with site theme changes
  */
+import { isHTMLElement } from '@/utils/typeGuards'
 
 type CleanupFunction = () => void
 
@@ -34,6 +35,9 @@ export function getCurrentTheme(): 'light' | 'dark' {
  * Exported for testing
  */
 export function getGiscusThemeUrl(theme: 'light' | 'dark'): string {
+  // Always use custom theme files with full URL
+  // In dev, this will cause a CORS error but Giscus will fallback to default theme
+  // In production, the custom themes will load correctly
   const origin = typeof window === 'undefined' ? '' : window.location.origin
   return `${origin}/giscus-${theme}.generated.css`
 }
@@ -84,6 +88,64 @@ export function syncGiscusTheme(theme: 'light' | 'dark'): void {
 }
 
 /**
+ * Initialize Giscus script on the page
+ */
+function loadGiscusScript(container: Element): void {
+  // Check if Giscus is already loaded in this container
+  const existingScript = container.querySelector('script[src*="giscus.app"]')
+  const existingFrame = container.querySelector('iframe.giscus-frame')
+
+  if (existingScript || existingFrame) {
+    // Giscus already loaded, just sync theme
+    const theme = getCurrentTheme()
+    syncGiscusTheme(theme)
+    return
+  }
+
+  // Get configuration from data attributes
+  // Type guard to ensure container is HTMLElement
+  if (!isHTMLElement(container)) {
+    console.warn('Comments container is not an HTMLElement')
+    return
+  }
+
+  const repo = container.dataset.giscusRepo
+  const repoId = container.dataset.giscusRepoId
+  const category = container.dataset.giscusCategory
+  const categoryId = container.dataset.giscusCategoryId
+
+  if (repo == null || repoId == null || category == null || categoryId == null) {
+    console.warn('Missing Giscus configuration data attributes')
+    return
+  }
+
+  // Determine current theme
+  const theme = getCurrentTheme()
+  const themeUrl = getGiscusThemeUrl(theme)
+
+  // Create and configure Giscus script
+  const script = document.createElement('script')
+  script.src = 'https://giscus.app/client.js'
+  script.dataset.repo = repo
+  script.dataset.repoId = repoId
+  script.dataset.category = category
+  script.dataset.categoryId = categoryId
+  script.dataset.mapping = 'pathname'
+  script.dataset.strict = '0'
+  script.dataset.reactionsEnabled = '1'
+  script.dataset.emitMetadata = '0'
+  script.dataset.inputPosition = 'top'
+  script.dataset.theme = themeUrl
+  script.dataset.lang = 'en'
+  script.dataset.loading = 'lazy'
+  script.setAttribute('crossorigin', 'anonymous')
+  script.async = true
+
+  // Append to container
+  container.append(script)
+}
+
+/**
  * Initialize comments behavior
  * Watches for theme changes and syncs with Giscus
  */
@@ -100,6 +162,9 @@ export function initializeComments(): CleanupFunction {
   if (commentsContainer == null) {
     return () => {}
   }
+
+  // Load Giscus script
+  loadGiscusScript(commentsContainer)
 
   // Watch for theme changes on documentElement
   const observer = new MutationObserver((mutations) => {
@@ -141,6 +206,17 @@ export function initializeComments(): CleanupFunction {
     observer.disconnect()
     clearInterval(checkIframe)
     clearTimeout(cleanupTimeout)
+
+    // Remove Giscus elements on cleanup to ensure fresh start on next page
+    const giscusFrame = document.querySelector('.giscus-frame')
+    const giscusScript = document.querySelector('script[src*="giscus.app"]')
+    if (giscusFrame) {
+      giscusFrame.remove()
+    }
+    if (giscusScript) {
+      giscusScript.remove()
+    }
+
     cleanup = null
   }
 

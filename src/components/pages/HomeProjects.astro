@@ -6,13 +6,12 @@ import Container from '@/components/primitives/Container.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Surface from '@/components/primitives/Surface.astro'
-import { markLatestProjectAsLive, sortProjectsByLatestLog } from '@/lib/projects'
+import { sortProjectsByLatestLog } from '@/lib/projects'
 
 const allProjects = await getCollection('projects')
 const projectLogs = await getCollection('projectLogs')
 const sortedProjects = sortProjectsByLatestLog(allProjects, projectLogs)
-const projectsWithLive = markLatestProjectAsLive(sortedProjects, projectLogs)
-const featuredProjects = projectsWithLive.slice(0, 3)
+const featuredProjects = sortedProjects.slice(0, 3)
 ---
 
 <Surface id="projects">

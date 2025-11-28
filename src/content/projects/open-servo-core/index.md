@@ -1,11 +1,13 @@
 ---
-title: 'Smart Servo Hack — Cascade Control + DYNAMIXEL Protocol in Rust'
+title: 'OpenServoCore'
 description:
   'A project to turn low-cost servos like the MG90S into smart actuators with
   cascade control and a DYNAMIXEL-style Rust firmware — lowering the barrier to
   robotics for students, makers, and resource-limited builders.'
 status: 'in-development'
 aside: 'Democratize Robotics For Everyone'
+links:
+  github: 'https://github.com/aq1018/open-servo-controller'
 order: 2
 ---
 
@@ -207,3 +209,46 @@ identification, calibration, and performance development.
 
 These tools support iterative refinement of firmware, control algorithms, and
 hardware design without prematurely modifying the servo internals.
+
+---
+
+# Acknowledgements
+
+This project was partly inspired by
+[Adam B’s ServoProject](https://github.com/adamb314/ServoProject) and his
+excellent [YouTube breakdown](https://www.youtube.com/watch?v=ECLrLupFW10) of
+how to transform a cheap hobby servo into a high-performance actuator using a
+pair of custom analog encoders and cascaded control loops.
+
+Adam’s design centers around:
+
+- a custom 3D-printed housing
+- a clever analog “quad-ish” reflective encoder with paired IR sensors
+- system identification to characterize each servo
+- auto-generation of tuned C code based on that model
+- cascaded current/velocity/position control
+- and a simple multi-servo serial bus
+
+His approach achieves impressive accuracy and performance for a hacked SG90
+servo. The communication link can support multiple servos, but it isn’t meant to
+be a general-purpose actuator protocol — servo IDs, firmware constants, and
+control parameters are hard-coded and generated per device during system
+identification.
+
+My goals are different but inspired by the same spirit. Instead of pushing for
+maximum accuracy, this project focuses on:
+
+- simplicity and repeatability
+- low mechanical skill requirements
+- a drop-in control board for MG90S/MG90D servos
+- a unified, DYNAMIXEL-style bus protocol
+- easy modding
+- standardization
+- and keeping costs extremely low so high school students and hobbyists can
+  build multi-servo robots without financial barriers
+
+Where Adam’s project explores the upper limits of what a hacked servo can do,
+this project aims to make a similar upgrade path **accessible, standardized, and
+affordable**, so anyone can build real robots.
+
+Huge credit to him for showing what’s possible.

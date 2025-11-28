@@ -1,15 +1,10 @@
 ---
-// Individual Project Log Page - Shows full log entry with breadcrumbs
+// Individual Project Log Page - Shows full log entry with navigation
 import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
-import DraftBanner from '@/components/features/DraftBanner.astro'
-import ProjectLogEntry from '@/components/features/ProjectLogEntry.astro'
-import Container from '@/components/primitives/Container.astro'
-import Heading from '@/components/primitives/Heading.astro'
-import Link from '@/components/primitives/Link.astro'
+import ProjectLogDetail from '@/components/pages/ProjectLogDetail.astro'
 import BreadcrumbSchema from '@/components/primitives/seo/BreadcrumbSchema.astro'
-import Surface from '@/components/primitives/Surface.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 
 export async function getStaticPaths() {
@@ -27,9 +22,22 @@ export async function getStaticPaths() {
 
     const project = projects.find((p) => p.id === projectSlug)
 
+    // Find all logs for this project, sorted by date descending
+    const projectLogsSorted = projectLogs
+      .filter((l) => l.id.startsWith(`${projectSlug}/logs/`))
+      .toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+    // Find current log index
+    const currentIndex = projectLogsSorted.findIndex((l) => l.id === log.id)
+
+    // Get previous and next logs (remember: sorted newest to oldest)
+    const nextLog = currentIndex > 0 ? projectLogsSorted[currentIndex - 1] : null
+    const previousLog =
+      currentIndex < projectLogsSorted.length - 1 ? projectLogsSorted[currentIndex + 1] : null
+
     return {
       params: { slug: projectSlug, logSlug },
-      props: { log, project },
+      props: { log, project, previousLog, nextLog },
     }
   })
 }
@@ -37,9 +45,11 @@ export async function getStaticPaths() {
 export interface Props {
   log: CollectionEntry<'projectLogs'>
   project?: CollectionEntry<'projects'>
+  previousLog?: CollectionEntry<'projectLogs'>
+  nextLog?: CollectionEntry<'projectLogs'>
 }
 
-const { log, project } = Astro.props
+const { log, project, previousLog, nextLog } = Astro.props
 
 // Extract project slug for links
 const projectSlug = log.id.split('/')[0]
@@ -62,28 +72,6 @@ const pageTitle = `${log.data.title} | ${project?.data.title ?? 'Project Log'}`
   <BreadcrumbSchema slot="head" items={breadcrumbItems} />
 
   <main>
-    {log.data.draft && <DraftBanner />}
-    <Surface>
-      <Container>
-        <!-- Back link -->
-        <div class="mb-6">
-          <Link href={`/projects/${projectSlug}`} variant="back">
-            ← Back to {project?.data.title ?? 'project'}
-          </Link>
-        </div>
-
-        <!-- Page title -->
-        {
-          project && (
-            <Heading size="h1" class="mb-6 text-2xl sm:text-3xl">
-              {project.data.title}
-            </Heading>
-          )
-        }
-
-        <!-- Full log entry -->
-        <ProjectLogEntry {log} showExcerpt={false} />
-      </Container>
-    </Surface>
+    <ProjectLogDetail {log} {project} {previousLog} {nextLog} />
   </main>
 </BaseLayout>
