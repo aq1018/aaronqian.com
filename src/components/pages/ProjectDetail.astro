@@ -8,6 +8,7 @@ import Container from '@/components/primitives/Container.astro'
 import Divider from '@/components/primitives/Divider.astro'
 import Heading from '@/components/primitives/Heading.astro'
 import Link from '@/components/primitives/Link.astro'
+import Prose from '@/components/primitives/Prose.astro'
 import Sheet from '@/components/primitives/Sheet.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Surface from '@/components/primitives/Surface.astro'
@@ -21,6 +22,7 @@ export interface Props {
 }
 
 const { project, projectLogs, statusStyles, statusLabels } = Astro.props
+const hasContent = Astro.slots.has('default')
 ---
 
 <!-- Project Header -->
@@ -82,6 +84,21 @@ const { project, projectLogs, statusStyles, statusLabels } = Astro.props
     </Container>
   </Surface>
 </header>
+
+<!-- Project Content -->
+{
+  hasContent && (
+    <section>
+      <Surface>
+        <Container>
+          <Prose size="base">
+            <slot />
+          </Prose>
+        </Container>
+      </Surface>
+    </section>
+  )
+}
 
 <!-- Build Log -->
 <main>
