@@ -88,27 +88,34 @@ export function syncGiscusTheme(theme: 'light' | 'dark'): void {
 }
 
 /**
- * Initialize Giscus script on the page
+ * Wait for Giscus iframe to be ready
  */
-function loadGiscusScript(container: Element): void {
-  // Check if Giscus is already loaded in this container
-  const existingScript = container.querySelector('script[src*="giscus.app"]')
-  const existingFrame = container.querySelector('iframe.giscus-frame')
+function waitForGiscusIframe(theme: 'light' | 'dark', callback: () => void): void {
+  let checkCount = 0
+  const maxChecks = 100 // 5 seconds at 50ms intervals
 
-  if (existingScript || existingFrame) {
-    // Giscus already loaded, just sync theme
-    const theme = getCurrentTheme()
-    syncGiscusTheme(theme)
-    return
-  }
+  const checkInterval = setInterval(() => {
+    checkCount++
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
 
-  // Get configuration from data attributes
-  // Type guard to ensure container is HTMLElement
-  if (!isHTMLElement(container)) {
-    console.warn('Comments container is not an HTMLElement')
-    return
-  }
+    if (iframe?.contentWindow != null) {
+      clearInterval(checkInterval)
+      // Give iframe a moment to initialize
+      setTimeout(() => {
+        syncGiscusTheme(theme)
+        callback()
+      }, 100)
+    } else if (checkCount >= maxChecks) {
+      clearInterval(checkInterval)
+      callback()
+    }
+  }, 50)
+}
 
+/**
+ * Create Giscus script element
+ */
+function createGiscusScript(container: HTMLElement): HTMLScriptElement | null {
   const repo = container.dataset.giscusRepo
   const repoId = container.dataset.giscusRepoId
   const category = container.dataset.giscusCategory
@@ -116,14 +123,12 @@ function loadGiscusScript(container: Element): void {
 
   if (repo == null || repoId == null || category == null || categoryId == null) {
     console.warn('Missing Giscus configuration data attributes')
-    return
+    return null
   }
 
-  // Determine current theme
   const theme = getCurrentTheme()
   const themeUrl = getGiscusThemeUrl(theme)
 
-  // Create and configure Giscus script
   const script = document.createElement('script')
   script.src = 'https://giscus.app/client.js'
   script.dataset.repo = repo
@@ -140,6 +145,44 @@ function loadGiscusScript(container: Element): void {
   script.dataset.loading = 'lazy'
   script.setAttribute('crossorigin', 'anonymous')
   script.async = true
+
+  return script
+}
+
+/**
+ * Initialize Giscus script on the page
+ */
+function loadGiscusScript(container: Element): void {
+  // Check if Giscus is already loaded in this container
+  const existingScript = container.querySelector('script[src*="giscus.app"]')
+  const existingFrame = container.querySelector('iframe.giscus-frame')
+
+  if (existingScript || existingFrame) {
+    // Giscus already loaded, just sync theme
+    const theme = getCurrentTheme()
+    syncGiscusTheme(theme)
+    return
+  }
+
+  // Type guard to ensure container is HTMLElement
+  if (!isHTMLElement(container)) {
+    console.warn('Comments container is not an HTMLElement')
+    return
+  }
+
+  const script = createGiscusScript(container)
+  if (script == null) {
+    return
+  }
+
+  const theme = getCurrentTheme()
+
+  // Wait for script to load and create iframe
+  script.addEventListener('load', () => {
+    waitForGiscusIframe(theme, () => {
+      // Theme has been synced in waitForGiscusIframe
+    })
+  })
 
   // Append to container
   container.append(script)
