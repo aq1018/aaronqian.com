@@ -13,18 +13,20 @@ import Heading from '@/components/primitives/Heading.astro'
 import Stack from '@/components/primitives/Stack.astro'
 import Text from '@/components/primitives/Text.astro'
 
-type ProjectStatus = 'active' | 'planning' | 'done'
+type ProjectStatus = 'in-development' | 'active' | 'completed' | 'up-for-adoption'
 
 const statusStyles: Record<ProjectStatus, string> = {
+  'in-development': 'text-muted',
   active: 'text-primary',
-  done: 'text-content/60',
-  planning: 'text-muted',
+  completed: 'text-content/60',
+  'up-for-adoption': 'text-warning',
 }
 
 const statusLabels: Record<ProjectStatus, string> = {
+  'in-development': 'IN DEVELOPMENT',
   active: 'ACTIVE',
-  done: 'DONE',
-  planning: 'PLANNING',
+  completed: 'COMPLETED',
+  'up-for-adoption': 'UP FOR ADOPTION',
 }
 
 export interface Props {

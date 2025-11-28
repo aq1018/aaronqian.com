@@ -21,7 +21,7 @@ const projects = defineCollection({
     description: z.string(),
     live: z.boolean().optional().default(false),
     order: z.number(),
-    status: z.enum(['active', 'planning', 'done']),
+    status: z.enum(['in-development', 'active', 'completed', 'up-for-adoption']),
     title: z.string(),
     url: z.string().url().optional(),
   }),

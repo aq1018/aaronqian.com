@@ -1,6 +1,6 @@
 ---
 // Project Detail Page - Shows project info + log entries in reverse chronological order
-import { getCollection } from 'astro:content'
+import { getCollection, render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
 import ProjectDetail from '@/components/pages/ProjectDetail.astro'
@@ -25,6 +25,14 @@ export interface Props {
 const { project } = Astro.props
 const projectSlug = getProjectSlug(project)
 
+// Render project content if it has a body
+const hasProjectContent = project.body && project.body.trim() !== ''
+let Content = null
+if (hasProjectContent) {
+  const rendered = await render(project)
+  Content = rendered.Content
+}
+
 // Fetch all logs for this project, sorted by date descending
 // Filter out drafts in production
 const allLogs = await getCollection(
@@ -40,15 +48,17 @@ const projectLogs = allLogs
 
 // Status badge styles
 const statusStyles = {
+  'in-development': 'bg-muted/20 text-muted border-border',
   active: 'bg-primary/20 text-primary border-primary/40',
-  done: 'bg-content/20 text-content/60 border-content/40',
-  planning: 'bg-muted/20 text-muted border-border',
+  completed: 'bg-content/20 text-content/60 border-content/40',
+  'up-for-adoption': 'bg-warning/20 text-warning border-warning/40',
 }
 
 const statusLabels = {
+  'in-development': 'IN DEVELOPMENT',
   active: 'ACTIVE',
-  done: 'DONE',
-  planning: 'PLANNING',
+  completed: 'COMPLETED',
+  'up-for-adoption': 'UP FOR ADOPTION',
 }
 
 const ogImage = `/og/projects/${projectSlug}.png`
@@ -73,5 +83,7 @@ const creationDate = projectLogs.length > 0 ? projectLogs.at(-1)!.data.date : ne
     url={`/projects/${projectSlug}`}
     image={ogImage}
   />
-  <ProjectDetail {project} {projectLogs} {statusStyles} {statusLabels} />
+  <ProjectDetail {project} {projectLogs} {statusStyles} {statusLabels}>
+    {Content && <Content />}
+  </ProjectDetail>
 </BaseLayout>

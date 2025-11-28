@@ -11,7 +11,7 @@ type ProjectEntry = CollectionEntry<'projects'>
 const createMockProject = (
   id: string,
   title: string,
-  status: 'active' | 'planning' | 'done',
+  status: 'in-development' | 'active' | 'completed' | 'up-for-adoption',
   live = false,
 ): ProjectEntry => ({
   body: '',
@@ -90,8 +90,8 @@ describe('ProjectList', () => {
     it('should render multiple projects', async () => {
       const projects = [
         createMockProject('project-a/index.md', 'Project A', 'active'),
-        createMockProject('project-b/index.md', 'Project B', 'planning'),
-        createMockProject('project-c/index.md', 'Project C', 'done'),
+        createMockProject('project-b/index.md', 'Project B', 'in-development'),
+        createMockProject('project-c/index.md', 'Project C', 'completed'),
       ]
       const root = await renderAstroComponent(ProjectList, {
         props: {
@@ -157,8 +157,8 @@ describe('ProjectList', () => {
       expect(root.textContent).toContain('ACTIVE')
     })
 
-    it('should apply correct status label for planning projects', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'planning')]
+    it('should apply correct status label for in-development projects', async () => {
+      const projects = [createMockProject('project-a/index.md', 'Project A', 'in-development')]
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
@@ -167,11 +167,11 @@ describe('ProjectList', () => {
         },
       })
 
-      expect(root.textContent).toContain('PLANNING')
+      expect(root.textContent).toContain('IN DEVELOPMENT')
     })
 
-    it('should apply correct status label for done projects', async () => {
-      const projects = [createMockProject('project-a/index.md', 'Project A', 'done')]
+    it('should apply correct status label for completed projects', async () => {
+      const projects = [createMockProject('project-a/index.md', 'Project A', 'completed')]
       const root = await renderAstroComponent(ProjectList, {
         props: {
           projects,
@@ -180,7 +180,7 @@ describe('ProjectList', () => {
         },
       })
 
-      expect(root.textContent).toContain('DONE')
+      expect(root.textContent).toContain('COMPLETED')
     })
   })
 
@@ -255,8 +255,8 @@ describe('ProjectList', () => {
     it('should create correct link URLs', async () => {
       const projects = [
         createMockProject('project-a/index.md', 'Project A', 'active'),
-        createMockProject('project-b/index', 'Project B', 'planning'),
-        createMockProject('project-c', 'Project C', 'done'),
+        createMockProject('project-b/index', 'Project B', 'in-development'),
+        createMockProject('project-c', 'Project C', 'completed'),
       ]
       const root = await renderAstroComponent(ProjectList, {
         props: {
@@ -315,7 +315,7 @@ describe('ProjectList', () => {
     it('should use li elements for each project', async () => {
       const projects = [
         createMockProject('project-a/index.md', 'Project A', 'active'),
-        createMockProject('project-b/index.md', 'Project B', 'planning'),
+        createMockProject('project-b/index.md', 'Project B', 'in-development'),
       ]
       const root = await renderAstroComponent(ProjectList, {
         props: {
