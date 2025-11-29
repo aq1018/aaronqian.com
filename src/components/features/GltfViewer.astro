@@ -1,4 +1,6 @@
 ---
+import Icon from '@/components/primitives/Icon.astro'
+
 export interface Props {
   src: string
   width?: string | number
@@ -7,6 +9,7 @@ export interface Props {
   fallbackImage?: string
   alt?: string
   class?: string
+  showControls?: boolean
 }
 
 const {
@@ -17,6 +20,7 @@ const {
   fallbackImage,
   alt = '3D Model',
   class: className,
+  showControls = true,
 } = Astro.props
 
 // Calculate dimensions based on aspect ratio or explicit height
@@ -59,8 +63,59 @@ if (height) {
   </div>
 
   <!-- 3D Canvas Container -->
-  <canvas data-gltf-canvas style="display: none; width: 100%; height: 100%;" aria-label={alt}
-  ></canvas>
+  <div class="gltf-viewer-canvas-wrapper">
+    <canvas data-gltf-canvas style="display: none; width: 100%; height: 100%;" aria-label={alt}
+    ></canvas>
+
+    <!-- Control Buttons -->
+    {
+      showControls && (
+        <div class="gltf-viewer-controls" data-gltf-controls>
+          <button
+            class="gltf-control-btn"
+            data-control="fullscreen"
+            aria-label="Toggle fullscreen"
+            title="Fullscreen"
+          >
+            <Icon name="heroicons:arrows-pointing-out-20-solid" class="gltf-control-icon" />
+          </button>
+          <button
+            class="gltf-control-btn"
+            data-control="zoom-in"
+            aria-label="Zoom in"
+            title="Zoom in"
+          >
+            <Icon name="heroicons:magnifying-glass-plus-20-solid" class="gltf-control-icon" />
+          </button>
+          <button
+            class="gltf-control-btn"
+            data-control="zoom-out"
+            aria-label="Zoom out"
+            title="Zoom out"
+          >
+            <Icon name="heroicons:magnifying-glass-minus-20-solid" class="gltf-control-icon" />
+          </button>
+          <button
+            class="gltf-control-btn"
+            data-control="reset"
+            aria-label="Reset view"
+            title="Reset view"
+          >
+            <Icon name="heroicons:arrow-path-20-solid" class="gltf-control-icon" />
+          </button>
+          <button
+            class="gltf-control-btn"
+            data-control="rotate"
+            data-active="true"
+            aria-label="Toggle auto-rotate"
+            title="Auto-rotate"
+          >
+            <Icon name="heroicons:play-circle-20-solid" class="gltf-control-icon" />
+          </button>
+        </div>
+      )
+    }
+  </div>
 
   <!-- Fallback for no JS -->
   <noscript>
@@ -89,6 +144,12 @@ if (height) {
     overflow: hidden;
     background: var(--color-surface-2);
     border: 1px solid var(--color-border);
+  }
+
+  .gltf-viewer-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
 
   .gltf-viewer-loading {
@@ -151,6 +212,8 @@ if (height) {
 
   [data-gltf-canvas] {
     display: block;
+    width: 100%;
+    height: 100%;
     cursor: grab;
   }
 
@@ -161,6 +224,65 @@ if (height) {
   @keyframes spin {
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  /* Control Buttons */
+  .gltf-viewer-controls {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Hover state handled by opacity already being 1 */
+
+  .gltf-control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-content);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--color-surface-2) 90%, transparent);
+  }
+
+  .gltf-control-btn:hover {
+    background: var(--color-surface-3);
+    transform: scale(1.05);
+  }
+
+  .gltf-control-btn:active {
+    transform: scale(0.95);
+  }
+
+  .gltf-control-btn[data-active='true'] {
+    background: var(--color-surface-4);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .gltf-control-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Touch device adjustments */
+  @media (hover: none) {
+    .gltf-viewer-controls {
+      opacity: 1;
     }
   }
 

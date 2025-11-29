@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /**
  * GltfViewer client-side hook
  * Handles glTF file loading and 3D rendering with Three.js
@@ -18,6 +19,9 @@ interface GltfViewerInstance {
   renderer: THREE.WebGLRenderer
   controls: OrbitControls
   animationId: number | null
+  initialCameraPosition?: THREE.Vector3
+  initialControlsTarget?: THREE.Vector3
+  autoRotate: boolean
 }
 
 let cleanup: CleanupFunction | null = null
@@ -130,6 +134,7 @@ function initializeThreeJS(container: HTMLElement, canvas: HTMLCanvasElement): G
     renderer,
     controls,
     animationId: null,
+    autoRotate: true, // Start with auto-rotate enabled
   }
 
   return instance
@@ -141,6 +146,15 @@ function initializeThreeJS(container: HTMLElement, canvas: HTMLCanvasElement): G
 function startAnimation(instance: GltfViewerInstance): void {
   const animate = (): void => {
     instance.animationId = requestAnimationFrame(animate)
+
+    // Handle auto-rotation
+    if (instance.autoRotate) {
+      instance.controls.autoRotate = true
+      instance.controls.autoRotateSpeed = 2
+    } else {
+      instance.controls.autoRotate = false
+    }
+
     instance.controls.update()
     instance.renderer.render(instance.scene, instance.camera)
   }
@@ -179,11 +193,22 @@ function fitCameraToObjects(instance: GltfViewerInstance): void {
   const distance = maxDim * 1.2
 
   // Position camera
-  camera.position.set(center.x + distance, center.y + distance, center.z + distance)
+  const newPosition = new THREE.Vector3(
+    center.x + distance,
+    center.y + distance,
+    center.z + distance,
+  )
+  camera.position.copy(newPosition)
   camera.lookAt(center)
 
   controls.target.copy(center)
   controls.update()
+
+  // Store initial positions for reset
+  if (!instance.initialCameraPosition) {
+    instance.initialCameraPosition = newPosition.clone()
+    instance.initialControlsTarget = center.clone()
+  }
 }
 
 /**
@@ -230,6 +255,7 @@ function showSuccess(container: HTMLElement): void {
   setElementDisplay(loadingEl, 'none')
   setElementDisplay(errorEl, 'none')
   setElementDisplay(canvas, 'block')
+  // Controls visibility is handled by CSS hover
 }
 
 /**
@@ -238,6 +264,109 @@ function showSuccess(container: HTMLElement): void {
 function updateBackgroundColor(instance: GltfViewerInstance): void {
   const newColor = getThemeBackgroundColor(instance.container)
   instance.scene.background = new THREE.Color(newColor)
+}
+
+/**
+ * Handle zoom in
+ */
+function zoomIn(instance: GltfViewerInstance): void {
+  const { camera, controls } = instance
+  const direction = new THREE.Vector3()
+  direction.subVectors(camera.position, controls.target).multiplyScalar(0.8)
+  camera.position.copy(controls.target).add(direction)
+  controls.update()
+}
+
+/**
+ * Handle zoom out
+ */
+function zoomOut(instance: GltfViewerInstance): void {
+  const { camera, controls } = instance
+  const direction = new THREE.Vector3()
+  direction.subVectors(camera.position, controls.target).multiplyScalar(1.25)
+  camera.position.copy(controls.target).add(direction)
+  controls.update()
+}
+
+/**
+ * Reset camera view
+ */
+function resetView(instance: GltfViewerInstance): void {
+  if (instance.initialCameraPosition && instance.initialControlsTarget) {
+    instance.camera.position.copy(instance.initialCameraPosition)
+    instance.controls.target.copy(instance.initialControlsTarget)
+    instance.camera.lookAt(instance.initialControlsTarget)
+    instance.controls.update()
+  }
+}
+
+/**
+ * Toggle fullscreen
+ */
+async function toggleFullscreen(container: HTMLElement): Promise<void> {
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen()
+    } else {
+      await container.requestFullscreen()
+    }
+  } catch (error) {
+    console.warn('Fullscreen API not supported or failed:', error)
+  }
+}
+
+/**
+ * Setup control buttons
+ */
+function setupControlButtons(instance: GltfViewerInstance): void {
+  const controls = instance.container.querySelector('[data-gltf-controls]')
+  if (!controls || !isHTMLElement(controls)) {
+    return
+  }
+
+  // Show controls
+  controls.style.display = 'flex'
+
+  // Fullscreen button
+  const fullscreenBtn = controls.querySelector('[data-control="fullscreen"]')
+  if (fullscreenBtn && isHTMLElement(fullscreenBtn)) {
+    fullscreenBtn.addEventListener('click', () => {
+      void toggleFullscreen(instance.container)
+    })
+  }
+
+  // Zoom in button
+  const zoomInBtn = controls.querySelector('[data-control="zoom-in"]')
+  if (zoomInBtn && isHTMLElement(zoomInBtn)) {
+    zoomInBtn.addEventListener('click', () => {
+      zoomIn(instance)
+    })
+  }
+
+  // Zoom out button
+  const zoomOutBtn = controls.querySelector('[data-control="zoom-out"]')
+  if (zoomOutBtn && isHTMLElement(zoomOutBtn)) {
+    zoomOutBtn.addEventListener('click', () => {
+      zoomOut(instance)
+    })
+  }
+
+  // Reset view button
+  const resetBtn = controls.querySelector('[data-control="reset"]')
+  if (resetBtn && isHTMLElement(resetBtn)) {
+    resetBtn.addEventListener('click', () => {
+      resetView(instance)
+    })
+  }
+
+  // Auto-rotate toggle button
+  const rotateBtn = controls.querySelector('[data-control="rotate"]')
+  if (rotateBtn && isHTMLElement(rotateBtn)) {
+    rotateBtn.addEventListener('click', () => {
+      instance.autoRotate = !instance.autoRotate
+      rotateBtn.dataset.active = instance.autoRotate.toString()
+    })
+  }
 }
 
 /**
@@ -303,6 +432,9 @@ async function initializeGltfViewer(container: HTMLElement): Promise<void> {
 
     // Store instance for cleanup
     activeViewers.set(container, instance)
+
+    // Setup control buttons
+    setupControlButtons(instance)
 
     // Show success state
     showSuccess(container)
