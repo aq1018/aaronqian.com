@@ -4,7 +4,6 @@ title: 'Thanksgiving Night Build: Dual ITR1204 IR Sensor Test Module'
 tags:
   - hardware
   - sensor
-draft: true
 ---
 
 Thanksgiving night isn't usually when people open KiCad… but the house got quiet
