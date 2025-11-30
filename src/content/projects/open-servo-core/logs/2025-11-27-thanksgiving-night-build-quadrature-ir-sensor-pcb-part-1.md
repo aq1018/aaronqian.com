@@ -7,8 +7,6 @@ tags:
 draft: true
 ---
 
-import GltfViewer from '@/components/features/GltfViewer.astro'
-
 Thanksgiving night isn't usually when people open KiCad… but the house got quiet
 for a bit, and that was enough of an excuse for me to start a small hardware
 project that's been sitting in the queue.
@@ -36,11 +34,8 @@ So without further ado, let's dive into the details of this project.
 
 ## Render / Photo
 
-<GltfViewer
-  src="/models/open-servo-core/encoder-board.glb"
-  aspectRatio="16/9"
-  alt="3D model of the dual ITR1204 IR sensor PCB"
-/>
+<!-- prettier-ignore -->
+::3d[3D model of the dual ITR1204 IR sensor PCB]{src="/models/open-servo-core/encoder-board.glb" aspectRatio="16/9"}
 
 ---
 
@@ -75,9 +70,7 @@ This board is the **exploratory platform** for both.
 
 ## Schematic
 
-> 🖼️ **Insert Schematic Screenshot**
->
-> `<!-- IMAGE:schematic -->`
+![Circuit schematic showing dual ITR1204 IR sensor configuration with current limiting resistors and decoupling capacitors](encoder-board/encoder-board.svg)
 
 ---
 
@@ -111,9 +104,9 @@ intentional.
 
 ## PCB Layout
 
-> 🖼️ **Insert Top/Bottom Layout Images**
->
-> `<!-- IMAGE:pcb-top -->` `<!-- IMAGE:pcb-bottom -->`
+![Front copper layer of the encoder board PCB showing component placement and routing](encoder-board/encoder-board-F_Cu.svg)
+
+![Back copper layer of the encoder board PCB with ground plane and signal traces](encoder-board/encoder-board-B_Cu.svg)
 
 ---
 
@@ -215,10 +208,6 @@ This revision provides the raw data needed to evaluate feasibility.
 
 ## BOM (from JLCPCB BOM CSV)
 
-> 🖼️ **Insert BOM table screenshot (optional)**
->
-> `<!-- IMAGE:bom -->`
-
 | Value               | Designators | LCSC     | Qty |
 | ------------------- | ----------- | -------- | --- |
 | 100nF               | C1, C2      | C28233   | 2   |
@@ -288,11 +277,3 @@ Because the design is simple, assembly is cheap.
 - Experiment with **larger pull-down resistors** for analog-only encoder path.
 - Evaluate feasibility of integrating a miniaturized version inside future
   OpenServoCore servo housings.
-
----
-
-## Earlier / later in this project
-
-> Insert your timeline cards here.
->
-> `<!-- TIMELINE:previous -->` `<!-- TIMELINE:next -->`

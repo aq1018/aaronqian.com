@@ -1,0 +1,165 @@
+/**
+ * Global styles for GLTF Viewer component
+ * These styles are used by both the GltfViewer.astro component and the ::3d directive
+ */
+
+[data-gltf-viewer] {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+}
+
+.gltf-viewer-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.gltf-viewer-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  background: var(--color-surface-1);
+}
+
+.gltf-viewer-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.gltf-viewer-loading-text {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-content-muted);
+}
+
+.gltf-viewer-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-1);
+}
+
+.gltf-viewer-error-content {
+  text-align: center;
+  max-width: 80%;
+}
+
+.gltf-viewer-error-text {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-sm);
+  color: var(--color-content-muted);
+}
+
+.gltf-viewer-fallback-image {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.gltf-viewer-no-js {
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+[data-gltf-canvas] {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+[data-gltf-canvas]:active {
+  cursor: grabbing;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Control Buttons */
+.gltf-viewer-controls {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex !important;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.gltf-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-content);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--color-surface-2) 90%, transparent);
+}
+
+.gltf-control-btn:hover {
+  background: var(--color-surface-3);
+  transform: scale(1.05);
+}
+
+.gltf-control-btn:active {
+  transform: scale(0.95);
+}
+
+.gltf-control-btn[data-active='true'] {
+  background: var(--color-surface-4);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.gltf-control-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Touch device adjustments */
+@media (hover: none) {
+  .gltf-viewer-controls {
+    opacity: 1;
+  }
+}
+
+/* Dark theme adjustments */
+:global(.dark) [data-gltf-viewer] {
+  background: var(--color-surface-1);
+}
+
+:global(.dark) .gltf-viewer-loading,
+:global(.dark) .gltf-viewer-error {
+  background: var(--color-surface-2);
+}
+
+/* Lightbox open state - prevent body scroll */
+body.lightbox-open {
+  overflow: hidden;
+}

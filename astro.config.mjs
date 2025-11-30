@@ -1,13 +1,17 @@
 // @ts-check
 import cloudflare from '@astrojs/cloudflare'
-import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
+import rehypeFigure from '@microflash/rehype-figure'
 import tailwindcss from '@tailwindcss/vite'
 import icon from 'astro-icon'
 import { defineConfig, envField } from 'astro/config'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
+import remarkDirective from 'remark-directive'
 import remarkMath from 'remark-math'
+
+import remark3dDirective from './src/utils/remark-3d-directive.ts'
+import remarkImageLightbox from './src/utils/remark-image-lightbox.ts'
 
 const isTest = process.env.VITEST === 'true'
 
@@ -51,16 +55,9 @@ export default defineConfig({
       }),
     },
   },
-  integrations: [
-    icon(),
-    sitemap(),
-    mdx({
-      // Inherit all markdown config - they're identical anyway
-      extendMarkdownConfig: true,
-    }),
-  ],
+  integrations: [icon(), sitemap()],
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkDirective, remark3dDirective, remarkImageLightbox],
     rehypePlugins: [
       [
         rehypeExternalLinks,
@@ -69,6 +66,7 @@ export default defineConfig({
           rel: ['noopener', 'noreferrer'],
         },
       ],
+      rehypeFigure,
       rehypeKatex,
     ],
   },

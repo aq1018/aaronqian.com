@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions'
 
 import Footer from '@/components/features/Footer.astro'
 import GoogleAnalytics from '@/components/features/GoogleAnalytics.astro'
+import ImageLightbox from '@/components/features/ImageLightbox.astro'
 import Navigation from '@/components/features/Navigation.astro'
 import WebSiteSchema from '@/components/primitives/seo/WebSiteSchema.astro'
 import '@/styles/global.css'
@@ -91,6 +92,7 @@ const {
     <Navigation />
     <slot />
     <Footer />
+    <ImageLightbox />
 
     <script>
       import { initComponentHooks } from '@/components/hooks'

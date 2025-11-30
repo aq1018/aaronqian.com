@@ -1,0 +1,60 @@
+---
+// No props needed for this component currently
+---
+
+<!-- Lightbox overlay (hidden by default) -->
+<div
+  data-lightbox-overlay
+  class="fixed inset-0 z-50 hidden bg-white/95 backdrop-blur-sm dark:bg-black/90"
+  aria-hidden="true"
+>
+  <!-- Close button -->
+  <button
+    data-lightbox-close
+    class="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/10 text-black backdrop-blur-sm transition-colors hover:bg-black/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+    aria-label="Close lightbox"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M18 6 6 18"></path>
+      <path d="M6 6l12 12"></path>
+    </svg>
+  </button>
+
+  <!-- Image container -->
+  <div class="flex h-full w-full items-center justify-center p-8">
+    <img data-lightbox-image class="max-h-full max-w-full object-contain" alt="" />
+  </div>
+</div>
+
+<style>
+  [data-lightbox-overlay] {
+    transition:
+      opacity 0.2s ease-in-out,
+      visibility 0.2s ease-in-out;
+  }
+
+  [data-lightbox-overlay].hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  [data-lightbox-overlay].active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Prevent body scroll when lightbox is open */
+  :global(body.lightbox-open) {
+    overflow: hidden;
+  }
+</style>
