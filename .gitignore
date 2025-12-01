@@ -35,3 +35,4 @@ pnpm-debug.log*
 
 # generated files
 *.generated.*
+stats.html

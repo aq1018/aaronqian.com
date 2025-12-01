@@ -9,6 +9,7 @@ import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
 import remarkDirective from 'remark-directive'
 import remarkMath from 'remark-math'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 import remark3dDirective from './src/utils/remark-3d-directive.ts'
 import remarkImageLightbox from './src/utils/remark-image-lightbox.ts'
@@ -55,7 +56,46 @@ export default defineConfig({
       }),
     },
   },
-  integrations: [icon(), sitemap()],
+  integrations: [
+    icon({
+      include: {
+        heroicons: [
+          // HomeHero
+          'bolt-solid',
+          // ThemeToggle
+          'sun-20-solid',
+          'moon-20-solid',
+          'computer-desktop-20-solid',
+          // GltfViewer
+          'arrows-pointing-out-20-solid',
+          'magnifying-glass-plus-20-solid',
+          'magnifying-glass-minus-20-solid',
+          'arrow-path-20-solid',
+          'play-circle-20-solid',
+          // SocialsBar (from content)
+          'cloud',
+          'code-bracket-square',
+          'chat-bubble-bottom-center-text',
+          'envelope',
+          'code-bracket',
+          'user-circle',
+          'chat-bubble-left-right',
+          'tv',
+          'at-symbol',
+          'video-camera',
+          'link',
+          // ProjectDetail
+          'globe-alt',
+          'document-text',
+        ],
+        'simple-icons': [
+          // ProjectDetail
+          'github',
+        ],
+      },
+    }),
+    sitemap(),
+  ],
   markdown: {
     remarkPlugins: [remarkMath, remarkDirective, remark3dDirective, remarkImageLightbox],
     rehypePlugins: [
@@ -71,7 +111,15 @@ export default defineConfig({
     ],
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      visualizer({
+        filename: 'stats.html',
+        open: true,
+        gzipSize: true,
+        brotliSize: true,
+      }),
+    ],
     define: {
       __dirname: JSON.stringify(new URL('.', import.meta.url).pathname),
     },
@@ -87,6 +135,17 @@ export default defineConfig({
       watch: {
         ignored: ['**/*.test.ts', '**/*.spec.ts'],
       },
+    },
+    ssr: {
+      external: [
+        'node:fs/promises',
+        'node:path',
+        'node:buffer',
+        'node:crypto',
+        'node:module',
+        'fs',
+        'path',
+      ],
     },
   },
 })

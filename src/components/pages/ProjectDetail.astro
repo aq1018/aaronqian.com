@@ -58,7 +58,7 @@ const formatDate = (date: Date) => {
                     <IconLink
                       href={project.data.links.site}
                       icon="heroicons:globe-alt"
-                      tooltip="Visit site"
+                      label="Visit site"
                       size="md"
                     />
                   )}
@@ -66,7 +66,7 @@ const formatDate = (date: Date) => {
                     <IconLink
                       href={project.data.links.github}
                       icon="simple-icons:github"
-                      tooltip="View on GitHub"
+                      label="View on GitHub"
                       size="md"
                     />
                   )}
@@ -74,7 +74,7 @@ const formatDate = (date: Date) => {
                     <IconLink
                       href={project.data.links.docs}
                       icon="heroicons:document-text"
-                      tooltip="Documentation"
+                      label="Documentation"
                       size="md"
                     />
                   )}
@@ -100,7 +100,7 @@ const formatDate = (date: Date) => {
         {
           projectLogs.length > 0 && (
             <Stack space="sm">
-              <Heading size="h6" color="muted">
+              <Heading as="p" size="h6" color="muted">
                 Recent activity
               </Heading>
               <Stack space="xs">
@@ -148,7 +148,7 @@ const formatDate = (date: Date) => {
             <>
               {hasContent && <Divider />}
               <Stack space="sm">
-                <Heading size="h6" color="muted">
+                <Heading as="p" size="h6" color="muted">
                   Latest logs
                 </Heading>
                 {projectLogs.slice(0, 2).map((log) => (

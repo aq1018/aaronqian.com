@@ -10,7 +10,10 @@ import { cn } from '@/lib/utils'
 export interface Props extends LinkVariants, IconVariants {
   href: string
   icon: string
-  tooltip?: string
+  /** Accessible label for the link. Required for screen readers. Also used as tooltip if tooltip is not explicitly disabled. */
+  label: string
+  /** Set to false to hide the tooltip while keeping the aria-label */
+  tooltip?: boolean
   external?: boolean
   class?: string
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right'
@@ -19,7 +22,8 @@ export interface Props extends LinkVariants, IconVariants {
 const {
   href,
   icon,
-  tooltip,
+  label,
+  tooltip = true,
   external = true,
   size = 'md',
   variant = 'nav',
@@ -30,14 +34,15 @@ const {
 
 {
   tooltip ? (
-    <Tooltip text={tooltip} position={tooltipPosition}>
+    <Tooltip text={label} position={tooltipPosition}>
       <Link
         {href}
         {external}
         {variant}
+        aria-label={label}
         class={cn('inline-flex items-center justify-center', className)}
       >
-        <Icon name={icon} {size} />
+        <Icon name={icon} {size} aria-hidden="true" />
       </Link>
     </Tooltip>
   ) : (
@@ -45,9 +50,10 @@ const {
       {href}
       {external}
       {variant}
+      aria-label={label}
       class={cn('inline-flex items-center justify-center', className)}
     >
-      <Icon name={icon} {size} />
+      <Icon name={icon} {size} aria-hidden="true" />
     </Link>
   )
 }
