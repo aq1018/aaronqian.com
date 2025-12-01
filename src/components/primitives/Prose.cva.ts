@@ -30,7 +30,7 @@ export const proseCva = cva(
     'prose-a:underline',
     'prose-a:decoration-transparent',
     'prose-a:transition-colors',
-    'hover:prose-a:decoration-link',
+    'prose-a:hover:decoration-link',
 
     // Emphasis: content color for visibility
     'prose-strong:text-content',
