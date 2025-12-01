@@ -4,6 +4,8 @@
 /* Enable `.dark` class variant for Tailwind v4 */
 @custom-variant dark (&:where(.dark, .dark *));
 
+@import 'katex/dist/katex.min.css';
+
 @import './fonts.css';
 @import './colors.css';
 @import './light.css';

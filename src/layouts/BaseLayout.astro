@@ -29,6 +29,10 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Preconnect to GA4 origin for faster script loading -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
     <link
       rel="preload"
       href="/fonts/inter-latin-wght-normal.woff2"
@@ -64,14 +68,6 @@ const {
 
     <WebSiteSchema />
     <slot name="head" />
-
-    <!-- KaTeX CSS for math formula rendering -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css"
-      integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0"
-      crossorigin="anonymous"
-    />
 
     <ClientRouter />
 
