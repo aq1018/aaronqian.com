@@ -1,6 +1,6 @@
 ---
 // Project Detail Page - Shows project info + log entries in reverse chronological order
-import '@/styles/content.css'
+import contentCssUrl from '@/styles/content.css?url'
 import { getCollection, render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
@@ -60,6 +60,14 @@ const creationDate = projectLogs.length > 0 ? projectLogs.at(-1)!.data.date : ne
 ---
 
 <BaseLayout title={project.data.title} description={project.data.description} image={ogImage}>
+  <link
+    slot="head"
+    rel="preload"
+    href={contentCssUrl}
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript slot="head"><link rel="stylesheet" href={contentCssUrl} /></noscript>
   <BreadcrumbSchema slot="head" items={breadcrumbItems} />
   <CreativeWorkSchema
     slot="head"

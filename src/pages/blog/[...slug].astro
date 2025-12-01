@@ -1,5 +1,5 @@
 ---
-import '@/styles/content.css'
+import contentCssUrl from '@/styles/content.css?url'
 import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
@@ -40,6 +40,14 @@ const breadcrumbItems = [
   description={post.data.description}
   image={ogImage}
 >
+  <link
+    slot="head"
+    rel="preload"
+    href={contentCssUrl}
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript slot="head"><link rel="stylesheet" href={contentCssUrl} /></noscript>
   <ArticleSchema
     slot="head"
     title={post.data.title}

@@ -1,6 +1,6 @@
 ---
 // Individual Project Log Page - Shows full log entry with navigation
-import '@/styles/content.css'
+import contentCssUrl from '@/styles/content.css?url'
 import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
@@ -32,9 +32,9 @@ export async function getStaticPaths() {
     const currentIndex = projectLogsSorted.findIndex((l) => l.id === log.id)
 
     // Get previous and next logs (remember: sorted newest to oldest)
-    const nextLog = currentIndex > 0 ? projectLogsSorted[currentIndex - 1] : null
+    const nextLog = currentIndex > 0 ? projectLogsSorted[currentIndex - 1] : undefined
     const previousLog =
-      currentIndex < projectLogsSorted.length - 1 ? projectLogsSorted[currentIndex + 1] : null
+      currentIndex < projectLogsSorted.length - 1 ? projectLogsSorted[currentIndex + 1] : undefined
 
     return {
       params: { slug: projectSlug, logSlug },
@@ -70,6 +70,14 @@ const pageTitle = `${log.data.title} | ${project?.data.title ?? 'Project Log'}`
 ---
 
 <BaseLayout title={pageTitle} description={log.data.title}>
+  <link
+    slot="head"
+    rel="preload"
+    href={contentCssUrl}
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript slot="head"><link rel="stylesheet" href={contentCssUrl} /></noscript>
   <BreadcrumbSchema slot="head" items={breadcrumbItems} />
 
   <main>
