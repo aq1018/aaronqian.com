@@ -23,7 +23,6 @@ const { open = false, speed, bordered, class: className, ...rest } = Astro.props
   class={cn(collapsibleVariants({ speed, bordered }), className)}
   data-collapsible
   data-open={String(open)}
-  aria-expanded={open}
   {...rest}
 >
   <div class={collapsibleContentVariants()}>

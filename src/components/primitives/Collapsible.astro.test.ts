@@ -84,13 +84,5 @@ describe('Collapsible.astro', () => {
       const wrapper = root.querySelector('div')
       expect(wrapper).toHaveDataAttribute('data-open', 'true')
     })
-
-    it('should set aria-expanded based on open prop', async () => {
-      const closed = await renderAstroComponent(Collapsible, { props: { open: false } })
-      const open = await renderAstroComponent(Collapsible, { props: { open: true } })
-
-      expect(closed.querySelector('div')?.getAttribute('aria-expanded')).toBe('false')
-      expect(open.querySelector('div')?.getAttribute('aria-expanded')).toBe('true')
-    })
   })
 })

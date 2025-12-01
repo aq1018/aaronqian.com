@@ -65,7 +65,6 @@ function toggleCollapsible(id: string): void {
 
   // Update state - CSS handles the animation
   collapsible.dataset.open = String(newState)
-  collapsible.setAttribute('aria-expanded', String(newState))
 
   // Update trigger state
   const trigger = document.querySelector(`[data-collapsible-trigger="${id}"]`)
