@@ -1,3 +1,13 @@
 /* CSS for content pages (blog, projects, project logs) */
 @import 'katex/dist/katex.min.css';
 @import './gltf-viewer.css';
+
+/* Override KaTeX fonts to add font-display: swap */
+@font-face {
+  font-family: 'KaTeX_Main';
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KaTeX_Math';
+  font-display: swap;
+}
