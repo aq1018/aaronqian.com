@@ -456,11 +456,11 @@ Approx BOM cost (LCSC small quantity): **~$0.60 per board**.
 
 ```text
 hardware/encoder-board/
-  ├─ jlcpcb/
-  │    └─ production-files/
-  │         ├─ GERBER-encoder-board.zip
-  │         ├─ BOM-encoder-board.csv
-  │         └─ CPL-encoder-board.csv
+  └─ jlcpcb/
+       ├─ production-files/
+       ├─ GERBER-encoder-board.zip
+       ├─ BOM-encoder-board.csv
+       └─ CPL-encoder-board.csv
 ```
 
 ---

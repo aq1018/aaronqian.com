@@ -23,7 +23,7 @@ const hasNavigation = previousLog || nextLog
       <Stack space="lg">
         {previousLog && (
           <Stack space="sm">
-            <Heading as="p" size="h6" color="muted">
+            <Heading as="h2" size="h6" color="muted">
               Earlier in this project
             </Heading>
             <ProjectLogEntry log={previousLog} showExcerpt={true} />
@@ -32,7 +32,7 @@ const hasNavigation = previousLog || nextLog
 
         {nextLog && (
           <Stack space="sm">
-            <Heading as="p" size="h6" color="muted">
+            <Heading as="h2" size="h6" color="muted">
               Later in this project
             </Heading>
             <ProjectLogEntry log={nextLog} showExcerpt={true} />

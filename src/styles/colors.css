@@ -30,11 +30,11 @@
   --color-gold-900: oklch(0.12 0.02 85);
   --color-gold-950: oklch(0.06 0.01 85);
 
-  /* Grays (warm beige/cream tint) */
-  --color-gray-50: oklch(0.99 0.01 85);
-  --color-gray-100: oklch(0.97 0.012 85);
-  --color-gray-200: oklch(0.93 0.015 85);
-  --color-gray-300: oklch(0.89 0.018 85);
+  /* Grays (subtle warm tint) */
+  --color-gray-50: oklch(0.99 0.005 85);
+  --color-gray-100: oklch(0.97 0.006 85);
+  --color-gray-200: oklch(0.93 0.008 85);
+  --color-gray-300: oklch(0.92 0.01 85);
   --color-gray-400: oklch(0.7 0.015 85);
   --color-gray-500: oklch(0.45 0.01 85);
   --color-gray-600: oklch(0.45 0.012 75);

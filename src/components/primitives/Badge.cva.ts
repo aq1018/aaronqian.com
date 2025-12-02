@@ -18,7 +18,7 @@ export const badgeVariants = cva(
       { class: 'bg-danger text-danger-content', color: 'danger', variant: 'solid' },
       { class: 'bg-info text-info-content', color: 'info', variant: 'solid' },
       { class: 'bg-neutral text-neutral-content', color: 'neutral', variant: 'solid' },
-      { class: 'bg-muted/20 text-muted', color: 'muted', variant: 'solid' },
+      { class: 'bg-muted/20 text-content', color: 'muted', variant: 'solid' },
 
       // Outline variant
       { class: 'border-2 border-primary text-primary', color: 'primary', variant: 'outline' },
@@ -32,7 +32,7 @@ export const badgeVariants = cva(
       { class: 'border-2 border-muted text-muted', color: 'muted', variant: 'outline' },
 
       // Soft variant
-      { class: 'bg-primary/20 text-primary', color: 'primary', variant: 'soft' },
+      { class: 'bg-primary/20 text-content', color: 'primary', variant: 'soft' },
       { class: 'bg-accent/20 text-accent', color: 'accent', variant: 'soft' },
       { class: 'bg-secondary/20 text-secondary', color: 'secondary', variant: 'soft' },
       { class: 'bg-success/20 text-success', color: 'success', variant: 'soft' },

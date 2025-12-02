@@ -66,6 +66,11 @@ export const proseCva = cva(
 
     // Horizontal rules
     'prose-hr:border-border',
+
+    // Figcaptions: muted text, centered, italic for distinction
+    'prose-figcaption:text-muted',
+    'prose-figcaption:text-center',
+    'prose-figcaption:italic',
   ],
   {
     defaultVariants: {

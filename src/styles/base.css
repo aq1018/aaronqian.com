@@ -5,6 +5,12 @@ html {
     color 300ms ease-in-out;
 }
 
+/* Remove shadow from expressive-code blocks */
+.expressive-code,
+.expressive-code .frame {
+  box-shadow: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

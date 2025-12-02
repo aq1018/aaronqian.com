@@ -9,6 +9,7 @@
   --color-content: var(--color-content-light);
   --color-border: var(--color-border-light);
   --color-muted: var(--color-muted-light);
+  --color-disabled: var(--color-disabled-light);
 
   /* Legacy tokens (to be moved to component-specific tokens) */
   --color-link: var(--color-link-light);
@@ -52,6 +53,7 @@
     --color-content: var(--color-content-dark);
     --color-border: var(--color-border-dark);
     --color-muted: var(--color-muted-dark);
+    --color-disabled: var(--color-disabled-dark);
 
     /* Legacy tokens (to be moved to component-specific tokens) */
     --color-link: var(--color-link-dark);

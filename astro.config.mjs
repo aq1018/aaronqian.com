@@ -1,8 +1,10 @@
 // @ts-check
 import cloudflare from '@astrojs/cloudflare'
 import sitemap from '@astrojs/sitemap'
+import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 import rehypeFigure from '@microflash/rehype-figure'
 import tailwindcss from '@tailwindcss/vite'
+import expressiveCode from 'astro-expressive-code'
 import icon from 'astro-icon'
 import { defineConfig, envField } from 'astro/config'
 import rehypeExternalLinks from 'rehype-external-links'
@@ -57,6 +59,21 @@ export default defineConfig({
     },
   },
   integrations: [
+    expressiveCode({
+      themes: ['material-theme-palenight'],
+      // Inline styles to avoid Tailwind v4 Vite plugin trying to parse expressive-code CSS
+      emitExternalStylesheet: false,
+      plugins: [pluginLineNumbers()],
+      styleOverrides: {
+        // Remove shadow/elevation from code blocks
+        borderRadius: '0.5rem',
+        frames: {
+          shadowColor: 'transparent',
+          frameBoxShadowCssValue: 'none',
+          editorTabBarBorderBottomColor: 'transparent',
+        },
+      },
+    }),
     icon({
       include: {
         heroicons: [

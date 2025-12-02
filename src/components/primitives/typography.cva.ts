@@ -5,6 +5,7 @@ const colorVariants = {
   accent: 'text-accent',
   danger: 'text-danger',
   default: 'text-content',
+  disabled: 'text-disabled',
   info: 'text-info',
   inherit: 'text-inherit',
   muted: 'text-muted',

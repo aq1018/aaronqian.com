@@ -9,6 +9,7 @@
   --color-content-light: var(--color-gray-900);
   --color-border-light: var(--color-gray-400);
   --color-muted-light: var(--color-gray-500);
+  --color-disabled-light: var(--color-gray-400);
 
   /* Legacy tokens (to be moved to component-specific tokens) */
   --color-link-light: var(--color-cyan-600);

@@ -6,9 +6,10 @@
 :root {
   /* Base utility colors */
   --color-background-dark: var(--color-gray-950);
-  --color-content-dark: var(--color-gray-300);
+  --color-content-dark: var(--color-gray-200);
   --color-border-dark: var(--color-gray-800);
-  --color-muted-dark: var(--color-gray-400);
+  --color-muted-dark: var(--color-gray-300);
+  --color-disabled-dark: var(--color-gray-500);
 
   /* Legacy tokens (to be moved to component-specific tokens) */
   --color-link-dark: var(--color-cyan-400);

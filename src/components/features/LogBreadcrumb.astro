@@ -27,7 +27,9 @@ const { projectSlug, previousLog, nextLog } = Astro.props
             ← Previous
           </Link>
         ) : (
-          <span class="text-muted/30">← Previous</span>
+          <span class="font-mono text-sm text-disabled" aria-disabled="true">
+            ← Previous
+          </span>
         )
       }
     </div>
@@ -51,7 +53,9 @@ const { projectSlug, previousLog, nextLog } = Astro.props
             Next →
           </Link>
         ) : (
-          <span class="text-muted/30">Next →</span>
+          <span class="font-mono text-sm text-disabled" aria-disabled="true">
+            Next →
+          </span>
         )
       }
     </div>
