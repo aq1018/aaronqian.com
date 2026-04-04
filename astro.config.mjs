@@ -25,6 +25,7 @@ export default defineConfig({
     ? undefined
     : cloudflare({
         imageService: 'compile',
+        prerenderEnvironment: 'node',
       }),
   site: 'https://aaronqian.com',
   base: '/',

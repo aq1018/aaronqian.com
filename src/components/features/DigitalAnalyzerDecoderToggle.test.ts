@@ -1,5 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-
 import { initializeDecoderToggles } from './DigitalAnalyzerDecoderToggle.hook'
 
 describe('DigitalAnalyzerDecoderToggle Hook', () => {
@@ -166,7 +164,7 @@ describe('DigitalAnalyzerDecoderToggle Hook', () => {
       `
 
       const cleanupFn = initializeDecoderToggles()
-      expect(typeof cleanupFn).toBe('function')
+      expectTypeOf(cleanupFn).toBeFunction()
     })
 
     it('should remove keyboard event listeners on cleanup', () => {

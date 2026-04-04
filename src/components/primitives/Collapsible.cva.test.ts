@@ -1,11 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
 import { testDefaultVariants } from '@test/testHelpers'
 
 import { collapsibleContentVariants, collapsibleVariants } from './Collapsible.cva'
 
 describe('Collapsible.cva', () => {
-  describe('collapsibleVariants', () => {
+  describe(collapsibleVariants, () => {
     testDefaultVariants(collapsibleVariants, [
       'grid',
       'collapsible-wrapper',
@@ -19,7 +17,7 @@ describe('Collapsible.cva', () => {
     })
   })
 
-  describe('collapsibleContentVariants', () => {
+  describe(collapsibleContentVariants, () => {
     testDefaultVariants(collapsibleContentVariants, ['overflow-hidden'])
 
     it('should handle undefined props gracefully', () => {

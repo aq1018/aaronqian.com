@@ -1,5 +1,5 @@
+// @vitest-environment node
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it } from 'vitest'
 
 import { renderAstroComponent } from '@test/testHelpers'
 

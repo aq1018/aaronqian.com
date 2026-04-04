@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import DigitalAnalyzer from '@/components/features/DigitalAnalyzer.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('DigitalAnalyzer', () => {
+describe(DigitalAnalyzer, () => {
   it('should create container div with data-digital-analyzer attribute', async () => {
     const root = await renderAstroComponent(DigitalAnalyzer, {
       props: { name: 'test-analyzer' },

@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest'
-
 import { testDefaultVariants } from '@test/testHelpers'
 
 import { headingVariants } from './typography.cva'

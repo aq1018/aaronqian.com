@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'vitest'
-
 import { calculateGridSize } from './DigitalAnalyzer.config'
 import {
   generateGridLines,
@@ -11,7 +9,7 @@ import {
   stringToBinary,
 } from './DigitalAnalyzer.utils'
 
-describe('calculateGridSize', () => {
+describe(calculateGridSize, () => {
   it('should calculate grid size based on container width and byte count', () => {
     const containerWidth = 1600
     const byteCount = 2 // 16 bits
@@ -42,7 +40,7 @@ describe('calculateGridSize', () => {
   })
 })
 
-describe('generateGridLines', () => {
+describe(generateGridLines, () => {
   it('should generate grid lines at regular intervals', () => {
     const lines = generateGridLines(1000, 100)
 
@@ -72,7 +70,7 @@ describe('generateGridLines', () => {
   })
 })
 
-describe('stringToBinary', () => {
+describe(stringToBinary, () => {
   it('should convert ASCII characters to binary', () => {
     expect(stringToBinary('A')).toBe('01000001')
   })
@@ -93,7 +91,7 @@ describe('stringToBinary', () => {
   })
 })
 
-describe('hexToBinary', () => {
+describe(hexToBinary, () => {
   it('should convert hex to binary', () => {
     expect(hexToBinary('A5')).toBe('10100101')
   })
@@ -112,7 +110,7 @@ describe('hexToBinary', () => {
   })
 })
 
-describe('generateRandomBinary', () => {
+describe(generateRandomBinary, () => {
   it('should generate binary string of correct length', () => {
     const result = generateRandomBinary(16)
     expect(result.length).toBe(16)
@@ -129,7 +127,7 @@ describe('generateRandomBinary', () => {
   })
 })
 
-describe('generateSquareWavePath', () => {
+describe(generateSquareWavePath, () => {
   const testGridSize = 100 // Test with 100px grid cells
   const testHighY = 50 // High state Y position
   const testLowY = 150 // Low state Y position
@@ -208,7 +206,7 @@ describe('generateSquareWavePath', () => {
   })
 })
 
-describe('getGlowColor', () => {
+describe(getGlowColor, () => {
   it('should return color-mix with primary color and custom opacity', () => {
     const color = getGlowColor(0.5)
 
@@ -222,7 +220,7 @@ describe('getGlowColor', () => {
   })
 })
 
-describe('getLightningGlowColor', () => {
+describe(getLightningGlowColor, () => {
   it('should return primary-400 CSS variable', () => {
     const color = getLightningGlowColor()
 

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content'
+import { getCollection, render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
 import Prose from '@/components/primitives/Prose.astro'
@@ -25,7 +25,7 @@ const principles = principlesCollection.toSorted(
 // Render all principle content
 const principlesWithContent = await Promise.all(
   principles.map(async (principle: CollectionEntry<'principles'>) => {
-    const rendered = await principle.render()
+    const rendered = await render(principle)
     return {
       principle,
       Content: rendered.Content,

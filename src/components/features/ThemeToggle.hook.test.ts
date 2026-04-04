@@ -1,5 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
-
 import { setupTestDOM } from '@test/testHelpers'
 
 import { initializeThemeToggle, setupThemeToggle } from './ThemeToggle.hook'
@@ -45,7 +43,7 @@ describe('Theme Toggle System', () => {
     }
   }
 
-  describe('initializeThemeToggle', () => {
+  describe(initializeThemeToggle, () => {
     it('should initialize theme toggle buttons', () => {
       const envCleanup = setupTestEnvironment()
       const domCleanup = setupTestDOM(`
@@ -357,7 +355,7 @@ describe('Theme Toggle System', () => {
 
       // Should not throw error
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -365,7 +363,7 @@ describe('Theme Toggle System', () => {
     })
   })
 
-  describe('setupThemeToggle', () => {
+  describe(setupThemeToggle, () => {
     it('should initialize theme toggle immediately', () => {
       const envCleanup = setupTestEnvironment()
       localStorage.setItem('theme', 'dark')

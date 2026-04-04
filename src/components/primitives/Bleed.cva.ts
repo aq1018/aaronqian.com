@@ -7,15 +7,15 @@ import type { VariantProps } from 'class-variance-authority'
  */
 export const bleedCva = cva('', {
   defaultVariants: {
-    size: 'lg', // matches Container's default padX
+    size: 'lg', // Matches Container's default padX
   },
   variants: {
     size: {
       none: 'mx-0',
-      sm: '-mx-4 md:-mx-6', // negate Container sm
-      md: '-mx-4 md:-mx-8 lg:-mx-12', // negate Container md
-      lg: '-mx-6 md:-mx-10 lg:-mx-16', // negate Container lg (default)
-      xl: '-mx-6 md:-mx-12 lg:-mx-20', // negate Container xl
+      sm: '-mx-4 md:-mx-6', // Negate Container sm
+      md: '-mx-4 md:-mx-8 lg:-mx-12', // Negate Container md
+      lg: '-mx-6 md:-mx-10 lg:-mx-16', // Negate Container lg (default)
+      xl: '-mx-6 md:-mx-12 lg:-mx-20', // Negate Container xl
     },
   },
 })

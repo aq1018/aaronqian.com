@@ -1,5 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
-
 import { setupTestDOM } from '@test/testHelpers'
 
 import { setupKbd } from './Kbd.hook'
@@ -378,7 +376,7 @@ describe('Kbd Hook', () => {
 
       // Should not throw error
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()

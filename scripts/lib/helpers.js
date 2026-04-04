@@ -79,7 +79,7 @@ export function getNextProjectOrder() {
     const indexPath = path.join(projectsDir, project.name, 'index.md')
     if (fs.existsSync(indexPath)) {
       const content = fs.readFileSync(indexPath, 'utf8')
-      const orderMatch = content.match(/^order:\s*(\d+)/m)
+      const orderMatch = /^order:\s*(\d+)/m.exec(content)
       const orderStr = orderMatch?.[1]
       if (orderStr !== undefined && orderStr.length > 0) {
         const order = parseInt(orderStr, 10)

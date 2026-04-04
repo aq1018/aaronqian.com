@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import TeethMarks from '@/components/features/CuttingMatTeethMarks.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('TeethMarks', () => {
+describe(TeethMarks, () => {
   const width = 4000
   const height = 4000
   const minorInterval = 40

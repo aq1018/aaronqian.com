@@ -1,12 +1,11 @@
 import { fireEvent, screen } from '@testing-library/dom'
-import { describe, expect, it, vi } from 'vitest'
 
 import { setupTestDOM } from '@test/testHelpers'
 
 import { initializeToggles, setupToggles } from './PillToggle.hook'
 
 describe('Toggle Button System', () => {
-  describe('initializeToggles', () => {
+  describe(initializeToggles, () => {
     it('should initialize toggle buttons and menus', () => {
       const domCleanup = setupTestDOM(`
         <div>
@@ -209,7 +208,7 @@ describe('Toggle Button System', () => {
 
       // Click on SVG icon
       // SVG elements do not respond to .click()
-      // we simulate the click using fireEvent
+      // We simulate the click using fireEvent
       fireEvent.click(icon)
       expect(menu).not.toHaveClass('hidden')
 
@@ -291,7 +290,7 @@ describe('Toggle Button System', () => {
 
       // Should not throw error
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -439,7 +438,7 @@ describe('Toggle Button System', () => {
     })
   })
 
-  describe('setupToggles', () => {
+  describe(setupToggles, () => {
     it('should initialize toggles immediately', () => {
       const domCleanup = setupTestDOM(`
         <div>

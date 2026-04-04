@@ -1,5 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
-import { isAstroComponentFactory } from 'astro/runtime/server/render/astro/factory.js'
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
+import { Window } from 'happy-dom'
 import { describe, expect, it } from 'vitest'
 
 type CVAFn = (props?: Record<string, unknown>) => string
@@ -22,18 +23,13 @@ type CVAFn = (props?: Record<string, unknown>) => string
  * ```
  */
 export async function renderAstroComponent(
-  component: unknown,
+  component: AstroComponentFactory,
   options?: { props?: Record<string, unknown>; slots?: Record<string, string> },
-): Promise<HTMLDivElement> {
-  if (!isAstroComponentFactory(component)) {
-    throw new TypeError(
-      'renderAstroComponent: `component` must be a function or object exported by an .astro file.',
-    )
-  }
-
+) {
   const container = await AstroContainer.create()
   const result = await container.renderToString(component, options)
-  const div = document.createElement('div')
+  const window = new Window()
+  const div = window.document.createElement('div')
   div.innerHTML = result
   return div
 }

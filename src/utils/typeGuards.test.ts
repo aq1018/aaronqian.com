@@ -1,8 +1,6 @@
 /**
  * Tests for type guard utilities
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-
 import {
   assertHTMLElement,
   assertNonNull,
@@ -30,7 +28,7 @@ describe('typeGuards', () => {
   // DOM Type Guards
   // ==========================================================================
 
-  describe('isHTMLElement', () => {
+  describe(isHTMLElement, () => {
     it('should return true for HTMLElement instances', () => {
       const div = document.createElement('div')
       expect(isHTMLElement(div)).toBeTruthy()
@@ -69,7 +67,7 @@ describe('typeGuards', () => {
     })
   })
 
-  describe('isSVGSVGElement', () => {
+  describe(isSVGSVGElement, () => {
     it('should return true for SVGSVGElement instances', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       expect(isSVGSVGElement(svg)).toBeTruthy()
@@ -103,7 +101,7 @@ describe('typeGuards', () => {
   // Type-Safe DOM Query Helpers
   // ==========================================================================
 
-  describe('queryElement', () => {
+  describe(queryElement, () => {
     it('should return HTMLElement when element exists', () => {
       const div = document.createElement('div')
       div.dataset.test = 'foo'
@@ -124,7 +122,7 @@ describe('typeGuards', () => {
       svg.classList.add('test-svg')
       document.body.append(svg)
 
-      // queryElement expects HTMLElement, should return null for SVG
+      // QueryElement expects HTMLElement, should return null for SVG
       const result = queryElement('.test-svg')
       expect(result).toBeNull()
     })
@@ -141,7 +139,7 @@ describe('typeGuards', () => {
     })
   })
 
-  describe('querySVGElement', () => {
+  describe(querySVGElement, () => {
     it('should return SVGSVGElement when element exists', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       svg.classList.add('test-svg')
@@ -173,13 +171,13 @@ describe('typeGuards', () => {
       svg.append(circle)
       document.body.append(svg)
 
-      // querySVGElement specifically checks for SVGSVGElement
+      // QuerySVGElement specifically checks for SVGSVGElement
       const result = querySVGElement('.circle')
       expect(result).toBeNull()
     })
   })
 
-  describe('getElementById', () => {
+  describe(getElementById, () => {
     it('should return HTMLElement when element exists', () => {
       const div = document.createElement('div')
       div.id = 'test-id'
@@ -203,7 +201,7 @@ describe('typeGuards', () => {
       const result = getElementById('test-svg')
       expect(result).toBe(svg)
       // Note: SVGElement extends Element, not HTMLElement in strict typing
-      // but getElementById returns HTMLElement | null in DOM API
+      // But getElementById returns HTMLElement | null in DOM API
     })
   })
 
@@ -211,7 +209,7 @@ describe('typeGuards', () => {
   // General Type Guards
   // ==========================================================================
 
-  describe('isNonNull', () => {
+  describe(isNonNull, () => {
     it('should return true for non-null values', () => {
       expect(isNonNull('string')).toBeTruthy()
       expect(isNonNull(123)).toBeTruthy()
@@ -235,7 +233,7 @@ describe('typeGuards', () => {
     })
   })
 
-  describe('isString', () => {
+  describe(isString, () => {
     it('should return true for string values', () => {
       expect(isString('hello')).toBeTruthy()
       expect(isString('')).toBeTruthy()
@@ -252,7 +250,7 @@ describe('typeGuards', () => {
     })
   })
 
-  describe('isNumber', () => {
+  describe(isNumber, () => {
     it('should return true for number values', () => {
       expect(isNumber(123)).toBeTruthy()
       expect(isNumber(0)).toBeTruthy()
@@ -277,7 +275,7 @@ describe('typeGuards', () => {
   // Type Assertions
   // ==========================================================================
 
-  describe('assertNonNull', () => {
+  describe(assertNonNull, () => {
     it('should not throw for non-null values', () => {
       expect(() => {
         assertNonNull('string')
@@ -321,7 +319,7 @@ describe('typeGuards', () => {
     })
   })
 
-  describe('assertHTMLElement', () => {
+  describe(assertHTMLElement, () => {
     it('should not throw for HTMLElement', () => {
       const div = document.createElement('div')
       expect(() => {
@@ -355,7 +353,7 @@ describe('typeGuards', () => {
     })
   })
 
-  describe('assertSVGSVGElement', () => {
+  describe(assertSVGSVGElement, () => {
     it('should not throw for SVGSVGElement', () => {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       expect(() => {

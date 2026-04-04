@@ -1,14 +1,12 @@
 /**
  * Tests for DigitalAnalyzer.data.ts - Data source management
  */
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-
 import { DataSourceManager } from './DigitalAnalyzer.data'
 import type { DataSourceOptions } from './DigitalAnalyzer.data'
 import * as utils from './DigitalAnalyzer.utils'
 
 // Mock the utils module to control random generation
-vi.mock('./DigitalAnalyzer.utils', async () => {
+vi.mock(import('./DigitalAnalyzer.utils'), async () => {
   const actual = await vi.importActual<typeof utils>('./DigitalAnalyzer.utils')
   return {
     ...actual,
@@ -16,7 +14,7 @@ vi.mock('./DigitalAnalyzer.utils', async () => {
   }
 })
 
-describe('DataSourceManager', () => {
+describe(DataSourceManager, () => {
   describe('config mode', () => {
     const testMessage = 'HELLO'
     const byteCount = 2

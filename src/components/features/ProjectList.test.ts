@@ -1,5 +1,5 @@
+// @vitest-environment node
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it } from 'vitest'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
@@ -37,7 +37,7 @@ const defaultStatusLabels = {
   planning: 'PLANNING',
 }
 
-describe('ProjectList', () => {
+describe(ProjectList, () => {
   describe('Project rendering', () => {
     it('should render project title as link', async () => {
       const projects = [createMockProject('project-a/index.md', 'Project A', 'active')]

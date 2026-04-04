@@ -3,7 +3,6 @@
  * Validates GSAP timeline creation, parameter passing, and cleanup behavior
  */
 import { gsap } from 'gsap'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { TraceAnimationOptions } from './DigitalAnalyzer.animation'
 import { createTraceAnimation } from './DigitalAnalyzer.animation'
@@ -45,7 +44,7 @@ describe('TraceAnimationManager', () => {
     vi.clearAllMocks()
   })
 
-  describe('createTraceAnimation', () => {
+  describe(createTraceAnimation, () => {
     it('should create a valid GSAP timeline', () => {
       const options: TraceAnimationOptions = {
         binaryData: '10101010',
@@ -137,8 +136,8 @@ describe('TraceAnimationManager', () => {
 
       createTraceAnimation(options)
 
-      // clearBinaryBuffer is now called in hook.ts before createTraceAnimation
-      // to prevent race condition when multiple traces start close together
+      // ClearBinaryBuffer is now called in hook.ts before createTraceAnimation
+      // To prevent race condition when multiple traces start close together
       expect(clearSpy).not.toHaveBeenCalled()
     })
 
@@ -260,8 +259,8 @@ describe('TraceAnimationManager', () => {
       timeline.progress(1)
       timeline.kill()
 
-      expect(fadeSpy).toHaveBeenCalledOnce()
-      expect(resetSpy).toHaveBeenCalledOnce()
+      expect(fadeSpy).toHaveBeenCalledTimes(1)
+      expect(resetSpy).toHaveBeenCalledTimes(1)
     })
 
     it('should schedule ASCII fade and clear when shouldClear is true', () => {
@@ -288,8 +287,8 @@ describe('TraceAnimationManager', () => {
       timeline.progress(1)
       timeline.kill()
 
-      expect(fadeSpy).toHaveBeenCalledOnce()
-      expect(clearSpy).toHaveBeenCalledOnce()
+      expect(fadeSpy).toHaveBeenCalledTimes(1)
+      expect(clearSpy).toHaveBeenCalledTimes(1)
     })
 
     it('should NOT schedule ASCII fade/clear when shouldClear is false', () => {

@@ -1,6 +1,6 @@
+// @vitest-environment node
 import type { CollectionEntry } from 'astro:content'
 import { getCollection } from 'astro:content'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
@@ -9,7 +9,7 @@ import SocialsBar from './SocialsBar.astro'
 type SocialEntry = CollectionEntry<'socials'>
 
 // Mock getCollection
-vi.mock('astro:content', () => ({
+vi.mock(import('astro:content'), () => ({
   getCollection: vi.fn(),
 }))
 
@@ -39,7 +39,7 @@ const createMockSocial = (params: MockSocialParams): SocialEntry => {
   return result
 }
 
-describe('SocialsBar', () => {
+describe(SocialsBar, () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
