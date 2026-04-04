@@ -2,13 +2,14 @@
 title: 'OpenServoCore'
 description:
   'A project to turn low-cost servos like the MG90S into smart actuators with
-  cascade control and a DYNAMIXEL-style Rust firmware — lowering the barrier to
+  cascade control and a DYNAMIXEL-style Rust firmware; lowering the barrier to
   robotics for students, makers, and resource-limited builders.'
 status: 'in-development'
 aside: 'Democratize Robotics For Everyone'
 links:
-  github: 'https://github.com/aq1018/open-servo-controller'
-order: 2
+  github: 'https://github.com/OpenServoCore/open-servo-core'
+order: 1
+live: true
 ---
 
 # Overview
