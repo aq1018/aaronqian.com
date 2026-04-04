@@ -113,7 +113,7 @@ also increase. This is a huge performance issue.
 
 Using the example above, Data Loaders will collect the individual user IDs in
 the resolver and fetch the collected user IDs in one SQL query after
-[nextTick](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick).
+[nextTick](https://nodejs.org/learn/asynchronous-work/event-loop-timers-and-nexttick).
 It will then return the appropriate User object based on the supplied user ID.
 
 We decided to use the excellent and well supported
