@@ -1,5 +1,6 @@
 import { glob } from 'astro/loaders'
-import { defineCollection, z } from 'astro:content'
+import { z } from 'astro/zod'
+import { defineCollection } from 'astro:content'
 
 const blog = defineCollection({
   loader: glob({ pattern: '*/index.md', base: './src/content/blog' }),
@@ -21,9 +22,9 @@ const projects = defineCollection({
     description: z.string(),
     links: z
       .object({
-        site: z.string().url().optional(),
-        github: z.string().url().optional(),
-        docs: z.string().url().optional(),
+        site: z.url().optional(),
+        github: z.url().optional(),
+        docs: z.url().optional(),
       })
       .optional(),
     order: z.number(),
@@ -43,6 +44,7 @@ const projectLogs = defineCollection({
 })
 
 const socials = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/socials' }),
   schema: z.object({
     enabled: z.boolean(),
     label: z.string(),
@@ -50,10 +52,10 @@ const socials = defineCollection({
     rel: z.string().optional(),
     url: z.string(),
   }),
-  type: 'data',
 })
 
 const testimonials = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/testimonials' }),
   schema: z.object({
     author: z.string(),
     enabled: z.boolean(),
@@ -61,19 +63,19 @@ const testimonials = defineCollection({
     quote: z.string(),
     title: z.string().optional(),
   }),
-  type: 'data',
 })
 
 const principles = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/principles' }),
   schema: z.object({
     enabled: z.boolean(),
     position: z.number(),
     title: z.string(),
   }),
-  type: 'content',
 })
 
 const about = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/about' }),
   schema: z.object({
     availability: z.string().optional(),
     description: z.string(),
@@ -81,7 +83,6 @@ const about = defineCollection({
     title: z.string(),
     workingStyle: z.array(z.string()),
   }),
-  type: 'content',
 })
 
 export const collections = {

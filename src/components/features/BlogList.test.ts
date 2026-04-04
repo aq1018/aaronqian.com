@@ -1,5 +1,5 @@
+// @vitest-environment node
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it } from 'vitest'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
@@ -22,7 +22,7 @@ const createMockPost = (
   id,
 })
 
-describe('BlogList', () => {
+describe(BlogList, () => {
   describe('Post rendering', () => {
     it('should render post title as link', async () => {
       const posts = [createMockPost('2023-01-15-post-a', 'Post A', new Date('2023-01-15'))]
@@ -33,7 +33,7 @@ describe('BlogList', () => {
       })
 
       // Debug: check what's being rendered
-      // console.log('RENDERED HTML:', root.innerHTML)
+      // Console.log('RENDERED HTML:', root.innerHTML)
 
       const links = root.querySelectorAll('a')
       const postLink = [...links].find((link) => link.textContent?.includes('Post A'))

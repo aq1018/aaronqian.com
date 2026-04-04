@@ -24,8 +24,8 @@ export function initializeImageLightbox(): CleanupFunction {
   const closeButton = document.querySelector<HTMLElement>('[data-lightbox-close]')
 
   console.log('[ImageLightbox] Initializing:', {
-    overlay: !!overlay,
-    lightboxImage: !!lightboxImage,
+    overlay: Boolean(overlay),
+    lightboxImage: Boolean(lightboxImage),
   })
 
   if (!overlay || !lightboxImage) {

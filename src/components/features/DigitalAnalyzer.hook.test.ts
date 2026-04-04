@@ -1,5 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
-
 import { setupTestDOM } from '@test/testHelpers'
 
 import { initializeDigitalAnalyzer, setupDigitalAnalyzer } from './DigitalAnalyzer.hook'
@@ -38,7 +36,7 @@ describe('Digital Analyzer Hook', () => {
     }
   }
 
-  describe('initializeDigitalAnalyzer', () => {
+  describe(initializeDigitalAnalyzer, () => {
     it('should initialize digital analyzer with required DOM elements', () => {
       const timerCleanup = setupFakeTimers()
       const domCleanup = setupTestDOM(`
@@ -51,7 +49,7 @@ describe('Digital Analyzer Hook', () => {
       const cleanup = initializeDigitalAnalyzer()
 
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -68,7 +66,7 @@ describe('Digital Analyzer Hook', () => {
       const cleanup = initializeDigitalAnalyzer()
 
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -86,7 +84,7 @@ describe('Digital Analyzer Hook', () => {
       const cleanup = initializeDigitalAnalyzer()
 
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -104,7 +102,7 @@ describe('Digital Analyzer Hook', () => {
       const cleanup = initializeDigitalAnalyzer()
 
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -351,7 +349,7 @@ describe('Digital Analyzer Hook', () => {
     })
   })
 
-  describe('setupDigitalAnalyzer', () => {
+  describe(setupDigitalAnalyzer, () => {
     it('should setup View Transitions event listeners', () => {
       const addEventListenerSpy = vi.spyOn(document, 'addEventListener')
 
@@ -481,7 +479,7 @@ describe('Digital Analyzer Hook', () => {
       document.dispatchEvent(new Event('astro:page-load'))
 
       // Should initialize exactly once (one observe() call)
-      expect(mockObserve).toHaveBeenCalledTimes(1)
+      expect(mockObserve).toHaveBeenCalledOnce()
 
       domCleanup()
     })

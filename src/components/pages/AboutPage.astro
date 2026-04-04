@@ -1,5 +1,5 @@
 ---
-import { getEntry } from 'astro:content'
+import { getEntry, render } from 'astro:content'
 
 import PrinciplesList from '@/components/features/PrinciplesList.astro'
 import SocialsBar from '@/components/features/SocialsBar.astro'
@@ -17,7 +17,7 @@ if (aboutEntry == null) {
 }
 
 const { data } = aboutEntry
-const { Content } = await aboutEntry.render()
+const { Content } = await render(aboutEntry)
 ---
 
 <Surface padY="md">

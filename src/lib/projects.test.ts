@@ -1,5 +1,4 @@
 import type { CollectionEntry } from 'astro:content'
-import { describe, expect, it } from 'vitest'
 
 import { getLatestActiveProjectSlug, sortProjectsByLatestLog } from './projects'
 
@@ -33,7 +32,7 @@ const createProjectLog = (id: string): ProjectLogEntry => ({
   id,
 })
 
-describe('sortProjectsByLatestLog', () => {
+describe(sortProjectsByLatestLog, () => {
   it('should sort projects by latest log date (most recent first)', () => {
     const projects = [
       createProject('project-a/index.md', 'Project A'),
@@ -90,7 +89,7 @@ describe('sortProjectsByLatestLog', () => {
     const projectLogs = [
       createProjectLog('project-a/logs/2025-01-10-log.md'),
       createProjectLog('project-c/logs/2025-01-05-log.md'),
-      // project-b has no logs
+      // Project-b has no logs
     ]
 
     const sorted = sortProjectsByLatestLog(projects, projectLogs)
@@ -157,7 +156,7 @@ describe('sortProjectsByLatestLog', () => {
   })
 })
 
-describe('getLatestActiveProjectSlug', () => {
+describe(getLatestActiveProjectSlug, () => {
   it('should return slug of project with most recent log', () => {
     const projects = [
       createProject('project-a/index.md', 'Project A'),

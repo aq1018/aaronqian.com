@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import GradientMask from '@/components/features/CuttingMatGradientMask.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('GradientMask', () => {
+describe(GradientMask, () => {
   it('should create a defs element', async () => {
     const root = await renderAstroComponent(GradientMask, {
       props: { height: 4000, width: 4000 },

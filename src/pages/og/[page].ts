@@ -5,7 +5,7 @@ import type { PageMetadata } from '@/config/pages'
 import { staticPages } from '@/config/pages'
 
 // eslint-disable-next-line new-cap -- OGImageRoute is a factory function, not a constructor
-export const { getStaticPaths, GET } = OGImageRoute({
+export const { getStaticPaths, GET } = await OGImageRoute({
   param: 'page',
   pages: staticPages,
 

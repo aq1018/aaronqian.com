@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import AngleMarks from '@/components/features/CuttingMatAngleMarks.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('AngleMarks', () => {
+describe(AngleMarks, () => {
   const width = 4000
   const height = 4000
   const angleLineCount = 5

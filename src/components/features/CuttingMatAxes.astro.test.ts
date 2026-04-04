@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import Axes from '@/components/features/CuttingMatAxes.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('Axes', () => {
+describe(Axes, () => {
   it('should create two line elements', async () => {
     const root = await renderAstroComponent(Axes, {
       props: {

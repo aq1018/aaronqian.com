@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import { renderAstroComponent } from '@test/testHelpers'
 
 import Footer from './Footer.astro'
 
-describe('Footer', () => {
+describe(Footer, () => {
   describe('Rendering', () => {
     it('should render footer element', async () => {
       const root = await renderAstroComponent(Footer, { props: {} })

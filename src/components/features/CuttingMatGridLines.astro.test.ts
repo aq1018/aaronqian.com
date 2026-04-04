@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import GridLines from '@/components/features/CuttingMatGridLines.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('GridLines', () => {
+describe(GridLines, () => {
   const width = 4000
   const height = 4000
   const centerX = width / 2

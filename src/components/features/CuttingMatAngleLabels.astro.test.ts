@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import AngleLabels from '@/components/features/CuttingMatAngleLabels.astro'
 
 import { renderAstroComponent } from '@test/testHelpers'
 
-describe('AngleLabels', () => {
+describe(AngleLabels, () => {
   const width = 4000
   const height = 4000
   const angleLineCount = 5

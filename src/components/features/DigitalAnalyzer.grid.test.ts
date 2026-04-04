@@ -1,12 +1,10 @@
 /**
  * Tests for GridManager grid rendering and resize optimization
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-
 import { GridManager } from './DigitalAnalyzer.grid'
 import type { GridConfig } from './DigitalAnalyzer.grid'
 
-describe('GridManager', () => {
+describe(GridManager, () => {
   let staticSvg!: SVGSVGElement
   let dynamicSvg!: SVGSVGElement
   let gridGroup!: SVGGElement
@@ -78,7 +76,7 @@ describe('GridManager', () => {
 
       gridManager.updateDimensions(rect)
 
-      // gridSize = width / (byteCount * bitsPerByte) = 1600 / (2 * 8) = 100
+      // GridSize = width / (byteCount * bitsPerByte) = 1600 / (2 * 8) = 100
       expect(gridManager.getGridSize()).toBe(100)
     })
 

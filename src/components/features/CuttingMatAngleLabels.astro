@@ -29,9 +29,9 @@ const angles = Array.from(
 )
 
 // Calculate label distance (above the specified arc)
-const arcRadiusInterval = 1 // default from original code
+const arcRadiusInterval = 1 // Default from original code
 const arcRadius = (angleLabelArcIndex + 1) * arcRadiusInterval * majorLineInterval
-const labelOffset = 20 // pixels above the arc
+const labelOffset = 20 // Pixels above the arc
 const labelDistance = arcRadius + labelOffset
 
 const labels = angles.map((angle) => {

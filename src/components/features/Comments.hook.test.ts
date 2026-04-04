@@ -1,5 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
-
 import { setupTestDOM } from '@test/testHelpers'
 
 import {
@@ -67,7 +65,7 @@ describe('Comments System', () => {
     }
   }
 
-  describe('getCurrentTheme', () => {
+  describe(getCurrentTheme, () => {
     it('should return "light" when dark class is not present', () => {
       document.documentElement.classList.remove('dark')
       expect(getCurrentTheme()).toBe('light')
@@ -79,7 +77,7 @@ describe('Comments System', () => {
     })
   })
 
-  describe('getGiscusThemeUrl', () => {
+  describe(getGiscusThemeUrl, () => {
     it('should return light theme URL', () => {
       const url = getGiscusThemeUrl('light')
       expect(url).toMatch(/\/giscus-light\.generated\.css$/)
@@ -93,7 +91,7 @@ describe('Comments System', () => {
     })
   })
 
-  describe('syncGiscusTheme', () => {
+  describe(syncGiscusTheme, () => {
     it('should send theme change message to giscus iframe', () => {
       const domCleanup = setupTestDOM(`
         <iframe class="giscus-frame"></iframe>
@@ -115,7 +113,7 @@ describe('Comments System', () => {
 
       syncGiscusTheme('dark')
 
-      expect(postMessageSpy).toHaveBeenCalledTimes(1)
+      expect(postMessageSpy).toHaveBeenCalledOnce()
       const message: unknown = postMessageSpy.mock.calls[0]?.[0]
       if (isGiscusMessage(message)) {
         expect(message.giscus.setConfig.theme).toContain('giscus-dark.generated.css')
@@ -188,7 +186,7 @@ describe('Comments System', () => {
     })
   })
 
-  describe('initializeComments', () => {
+  describe(initializeComments, () => {
     it('should initialize comments when container exists', () => {
       const timerCleanup = setupFakeTimers()
       const domCleanup = setupTestDOM(`
@@ -220,7 +218,7 @@ describe('Comments System', () => {
       const container = document.querySelector('[data-comments]')
       expect(container).toBeDefined()
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -235,7 +233,7 @@ describe('Comments System', () => {
 
       // Should not throw error
       expect(cleanup).toBeDefined()
-      expect(typeof cleanup).toBe('function')
+      expectTypeOf(cleanup).toBeFunction()
 
       cleanup()
       domCleanup()
@@ -321,7 +319,7 @@ describe('Comments System', () => {
       }
 
       // Should have sent message to set dark theme
-      expect(postMessageSpy).toHaveBeenCalledTimes(1)
+      expect(postMessageSpy).toHaveBeenCalledOnce()
       const callArgs: unknown = postMessageSpy.mock.calls[0]
       if (isPostMessageCall(callArgs)) {
         const [message, origin] = callArgs
@@ -416,7 +414,7 @@ describe('Comments System', () => {
       }
 
       // Should have sent message to set light theme
-      expect(postMessageSpy).toHaveBeenCalledTimes(1)
+      expect(postMessageSpy).toHaveBeenCalledOnce()
       const callArgs: unknown = postMessageSpy.mock.calls[0]
       if (isPostMessageCall(callArgs)) {
         const [message, origin] = callArgs
@@ -740,7 +738,7 @@ describe('Comments System', () => {
     })
   })
 
-  describe('setupComments', () => {
+  describe(setupComments, () => {
     it('should initialize comments immediately', () => {
       const timerCleanup = setupFakeTimers()
       const domCleanup = setupTestDOM(`

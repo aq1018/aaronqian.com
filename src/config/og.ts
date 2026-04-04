@@ -32,14 +32,16 @@ export const ogImageConfig: SharedOGImageConfig = {
   // Font styling
   font: {
     title: {
-      color: [255, 255, 255], // white (better contrast)
+      // White (better contrast)
+      color: [255, 255, 255],
       size: 56,
       families: ['Inter'],
       weight: 'Bold',
       lineHeight: 1.2,
     },
     description: {
-      color: [228, 228, 231], // zinc-200 (lighter for better contrast)
+      // Zinc-200 (lighter for better contrast)
+      color: [228, 228, 231],
       size: 32,
       families: ['Inter'],
       weight: 'Normal',
@@ -50,7 +52,10 @@ export const ogImageConfig: SharedOGImageConfig = {
 
 // Border colors for different content types
 export const borderColors: Record<string, RGBColor> = {
-  pages: [250, 204, 21], // gold-400/yellow-400
-  blog: [34, 211, 238], // cyan-400
-  projects: [192, 132, 252], // purple-400
+  // Gold-400/yellow-400
+  pages: [250, 204, 21],
+  // Cyan-400
+  blog: [34, 211, 238],
+  // Purple-400
+  projects: [192, 132, 252],
 }

@@ -1,8 +1,6 @@
 /**
  * Tests for JSON-LD generator functions
  */
-import { describe, expect, it } from 'vitest'
-
 import {
   generateArticleSchema,
   generateBlogPostingSchema,
@@ -12,7 +10,7 @@ import {
   generateWebSiteSchema,
 } from './generators'
 
-describe('generateWebSiteSchema', () => {
+describe(generateWebSiteSchema, () => {
   it('should generate valid WebSite schema', () => {
     const schema = generateWebSiteSchema({
       name: 'Test Site',
@@ -39,7 +37,7 @@ describe('generateWebSiteSchema', () => {
   })
 })
 
-describe('generatePersonSchema', () => {
+describe(generatePersonSchema, () => {
   it('should generate minimal Person schema', () => {
     const schema = generatePersonSchema({
       name: 'John Doe',
@@ -87,7 +85,7 @@ describe('generatePersonSchema', () => {
   })
 })
 
-describe('generateOrganizationSchema', () => {
+describe(generateOrganizationSchema, () => {
   it('should generate minimal Organization schema', () => {
     const schema = generateOrganizationSchema({
       name: 'Test Org',
@@ -121,7 +119,7 @@ describe('generateOrganizationSchema', () => {
   })
 })
 
-describe('generateArticleSchema', () => {
+describe(generateArticleSchema, () => {
   const config = {
     baseUrl: 'https://example.com',
     authorName: 'John Doe',
@@ -190,7 +188,7 @@ describe('generateArticleSchema', () => {
   })
 })
 
-describe('generateBlogPostingSchema', () => {
+describe(generateBlogPostingSchema, () => {
   const config = {
     baseUrl: 'https://example.com',
     authorName: 'John Doe',
@@ -241,7 +239,7 @@ describe('generateBlogPostingSchema', () => {
   })
 })
 
-describe('generateBreadcrumbSchema', () => {
+describe(generateBreadcrumbSchema, () => {
   it('should generate BreadcrumbList schema', () => {
     const items = [
       { name: 'Home', url: '/' },

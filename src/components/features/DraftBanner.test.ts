@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import { renderAstroComponent } from '@test/testHelpers'
 
 import DraftBanner from './DraftBanner.astro'
 
-describe('DraftBanner', () => {
+describe(DraftBanner, () => {
   it('should render the draft warning banner', async () => {
     const root = await renderAstroComponent(DraftBanner, { props: {} })
 

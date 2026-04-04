@@ -57,7 +57,7 @@ expect.extend({
    */
   toRenderElement(received: HTMLElement, selector: string): MatcherResult {
     const element = received.querySelector(selector)
-    const exists = !!element
+    const exists = Boolean(element)
 
     return {
       actual: element,

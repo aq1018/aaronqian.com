@@ -53,7 +53,7 @@ const familyVariants = {
 
 export const headingVariants = cva('', {
   compoundVariants: [
-    // mono display gets the mono tracking
+    // Mono display gets the mono tracking
     {
       class: 'tracking-heading-display-mono',
       family: 'mono',

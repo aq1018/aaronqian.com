@@ -2,11 +2,9 @@
  * Tests for DigitalAnalyzer display manager
  * Validates binary buffer and ASCII text display updates
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-
 import { DisplayManager } from './DigitalAnalyzer.display'
 
-describe('DisplayManager', () => {
+describe(DisplayManager, () => {
   let binaryBuffer!: HTMLElement
   let asciiDisplay!: HTMLElement
   let displayManager!: DisplayManager

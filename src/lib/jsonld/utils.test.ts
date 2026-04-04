@@ -1,11 +1,9 @@
 /**
  * Tests for JSON-LD utility functions
  */
-import { describe, expect, it } from 'vitest'
-
 import { sanitizeText, toAbsoluteUrl, toIsoDate } from './utils'
 
-describe('toAbsoluteUrl', () => {
+describe(toAbsoluteUrl, () => {
   const baseUrl = 'https://example.com'
 
   it('should return absolute URLs unchanged', () => {
@@ -29,7 +27,7 @@ describe('toAbsoluteUrl', () => {
   })
 })
 
-describe('toIsoDate', () => {
+describe(toIsoDate, () => {
   it('should convert Date objects to ISO strings', () => {
     const date = new Date('2024-01-15T12:00:00Z')
     expect(toIsoDate(date)).toBe('2024-01-15T12:00:00.000Z')
@@ -45,7 +43,7 @@ describe('toIsoDate', () => {
   })
 })
 
-describe('sanitizeText', () => {
+describe(sanitizeText, () => {
   it('should remove extra whitespace', () => {
     expect(sanitizeText('  hello   world  ')).toBe('hello world')
     expect(sanitizeText('hello    world')).toBe('hello world')

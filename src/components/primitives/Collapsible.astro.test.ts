@@ -1,5 +1,4 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import { renderAstroComponent } from '@test/testHelpers'
 
 import Collapsible from './Collapsible.astro'

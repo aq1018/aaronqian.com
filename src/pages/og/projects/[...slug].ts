@@ -11,7 +11,7 @@ const pages = Object.fromEntries(
 )
 
 // eslint-disable-next-line new-cap -- OGImageRoute is a factory function, not a constructor
-export const { getStaticPaths, GET } = OGImageRoute({
+export const { getStaticPaths, GET } = await OGImageRoute({
   param: 'slug',
   pages,
 

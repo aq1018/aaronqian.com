@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest'
-
+// @vitest-environment node
 import { renderAstroComponent } from '@test/testHelpers'
 
 import HeroContent from './HeroContent.astro'
 
-describe('HeroContent', () => {
+describe(HeroContent, () => {
   describe('Props rendering', () => {
     it('should render eyebrow prop', async () => {
       const root = await renderAstroComponent(HeroContent, {
