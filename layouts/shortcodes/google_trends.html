@@ -16,7 +16,7 @@
   {{- $items = $items | append (dict "keyword" (trim $kw " ") "geo" $geo "time" (printf "today %s" $range)) -}}
 {{- end -}}
 {{- $config := dict "comparisonItem" $items "category" 0 "property" "" -}}
-<div id="{{ $id }}" class="my-8 not-prose"></div>
+<div id="{{ $id }}" class="trends-embed"></div>
 <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/embed_loader.js"></script>
 <script type="text/javascript">
   trends.embed.renderExploreWidgetTo(

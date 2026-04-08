@@ -1,6 +1,6 @@
 {{- $title := cond .IsHome .Site.Title (printf "%s · %s" .Title .Site.Title) -}}
 {{- $description := .Description | default .Summary | default .Site.Params.description -}}
-{{- $css := resources.Get "css/main.css" | css.TailwindCSS -}}
+{{- $css := resources.Get "css/main.scss" | css.Sass (dict "transpiler" "libsass" "outputStyle" "compressed") -}}
 {{- if hugo.IsProduction -}}
   {{- $css = $css | fingerprint | minify -}}
 {{- end }}

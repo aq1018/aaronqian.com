@@ -19,6 +19,5 @@
   shadow-intensity="1"
   exposure="1"
   camera-orbit="0deg {{ $phi }}deg auto"
-  style="width: 100%; aspect-ratio: {{ $aspect }};"
-  class="my-8 rounded-lg border border-border bg-background"
+  style="{{ printf "width: 100%%; aspect-ratio: %s;" $aspect | safeCSS }}"
 ></model-viewer>

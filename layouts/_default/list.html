@@ -1,16 +1,16 @@
 {{ define "main" }}
-  <header class="mb-8">
-    <h1 class="text-4xl font-bold tracking-tight">{{ .Title }}</h1>
-    {{ with .Description }}<p class="mt-2 text-lg text-muted">{{ . }}</p>{{ end }}
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
   </header>
-  <ul class="space-y-6">
+  <ul class="entry-list">
     {{ range .Pages.ByDate.Reverse }}
-      <li>
-        <a href="{{ .RelPermalink }}" class="block group">
-          <h2 class="text-xl font-semibold text-content group-hover:text-link">{{ .Title }}</h2>
-          {{ with .Description }}<p class="mt-1 text-muted">{{ . }}</p>{{ end }}
+      <li class="entry">
+        <a href="{{ .RelPermalink }}">
+          <h2>{{ .Title }}</h2>
+          {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
           {{ if not .Date.IsZero }}
-            <p class="mt-1 text-sm text-muted"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
+            <p class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
           {{ end }}
         </a>
       </li>

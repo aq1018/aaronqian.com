@@ -11,7 +11,7 @@
   {{- $small := $resource.Resize "640x q85 webp" -}}
   {{- $medium := $resource.Resize "960x q85 webp" -}}
   {{- $large := $resource.Resize "1440x q85 webp" -}}
-  <figure class="my-8">
+  <figure>
     <picture>
       <source srcset="{{ $small.RelPermalink }} 640w, {{ $medium.RelPermalink }} 960w, {{ $large.RelPermalink }} 1440w" sizes="(max-width: 768px) 100vw, 768px" type="image/webp" />
       <img
@@ -21,14 +21,13 @@
         decoding="async"
         width="{{ $medium.Width }}"
         height="{{ $medium.Height }}"
-        class="rounded-lg border border-border"
       />
     </picture>
-    {{ with $title }}<figcaption class="mt-2 text-center text-sm text-muted">{{ . }}</figcaption>{{ end }}
+    {{ with $title }}<figcaption>{{ . }}</figcaption>{{ end }}
   </figure>
 {{- else }}
-  <figure class="my-8">
-    <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" decoding="async" class="rounded-lg border border-border" />
-    {{ with $title }}<figcaption class="mt-2 text-center text-sm text-muted">{{ . }}</figcaption>{{ end }}
+  <figure>
+    <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy" decoding="async" />
+    {{ with $title }}<figcaption>{{ . }}</figcaption>{{ end }}
   </figure>
 {{- end }}

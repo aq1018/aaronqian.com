@@ -53,9 +53,8 @@
 
 /* -----------------------------
    SEMANTIC TOKENS — DARK ONLY
-   Exposed to Tailwind utilities via @theme
    ----------------------------- */
-@theme {
+:root {
   /* Base */
   --color-background: var(--color-gray-950);
   --color-content: var(--color-gray-200);

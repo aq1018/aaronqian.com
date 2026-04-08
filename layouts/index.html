@@ -1,34 +1,34 @@
 {{ define "main" }}
-  <section class="py-12">
-    <h1 class="text-5xl font-bold tracking-tight">{{ .Site.Title }}</h1>
-    <p class="mt-4 text-xl text-muted">{{ .Site.Params.description }}</p>
+  <section class="hero">
+    <h1>{{ .Site.Title }}</h1>
+    <p class="tagline">{{ .Site.Params.description }}</p>
   </section>
 
-  <section class="py-8">
-    <h2 class="text-2xl font-semibold mb-4">Recent posts</h2>
-    <ul class="space-y-4">
+  <section class="home-section">
+    <h2>Recent posts</h2>
+    <ul class="entry-list compact">
       {{ range first 5 (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}
-        <li>
-          <a href="{{ .RelPermalink }}" class="block group">
-            <h3 class="text-lg font-medium text-content group-hover:text-link">{{ .Title }}</h3>
-            {{ with .Description }}<p class="text-sm text-muted">{{ . }}</p>{{ end }}
+        <li class="entry">
+          <a href="{{ .RelPermalink }}">
+            <h3>{{ .Title }}</h3>
+            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
           </a>
         </li>
       {{ end }}
     </ul>
-    <p class="mt-4"><a href="/blog/" class="text-link">All posts →</a></p>
+    <p class="more"><a href="/blog/">All posts →</a></p>
   </section>
 
-  <section class="py-8">
-    <h2 class="text-2xl font-semibold mb-4">Projects</h2>
-    <ul class="space-y-4">
+  <section class="home-section">
+    <h2>Projects</h2>
+    <ul class="entry-list compact">
       {{ with site.GetPage "/projects" }}
         {{ range .Sections.ByParam "order" }}
-          <li>
-            <a href="{{ .RelPermalink }}" class="block group">
-              <h3 class="text-lg font-medium text-content group-hover:text-link">{{ .Title }}</h3>
-              {{ with .Description }}<p class="text-sm text-muted">{{ . }}</p>{{ end }}
-              {{ with .Params.aside }}<p class="text-sm italic text-accent">{{ . }}</p>{{ end }}
+          <li class="entry">
+            <a href="{{ .RelPermalink }}">
+              <h3>{{ .Title }}</h3>
+              {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+              {{ with .Params.aside }}<p class="aside">{{ . }}</p>{{ end }}
             </a>
           </li>
         {{ end }}

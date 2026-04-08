@@ -3,9 +3,9 @@
   <head>
     {{ partial "head.html" . }}
   </head>
-  <body class="bg-background text-content font-sans antialiased">
+  <body>
     {{ partial "header.html" . }}
-    <main id="main" class="mx-auto max-w-3xl px-6 py-12">
+    <main id="main" class="site-main">
       {{ block "main" . }}{{ end }}
     </main>
     {{ partial "footer.html" . }}

@@ -1,33 +1,33 @@
 {{ define "main" }}
   {{ if .Parent.IsHome }}
     {{/* Top-level /projects/ — list all projects */}}
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold tracking-tight">{{ .Title }}</h1>
-      {{ with .Description }}<p class="mt-2 text-lg text-muted">{{ . }}</p>{{ end }}
+    <header class="page-header">
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
     </header>
-    <ul class="space-y-6">
+    <ul class="entry-list">
       {{ range .Sections.ByParam "order" }}
-        <li>
-          <a href="{{ .RelPermalink }}" class="block group">
-            <h2 class="text-xl font-semibold text-content group-hover:text-link">{{ .Title }}</h2>
-            {{ with .Description }}<p class="mt-1 text-muted">{{ . }}</p>{{ end }}
-            {{ with .Params.aside }}<p class="mt-1 italic text-accent text-sm">{{ . }}</p>{{ end }}
+        <li class="entry">
+          <a href="{{ .RelPermalink }}">
+            <h2>{{ .Title }}</h2>
+            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+            {{ with .Params.aside }}<p class="aside">{{ . }}</p>{{ end }}
           </a>
         </li>
       {{ end }}
     </ul>
   {{ else }}
     {{/* Individual project page — content + recent logs */}}
-    <article class="prose prose-invert max-w-none">
-      <header class="mb-8">
-        <h1 class="text-4xl font-bold tracking-tight">{{ .Title }}</h1>
-        {{ with .Description }}<p class="mt-2 text-lg text-muted">{{ . }}</p>{{ end }}
-        {{ with .Params.aside }}<p class="mt-2 italic text-accent">{{ . }}</p>{{ end }}
+    <article class="post">
+      <header class="page-header">
+        <h1>{{ .Title }}</h1>
+        {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+        {{ with .Params.aside }}<p class="aside">{{ . }}</p>{{ end }}
         {{ with .Params.links }}
-          <ul class="mt-4 flex flex-wrap gap-4 text-sm">
-            {{ with .github }}<li><a href="{{ . }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1"><span class="icon-[simple-icons--github] size-4"></span>GitHub</a></li>{{ end }}
-            {{ with .site }}<li><a href="{{ . }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1"><span class="icon-[heroicons--globe-alt] size-4"></span>Site</a></li>{{ end }}
-            {{ with .docs }}<li><a href="{{ . }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1"><span class="icon-[heroicons--book-open] size-4"></span>Docs</a></li>{{ end }}
+          <ul class="project-links">
+            {{ with .github }}<li><a href="{{ . }}" target="_blank" rel="noopener">{{ partial "icon.html" "github" }}GitHub</a></li>{{ end }}
+            {{ with .site }}<li><a href="{{ . }}" target="_blank" rel="noopener">{{ partial "icon.html" "globe-alt" }}Site</a></li>{{ end }}
+            {{ with .docs }}<li><a href="{{ . }}" target="_blank" rel="noopener">{{ partial "icon.html" "book-open" }}Docs</a></li>{{ end }}
           </ul>
         {{ end }}
       </header>
@@ -38,21 +38,21 @@
 
     {{ $logs := .RegularPagesRecursive }}
     {{ if $logs }}
-      <section class="mt-16">
-        <h2 class="text-2xl font-semibold mb-4">Recent build logs</h2>
-        <ul class="space-y-4">
+      <section class="recent-logs">
+        <h2>Recent build logs</h2>
+        <ul class="entry-list compact">
           {{ range first 10 $logs.ByDate.Reverse }}
-            <li>
-              <a href="{{ .RelPermalink }}" class="block group">
-                <h3 class="text-lg font-medium text-content group-hover:text-link">{{ .Title }}</h3>
+            <li class="entry">
+              <a href="{{ .RelPermalink }}">
+                <h3>{{ .Title }}</h3>
                 {{ if not .Date.IsZero }}
-                  <p class="text-sm text-muted"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
+                  <p class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
                 {{ end }}
               </a>
             </li>
           {{ end }}
         </ul>
-        <p class="mt-4"><a href="{{ .RelPermalink }}logs/" class="text-link">All logs →</a></p>
+        <p class="more"><a href="{{ .RelPermalink }}logs/">All logs →</a></p>
       </section>
     {{ end }}
   {{ end }}
