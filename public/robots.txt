@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://aaronqian.com/sitemap-index.xml

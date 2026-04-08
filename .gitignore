@@ -1,38 +1,23 @@
-# build output
-dist/
-# generated types
-.astro/
+# Hugo
+public/
+resources/
+.hugo_build.lock
 
-# wrangler
-.wrangler/
-
-# dependencies
+# Node
 node_modules/
-node_modules/.astro-og-canvas/
 
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-
-# environment variables
+# Local env
 .env
-.env.production
 .envrc
 
-# macOS-specific files
+# Playwright / test artifacts
+.playwright-mcp/
+*.png
+
+# OS
 .DS_Store
 
-# jetbrains setting folder
+# IDE
+.vscode/
 .idea/
-
-# AI files - ignore all except shared settings and hooks
-.claude/*
-!.claude/settings.json
-.playwright-mcp
-
-# generated files
-*.generated.*
-stats.html
+.zed/

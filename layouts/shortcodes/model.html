@@ -1,0 +1,24 @@
+{{- /*
+  Embed a glTF/GLB model via Google's model-viewer web component.
+  Args: src (required, relative to page bundle), alt, aspect (default 16/9),
+  tilt (degrees down from horizontal; negative looks from above).
+*/ -}}
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default "3D model" -}}
+{{- $aspect := .Get "aspect" | default "16/9" -}}
+{{- $tilt := .Get "tilt" | default "0" -}}
+{{- $resource := .Page.Resources.GetMatch $src -}}
+{{- $url := cond (ne $resource nil) ($resource.RelPermalink) $src -}}
+{{- /* model-viewer camera-orbit: theta phi radius. Default phi 75deg, tilt subtracts. */ -}}
+{{- $phi := sub 75 (int $tilt) -}}
+<model-viewer
+  src="{{ $url }}"
+  alt="{{ $alt }}"
+  camera-controls
+  auto-rotate
+  shadow-intensity="1"
+  exposure="1"
+  camera-orbit="0deg {{ $phi }}deg auto"
+  style="width: 100%; aspect-ratio: {{ $aspect }};"
+  class="my-8 rounded-lg border border-border bg-background"
+></model-viewer>

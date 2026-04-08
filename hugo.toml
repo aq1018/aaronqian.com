@@ -1,0 +1,42 @@
+baseURL = 'https://aaronqian.com/'
+locale = 'en-us'
+title = 'Aaron Qian'
+enableRobotsTXT = true
+enableGitInfo = false
+summaryLength = 30
+
+[pagination]
+  pagerSize = 10
+
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        block = [['\[', '\]'], ['$$', '$$']]
+        inline = [['\(', '\)'], ['$', '$']]
+  [markup.highlight]
+    style = 'monokai'
+    lineNos = false
+    codeFences = true
+    guessSyntax = true
+    tabWidth = 2
+
+[outputs]
+  home = ['HTML', 'RSS']
+  section = ['HTML', 'RSS']
+
+[sitemap]
+  changefreq = 'weekly'
+  filename = 'sitemap.xml'
+  priority = 0.5
+
+[params]
+  description = 'Engineer & Consultant. Hardware Hobbyist. Father.'
+  author = 'Aaron Qian'

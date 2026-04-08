@@ -1,5 +1,0 @@
-# Cloudflare configuration
-# Copy this file to .envrc and fill in your actual values
-# Then run `direnv allow` to load the environment variables
-
-export CLOUDFLARE_ACCOUNT_ID=your-cloudflare-account-id-here

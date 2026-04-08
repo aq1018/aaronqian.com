@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="{{ .Site.Language.Lang | default "en" }}">
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="bg-background text-content font-sans antialiased">
+    {{ partial "header.html" . }}
+    <main id="main" class="mx-auto max-w-3xl px-6 py-12">
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ partial "footer.html" . }}
+    {{ partial "analytics.html" . }}
+  </body>
+</html>

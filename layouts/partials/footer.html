@@ -1,0 +1,20 @@
+<footer class="border-t border-border mt-24">
+  <div class="mx-auto max-w-3xl px-6 py-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-sm text-muted">
+    <p>© {{ now.Year }} Aaron Qian</p>
+    <ul class="flex flex-wrap gap-4">
+      {{ range where (sort hugo.Data.socials "position") "enabled" true }}
+        <li>
+          <a
+            href="{{ .url }}"
+            {{ with .rel }}rel="{{ . }}"{{ end }}
+            class="inline-flex items-center gap-1 text-muted hover:text-link"
+            title="{{ .label }}"
+          >
+            <span class="icon-[{{ .icon }}] size-4" aria-hidden="true"></span>
+            <span class="sr-only">{{ .label }}</span>
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  </div>
+</footer>

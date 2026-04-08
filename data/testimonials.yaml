@@ -1,0 +1,15 @@
+- quote: >
+    Aaron shipped our MVP in weeks, not months. His focus on small, testable
+    increments kept us moving forward without surprises.
+  author: Jane Smith
+  title: CTO, TechStartup Inc
+  position: 1
+  enabled: false
+
+- quote: >
+    Working with Aaron felt like having a senior engineer embedded in our team.
+    He documented decisions and made the codebase approachable.
+  author: Michael Chen
+  title: Product Lead, SaaS Co
+  position: 2
+  enabled: false

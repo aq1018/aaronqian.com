@@ -1,0 +1,28 @@
+{{- /*
+  Embed a Google Trends explore widget.
+  Args:
+    keywords (required): comma-separated search terms or freebase IDs
+    range:    time window (default "5-y"; passed as "today RANGE")
+    geo:      country code (default "" = worldwide)
+    type:     widget type (default "TIMESERIES"; also GEO_MAP, RELATED_TOPICS, RELATED_QUERIES)
+*/ -}}
+{{- $keywords := .Get "keywords" -}}
+{{- $range := .Get "range" | default "5-y" -}}
+{{- $geo := .Get "geo" | default "" -}}
+{{- $type := .Get "type" | default "TIMESERIES" -}}
+{{- $id := printf "trends-%d" .Ordinal -}}
+{{- $items := slice -}}
+{{- range $kw := split $keywords "," -}}
+  {{- $items = $items | append (dict "keyword" (trim $kw " ") "geo" $geo "time" (printf "today %s" $range)) -}}
+{{- end -}}
+{{- $config := dict "comparisonItem" $items "category" 0 "property" "" -}}
+<div id="{{ $id }}" class="my-8 not-prose"></div>
+<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/embed_loader.js"></script>
+<script type="text/javascript">
+  trends.embed.renderExploreWidgetTo(
+    document.getElementById('{{ $id }}'),
+    '{{ $type }}',
+    {{ $config | jsonify | safeJS }},
+    { guestPath: 'https://trends.google.com:443/trends/embed/' }
+  )
+</script>

@@ -1,0 +1,89 @@
+/* -----------------------------
+   COLOR PALETTE — OKLCH
+   ----------------------------- */
+:root {
+  /* Cyan (primary) */
+  --color-cyan-50: oklch(0.97 0.02 210);
+  --color-cyan-100: oklch(0.94 0.05 210);
+  --color-cyan-200: oklch(0.89 0.09 210);
+  --color-cyan-300: oklch(0.8 0.12 210);
+  --color-cyan-400: oklch(0.71 0.19 210);
+  --color-cyan-500: oklch(0.6 0.27 210);
+  --color-cyan-600: oklch(0.4 0.19 210);
+  --color-cyan-700: oklch(0.38 0.12 210);
+  --color-cyan-800: oklch(0.25 0.05 210);
+  --color-cyan-900: oklch(0.12 0.02 210);
+  --color-cyan-950: oklch(0.06 0.01 210);
+
+  /* Gold (accent) */
+  --color-gold-50: oklch(0.97 0.02 85);
+  --color-gold-100: oklch(0.94 0.05 85);
+  --color-gold-200: oklch(0.89 0.09 85);
+  --color-gold-300: oklch(0.8 0.12 85);
+  --color-gold-400: oklch(0.71 0.19 85);
+  --color-gold-500: oklch(0.6 0.27 85);
+  --color-gold-600: oklch(0.49 0.19 85);
+  --color-gold-700: oklch(0.38 0.12 85);
+  --color-gold-800: oklch(0.25 0.05 85);
+  --color-gold-900: oklch(0.12 0.02 85);
+  --color-gold-950: oklch(0.06 0.01 85);
+
+  /* Grays (subtle warm tint) */
+  --color-gray-50: oklch(0.99 0.005 85);
+  --color-gray-100: oklch(0.97 0.006 85);
+  --color-gray-200: oklch(0.93 0.008 85);
+  --color-gray-300: oklch(0.92 0.01 85);
+  --color-gray-400: oklch(0.7 0.015 85);
+  --color-gray-500: oklch(0.45 0.01 85);
+  --color-gray-600: oklch(0.45 0.012 75);
+  --color-gray-700: oklch(0.38 0.012 75);
+  --color-gray-800: oklch(0.32 0.012 75);
+  --color-gray-900: oklch(0.35 0.01 75);
+  --color-gray-950: oklch(0.12 0.015 75);
+
+  /* Purple (secondary) */
+  --color-purple-400: oklch(0.71 0.19 300);
+
+  /* Status colors (only the dark anchor shade) */
+  --color-red-400: oklch(0.71 0.19 15);
+  --color-green-400: oklch(0.71 0.19 140);
+  --color-orange-400: oklch(0.71 0.19 45);
+  --color-indigo-400: oklch(0.71 0.19 265);
+}
+
+/* -----------------------------
+   SEMANTIC TOKENS — DARK ONLY
+   Exposed to Tailwind utilities via @theme
+   ----------------------------- */
+@theme {
+  /* Base */
+  --color-background: var(--color-gray-950);
+  --color-content: var(--color-gray-200);
+  --color-border: var(--color-gray-800);
+  --color-muted: var(--color-gray-300);
+  --color-disabled: var(--color-gray-500);
+  --color-link: var(--color-cyan-400);
+  --color-highlight: var(--color-cyan-900);
+
+  /* Brand */
+  --color-primary: var(--color-cyan-400);
+  --color-primary-content: var(--color-gray-950);
+  --color-accent: var(--color-gold-400);
+  --color-accent-content: var(--color-gray-950);
+  --color-secondary: var(--color-purple-400);
+  --color-secondary-content: var(--color-gray-950);
+
+  /* Neutral */
+  --color-neutral: var(--color-gray-200);
+  --color-neutral-content: var(--color-gray-950);
+
+  /* Status */
+  --color-danger: var(--color-red-400);
+  --color-success: var(--color-green-400);
+  --color-warning: var(--color-orange-400);
+  --color-info: var(--color-indigo-400);
+
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
