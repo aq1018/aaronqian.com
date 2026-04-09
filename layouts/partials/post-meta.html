@@ -1,0 +1,24 @@
+{{- /* Reusable meta row: date · tags. Skips empty fields. */ -}}
+{{- $hasDate := and .Date (not .Date.IsZero) -}}
+{{- $tags := .Params.tags -}}
+{{- if or $hasDate $tags -}}
+  <div class="meta">
+    {{- if $hasDate -}}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+    {{- end -}}
+    {{- with $tags -}}
+      <ul class="tags">
+        {{- range . -}}
+          {{- $term := site.GetPage (printf "/tags/%s" (urlize .)) -}}
+          <li>
+            {{- if $term -}}
+              <a class="tag" href="{{ $term.RelPermalink }}">{{ . }}</a>
+            {{- else -}}
+              <span class="tag">{{ . }}</span>
+            {{- end -}}
+          </li>
+        {{- end -}}
+      </ul>
+    {{- end -}}
+  </div>
+{{- end -}}

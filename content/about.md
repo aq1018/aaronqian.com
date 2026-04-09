@@ -1,5 +1,5 @@
 ---
-title: Aaron Qian
+title: About Aaron
 description: Engineer & Consultant · Hardware Hobbyist · Father
 microLine: LIVE BY PRINCIPLE. ACT IN TRUTH. GUIDE WITH EMPATHY.
 workingStyle:

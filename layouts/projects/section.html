@@ -8,11 +8,12 @@
     <ul class="entry-list">
       {{ range .Sections.ByParam "order" }}
         <li class="entry">
-          <a href="{{ .RelPermalink }}">
-            <h2>{{ .Title }}</h2>
-            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
-            {{ with .Params.aside }}<p class="aside">{{ . }}</p>{{ end }}
-          </a>
+          <h2>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{ with .Params.status }}<span class="status-badge status-badge--{{ . }}">{{ . }}</span>{{ end }}
+          </h2>
+          {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+          {{ with .Params.aside }}<p class="aside">{{ . }}</p>{{ end }}
         </li>
       {{ end }}
     </ul>
@@ -20,7 +21,11 @@
     {{/* Individual project page — content + recent logs */}}
     <article class="post">
       <header class="page-header">
-        <h1>{{ .Title }}</h1>
+        {{ partial "breadcrumb.html" . }}
+        <h1>
+          {{ .Title }}
+          {{ with .Params.status }}<span class="status-badge status-badge--{{ . }}">{{ . }}</span>{{ end }}
+        </h1>
         {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
         {{ with .Params.aside }}<p class="aside">{{ . }}</p>{{ end }}
         {{ with .Params.links }}
@@ -38,17 +43,15 @@
 
     {{ $logs := .RegularPagesRecursive }}
     {{ if $logs }}
-      <section class="recent-logs">
-        <h2>Recent build logs</h2>
-        <ul class="entry-list compact">
+      <section class="section">
+        <header>
+          <h2>Recent build logs</h2>
+        </header>
+        <ul class="entry-list">
           {{ range first 10 $logs.ByDate.Reverse }}
             <li class="entry">
-              <a href="{{ .RelPermalink }}">
-                <h3>{{ .Title }}</h3>
-                {{ if not .Date.IsZero }}
-                  <p class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
-                {{ end }}
-              </a>
+              <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+              {{ partial "post-meta.html" . }}
             </li>
           {{ end }}
         </ul>

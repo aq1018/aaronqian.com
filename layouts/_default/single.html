@@ -1,14 +1,15 @@
 {{ define "main" }}
   <article class="post">
     <header class="page-header">
+      {{ partial "breadcrumb.html" . }}
       <h1>{{ .Title }}</h1>
       {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
-      {{ if not .Date.IsZero }}
-        <p class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></p>
-      {{ end }}
+      {{ partial "post-meta.html" . }}
     </header>
+    {{ partial "post-nav.html" (dict "page" . "position" "top") }}
     <div class="content">
       {{ .Content }}
     </div>
+    {{ partial "post-nav.html" (dict "page" . "position" "bottom") }}
   </article>
 {{ end }}

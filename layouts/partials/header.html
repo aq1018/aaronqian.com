@@ -1,10 +1,19 @@
+{{- $current := .RelPermalink -}}
+{{- $items := slice
+    (dict "href" "/projects/" "label" "Projects" "match" "/projects")
+    (dict "href" "/blog/" "label" "Blog" "match" "/blog")
+    (dict "href" "/about/" "label" "About" "match" "/about")
+-}}
 <header class="site-header">
-  <nav>
-    <a href="/" class="brand">Aaron Qian</a>
+  <nav aria-label="Primary">
+    <a href="/" class="brand"{{ if eq $current "/" }} aria-current="page"{{ end }}>Aaron Qian</a>
     <ul>
-      <li><a href="/blog/">Blog</a></li>
-      <li><a href="/projects/">Projects</a></li>
-      <li><a href="/about/">About</a></li>
+      {{- range $items -}}
+        {{- $active := or (eq $current .href) (and (ne .match "/") (hasPrefix $current (printf "%s/" (trim .match "/")))) -}}
+        <li>
+          <a href="{{ .href }}"{{ if $active }} aria-current="page"{{ end }}>{{ .label }}</a>
+        </li>
+      {{- end -}}
     </ul>
   </nav>
 </header>

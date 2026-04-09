@@ -28,7 +28,6 @@ So without further ado, let’s dive into the details of this board.
 More info:
 
 - [KiCad files](https://github.com/aq1018/open-servo-core/tree/main/hardware/encoder-board)
-- [JLCPCB production files](https://github.com/aq1018/open-servo-core/tree/main/hardware/encoder-board/jlcpcb/production_files)
 
 ## TL;DR
 
@@ -88,7 +87,7 @@ This board is the **exploratory platform** for both.
 
 ## Schematic
 
-![Circuit schematic showing dual ITR1204 IR sensor configuration with current limiting resistors and decoupling capacitors](encoder-board/encoder-board.svg)
+![Circuit schematic showing dual ITR1204 IR sensor configuration with current limiting resistors and decoupling capacitors](encoder-board.svg)
 
 ---
 
@@ -137,9 +136,9 @@ That’s intentional: this board is meant to be **easy to retune** by swapping R
 values as you experiment with 5 V vs 3.3 V, digital vs analog, or different LED
 currents and pull-downs.
 
-![Front copper layer of the encoder board PCB. All passives and the connector are on this side.](encoder-board/encoder-board-F_Cu.svg)
+![Front copper layer of the encoder board PCB. All passives and the connector are on this side.](encoder-board-F_Cu.svg)
 
-![Back copper layer. Only the two IR sensors are on this side so it can sit close to a disk or inside a shroud.](encoder-board/encoder-board-B_Cu.svg)
+![Back copper layer. Only the two IR sensors are on this side so it can sit close to a disk or inside a shroud.](encoder-board-B_Cu.svg)
 
 ---
 

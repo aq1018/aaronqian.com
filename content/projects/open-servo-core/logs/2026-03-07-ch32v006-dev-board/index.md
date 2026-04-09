@@ -1,6 +1,6 @@
 ---
-date: '2026-03-07T17:32:38.071Z'
-title: 'CH32V006 Based Dev Board For OpenServoCore'
+date: "2026-03-07T17:32:38.071Z"
+title: "CH32V006 Based Dev Board For OpenServoCore"
 draft: true
 tags:
   - hardware
@@ -27,7 +27,7 @@ images are correct.
 
 Here is a quick peak of the board.
 
-{{< model src="servo-dev-board-ch32v006-2.glb" alt="3D model of CH32V006 based OpenServoCore dev board" aspect="16/9" tilt="-35" >}}
+{{<model src="servo-dev-board-ch32v006.glb" alt="3D model of CH32V006 based OpenServoCore dev board" aspect="4/3" tilt="-50">}}
 
 ## Features
 

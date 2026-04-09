@@ -1,38 +1,48 @@
 {{ define "main" }}
   <section class="hero">
-    <h1>{{ .Site.Title }}</h1>
+    <p class="kicker">Engineer · Hardware Hobbyist · Father</p>
     <p class="tagline">{{ .Site.Params.description }}</p>
   </section>
 
-  <section class="home-section">
-    <h2>Recent posts</h2>
-    <ul class="entry-list compact">
+  {{ with site.GetPage "/projects" }}
+    {{ range .Sections.ByParam "order" }}
+      <section class="section">
+        <header>
+          <h2>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{ with .Params.status }}<span class="status-badge status-badge--{{ . }}">{{ . }}</span>{{ end }}
+          </h2>
+          {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+        </header>
+        {{ $logs := .RegularPagesRecursive }}
+        {{ if $logs }}
+          <ul class="entry-list">
+            {{ range first 5 $logs.ByDate.Reverse }}
+              <li class="entry">
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                {{ partial "post-meta.html" . }}
+              </li>
+            {{ end }}
+          </ul>
+          <p class="more"><a href="{{ .RelPermalink }}logs/">All logs →</a></p>
+        {{ end }}
+      </section>
+    {{ end }}
+  {{ end }}
+
+  <section class="section">
+    <header>
+      <h2><a href="/blog/">Recent posts</a></h2>
+    </header>
+    <ul class="entry-list">
       {{ range first 5 (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}
         <li class="entry">
-          <a href="{{ .RelPermalink }}">
-            <h3>{{ .Title }}</h3>
-            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
-          </a>
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+          {{ partial "post-meta.html" . }}
         </li>
       {{ end }}
     </ul>
     <p class="more"><a href="/blog/">All posts →</a></p>
-  </section>
-
-  <section class="home-section">
-    <h2>Projects</h2>
-    <ul class="entry-list compact">
-      {{ with site.GetPage "/projects" }}
-        {{ range .Sections.ByParam "order" }}
-          <li class="entry">
-            <a href="{{ .RelPermalink }}">
-              <h3>{{ .Title }}</h3>
-              {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
-              {{ with .Params.aside }}<p class="aside">{{ . }}</p>{{ end }}
-            </a>
-          </li>
-        {{ end }}
-      {{ end }}
-    </ul>
   </section>
 {{ end }}

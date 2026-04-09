@@ -1,0 +1,31 @@
+{{- /* Prev / next navigation within the current section.
+       Accepts either a Page directly, or a dict {page, position}
+       where position is "top" or "bottom" (default "bottom"). */ -}}
+{{- $page := . -}}
+{{- $position := "bottom" -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = .page -}}
+  {{- $position = .position | default "bottom" -}}
+{{- end -}}
+{{- $prev := $page.PrevInSection -}}
+{{- $next := $page.NextInSection -}}
+{{- if or $prev $next -}}
+  <nav class="post-nav post-nav-{{ $position }}" aria-label="Post navigation">
+    {{- if $prev -}}
+      <a href="{{ $prev.RelPermalink }}" rel="prev">
+        <span class="direction">← Previous</span>
+        <span class="title">{{ $prev.Title }}</span>
+      </a>
+    {{- else -}}
+      <span></span>
+    {{- end -}}
+    {{- if $next -}}
+      <a href="{{ $next.RelPermalink }}" rel="next">
+        <span class="direction">Next →</span>
+        <span class="title">{{ $next.Title }}</span>
+      </a>
+    {{- else -}}
+      <span></span>
+    {{- end -}}
+  </nav>
+{{- end -}}

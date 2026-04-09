@@ -1,0 +1,23 @@
+{{- /* Breadcrumb walking up .Parent until home. Skips on home and top-level
+       sections. */ -}}
+{{- $crumbs := slice -}}
+{{- $page := . -}}
+{{- range seq 5 -}}
+  {{- with $page.Parent -}}
+    {{- if not .IsHome -}}
+      {{- $crumbs = $crumbs | append . -}}
+    {{- end -}}
+    {{- $page = . -}}
+  {{- end -}}
+{{- end -}}
+{{- if $crumbs -}}
+  {{- $crumbs = sort $crumbs ".RelPermalink" -}}
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      {{- range $crumbs -}}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+      {{- end -}}
+    </ol>
+  </nav>
+{{- end -}}
