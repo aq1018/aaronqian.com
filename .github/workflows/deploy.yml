@@ -1,4 +1,4 @@
-name: Deploy
+name: Build and deploy
 
 on:
   push:
@@ -6,8 +6,12 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: pages
   cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   deploy:
@@ -15,26 +19,60 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    env:
+      DART_SASS_VERSION: 1.89.1
+      HUGO_VERSION: 0.160.1
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install Hugo (extended)
-        env:
-          HUGO_VERSION: 0.160.1
-        run: |
-          curl -sSL "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz" \
-            | tar -xz -C /tmp hugo
-          sudo mv /tmp/hugo /usr/local/bin/hugo
-          hugo version
+      - name: Create directory for user-specific executable files
+        run: mkdir -p "${HOME}/.local"
 
       - name: Install Dart Sass
-        run: npm install -g sass
+        run: |
+          curl -sLJO "https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
+          tar -C "${HOME}/.local" -xf "dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
+          rm "dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
+          echo "${HOME}/.local/dart-sass" >> "${GITHUB_PATH}"
+
+      - name: Install Hugo
+        run: |
+          curl -sLJO "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          mkdir "${HOME}/.local/hugo"
+          tar -C "${HOME}/.local/hugo" -xf "hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          rm "hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          echo "${HOME}/.local/hugo" >> "${GITHUB_PATH}"
+
+      - name: Verify installations
+        run: |
+          echo "Dart Sass: $(sass --version)"
+          echo "Hugo: $(hugo version)"
+
+      - name: Cache restore
+        id: cache-restore
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ runner.temp }}/hugo_cache
+          key: hugo-${{ github.run_id }}
+          restore-keys:
+            hugo-
 
       - name: Build site
         env:
           HUGO_ENVIRONMENT: production
           HUGO_PARAMS_GOOGLEANALYTICSID: ${{ secrets.GA_MEASUREMENT_ID }}
-        run: hugo --minify
+        run: |
+          hugo build \
+            --gc \
+            --minify \
+            --cacheDir "${{ runner.temp }}/hugo_cache"
+
+      - name: Cache save
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ runner.temp }}/hugo_cache
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
