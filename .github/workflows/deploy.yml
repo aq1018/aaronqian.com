@@ -61,7 +61,7 @@ jobs:
       - name: Build site
         env:
           HUGO_ENVIRONMENT: production
-          HUGO_PARAMS_GOOGLEANALYTICSID: ${{ secrets.GA_MEASUREMENT_ID }}
+          HUGO_PARAMS_GOOGLEANALYTICSID: ${{ vars.GA_MEASUREMENT_ID }}
         run: |
           hugo build \
             --gc \
@@ -78,5 +78,5 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
