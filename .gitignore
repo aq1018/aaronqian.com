@@ -12,7 +12,6 @@ node_modules/
 
 # Playwright / test artifacts
 .playwright-mcp/
-*.png
 
 # OS
 .DS_Store
