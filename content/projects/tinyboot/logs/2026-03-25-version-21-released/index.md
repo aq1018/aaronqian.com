@@ -1,9 +1,8 @@
 ---
-date: '2026-04-04T02:06:45.628Z'
-title: 'Version 2.1 released'
+date: "2026-04-04T02:06:45.628Z"
+title: "Version 2.1 released"
 tags:
   - firmware
-project: 'tinyboot'
 draft: true
 ---
 
