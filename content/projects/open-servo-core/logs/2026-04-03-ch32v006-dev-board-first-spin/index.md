@@ -134,7 +134,9 @@ more time. Good.
 ## It Works
 
 I plugged in the board, flashed the blinker app, and the `STAT` LED started
-blinking. Then I brought up UART and that worked too.
+blinking. This means the GPIO block of the MCU didn't get fried by the reverse
+voltage and is functioning as if nothing had happened to it. I can't believe it
+actually works! Then I brought up UART and that worked too.
 
 ![Plugged in and working post PCB surgery](in-use.webp "Plugged in and working post PCB surgery")
 
