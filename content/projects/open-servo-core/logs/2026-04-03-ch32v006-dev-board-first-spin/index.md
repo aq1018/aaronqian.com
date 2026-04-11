@@ -11,16 +11,15 @@ since they were kind enough to sponsor the PCB and assembly for the
 OpenServoCore project, and a few days ago, I received a notification that the
 boards had been delivered.
 
-## Unboxing (eventually)
+## Unboxing (Eventually)
 
 That should've been the easy part. Instead, my first debugging task turned out
 not to be the board, but the shipping address. The tracking page said the
 package had arrived at my front door, but there was nothing there. After
-checking around the house and running around in circles trying to it in a
-panicked daze, I went back to the order details and realized I had entered the
-wrong house number. Facepalm. The package had been delivered to my neighbor
-instead. Luckily my lovely neighbor kept the package safe for me, and I was able
-to get the package back.
+checking around the house and running around in circles in a panicked daze, I
+went back to the order details and realized I had entered the wrong house
+number. Embarrassing mistake #1. The package had been delivered to my neighbor
+instead. Luckily my lovely neighbor kept it safe for me.
 
 After thanking my neighbor and skipping home like a five year old, I immediately
 opened the package. Seeing the red boards in front of me had made my day.
@@ -37,102 +36,132 @@ remarkably naive assumption.
 ## Powering On
 
 When I plugged in the USB-C cable to the board, the first thing I noticed is
-that the 3.3V rail LED didn't light up. This is an immediate bad sign, that
-means something past the LDO is not working right. I pulled out my multimeter
-and measured the voltage on the rail - 0.84V. Board defect? Design error? Bad
-parts? My mind raced through different possibilities. The components on the
-board felt cold, and I didn't smell any magic smoke coming out of the board. Thi
-is a good indication that nothing is shorted. But to be safe, I unplugged the
-power and started measuring with my multimeter, and I found nothing.
+that the 3.3V rail LED didn't light up. This is an immediate bad sign — it means
+something past the LDO is not working right. I pulled out my multimeter and
+measured the voltage on the rail: 0.84V. Board defect? Design error? Bad parts?
+My mind raced through different possibilities. The components on the board felt
+cold, and I didn't smell any magic smoke. That's a good indication that nothing
+is shorted. But to be safe, I unplugged the power and started probing with my
+multimeter. Nothing obvious.
 
-Out of ideas, I decided to test out other boards to see if it was a board defect
-after determining that the risk is fairly low, especially if I just plug it in
-for a brief second or two to see if the LED lights up. The results came up
-exactly the same: 3.3V LED is not lighting up. This means it was not a
-manufacturing issue. It's either the LDO is faulty or something wrong with my
-design.
+Out of ideas, I decided to test the other boards to see if it was a
+manufacturing defect. The results came up exactly the same: 3.3V LED not
+lighting up. So it wasn't a board defect. It's either the LDO or my design.
 
-To eliminate the possibility of faulty LDO, I hooked up the `GND` and `+3V3`
-rails with an external 3.3V power source. The result is still the same - 0.84V.
-So the conclusion is clear, PCBWay did a good job, but my design has failed.
+To eliminate the possibility of a faulty LDO, I hooked up the `GND` and `+3V3`
+rails with an external 3.3V power source. Still 0.84V. The conclusion was clear:
+PCBWay did a good job, but my design had failed.
 
 ## Debugging
 
-After narrowing down to design issue, I hunted through the KiCad PCB design file
-trying to hunt down any misplaced vias, traces, or design violations, and still
-couldn't find anything. I looked at the schematics again, and still nothing
-popped out as suspicious.
+After narrowing it down to a design issue, I hunted through the KiCad PCB design
+file looking for misplaced vias, traces, or design violations. Nothing. I stared
+at the schematics again. Still nothing suspicious.
 
-Out of options and ideas, I started randomly poking around different test
-points. At some point, I decided to hook the previously used external 3.3V to
-the 3.3V test point hook for some reason, and then I heard a pop and magic smoke
-came out. Strangely, the green LED lit up. I measured the `+3V3` rail and now
-it's 3.3V.
+Out of options, I started randomly poking around different test points. At some
+point, I decided to hook the external 3.3V supply to what was labeled as the
+`+3V3` test point hook.
 
-Well, something definitely got shorted open, I thought to myself, but couldn't
-identify where that brief pop and smell come from. However, looking at the PCB
-design, I got myself another facepalm moment: The top row of the test point
-hooks are all labeled wrong. I have no idea how this happened. I guess I was
-shifting the nets during design, but forgot to update the labels. That `+3V3`
-test point was actually the `EN` pin between the MCU and the DRV. By feeding
-3.3V to that pin, I either fried the DRV or the MCU, and this created an open
-short that allowed 3.3V to not be dragged down to 0.84V. Now I can narrow down
-the design issue to either the MCU or the DRV.
+Pop. Magic smoke.
 
-To test which one was the culprit, I decided to use desolder one component at a
-time, and then test the `+3V3` rail. With another board, I first desolder the
-DRV with a hot air reflow tool, plugged it in, still the same. Then repeated the
-same process with the MCU, and vola, the 3.3V LED lit up. So the issue is the
-MCU.
+My heart sank. But then — the green LED lit up. I stared at it for a moment,
+confused. I measured the `+3V3` rail: 3.3V. What?
 
-I then stared at the MCU design for a good 10 minutes, and then suddenly it
-dawned on me that I have made the rookiest mistake of all time. I swapped the
-VDD/VCC pins!!
+Something had clearly burned open, but I couldn't even tell where the pop came
+from. Then I looked at the PCB design more carefully and had my second moment of
+shame: the top row of test point hooks are all labeled wrong. Embarrassing
+mistake #2. I must have been shifting the nets during layout and forgot to
+update the silkscreen labels. That "3V3" test point was actually the `EN` pin
+between the MCU and the DRV. By feeding 3.3V directly into it, I had fried
+either the DRV or the MCU, and whatever burned open had stopped dragging the
+3.3V rail down to 0.84V.
+
+To figure out which one was the culprit, I grabbed a fresh board and started
+desoldering components one at a time. First the DRV, with a hot air reflow tool
+— plugged it in, still the same. Then the MCU — and the 3.3V LED lit up.
+
+I stared at the MCU schematic for a good 10 minutes, and then it hit me.
+Embarrassing mistake #3, and the rookiest one of all: I had swapped VDD and VCC.
 
 ## The Board Surgery
 
-With the root cause identified, the only logical next thing to do is to lift the
-VCC/VDD leads of the MCU and reflow the chips back onto the board, and that's
-exactly what I did. However, during soldering I yanked VCC lead a bit too hard
-it it fell off the MCU. For some reason, I decided to power on this poor board
-just to see what would happen. To my surprise, after connecting the debugger,
-the software actually recognized the MCU! This is HUGE. I proceeded to write a
-blinker app and was even able to flash to the MCU without issues. However, the
-`STAT` LED was permanently on. I measure all other GPIO pins, and
-unsurprisingly, they are all at 3.3V due to disconnected VCC.
+With the root cause identified, the fix was conceptually simple: lift the
+VCC/VDD leads of the MCU and wire them correctly. Whether it would actually work
+was another question. I had no idea if the MCU was still alive after being fed
+reverse voltage. But there was no other choice — I had 5 boards and all of them
+had the same design error. The only encouraging sign was that nothing had
+released magic smoke during normal power-on, which meant the MCU might have
+survived.
 
-However, this is hugely encouraging, and I proceeded to attempt a second surgery
-on board #3. This time instead of desoldering the MCU, I thought to myself, what
-if I just cut the trace to VCC lead from the decoupling capacitor, and cut and
-lift the VDD pin connected to the GND plane? (They are reversed in the design.)
-That turned out to be another failure, I cut the VDD pin a bit too hard, and the
-lead fell off again. Only 2 more boards left.
+### Attempt #1
 
-This time, I reviewed the PCB file more carefully, and decided it's better to
-just cut both the decoupling capacitor trace as well as the ground plane and
-measure continuity to ensure it's truly cut and then solder wires. After a bit
-of cutting and scratching I was able to isolate those two leads. The hardest
-part was to actually soldering the two thin magnet wires onto the leads and the
-near by decoupling capacitors cleanly, but after about an hour or so of shaky
-hands and lots of flux, I was finally able to successfully complete this
-surgery. After plugging the board in and flashing the blinker app to memory, the
-`STAT` LED started blinking. I then proceeded to UART bring up and that worked
-as well. With a sigh of relief, I have finally salvage the board with one extra
-board for backup.
+I lifted the VCC/VDD leads on the already desoldered MCU, and reflowed the chip
+back onto the board. But during soldering of the tiny magnet wires, I yanked the
+VCC lead a bit too hard and it snapped clean off. Out of morbid curiosity, I
+decided to power on the board anyway, just to see what would happen.
 
-Here is the post surgery board plugged in:
+To my surprise, the debugger recognized the MCU. I wrote a quick blinker app and
+flashed it — no issues. The `STAT` LED was permanently on and all GPIO pins read
+3.3V due to the disconnected VCC, so it wasn't a functional board, but the MCU
+was alive. That was huge.
 
-![Plugged in and working post PCB Surgery](in-use.webp "Plugged in and working post PCB Surgery")
+### Attempt #2
+
+Encouraged, I moved on to board #3. This time, instead of desoldering the entire
+MCU, I tried a more targeted approach: cut the trace from the decoupling
+capacitor to the VCC lead, then cut and lift the VDD pin from the ground plane.
+I went in with the knife, but cut the VDD lead a bit too aggressively — the
+whole lead fell off. Another board down. I had to stop, put everything away, and
+walk away for the night. Two failed attempts in a row was enough for one day.
+
+### Attempt #3
+
+The next day, with steadier nerves, I came back and reviewed the PCB layout more
+carefully. This time I planned every cut before touching the board. The
+approach: cut both the decoupling capacitor trace and the ground plane
+connection, verify isolation with continuity measurements, and then bridge the
+corrected connections with thin magnet wire.
+
+The cutting and scraping went fine. The hard part was soldering the magnet wire.
+The leads on the QFP package are tiny, and the wire kept slipping off. I bridged
+adjacent leads multiple times and had to wick them clean. The wire wouldn't stay
+in place while I tried to tack it down. I found myself holding my breath,
+magnifying glasses on, taking deep breaths between each attempt. After about an
+hour of shaky hands and generous amounts of flux, I finally got the wires to
+behave by pressing them against the body of the MCU. This let me hold the wire
+steady while aligning it with the leads precisely. I measured continuity one
+more time — good.
+
+## It Works
+
+I plugged in the board, flashed the blinker app, and the `STAT` LED started
+blinking. I let out a breath I didn't know I was holding. Then I brought up UART
+— that worked too.
+
+![Plugged in and working post PCB surgery](in-use.webp "Plugged in and working post PCB surgery")
+
+With a sigh of relief, I had salvaged the board, with one extra board left for
+backup.
+
+It's also worth noting just how resilient the CH32V006 turned out to be. This
+chip took reverse voltage on its power pins across multiple power-on cycles and
+still came back to life. For a $0.22 MCU, that's pretty impressive. I would not
+have expected it to survive, let alone run firmware afterwards.
+
+I also wanted to shout out to PCBWay for sponsoring this spin. I did not see any
+issues with manufacturing and the boards are of high quality. If I want to
+nitpick, the test point hooks are not aligned perfectly, but it's kind of
+expected due to how big the TP footprints are and the reflow process probably
+caused those hooks to float a bit. This is purely cosmetic however, and I
+probably should've used a smaller footprint anyway.
 
 ## What's Next
 
-The next day, I pushed out fixes to my design to Github and updated my previous
-post with the correct designs. However, at the time of this article is written,
-I still haven't had the time to fully test the board, so I cannot say the board
-is fully working, but it's looking like good progress.
+I pushed out fixes to the design on GitHub and updated my previous post with the
+corrected schematics. My next step is to fully verify the board — testing the
+DRV, UART buffer, ADCs, and the various sensors. Now that I know which pin is
+real power and which one is real ground, hopefully Rev. B will be a smoother
+sail.
 
-My next immediate step is to verify the board is fully functional. Specifically,
-testing DRV, UART buffer, ADCs, as well as various sensors to ensure the board
-is fully functional. Now that I know which pin is real power and which one is
-real ground like a grown up engineer, hopefully Rev. B will be a smoother sail
-for me and for anyone who is interested in this project.
+Three embarrassing mistakes, two failed surgeries, and one working board. I'll
+take it.
