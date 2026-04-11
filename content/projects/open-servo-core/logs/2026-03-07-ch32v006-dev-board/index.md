@@ -35,7 +35,7 @@ And here are the top level modules. As the schematics grew and grew, I finally
 decided to organize the components into modules and sub-sheets, which gave me
 more room for nicer schematic layouts and documentation.
 
-![Top Level Modules](modules.png)
+![Top Level Modules](modules.webp)
 
 The board is split into the following modules:
 
@@ -69,7 +69,7 @@ I have chosen components to support 3.6V (1S LiPo 80% empty) ~ 8.4V (2S LiPo
 full charge) so that the servos can ultimately run directly from LiPo battery
 power sources without needing another regulator.
 
-![Power Subsystem](power.png)
+![Power Subsystem](power.webp)
 
 One aspect of the design that took me a long time to finalize was the Power
 Source ORing. Initially I wasn't happy about the Schottky diodes (`SS54`)
@@ -99,7 +99,7 @@ As a result of low-side power shunt current sensing, we now have split ground
 (`PGND` and `GND`). A ferrite bead and capacitor are used to try to isolate the
 logic ground from the power ground — we'll see how this goes.
 
-![Motor Driver Subsystem](motor-driver.png)
+![Motor Driver Subsystem](motor-driver.webp)
 
 The previous STM32 board also didn't have voltage sensing, which limited
 visibility into the motor during system control. This board adds voltage sensors
@@ -126,7 +126,7 @@ needs some way to sense ambient temperature to match. This is done via the 10kΩ
 NTC (`TH1`). It is very low cost. The `VNTC` net goes to the ADC for temperature
 sensing.
 
-![Servo IO Subsystem](servo-io.png)
+![Servo IO Subsystem](servo-io.webp)
 
 Servo position sensing works mostly the same as the previous STM32-based board.
 I added a 4.7kΩ/0.1µF RC filter to smooth out jitter as a safety measure.
@@ -145,7 +145,7 @@ reuse the 3-wire connectors from traditional servos — however, the PWM wire is
 now single-wire UART, aka
 [DXL TTL](https://emanual.robotis.com/docs/en/parts/interface/dxl_bridge/).
 
-![Comms Subsystem](comms.png)
+![Comms Subsystem](comms.webp)
 
 The STM32 dev board only had regular UART connectors. This board integrates
 single-wire UART intended to work directly with existing Dynamixel TTL-style
@@ -171,7 +171,7 @@ while the `STM32F301` is closer to $1.85 each, despite being in a fairly similar
 class for this project. This is probably the biggest cost savings for this
 design.
 
-![MCU Subsystem](mcu.png)
+![MCU Subsystem](mcu.webp)
 
 I chose a 2x3 pin header for the debugger (`J3`). This is intended to be
 connected to the WCH-LinkE debugger for firmware programming and debugging. One
@@ -186,7 +186,7 @@ Point Hooks (`KS-5015`/`RH-5015`) for easy scope / digital analyzer access. I
 think this really accentuates the overall design for some reason... I might have
 gone a bit overboard, but I'm not regretting it.
 
-![Diagnostics Subsystem](diagnostics.png)
+![Diagnostics Subsystem](diagnostics.webp)
 
 ## Next Steps
 
