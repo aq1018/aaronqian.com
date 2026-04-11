@@ -36,13 +36,13 @@ remarkably naive assumption.
 ## Powering On
 
 When I plugged in the USB-C cable to the board, the first thing I noticed is
-that the 3.3V rail LED didn't light up. This is an immediate bad sign — it means
+that the 3.3V rail LED didn't light up. This is an immediate bad sign, it means
 something past the LDO is not working right. I pulled out my multimeter and
 measured the voltage on the rail: 0.84V. Board defect? Design error? Bad parts?
 My mind raced through different possibilities. The components on the board felt
-cold, and I didn't smell any magic smoke. That's a good indication that nothing
-is shorted. But to be safe, I unplugged the power and started probing with my
-multimeter. Nothing obvious.
+cold, and I didn't smell any magic smoke, which is a good indication that
+nothing is shorted. But to be safe, I unplugged the power and started probing
+with my multimeter. Nothing obvious.
 
 Out of ideas, I decided to test the other boards to see if it was a
 manufacturing defect. The results came up exactly the same: 3.3V LED not
@@ -62,9 +62,8 @@ Out of options, I started randomly poking around different test points. At some
 point, I decided to hook the external 3.3V supply to what was labeled as the
 `+3V3` test point hook.
 
-Pop. Magic smoke.
-
-My heart sank. But then — the green LED lit up. I stared at it for a moment,
+I heard a pop and magic smoke came out. I immediately thought I had just fried
+the board. But then, the green LED lit up. I stared at it for a moment,
 confused. I measured the `+3V3` rail: 3.3V. What?
 
 Something had clearly burned open, but I couldn't even tell where the pop came
@@ -77,8 +76,8 @@ either the DRV or the MCU, and whatever burned open had stopped dragging the
 3.3V rail down to 0.84V.
 
 To figure out which one was the culprit, I grabbed a fresh board and started
-desoldering components one at a time. First the DRV, with a hot air reflow tool
-— plugged it in, still the same. Then the MCU — and the 3.3V LED lit up.
+desoldering components one at a time. First the DRV, with a hot air reflow tool.
+Plugged it in, still the same. Then the MCU, and the 3.3V LED lit up.
 
 I stared at the MCU schematic for a good 10 minutes, and then it hit me.
 Embarrassing mistake #3, and the rookiest one of all: I had swapped VDD and VCC.
@@ -88,7 +87,7 @@ Embarrassing mistake #3, and the rookiest one of all: I had swapped VDD and VCC.
 With the root cause identified, the fix was conceptually simple: lift the
 VCC/VDD leads of the MCU and wire them correctly. Whether it would actually work
 was another question. I had no idea if the MCU was still alive after being fed
-reverse voltage. But there was no other choice — I had 5 boards and all of them
+reverse voltage. But there was no other choice, I had 5 boards and all of them
 had the same design error. The only encouraging sign was that nothing had
 released magic smoke during normal power-on, which meant the MCU might have
 survived.
@@ -101,7 +100,7 @@ VCC lead a bit too hard and it snapped clean off. Out of morbid curiosity, I
 decided to power on the board anyway, just to see what would happen.
 
 To my surprise, the debugger recognized the MCU. I wrote a quick blinker app and
-flashed it — no issues. The `STAT` LED was permanently on and all GPIO pins read
+flashed it, no issues. The `STAT` LED was permanently on and all GPIO pins read
 3.3V due to the disconnected VCC, so it wasn't a functional board, but the MCU
 was alive. That was huge.
 
@@ -110,7 +109,7 @@ was alive. That was huge.
 Encouraged, I moved on to board #3. This time, instead of desoldering the entire
 MCU, I tried a more targeted approach: cut the trace from the decoupling
 capacitor to the VCC lead, then cut and lift the VDD pin from the ground plane.
-I went in with the knife, but cut the VDD lead a bit too aggressively — the
+I went in with the knife, but cut the VDD lead a bit too aggressively and the
 whole lead fell off. Another board down. I had to stop, put everything away, and
 walk away for the night. Two failed attempts in a row was enough for one day.
 
@@ -130,13 +129,12 @@ magnifying glasses on, taking deep breaths between each attempt. After about an
 hour of shaky hands and generous amounts of flux, I finally got the wires to
 behave by pressing them against the body of the MCU. This let me hold the wire
 steady while aligning it with the leads precisely. I measured continuity one
-more time — good.
+more time. Good.
 
 ## It Works
 
 I plugged in the board, flashed the blinker app, and the `STAT` LED started
-blinking. I let out a breath I didn't know I was holding. Then I brought up UART
-— that worked too.
+blinking. Then I brought up UART and that worked too.
 
 ![Plugged in and working post PCB surgery](in-use.webp "Plugged in and working post PCB surgery")
 
@@ -158,7 +156,7 @@ probably should've used a smaller footprint anyway.
 ## What's Next
 
 I pushed out fixes to the design on GitHub and updated my previous post with the
-corrected schematics. My next step is to fully verify the board — testing the
+corrected schematics. My next step is to fully verify the board, testing the
 DRV, UART buffer, ADCs, and the various sensors. Now that I know which pin is
 real power and which one is real ground, hopefully Rev. B will be a smoother
 sail.
