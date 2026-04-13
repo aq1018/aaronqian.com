@@ -8,10 +8,55 @@ tags:
 As hinted at the end of my previous log, I sent the design of the CH32V006
 OpenServoCore dev board to [PCBWay](https://www.pcbway.com/) for fabrication,
 since they were kind enough to sponsor the PCB and assembly for the
-OpenServoCore project, and a few days ago, I received a notification that the
-boards had been delivered.
+OpenServoCore project.
+
+## The Ordering Process
+
+Before I get into the debugging saga, I want to talk about the ordering
+experience, because it turned out to be more eventful than I expected (entirely
+my fault, as you will soon see is a recurring theme in this post).
+
+After uploading my Gerber files, Chloe from PCBWay's team came back and pointed
+out that some of my pad clearances on the `SN74LVC2G241DCUR` dual buffer were
+under 0.19mm, which could cause solder mask bridging and potential shorts. The
+funny thing is that this was a standard KiCad footprint, and KiCad's own DRC
+didn't flag it either. I ended up swapping it for the LCSC footprint, which had
+the correct clearances. So before the board even went into production, PCBWay
+had already caught a mistake that neither I nor KiCad did.
+
+Then during BOM review, I realized I had submitted the wrong shunt resistor
+value for `RS1` (100 mOhm instead of 10 mOhm). The order was already in review,
+and I had to sheepishly email them asking for a last minute swap. They updated
+it without any fuss. At this point I was starting to wonder how many more of my
+own mistakes PCBWay was going to have to deal with before I even got the boards.
+
+Later on, Yilia from their team sent me photos of the assembled boards and asked
+me to confirm component orientation and LED polarity before they finished
+soldering the through-hole parts. They even placed little paper cutouts with "+"
+signs next to the LED anodes so I could easily verify the orientation in the
+photos, which I thought was a nice touch.
+
+![PCBWay assembly review photo for LED polarity confirmation](pcbway-assembly-review.webp "Assembly review photo sent by PCBWay for LED polarity confirmation")
+
+That kind of back-and-forth is not something I've experienced with other
+providers. Most of the time you upload your files, pay, and hope for the best.
+
+In terms of pricing, PCBWay is not the cheapest option out there. But for
+someone like me who apparently can't stop making mistakes, having a team that
+actually reviews your files and catches problems before they go into production
+probably ends up being cheaper in the long run. One less wasted spin pays for
+itself pretty quickly.
+
+It's also worth mentioning that at the time of this order, the `CH32V006F8P6`
+was not available on either JLCPCB or LCSC. The only way to get it assembled
+through JLCPCB would have been to buy the parts off AliExpress and solder them
+myself. PCBWay was able to source the parts and assemble the full board, so you
+don't have to worry about whether your entire BOM is available on LCSC. They
+will find the parts for you.
 
 ## Unboxing (Eventually)
+
+After a few weeks, I got a notification that the boards had arrived.
 
 That should've been the easy part. Instead, my first debugging task turned out
 not to be the board, but the shipping address. The tracking page said the
@@ -148,12 +193,12 @@ chip took reverse voltage on its power pins across multiple power-on cycles and
 still came back to life. For a $0.22 MCU, that's pretty impressive. I would not
 have expected it to survive, let alone run firmware afterwards.
 
-I also wanted to shout out to PCBWay for sponsoring this spin. I did not see any
-issues with manufacturing and the boards are of high quality. If I want to
-nitpick, the test point hooks are not aligned perfectly, but it's kind of
-expected due to how big the TP footprints are and the reflow process probably
-caused those hooks to float a bit. This is purely cosmetic however, and I
-probably should've used a smaller footprint anyway.
+As for the boards themselves, I did not see any issues with manufacturing and
+they are of high quality. If I want to nitpick, the test point hooks are not
+aligned perfectly, but that's kind of expected due to how big the TP footprints
+are and the reflow process probably caused those hooks to float a bit. This is
+purely cosmetic however, and I probably should've used a smaller footprint
+anyway.
 
 ## What's Next
 
