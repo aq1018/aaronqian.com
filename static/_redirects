@@ -2,3 +2,9 @@
 /tw /?utm_source=twitter&utm_medium=social&utm_campaign=brand-evergreen-2025&utm_content=profile 302
 /li /?utm_source=linkedin&utm_medium=social&utm_campaign=brand-evergreen-2025&utm_content=profile 302
 /rd /?utm_source=reddit&utm_medium=social&utm_campaign=brand-evergreen-2025&utm_content=profile 302
+
+# Old section pages → new locations
+/projects/ /log/ 301
+/projects/open-servo-core/logs/ /log/ 301
+/projects/tinyboot/logs/ /log/ 301
+/blog/ /archive/ 301
