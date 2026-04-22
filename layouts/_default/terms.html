@@ -4,13 +4,16 @@
     <h1>{{ .Title }}</h1>
     {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
   </header>
-  <ul class="entry-list">
-    {{ range .Pages.ByCount }}
-      <li class="entry">
-        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-        {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
-        <p class="meta">{{ .Count }} {{ if eq .Count 1 }}post{{ else }}posts{{ end }}</p>
-      </li>
-    {{ end }}
-  </ul>
+  {{ $terms := .Data.Terms.Alphabetical }}
+  {{ if $terms }}
+    <ul class="entry-list">
+      {{ range $terms }}
+        <li class="entry">
+          <h2><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></h2>
+          {{ with .Page.Description }}<p class="description">{{ . }}</p>{{ end }}
+          <p class="meta">{{ .Count }} {{ if eq .Count 1 }}post{{ else }}posts{{ end }}</p>
+        </li>
+      {{ end }}
+    </ul>
+  {{ end }}
 {{ end }}
