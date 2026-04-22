@@ -24,7 +24,7 @@ I favor architectures that are boring in the best way: fast, observable, and
 easy to reason about. A system is “done” not when there’s nothing left to add,
 but when there’s nothing left to remove. I contribute to open source and
 occasionally upstream fixes (including bugfixes to Ruby) because open source
-matters. These days I split time between client work and
+matters. Most of my attention right now goes to
 [OpenServoCore](https://github.com/OpenServoCore/open-servo-core) — an open
 hardware project to turn cheap MG90S servos into smart actuators with cascade
 control and a DYNAMIXEL-style Rust firmware, lowering the barrier to robotics
