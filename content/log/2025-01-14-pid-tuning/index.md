@@ -1,9 +1,11 @@
 ---
 date: 2025-01-14T19:45:00-08:00
 title: 'PID tuning breakthrough — cascaded loop working'
+project: open-servo-core
+aliases:
+  - /projects/open-servo-core/logs/2025-01-14-pid-tuning/
 tags:
-  - control-systems
-  - milestone
+  - firmware
 ---
 
 Finally got cascaded PID stable:

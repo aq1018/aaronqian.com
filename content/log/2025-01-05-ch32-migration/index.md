@@ -1,9 +1,12 @@
 ---
 date: 2025-01-05T11:20:00-08:00
 title: 'CH32 migration started'
+project: open-servo-core
+aliases:
+  - /projects/open-servo-core/logs/2025-01-05-ch32-migration/
 tags:
   - hardware
-  - cost-reduction
+  - ch32
 ---
 
 Switching from STM32F301 to CH32V303 to cut BOM cost.

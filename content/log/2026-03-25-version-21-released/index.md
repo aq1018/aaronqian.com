@@ -1,8 +1,12 @@
 ---
 date: "2026-03-25T00:00:00.000Z"
 title: "Version 0.2.1 Released"
+project: tinyboot
+aliases:
+  - /projects/tinyboot/logs/2026-03-25-version-21-released/
 tags:
   - firmware
+  - rust
 ---
 
 After the initial release, I spent most of the following week hunting down bugs

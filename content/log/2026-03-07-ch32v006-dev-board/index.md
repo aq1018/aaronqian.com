@@ -1,8 +1,12 @@
 ---
 date: "2026-03-07T17:32:38.071Z"
 title: "CH32V006 Based Dev Board For OpenServoCore"
+project: open-servo-core
+aliases:
+  - /projects/open-servo-core/logs/2026-03-07-ch32v006-dev-board/
 tags:
   - hardware
+  - ch32
 ---
 
 As I mentioned in earlier logs, I am migrating OpenServoCore from an

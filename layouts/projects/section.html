@@ -41,21 +41,22 @@
       </div>
     </article>
 
-    {{ $logs := .RegularPagesRecursive }}
+    {{ $slug := .File.ContentBaseName }}
+    {{ $logs := where (site.GetPage "/log").RegularPagesRecursive ".Params.project" $slug }}
     {{ if $logs }}
       <section class="section">
         <header>
           <h2>Recent build logs</h2>
         </header>
         <ul class="entry-list">
-          {{ range first 10 $logs.ByDate.Reverse }}
+          {{ range first 10 (sort $logs ".Date" "desc") }}
             <li class="entry">
               <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
               {{ partial "post-meta.html" . }}
             </li>
           {{ end }}
         </ul>
-        <p class="more"><a href="{{ .RelPermalink }}logs/">All logs →</a></p>
+        <p class="more"><a href="/log/">All logs →</a></p>
       </section>
     {{ end }}
   {{ end }}

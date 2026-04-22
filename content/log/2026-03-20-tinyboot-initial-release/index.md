@@ -1,8 +1,13 @@
 ---
 date: "2026-03-20T00:00:00.000Z"
 title: "tinyboot Initial Release"
+project: tinyboot
+aliases:
+  - /projects/tinyboot/logs/2026-03-20-tinyboot-initial-release/
 tags:
   - firmware
+  - rust
+  - announcement
 ---
 
 While I was waiting for the CH32V006 dev board to arrive, I ended up going on a

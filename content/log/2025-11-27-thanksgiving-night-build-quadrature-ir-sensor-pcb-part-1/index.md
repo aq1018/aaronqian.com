@@ -1,9 +1,11 @@
 ---
 date: '2025-11-28T04:50:23.084Z'
 title: 'Thanksgiving Night Build: Dual ITR1204 IR Sensor Test Module'
+project: open-servo-core
+aliases:
+  - /projects/open-servo-core/logs/2025-11-27-thanksgiving-night-build-quadrature-ir-sensor-pcb-part-1/
 tags:
   - hardware
-  - sensor
 ---
 
 Thanksgiving night isn’t usually when people open KiCad… but the house got quiet
