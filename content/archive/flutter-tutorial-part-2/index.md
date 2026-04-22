@@ -4,8 +4,6 @@ description: Walk through how the basic demo app works.
 date: 2022-11-15
 aliases:
   - /blog/flutter-tutorial-part-2/
-categories:
-  - frontend
 tags:
   - flutter
   - dart

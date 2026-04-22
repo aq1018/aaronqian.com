@@ -5,8 +5,6 @@ description:
 date: 2022-10-30
 aliases:
   - /blog/flutter-tutorial-part-1/
-categories:
-  - frontend
 tags:
   - flutter
   - dart
