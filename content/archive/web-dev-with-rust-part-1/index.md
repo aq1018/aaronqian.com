@@ -3,6 +3,8 @@ title: 'Part 1 - Simple GraphQL Server with Juniper And Actix'
 description:
   Build a simple GraphQL server in Rust using Juniper and Actix Web frameworks.
 date: 2021-03-23
+aliases:
+  - /blog/web-dev-with-rust-part-1/
 tags:
   - rust
   - graphql

@@ -4,6 +4,8 @@ description:
   Optimize Rails API performance with streaming techniques for large GeoJSON
   responses.
 date: 2014-08-22
+aliases:
+  - /blog/rails-gdal-streaming/
 tags:
   - ruby
   - rails

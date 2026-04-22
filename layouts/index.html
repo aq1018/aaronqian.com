@@ -23,20 +23,4 @@
       </section>
     {{ end }}
   {{ end }}
-
-  <section class="section">
-    <header>
-      <h2><a href="/blog/">Recent posts</a></h2>
-    </header>
-    <ul class="entry-list">
-      {{ range first 5 (where .Site.RegularPages "Section" "blog").ByDate.Reverse }}
-        <li class="entry">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
-          {{ partial "post-meta.html" . }}
-        </li>
-      {{ end }}
-    </ul>
-    <p class="more"><a href="/blog/">All posts →</a></p>
-  </section>
 {{ end }}

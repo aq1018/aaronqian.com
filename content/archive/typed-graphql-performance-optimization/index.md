@@ -2,6 +2,8 @@
 title: Typed-GraphQL Performance Optimization
 description: Eliminate N+1 Database Queries in Typed-GraphQL with Data Loader.
 date: 2021-10-01
+aliases:
+  - /blog/typed-graphql-performance-optimization/
 categories:
   - backend
 tags:

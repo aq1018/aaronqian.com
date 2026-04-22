@@ -1,16 +1,22 @@
 ---
-title: 'OpenServoCore'
+date: "2024-12-15T00:00:00.000Z"
+title: "OpenServoCore — Project Overview"
 description:
   'A project to turn low-cost servos like the MG90S into smart actuators with
   cascade control and a DYNAMIXEL-style Rust firmware; lowering the barrier to
   robotics for students, makers, and resource-limited builders.'
-status: 'in-development'
-aside: 'Democratize Robotics For Everyone'
-links:
-  github: 'https://github.com/OpenServoCore/open-servo-core'
-order: 1
-live: true
+project: open-servo-core
+aliases:
+  - /projects/open-servo-core/
+tags:
+  - hardware
+  - rust
+  - announcement
 ---
+
+*Democratize Robotics For Everyone*
+
+GitHub: [OpenServoCore/open-servo-core](https://github.com/OpenServoCore/open-servo-core)
 
 # Overview
 
@@ -39,13 +45,13 @@ To ground it in numbers:
 - The same robot built on this platform, using **MG90S clones from AliExpress**
   (≈ \$2.50 each) plus a custom smart-servo board in the **\$2–\$4** range per
   joint, brings the per-actuator cost down to roughly **\$4.50–\$6.50**.
-- For 12 joints, that’s on the order of **$55–$80** in actuators instead of
+- For 12 joints, that's on the order of **$55–$80** in actuators instead of
   several hundred dollars — **making it an accessible option for students,
   hobbyists, and resource-limited builders.**
 
 By upgrading a \$2–\$3 servo into a capable, addressable actuator, this project
 works toward **democratizing robotics for everyone**, especially builders who
-can’t casually sink a few hundred dollars into “just the servos.”
+can't casually sink a few hundred dollars into "just the servos."
 
 ---
 
@@ -91,7 +97,7 @@ High-level target spec for the v0.x platform:
 - Packet-based, inspired by **DYNAMIXEL 2.0**:
   - header → ID → length → instruction → params → checksum
   - instructions: PING, READ, WRITE, SYNC_WRITE, BULK_READ
-- “Backwards-inspired,” not backwards-compatible
+- "Backwards-inspired," not backwards-compatible
 - Designed so a PC, microcontroller, or SBC can control many servos over one
   UART
 
@@ -216,22 +222,22 @@ hardware design without prematurely modifying the servo internals.
 # Acknowledgements
 
 This project was partly inspired by
-[Adam B’s ServoProject](https://github.com/adamb314/ServoProject) and his
+[Adam B's ServoProject](https://github.com/adamb314/ServoProject) and his
 excellent [YouTube breakdown](https://www.youtube.com/watch?v=ECLrLupFW10) of
 how to transform a cheap hobby servo into a high-performance actuator using a
 pair of custom analog encoders and cascaded control loops.
 
-Adam’s design centers around:
+Adam's design centers around:
 
 - a custom 3D-printed housing
-- a clever analog “quad-ish” reflective encoder with paired IR sensors
+- a clever analog "quad-ish" reflective encoder with paired IR sensors
 - system identification to characterize each servo
 - auto-generation of tuned C code based on that model
 - cascaded current/velocity/position control
 - and a simple multi-servo serial bus
 
 His approach achieves impressive accuracy and performance for a hacked SG90
-servo. The communication link can support multiple servos, but it isn’t meant to
+servo. The communication link can support multiple servos, but it isn't meant to
 be a general-purpose actuator protocol — servo IDs, firmware constants, and
 control parameters are hard-coded and generated per device during system
 identification.
@@ -248,8 +254,8 @@ maximum accuracy, this project focuses on:
 - and keeping costs extremely low so high school students and hobbyists can
   build multi-servo robots without financial barriers
 
-Where Adam’s project explores the upper limits of what a hacked servo can do,
+Where Adam's project explores the upper limits of what a hacked servo can do,
 this project aims to make a similar upgrade path **accessible, standardized, and
 affordable**, so anyone can build real robots.
 
-Huge credit to him for showing what’s possible.
+Huge credit to him for showing what's possible.

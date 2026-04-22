@@ -3,6 +3,8 @@ title: 'Part 2 - Persisting Data To Database'
 description:
   Connect your Rust GraphQL server to PostgreSQL using tokio-postgres.
 date: 2021-03-30
+aliases:
+  - /blog/web-dev-with-rust-part-2/
 tags:
   - rust
   - graphql
