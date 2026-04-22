@@ -7,9 +7,7 @@ project: tinyboot
 aliases:
   - /projects/tinyboot/
 tags:
-  - firmware
-  - rust
-  - ch32
+  - tinyboot
   - announcement
 ---
 

@@ -9,9 +9,8 @@ project: open-servo-core
 aliases:
   - /projects/open-servo-core/
 tags:
-  - hardware
-  - rust
   - announcement
+  - hardware
 ---
 
 *Democratize Robotics For Everyone*

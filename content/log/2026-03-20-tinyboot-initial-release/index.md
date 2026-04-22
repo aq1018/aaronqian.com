@@ -5,8 +5,7 @@ project: tinyboot
 aliases:
   - /projects/tinyboot/logs/2026-03-20-tinyboot-initial-release/
 tags:
-  - firmware
-  - rust
+  - tinyboot
   - announcement
 ---
 

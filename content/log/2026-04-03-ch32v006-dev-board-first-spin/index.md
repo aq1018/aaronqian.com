@@ -6,7 +6,6 @@ aliases:
   - /projects/open-servo-core/logs/2026-04-03-ch32v006-dev-board-first-spin/
 tags:
   - hardware
-  - ch32
 ---
 
 As hinted at the end of my previous log, I sent the design of the CH32V006

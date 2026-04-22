@@ -5,8 +5,8 @@ project: tinyboot
 aliases:
   - /projects/tinyboot/logs/2026-03-25-version-21-released/
 tags:
-  - firmware
-  - rust
+  - tinyboot
+  - announcement
 ---
 
 After the initial release, I spent most of the following week hunting down bugs

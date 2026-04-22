@@ -6,7 +6,6 @@ aliases:
   - /projects/open-servo-core/logs/2026-03-07-ch32v006-dev-board/
 tags:
   - hardware
-  - ch32
 ---
 
 As I mentioned in earlier logs, I am migrating OpenServoCore from an

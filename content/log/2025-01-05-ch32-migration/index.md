@@ -5,7 +5,6 @@ project: open-servo-core
 aliases:
   - /projects/open-servo-core/logs/2025-01-05-ch32-migration/
 tags:
-  - hardware
   - ch32
 ---
 
