@@ -8,11 +8,14 @@
   {{ if $terms }}
     <ul class="entry-list">
       {{ range $terms }}
-        <li class="entry">
-          <h2><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></h2>
-          {{ with .Page.Description }}<p class="description">{{ . }}</p>{{ end }}
-          <p class="meta">{{ .Count }} {{ if eq .Count 1 }}post{{ else }}posts{{ end }}</p>
-        </li>
+        {{ $logCount := len (where .Pages "Section" "log") }}
+        {{ if gt $logCount 0 }}
+          <li class="entry">
+            <h2><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></h2>
+            {{ with .Page.Description }}<p class="description">{{ . }}</p>{{ end }}
+            <p class="meta">{{ $logCount }} {{ if eq $logCount 1 }}post{{ else }}posts{{ end }}</p>
+          </li>
+        {{ end }}
       {{ end }}
     </ul>
   {{ end }}
