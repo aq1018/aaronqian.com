@@ -1,0 +1,22 @@
+{{ define "main" }}
+  <header class="page-header">
+    {{ partial "breadcrumb.html" . }}
+    <h1>{{ .Title }}</h1>
+    {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+  </header>
+  {{ $terms := .Data.Terms.Alphabetical }}
+  {{ if $terms }}
+    <ul class="entry-list">
+      {{ range $terms }}
+        {{ $logCount := len (where .Pages "Section" "log") }}
+        {{ if gt $logCount 0 }}
+          <li class="entry">
+            <h2><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></h2>
+            {{ with .Page.Description }}<p class="description">{{ . }}</p>{{ end }}
+            <p class="meta">{{ $logCount }} {{ if eq $logCount 1 }}post{{ else }}posts{{ end }}</p>
+          </li>
+        {{ end }}
+      {{ end }}
+    </ul>
+  {{ end }}
+{{ end }}

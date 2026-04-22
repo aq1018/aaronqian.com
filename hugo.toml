@@ -9,7 +9,6 @@ summaryLength = 30
   pagerSize = 10
 
 [taxonomies]
-  category = 'categories'
   tag = 'tags'
 
 [markup]
