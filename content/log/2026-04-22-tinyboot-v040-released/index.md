@@ -22,7 +22,7 @@ tinyboot is a minimal bootloader for resource constrained MCUs. It is written
 in Rust, and it fits in 1920 bytes of system flash, leaving all user flash free
 for your application, except a small page (64 bytes on V003) of user flash to
 store boot metadata. It gives you CRC-validated firmware updates over UART with
-trial boot with automatic fallback to bootloader service mode if trials run out.
+trial boot and automatic fallback to bootloader service mode when trials run out.
 The kind of safe OTA update story you'd expect from a much larger bootloader,
 squeezed into the constraints of a $0.22 MCU.
 
@@ -35,6 +35,15 @@ I'm building it as part of [OpenServoCore](/projects/open-servo-core/), an
 open-source smart servo platform. tinyboot handles the OTA updates via the
 existing single wire UART (Dynamixel TTL), so you don't have to tear your robot
 apart and open up each servo, unsolder the board just to flash a new firmware.
+
+### Platform Support
+
+| Family    | Status              |
+|-----------|---------------------|
+| CH32V003  | Supported           |
+| CH32V00x  | **New in v0.4.0**   |
+| CH32V103  | Supported           |
+| CH32X03x  | Planned             |
 
 ## V00x Support
 
@@ -71,20 +80,24 @@ This wasn't a planned refactor. It was the natural result of continuous
 iteration during tinyboot's early development. I'd rather get the architecture
 right early by sacrificing API stability than lock in the wrong abstractions.
 
+`tinyboot-ch32` is currently git-only and not published to crates.io. It depends
+on a git version of `ch32-metapac` that includes flash fixes for the V00x family
+that haven't been released yet.
+
 ## Protocol and API Changes
 
 The wire protocol now uses 24-bit addresses instead of 32-bit, freeing the
 fourth byte for per-command flags. 24 bits is still 16MB of addressable space,
 more than enough for these MCUs. The standalone `Flush` command is gone; it's
 now a flag on the final `Write`. Cleaner on the wire, simpler in the dispatcher,
-increases DX, and best of all no size increase due to zero cost abstraction with
-unions with Rust.
+improves the developer experience, and best of all no size increase due to
+zero-cost abstractions via Rust's union types.
 
 On the API side: `BootMode` became `RunMode` to separate the concept of boot
-flash region selection vs bootloader run mode ( handoff or service).
-`BootClient` was also removed after the crates merge. `boolean` parameters in
-public API became semantic enums (`Duplex::Half` instead of
-`half_duplex: true`). Lastly but not least, flash lock/unlock is now scoped per
+flash region selection vs bootloader run mode (handoff or service).
+`BootClient` was also removed after the crates merge. Boolean parameters in
+the public API became semantic enums (`Duplex::Half` instead of
+`half_duplex: true`). Last but not least, flash lock/unlock is now scoped per
 operation instead of manual.
 
 ## Bug Fixes
@@ -129,3 +142,5 @@ pausing for now.
 - USB transport for V103 (the second flash region has room).
 - CH32X03x support eventually.
 - But the immediate priority is OpenServoCore firmware.
+
+Full changelog: [CHANGELOG.md](https://github.com/OpenServoCore/tinyboot/blob/main/CHANGELOG.md)
