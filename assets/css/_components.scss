@@ -340,6 +340,7 @@ html {
 }
 
 .tag {
+  --tag-color: var(--color-gray-400);
   display: inline-flex;
   align-items: center;
   padding: 0.0625rem 0.5rem;
