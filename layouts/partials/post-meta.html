@@ -12,9 +12,9 @@
           {{- $term := site.GetPage (printf "/tags/%s" (urlize .)) -}}
           <li>
             {{- if $term -}}
-              <a class="tag" href="{{ $term.RelPermalink }}">{{ . }}</a>
+              <a class="tag" href="{{ $term.RelPermalink }}" data-tag="{{ urlize . }}">{{ . }}</a>
             {{- else -}}
-              <span class="tag">{{ . }}</span>
+              <span class="tag" data-tag="{{ urlize . }}">{{ . }}</span>
             {{- end -}}
           </li>
         {{- end -}}
