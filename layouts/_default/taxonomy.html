@@ -1,0 +1,40 @@
+{{ define "main" }}
+  <header class="page-header">
+    {{ partial "breadcrumb.html" . }}
+    <h1>{{ .Title }}</h1>
+    {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+  </header>
+
+  {{ $logPages := where .Pages "Section" "log" }}
+  {{ $archivePages := where .Pages "Section" "archive" }}
+
+  {{ if $logPages }}
+    <section class="section">
+      <header><h2>Current</h2></header>
+      <ul class="entry-list">
+        {{ range $logPages.ByDate.Reverse }}
+          <li class="entry">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+            {{ partial "post-meta.html" . }}
+          </li>
+        {{ end }}
+      </ul>
+    </section>
+  {{ end }}
+
+  {{ if $archivePages }}
+    <section class="section">
+      <header><h2>Archived</h2></header>
+      <ul class="entry-list">
+        {{ range $archivePages.ByDate.Reverse }}
+          <li class="entry">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+            {{ partial "post-meta.html" . }}
+          </li>
+        {{ end }}
+      </ul>
+    </section>
+  {{ end }}
+{{ end }}
