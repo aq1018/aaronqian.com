@@ -1,4 +1,4 @@
 ---
 title: Announcement
-description: Project launches, releases, and milestone updates.
+description: Releases, milestones, and project updates from OpenServoCore and its sub-projects.
 ---

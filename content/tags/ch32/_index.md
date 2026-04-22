@@ -1,4 +1,4 @@
 ---
 title: CH32
-description: Work with WCH's CH32 RISC-V microcontrollers — porting, dev boards, and toolchain notes.
+description: Notes on WCH's CH32 RISC-V microcontrollers — the MCU family behind OpenServoCore's control boards.
 ---

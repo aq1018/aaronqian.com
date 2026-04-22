@@ -1,4 +1,4 @@
 ---
 title: Rust
-description: Embedded and systems programming in Rust — from bare-metal firmware to web backends.
+description: Rust in the OpenServoCore stack — PAC-level drivers, no-std bootloaders, and bare-metal control firmware.
 ---

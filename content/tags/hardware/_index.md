@@ -1,4 +1,4 @@
 ---
 title: Hardware
-description: PCB design, schematic reviews, board bring-up, and physical builds for OpenServoCore and related projects.
+description: PCB design, board bring-up, and physical builds — mostly for the OpenServoCore smart servo platform.
 ---
