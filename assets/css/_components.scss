@@ -356,24 +356,28 @@ html {
   }
 
   &[data-tag='hardware'] {
-    color: var(--color-gold-400);
-    border-color: var(--color-gold-400);
+    --tag-color: var(--color-gold-400);
   }
   &[data-tag='ch32'] {
-    color: var(--color-green-400);
-    border-color: var(--color-green-400);
+    --tag-color: var(--color-green-400);
   }
   &[data-tag='firmware'] {
-    color: var(--color-cyan-400);
-    border-color: var(--color-cyan-400);
+    --tag-color: var(--color-cyan-400);
   }
   &[data-tag='rust'] {
-    color: var(--color-orange-400);
-    border-color: var(--color-orange-400);
+    --tag-color: var(--color-orange-400);
   }
   &[data-tag='announcement'] {
-    color: var(--color-purple-400);
-    border-color: var(--color-purple-400);
+    --tag-color: var(--color-purple-400);
+  }
+
+  &[data-tag] {
+    color: oklch(from var(--tag-color) l c h / 0.6);
+    border-color: oklch(from var(--tag-color) l c h / 0.4);
+    &:hover {
+      color: var(--tag-color);
+      border-color: var(--tag-color);
+    }
   }
 }
 
