@@ -16,6 +16,12 @@ was being reworked. I didn't want to write up something that'd be outdated in
 two weeks. I wanted to wait until the dust settled. And with v0.4.0, we have
 finally arrived at this point.
 
+## Links
+
+- Repository: [OpenServoCore/tinyboot](https://github.com/OpenServoCore/tinyboot)
+- Handbook: [openservocore.github.io/tinyboot](https://openservocore.github.io/tinyboot)
+- Changelog: [CHANGELOG.md](https://github.com/OpenServoCore/tinyboot/blob/main/CHANGELOG.md)
+
 ## What is tinyboot
 
 tinyboot is a minimal bootloader for resource constrained MCUs. It is written
@@ -142,5 +148,3 @@ pausing for now.
 - USB transport for V103 (the second flash region has room).
 - CH32X03x support eventually.
 - But the immediate priority is OpenServoCore firmware.
-
-Full changelog: [CHANGELOG.md](https://github.com/OpenServoCore/tinyboot/blob/main/CHANGELOG.md)
