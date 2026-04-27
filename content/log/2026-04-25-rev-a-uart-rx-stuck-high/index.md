@@ -81,12 +81,9 @@ As absurd as it sounds, the workaround was to assert `TX_EN`, while reading from
 
 With it held high, the `DATA` to `RX` buffer is disabled, RX falls back to its own pullup, and the USB UART adapter can drive it without a fight. Poking 3.3 V onto `TX_EN` confirmed it in real time:
 
-<figure>
-  <video controls muted playsinline loop style="max-width: 100%; max-height: 70vh; display: block; margin: 0 auto; border-radius: 0.5rem; border: 1px solid var(--color-border);">
-    <source src="tx-en-fix.mp4" type="video/mp4">
-  </video>
-  <figcaption>Touching 3.3 V to TX_EN snaps the ripple into a clean rail-to-rail square wave. Release it and the line flat-lines back near 3.3 V. The buffer is the whole problem.</figcaption>
-</figure>
+{{< youtube 2giFb58HLf4 >}}
+
+_Touching 3.3 V to TX_EN snaps the ripple into a clean rail-to-rail square wave. Release it and the line flat-lines back near 3.3 V. The buffer is the whole problem._
 
 For those eagle-eyed viewers, yes. I'm touching the TP that says TX... But the electric trace is actually TX_EN.
 
