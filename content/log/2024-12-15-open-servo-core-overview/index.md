@@ -1,10 +1,7 @@
 ---
 date: "2024-12-15T00:00:00.000Z"
 title: "OpenServoCore — Project Overview"
-description:
-  'A project to turn low-cost servos like the MG90S into smart actuators with
-  cascade control and a DYNAMIXEL-style Rust firmware; lowering the barrier to
-  robotics for students, makers, and resource-limited builders.'
+description: "A project to turn low-cost servos like the MG90S into smart actuators with cascade control and a DYNAMIXEL-style Rust firmware; lowering the barrier to robotics for students, makers, and resource-limited builders."
 project: open-servo-core
 aliases:
   - /projects/open-servo-core/
@@ -13,23 +10,20 @@ tags:
   - hardware
 ---
 
-*Democratize Robotics For Everyone*
+_Democratize Robotics For Everyone_
 
 GitHub: [OpenServoCore/open-servo-core](https://github.com/OpenServoCore/open-servo-core)
 
 # Overview
 
-This project aims to transform **cheap MG90S-class servos** into fully networked
-**smart actuators** by adding:
+This project aims to transform **cheap MG90S-class servos** into fully networked **smart actuators** by adding:
 
 - real sensor feedback
 - cascade control loops (current → velocity → position)
 - a DYNAMIXEL-style serial protocol
 - a bare-metal Rust firmware stack
 
-Rather than relying on expensive commercial smart servos, this platform provides
-a low-cost, open, and hackable alternative. It gives students, hobbyists, and
-resource-limited builders the tools to explore:
+Rather than relying on expensive commercial smart servos, this platform provides a low-cost, open, and hackable alternative. It gives students, hobbyists, and resource-limited builders the tools to explore:
 
 - motor current and voltage sensing
 - system identification and model building
@@ -39,18 +33,11 @@ resource-limited builders the tools to explore:
 
 To ground it in numbers:
 
-- A small 4-legged robot with **12 smart servos** built from commercial
-  DYNAMIXEL-style actuators can easily cost **\$300–\$400+** just in servos.
-- The same robot built on this platform, using **MG90S clones from AliExpress**
-  (≈ \$2.50 each) plus a custom smart-servo board in the **\$2–\$4** range per
-  joint, brings the per-actuator cost down to roughly **\$4.50–\$6.50**.
-- For 12 joints, that's on the order of **$55–$80** in actuators instead of
-  several hundred dollars — **making it an accessible option for students,
-  hobbyists, and resource-limited builders.**
+- A small 4-legged robot with **12 smart servos** built from commercial DYNAMIXEL-style actuators can easily cost **\$300–\$400+** just in servos.
+- The same robot built on this platform, using **MG90S clones from AliExpress** (≈ \$2.50 each) plus a custom smart-servo board in the **\$2–\$4** range per joint, brings the per-actuator cost down to roughly **\$4.50–\$6.50**.
+- For 12 joints, that's on the order of **$55–$80** in actuators instead of several hundred dollars — **making it an accessible option for students, hobbyists, and resource-limited builders.**
 
-By upgrading a \$2–\$3 servo into a capable, addressable actuator, this project
-works toward **democratizing robotics for everyone**, especially builders who
-can't casually sink a few hundred dollars into "just the servos."
+By upgrading a \$2–\$3 servo into a capable, addressable actuator, this project works toward **democratizing robotics for everyone**, especially builders who can't casually sink a few hundred dollars into "just the servos."
 
 ---
 
@@ -72,8 +59,7 @@ High-level target spec for the v0.x platform:
   - stock potentiometer
   - onboard current sensor
   - future: internal **reflective IR encoder** for position detection
-- **Current sensing:** shunt + amplifier, or integrated sense inside the motor
-  driver
+- **Current sensing:** shunt + amplifier, or integrated sense inside the motor driver
 - **Communications bus:**
   - Phase 1: **half-duplex UART**, DYNAMIXEL-style (TTL)
   - Future: RS-485 and/or CAN-FD variants
@@ -97,17 +83,13 @@ High-level target spec for the v0.x platform:
   - header → ID → length → instruction → params → checksum
   - instructions: PING, READ, WRITE, SYNC_WRITE, BULK_READ
 - "Backwards-inspired," not backwards-compatible
-- Designed so a PC, microcontroller, or SBC can control many servos over one
-  UART
+- Designed so a PC, microcontroller, or SBC can control many servos over one UART
 
 ---
 
 # Architecture
 
-The Smart Servo project is organized into mechanical, hardware, firmware,
-protocol, and tooling layers. Only components **inside the servo** belong to the
-core architecture. External sensors and rigs for system identification live
-under **Tooling & Measurement Rigs**.
+The Smart Servo project is organized into mechanical, hardware, firmware, protocol, and tooling layers. Only components **inside the servo** belong to the core architecture. External sensors and rigs for system identification live under **Tooling & Measurement Rigs**.
 
 ## 1. Mechanical & Enclosure Layer
 
@@ -124,13 +106,11 @@ under **Tooling & Measurement Rigs**.
   - mounting points for integrated sensors
 - 3D-printed internal brackets for future sensing modules
 
-This layer governs physical constraints, gear clearance, and mechanical
-integration.
+This layer governs physical constraints, gear clearance, and mechanical integration.
 
 ## 2. Hardware Layer (Servo Electronics)
 
-The smart control board replaces the stock PCB and becomes the electrical core
-of the servo:
+The smart control board replaces the stock PCB and becomes the electrical core of the servo:
 
 - **MCU:** STM32 / CH32V-class
 - **H-bridge:** DRV8xxx or similar
@@ -146,18 +126,15 @@ This board handles motor actuation, sensing, comms, and safety.
 **Current**
 
 - Rotary potentiometer (primary feedback)
-- External sensors (like the reflective IR rig) used **only** for system ID and
-  testing — not part of the servo hardware
+- External sensors (like the reflective IR rig) used **only** for system ID and testing — not part of the servo hardware
 
 **Future / Nice-to-Have**
 
 - **Internal reflective IR encoder (ultra-compact)**
   - flex PCB with dual IR elements positioned directly under the gearbox
   - signal conditioning moved to main control board due to space constraints
-  - requires extremely tight spacing, custom internal bracket, redesigned bottom
-    housing
-  - intended for higher-resolution position feedback and backlash compensation
-    without changing the gear train
+  - requires extremely tight spacing, custom internal bracket, redesigned bottom housing
+  - intended for higher-resolution position feedback and backlash compensation without changing the gear train
 
 This section tracks how feedback could evolve as the design matures.
 
@@ -191,13 +168,11 @@ A DYNAMIXEL-inspired packet system:
 
 # Tooling & Measurement Rigs
 
-These components are **not part of the servo**, but are essential for system
-identification, calibration, and performance development.
+These components are **not part of the servo**, but are essential for system identification, calibration, and performance development.
 
 ## Current Tools
 
-- **Reflective IR Sensor PCB** A standalone board using the **ITR1204** as a
-  reflective sensor, producing analog signals. Used for:
+- **Reflective IR Sensor PCB** A standalone board using the **ITR1204** as a reflective sensor, producing analog signals. Used for:
   - capturing motor speed / motion for system identification
   - experimenting with reflective sensing for future encoder ideas
 
@@ -213,18 +188,13 @@ identification, calibration, and performance development.
 - Internal flex-PCB reflective encoder (if space allows)
 - Hybrid optical + magnetic sensing experiments
 
-These tools support iterative refinement of firmware, control algorithms, and
-hardware design without prematurely modifying the servo internals.
+These tools support iterative refinement of firmware, control algorithms, and hardware design without prematurely modifying the servo internals.
 
 ---
 
 # Acknowledgements
 
-This project was partly inspired by
-[Adam B's ServoProject](https://github.com/adamb314/ServoProject) and his
-excellent [YouTube breakdown](https://www.youtube.com/watch?v=ECLrLupFW10) of
-how to transform a cheap hobby servo into a high-performance actuator using a
-pair of custom analog encoders and cascaded control loops.
+This project was partly inspired by [Adam B's ServoProject](https://github.com/adamb314/ServoProject) and his excellent [YouTube breakdown](https://www.youtube.com/watch?v=ECLrLupFW10) of how to transform a cheap hobby servo into a high-performance actuator using a pair of custom analog encoders and cascaded control loops.
 
 Adam's design centers around:
 
@@ -235,14 +205,9 @@ Adam's design centers around:
 - cascaded current/velocity/position control
 - and a simple multi-servo serial bus
 
-His approach achieves impressive accuracy and performance for a hacked SG90
-servo. The communication link can support multiple servos, but it isn't meant to
-be a general-purpose actuator protocol — servo IDs, firmware constants, and
-control parameters are hard-coded and generated per device during system
-identification.
+His approach achieves impressive accuracy and performance for a hacked SG90 servo. The communication link can support multiple servos, but it isn't meant to be a general-purpose actuator protocol — servo IDs, firmware constants, and control parameters are hard-coded and generated per device during system identification.
 
-My goals are different but inspired by the same spirit. Instead of pushing for
-maximum accuracy, this project focuses on:
+My goals are different but inspired by the same spirit. Instead of pushing for maximum accuracy, this project focuses on:
 
 - simplicity and repeatability
 - low mechanical skill requirements
@@ -250,11 +215,8 @@ maximum accuracy, this project focuses on:
 - a unified, DYNAMIXEL-style bus protocol
 - easy modding
 - standardization
-- and keeping costs extremely low so high school students and hobbyists can
-  build multi-servo robots without financial barriers
+- and keeping costs extremely low so high school students and hobbyists can build multi-servo robots without financial barriers
 
-Where Adam's project explores the upper limits of what a hacked servo can do,
-this project aims to make a similar upgrade path **accessible, standardized, and
-affordable**, so anyone can build real robots.
+Where Adam's project explores the upper limits of what a hacked servo can do, this project aims to make a similar upgrade path **accessible, standardized, and affordable**, so anyone can build real robots.
 
 Huge credit to him for showing what's possible.

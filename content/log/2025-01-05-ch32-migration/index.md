@@ -1,6 +1,6 @@
 ---
 date: 2025-01-05T11:20:00-08:00
-title: 'CH32 migration started'
+title: "CH32 migration started"
 project: open-servo-core
 aliases:
   - /projects/open-servo-core/logs/2025-01-05-ch32-migration/

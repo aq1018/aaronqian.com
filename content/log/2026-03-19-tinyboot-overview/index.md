@@ -1,8 +1,7 @@
 ---
 date: "2026-03-19T00:00:00.000Z"
 title: "tinyboot — Project Overview"
-description:
-  Rust based embedded bootloader for resource constrained MCUs such as CH32
+description: Rust based embedded bootloader for resource constrained MCUs such as CH32
 project: tinyboot
 aliases:
   - /projects/tinyboot/
@@ -11,16 +10,13 @@ tags:
   - announcement
 ---
 
-*Fits in the CH32V003's 1920-byte system flash!*
+_Fits in the CH32V003's 1920-byte system flash!_
 
 GitHub: [OpenServoCore/tinyboot](https://github.com/OpenServoCore/tinyboot)
 
 ## Overview
 
-Rust bootloader for resource-constrained micro-controllers. Fits in the
-CH32V003's 1920-byte system flash with full trial boot, CRC16 app validation,
-OB-based metadata, and version reporting — leaving the entire 16KB user flash
-for the application.
+Rust bootloader for resource-constrained micro-controllers. Fits in the CH32V003's 1920-byte system flash with full trial boot, CRC16 app validation, OB-based metadata, and version reporting — leaving the entire 16KB user flash for the application.
 
 ## Key Features
 
