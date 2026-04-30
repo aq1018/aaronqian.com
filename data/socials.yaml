@@ -1,68 +1,75 @@
+- label: RSS feed
+  url: /index.xml
+  icon: rss
+  position: 1
+  enabled: true
+  rel: alternate
+
 - label: GitHub
   url: https://github.com/aq1018
   icon: github
-  position: 1
+  position: 2
   enabled: true
   rel: me noopener
 
 - label: LinkedIn
   url: https://www.linkedin.com/in/aaronqian/
   icon: linkedin
-  position: 2
+  position: 3
   enabled: true
   rel: me noopener
 
 - label: X/Twitter
   url: https://x.com/aq1018
   icon: x
-  position: 3
+  position: 4
   enabled: true
   rel: me noopener
 
 - label: Email
   url: mailto:aq1018@gmail.com
   icon: envelope
-  position: 4
+  position: 5
   enabled: true
 
 - label: Bluesky
   url: https://bsky.app/profile/aaronqian.bsky.social
   icon: bluesky
-  position: 5
+  position: 6
   enabled: false
   rel: me noopener
 
 - label: Mastodon
   url: https://mastodon.social/@aaronqian
   icon: mastodon
-  position: 6
+  position: 7
   enabled: false
   rel: me noopener
 
 - label: YouTube
   url: https://youtube.com/@aaronqian
   icon: youtube
-  position: 7
+  position: 8
   enabled: false
   rel: me noopener
 
 - label: Twitch
   url: https://twitch.tv/aaronqian
   icon: twitch
-  position: 8
+  position: 9
   enabled: false
   rel: me noopener
 
 - label: Discord
   url: https://discord.com/users/aaronqian
   icon: discord
-  position: 9
+  position: 10
   enabled: false
   rel: me noopener
 
 - label: CodePen
   url: https://codepen.io/aaronqian
   icon: codepen
-  position: 10
+  position: 11
   enabled: false
   rel: me noopener
