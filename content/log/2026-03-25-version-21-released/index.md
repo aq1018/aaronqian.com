@@ -10,7 +10,11 @@ tags:
   - announcement
 ---
 
-After the initial release, I spent most of the following week hunting down bugs that only show up when you actually try to boot real firmware through the bootloader. I had been testing the system-flash version pretty heavily, but did not give the user-flash version nearly enough attention. Turns out the application was not booting properly in that configuration, and it took a few different fixes to get it working end to end.
+Turns out shipping a bootloader and actually booting real firmware through it are two different things. The user-flash path was quietly broken, and the week after the initial release was mostly spent hunting down the bugs that only show up once an application is sitting behind the bootloader.
+
+If you're new here, [tinyboot](https://github.com/aq1018/tinyboot) is my minimal serial bootloader for the CH32V003 and friends, squeezed into 1920 bytes of system flash. The 0.2.0 release got the protocol and the system-flash variant solid. 0.2.1 is the follow-up that makes the user-flash variant actually usable.
+
+The headline fixes: a hardcoded `mtvec` in `qingke-rt` that pointed the interrupt vector table at the wrong place, APB2 peripherals leaking state from the bootloader into the app, a broken `app_version` read, an alignment UB in the boot metadata path, and a `defmt` panic on reset-into-bootloader. Plus another ~180 bytes shaved off the system-flash build, because every byte matters when you have 1920 of them.
 
 <!--more-->
 

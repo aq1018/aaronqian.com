@@ -7,7 +7,11 @@ tags:
   - hardware
 ---
 
-If you're new to the project, [OpenServoCore](https://github.com/OpenServoCore) is my effort to turn cheap MG90S-class servos into networked smart actuators with sensor feedback, cascade control, and a DYNAMIXEL-style TTL bus. [tinyboot](https://github.com/OpenServoCore/tinyboot) is the Rust bootloader that runs on those boards. It fits in the CH32V003's 1920-byte system flash and gives you CRC-validated OTA updates over UART, with trial boot and automatic rollback.
+RX wouldn't go low. The scope showed a perfectly shaped square wave, riding on top of 3.3 V with a whopping 180 mV of swing. Something was holding the line near the rail so hard my USB UART adapter could only nudge it down a couple hundred millivolts.
+
+If you're new here, [OpenServoCore](https://github.com/OpenServoCore) is my effort to turn cheap MG90S-class servos into networked smart actuators with sensor feedback, cascade control, and a DYNAMIXEL-style TTL bus. [tinyboot](https://github.com/OpenServoCore/tinyboot) is the Rust bootloader for those boards, and this post is what happened the first time I tried to bring it up on the Rev A CH32V006 dev board.
+
+The culprit turned out to be the half-duplex TTL front-end. `TX_EN` isn't a transmit enable, it's a mux select, and with it low the buffer was actively pushing 3.3 V back into RX through a 24 mA CMOS output stage. Inside: scope photos, schematic walkthrough, the absurd workaround (assert TX_EN to receive), and why Rev B gets a jumper instead of a firmware fix.
 
 <!--more-->
 

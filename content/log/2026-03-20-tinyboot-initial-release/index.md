@@ -12,6 +12,10 @@ tags:
 
 While I was waiting for the CH32V006 dev board to arrive, I ended up going on a side quest: making firmware updates less painful for future OpenServoCore-based servos. Once a servo is built into a system, it is not really practical to pull it back out, open the case, desolder the board, and hook up a debugger just to flash new firmware. Updating over the existing one-wire UART bus is a must-have feature if I wanted to keep both you and me sane. And that is how [tinyboot](https://github.com/OpenServoCore/tinyboot) was born.
 
+If you're new here, [OpenServoCore](https://github.com/OpenServoCore) is my effort to turn cheap MG90S-class servos into networked smart actuators with sensor feedback, cascade control, and a DYNAMIXEL-style TTL bus. `tinyboot` is the bootloader half of that story: a small Rust bootloader that lives where the WCH factory bootloader normally sits, so a deployed servo can take firmware updates over the same one-wire UART bus it already speaks on.
+
+This first release targets the `CH32V003`, fits in 1920 bytes of system flash, and ships with CRC validation, a trial-boot counter that rolls back bad updates on its own, a modular transport layer (standard UART plus DXL TTL with `TX_EN`), and a `tinyboot-cli` for driving updates from the host. It is, in the author's words, a little unhinged on the inside. But it works.
+
 <!--more-->
 
 ## Demo

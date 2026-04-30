@@ -9,9 +9,11 @@ tags:
   - hardware
 ---
 
-As I mentioned in earlier logs, I am migrating OpenServoCore from an STM32F301-based architecture to a cheaper CH32V006-based one. The first step was to create a development board that I could use for firmware development. After a few weeks of work in KiCad, along with several rounds of PCB review from the Reddit community, I finally have a design that is ready to share here.
+Swapping a $1.85 STM32F301 for a $0.22 CH32V006 sounds like a one-line BOM edit. It turned into the most complex board I've designed yet, weeks in KiCad, and several rounds of Reddit PCB review before I felt good about sending it out.
 
-Just in case you landed here with no prior context, this board is intended to serve as the firmware development platform for OpenServoCore, a project to turn low-cost servos like the MG90S into smart actuators with cascade control and DYNAMIXEL-style communication over single-wire UART (DXL TTL).
+If you're new here, [OpenServoCore](https://github.com/OpenServoCore) is my effort to turn low-cost servos like the MG90S into smart actuators with cascade control and DYNAMIXEL-style communication over single-wire UART (DXL TTL). This board is the firmware development platform for that move, and the first dev board to actually exercise the new MCU end to end.
+
+Inside: three-way power ORing for USB-C, bench supply, and 1S/2S LiPo direct, low-side current sensing through CH32V006's internal PGA op-amps, motor terminal voltage sensing for back-EMF, an NTC to replace the STM32's internal temperature sensor, single-wire DXL TTL through a `74LVC2G241` buffer, and probably more test points than strictly necessary. Off to PCBWay, since JLCPCB was out of `CH32V006F8P6` the day I hit submit.
 
 <!--more-->
 

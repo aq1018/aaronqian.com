@@ -8,7 +8,11 @@ tags:
   - announcement
 ---
 
-If you've been following tinyboot, you might have noticed there was no announcement for v0.3.0. That release added CH32V103 support, but things were still in flux. Crate structure was shifting, APIs were changing, the protocol was being reworked. I didn't want to write up something that'd be outdated in two weeks. I wanted to wait until the dust settled. And with v0.4.0, we have finally arrived at this point.
+You may have noticed v0.3.0 came and went without an announcement. That was deliberate. Crates were merging, APIs were shifting, the wire protocol was being reworked, and I didn't want to ship a writeup that'd be stale in two weeks. v0.4.0 is the release where the dust finally settles.
+
+If you're new here, [tinyboot](https://github.com/OpenServoCore/tinyboot) is a minimal Rust bootloader for resource-constrained MCUs. It fits in 1920 bytes of system flash and gives you CRC-validated firmware updates over UART, with trial boot and automatic fallback to service mode. I'm building it as part of [OpenServoCore](/projects/open-servo-core/) so you can OTA-update servo firmware over the same single-wire DXL TTL bus, without tearing the robot apart.
+
+What's in v0.4.0: full CH32V00x family support (V002 through V007, including the V006 that the OSC dev board runs on), TX_EN now fits in system flash on every supported variant, the three `tinyboot-ch32-*` crates collapsed into one, 24-bit protocol addresses with per-command flag bits, two nasty half-duplex bugs squashed during dev-board validation, and a docs rewrite aimed at users instead of maintainers. Plus a quiet announcement: with the API stable, active feature work pauses while my attention shifts to the OSC firmware rewrite.
 
 <!--more-->
 

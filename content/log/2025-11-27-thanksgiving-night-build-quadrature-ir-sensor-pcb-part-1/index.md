@@ -9,7 +9,11 @@ tags:
   - hardware
 ---
 
-Thanksgiving night isn’t usually when people open KiCad… but the house got quiet for a bit, and that was enough of an excuse for me to start a small hardware project that’s been sitting in the queue.
+The house got quiet on Thanksgiving night, so I opened KiCad and finally started the encoder board that's been sitting in my backlog: a $0.60, dual-channel reflective IR sensor that's the first step toward closing the loop on cheap servos.
+
+If you're new here, [OpenServoCore](https://github.com/OpenServoCore) is my effort to turn cheap MG90S-class servos into networked smart actuators with sensor feedback, cascade control, and a DYNAMIXEL-style TTL bus. To get there I need a reliable, low-cost way to measure motor motion, and this board is Part 1 of that: a tiny ITR1204-based PCB that handles the detection stage. Part 2 will be the MCU and comparator front-end once these come back from fab.
+
+What's in this post: the schematic and 4-layer layout, a full walk through four operating modes (5 V and 3.3 V, digital and analog) with the math behind each resistor pair, a BOM that lands at roughly $0.60 per board, and JLCPCB ordering notes for both bare-PCB and full PCBA paths. The board is intentionally retunable by swapping two resistor pairs, so the same footprint serves as a quadrature edge sensor or a direct-to-ADC analog encoder.
 
 <!--more-->
 
