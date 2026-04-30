@@ -49,6 +49,32 @@ html {
 }
 
 /* -----------------------------
+   ICON LIST (shared: header icon bar + footer socials)
+   ----------------------------- */
+.icon-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+
+  li {
+    display: flex;
+    align-items: center;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    color: var(--color-muted);
+    transition: color 120ms ease;
+
+    &:hover {
+      color: var(--color-link);
+    }
+  }
+}
+
+/* -----------------------------
    HEADER
    ----------------------------- */
 .site-header {
@@ -61,13 +87,13 @@ html {
     padding: 1rem clamp(1rem, 3vw, 1.5rem);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
   }
 
   .brand {
     color: var(--color-content);
     font-weight: 700;
+    margin-right: auto;
 
     &:hover {
       text-decoration: none;
@@ -75,27 +101,33 @@ html {
     }
   }
 
-  ul {
+  .nav-text {
     display: flex;
+    align-items: center;
     gap: clamp(0.875rem, 2vw, 1.5rem);
     font-size: 0.875rem;
+
+    a {
+      color: var(--color-muted);
+      padding: 0.25rem 0;
+      border-bottom: 1px solid transparent;
+      transition: color 120ms ease, border-color 120ms ease;
+
+      &:hover {
+        color: var(--color-link);
+        text-decoration: none;
+      }
+
+      &[aria-current='page'] {
+        color: var(--color-content);
+        border-bottom-color: var(--color-link);
+      }
+    }
   }
 
-  a {
-    color: var(--color-muted);
-    padding: 0.25rem 0;
-    border-bottom: 1px solid transparent;
-    transition: color 120ms ease, border-color 120ms ease;
-
-    &:hover {
-      color: var(--color-link);
-      text-decoration: none;
-    }
-
-    &[aria-current='page'] {
-      color: var(--color-content);
-      border-bottom-color: var(--color-link);
-    }
+  .icon-list {
+    border-left: 1px solid var(--color-border);
+    padding-left: 1rem;
   }
 }
 
@@ -120,23 +152,6 @@ html {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-    }
-  }
-
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--color-muted);
-
-    &:hover {
-      color: var(--color-link);
     }
   }
 }

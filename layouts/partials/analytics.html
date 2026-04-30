@@ -9,6 +9,61 @@
       }
       gtag('js', new Date())
       gtag('config', '{{ . }}')
+
+      // Key-event click tracking. Delegated listener on the document
+      // resolves an event name from the clicked anchor's URL, then forwards
+      // to gtag. Keep classifications mutually exclusive — each click fires
+      // at most one event.
+      ;(function () {
+        var OSC_REPO_RE = /^\/openservocore\//i
+        var TINYBOOT_REPO_RE = /^\/openservocore\/tinyboot(\/|$)/i
+        var DISCUSSIONS_RE = /\/discussions(\/|$)/i
+        var LOG_POST_RE = /^\/log\/[^/]+\/?$/i
+        var RSS_RE = /\/index\.xml$/i
+
+        function classify(url) {
+          var host = url.hostname.toLowerCase()
+          var path = url.pathname
+
+          if (host === 'github.com') {
+            if (TINYBOOT_REPO_RE.test(path)) return 'click_tinyboot_repo'
+            if (OSC_REPO_RE.test(path) && DISCUSSIONS_RE.test(path)) return 'click_discussions'
+            if (OSC_REPO_RE.test(path)) return 'click_osc_repo'
+            return null
+          }
+
+          if (host === location.hostname) {
+            if (RSS_RE.test(path)) return 'click_rss'
+            if (LOG_POST_RE.test(path) && LOG_POST_RE.test(location.pathname) && path !== location.pathname) {
+              return 'click_internal_log'
+            }
+          }
+          return null
+        }
+
+        function handle(e) {
+          var a = e.target.closest && e.target.closest('a[href]')
+          if (!a) return
+          var href = a.getAttribute('href')
+          if (!href || href.charAt(0) === '#') return
+          var url
+          try {
+            url = new URL(href, location.href)
+          } catch (_) {
+            return
+          }
+          var name = classify(url)
+          if (!name) return
+          gtag('event', name, {
+            link_url: url.href,
+            link_text: (a.textContent || '').trim().slice(0, 100),
+            outbound: url.hostname !== location.hostname
+          })
+        }
+
+        document.addEventListener('click', handle, true)
+        document.addEventListener('auxclick', handle, true)
+      })()
     </script>
   {{- end -}}
 {{- end -}}

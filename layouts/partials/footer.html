@@ -1,7 +1,7 @@
 <footer class="site-footer">
   <div class="inner">
     <p>© {{ now.Year }} Aaron Qian</p>
-    <ul>
+    <ul class="icon-list">
       {{ range where (sort hugo.Data.socials "position") "enabled" true }}
         <li>
           <a

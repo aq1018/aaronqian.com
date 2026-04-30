@@ -4,14 +4,33 @@
     (dict "href" "/archive/" "label" "Archive" "match" "/archive")
     (dict "href" "/about/" "label" "About" "match" "/about")
 -}}
+{{- $iconLinks := slice
+    (dict "href" "/index.xml" "icon" "rss" "label" "Subscribe via RSS" "rel" "alternate" "type" "application/rss+xml")
+    (dict "href" "https://github.com/aq1018" "icon" "github" "label" "GitHub" "rel" "me noopener")
+-}}
 <header class="site-header">
   <nav aria-label="Primary">
     <a href="/" class="brand"{{ if eq $current "/" }} aria-current="page"{{ end }}>Aaron Qian</a>
-    <ul>
+    <ul class="nav-text">
       {{- range $items -}}
         {{- $active := or (eq $current .href) (and (ne .match "/") (hasPrefix $current (printf "%s/" (trim .match "/")))) -}}
         <li>
           <a href="{{ .href }}"{{ if $active }} aria-current="page"{{ end }}>{{ .label }}</a>
+        </li>
+      {{- end -}}
+    </ul>
+    <ul class="icon-list">
+      {{- range $iconLinks -}}
+        <li>
+          <a
+            href="{{ .href }}"
+            {{ with .rel }}rel="{{ . }}"{{ end }}
+            {{ with .type }}type="{{ . }}"{{ end }}
+            title="{{ .label }}"
+          >
+            {{ partial "icon.html" .icon }}
+            <span class="sr-only">{{ .label }}</span>
+          </a>
         </li>
       {{- end -}}
     </ul>
