@@ -2,7 +2,7 @@
   <header class="page-header">
     {{ partial "breadcrumb.html" . }}
     <h1>{{ .Title }}</h1>
-    {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+    {{ with .Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
   </header>
 
   {{ $logPages := where .Pages "Section" "log" }}
@@ -15,7 +15,7 @@
         {{ range $logPages.ByDate.Reverse }}
           <li class="entry">
             <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+            {{ with .Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
             {{ partial "post-meta.html" . }}
           </li>
         {{ end }}
@@ -30,7 +30,7 @@
         {{ range $archivePages.ByDate.Reverse }}
           <li class="entry">
             <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+            {{ with .Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
             {{ partial "post-meta.html" . }}
           </li>
         {{ end }}

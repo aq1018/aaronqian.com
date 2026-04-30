@@ -12,6 +12,8 @@ tags:
 
 _Democratize Robotics For Everyone_
 
+<!--more-->
+
 GitHub: [OpenServoCore/open-servo-core](https://github.com/OpenServoCore/open-servo-core)
 
 # Overview

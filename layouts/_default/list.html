@@ -2,7 +2,7 @@
   <header class="page-header">
     {{ partial "breadcrumb.html" . }}
     <h1>{{ .Title }}</h1>
-    {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+    {{ with .Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
   </header>
   {{ $pages := .RegularPagesRecursive }}
   {{ if $pages }}
@@ -10,7 +10,7 @@
       {{ range $pages.ByDate.Reverse }}
         <li class="entry">
           <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-          {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+          {{ with .Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
           {{ partial "post-meta.html" . }}
         </li>
       {{ end }}

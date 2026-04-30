@@ -1,6 +1,7 @@
 ---
 date: "2026-03-07T17:32:38.071Z"
 title: "CH32V006 Based Dev Board For OpenServoCore"
+description: Introducing the CH32V006-based OpenServoCore dev board — the firmware development platform for the move from STM32 to a cheaper RISC-V chip.
 project: open-servo-core
 aliases:
   - /projects/open-servo-core/logs/2026-03-07-ch32v006-dev-board/
@@ -11,6 +12,8 @@ tags:
 As I mentioned in earlier logs, I am migrating OpenServoCore from an STM32F301-based architecture to a cheaper CH32V006-based one. The first step was to create a development board that I could use for firmware development. After a few weeks of work in KiCad, along with several rounds of PCB review from the Reddit community, I finally have a design that is ready to share here.
 
 Just in case you landed here with no prior context, this board is intended to serve as the firmware development platform for OpenServoCore, a project to turn low-cost servos like the MG90S into smart actuators with cascade control and DYNAMIXEL-style communication over single-wire UART (DXL TTL).
+
+<!--more-->
 
 **Update 04/08/2026**
 

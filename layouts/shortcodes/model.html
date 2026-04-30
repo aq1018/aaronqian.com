@@ -7,8 +7,10 @@
 {{- $alt := .Get "alt" | default "3D model" -}}
 {{- $aspect := .Get "aspect" | default "16/9" -}}
 {{- $tilt := .Get "tilt" | default "0" -}}
-{{- $resource := .Page.Resources.GetMatch $src -}}
-{{- $url := cond (ne $resource nil) ($resource.RelPermalink) $src -}}
+{{- $url := $src -}}
+{{- with .Page.Resources.GetMatch $src -}}
+  {{- $url = .RelPermalink -}}
+{{- end -}}
 {{- /* model-viewer camera-orbit: theta phi radius. Default phi 75deg, tilt subtracts. */ -}}
 {{- $phi := sub 75 (int $tilt) -}}
 {{- /* Load the model-viewer web component once per page on first use. */ -}}

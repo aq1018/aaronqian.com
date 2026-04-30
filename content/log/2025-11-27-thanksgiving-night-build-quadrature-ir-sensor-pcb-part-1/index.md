@@ -1,6 +1,7 @@
 ---
 date: "2025-11-28T04:50:23.084Z"
 title: "Thanksgiving Night Build: Dual ITR1204 IR Sensor Test Module"
+description: A small Thanksgiving-night KiCad project — a dual-channel ITR1204 IR reflective sensor board for OpenServoCore motion sensing. Part 1 of 2.
 project: open-servo-core
 aliases:
   - /projects/open-servo-core/logs/2025-11-27-thanksgiving-night-build-quadrature-ir-sensor-pcb-part-1/
@@ -9,6 +10,8 @@ tags:
 ---
 
 Thanksgiving night isn’t usually when people open KiCad… but the house got quiet for a bit, and that was enough of an excuse for me to start a small hardware project that’s been sitting in the queue.
+
+<!--more-->
 
 This board is part of **OpenServoCore** — an ongoing attempt to turn cheap, commodity servos into **smart actuators**. The long-term goal is to make it easy to mod low-cost servos with better sensing and open firmware, so students and hobbyists can build high-performance robotics without dropping hundreds of dollars on expensive smart servos.
 

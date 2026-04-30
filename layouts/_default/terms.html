@@ -2,7 +2,7 @@
   <header class="page-header">
     {{ partial "breadcrumb.html" . }}
     <h1>{{ .Title }}</h1>
-    {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+    {{ with .Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
   </header>
   {{ $terms := .Data.Terms.Alphabetical }}
   {{ if $terms }}
@@ -12,7 +12,7 @@
         {{ if gt $logCount 0 }}
           <li class="entry">
             <h2><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></h2>
-            {{ with .Page.Description }}<p class="description">{{ . }}</p>{{ end }}
+            {{ with .Page.Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
             <p class="meta">{{ $logCount }} {{ if eq $logCount 1 }}post{{ else }}posts{{ end }}</p>
           </li>
         {{ end }}

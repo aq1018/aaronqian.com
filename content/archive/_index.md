@@ -1,4 +1,4 @@
 ---
 title: Archive
-description: Older articles on web development and software engineering.
+summary: Older articles on web development and software engineering.
 ---
