@@ -1,6 +1,7 @@
 ---
 date: "2026-04-22T00:00:00.000Z"
 title: "tinyboot v0.4.0 Released — The API is Stable"
+description: tinyboot v0.4.0 marks API stability — protocol design, crate structure, and CH32V103 support are settled enough to commit to.
 project: tinyboot
 tags:
   - tinyboot
@@ -8,6 +9,8 @@ tags:
 ---
 
 If you've been following tinyboot, you might have noticed there was no announcement for v0.3.0. That release added CH32V103 support, but things were still in flux. Crate structure was shifting, APIs were changing, the protocol was being reworked. I didn't want to write up something that'd be outdated in two weeks. I wanted to wait until the dust settled. And with v0.4.0, we have finally arrived at this point.
+
+<!--more-->
 
 ## Links
 

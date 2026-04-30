@@ -1,6 +1,7 @@
 ---
 date: "2026-03-20T00:00:00.000Z"
 title: "tinyboot Initial Release"
+description: Initial release of tinyboot — a Rust bootloader for CH32V003 that fits in 1920-byte system flash with CRC validation, trial boot, and DXL TTL UART updates.
 project: tinyboot
 aliases:
   - /projects/tinyboot/logs/2026-03-20-tinyboot-initial-release/
@@ -10,6 +11,8 @@ tags:
 ---
 
 While I was waiting for the CH32V006 dev board to arrive, I ended up going on a side quest: making firmware updates less painful for future OpenServoCore-based servos. Once a servo is built into a system, it is not really practical to pull it back out, open the case, desolder the board, and hook up a debugger just to flash new firmware. Updating over the existing one-wire UART bus is a must-have feature if I wanted to keep both you and me sane. And that is how [tinyboot](https://github.com/OpenServoCore/tinyboot) was born.
+
+<!--more-->
 
 ## Demo
 

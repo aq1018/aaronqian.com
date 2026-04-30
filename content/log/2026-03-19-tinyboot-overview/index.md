@@ -12,6 +12,8 @@ tags:
 
 _Fits in the CH32V003's 1920-byte system flash!_
 
+<!--more-->
+
 GitHub: [OpenServoCore/tinyboot](https://github.com/OpenServoCore/tinyboot)
 
 ## Overview

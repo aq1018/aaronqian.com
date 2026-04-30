@@ -15,6 +15,7 @@
           {{ range first 5 $logs.ByDate.Reverse }}
             <li class="entry">
               <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+              {{ with .Summary }}<p class="description">{{ . | plainify }}</p>{{ end }}
               {{ partial "post-meta.html" . }}
             </li>
           {{ end }}

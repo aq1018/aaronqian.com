@@ -3,7 +3,6 @@
     <header class="page-header">
       {{ partial "breadcrumb.html" . }}
       <h1>{{ .Title }}</h1>
-      {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
       {{ partial "post-meta.html" . }}
     </header>
     {{ partial "post-nav.html" (dict "page" . "position" "top") }}

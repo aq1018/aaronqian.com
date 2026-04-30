@@ -1,14 +1,15 @@
 ---
 date: "2026-04-25T00:00:00.000Z"
 title: "Rev A UART Validation - RX Stuck High (TTL Buffer / TX_EN Gotcha)"
+description: Rev A's UART RX wouldn't go low. The diagnosis — TX_EN on the half-duplex TTL buffer wasn't just enabling TX, it was actively driving RX too.
 project: open-servo-core
 tags:
   - hardware
 ---
 
-## Background
-
 If you're new to the project, [OpenServoCore](https://github.com/OpenServoCore) is my effort to turn cheap MG90S-class servos into networked smart actuators with sensor feedback, cascade control, and a DYNAMIXEL-style TTL bus. [tinyboot](https://github.com/OpenServoCore/tinyboot) is the Rust bootloader that runs on those boards. It fits in the CH32V003's 1920-byte system flash and gives you CRC-validated OTA updates over UART, with trial boot and automatic rollback.
+
+<!--more-->
 
 ## TL;DR
 

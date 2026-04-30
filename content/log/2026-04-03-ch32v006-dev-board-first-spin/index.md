@@ -1,6 +1,7 @@
 ---
 date: "2026-04-04T01:38:14.199Z"
 title: "CH32V006 Dev Board First Spin - Lessons From a Faulty Revision"
+description: First spin of the CH32V006 OSC dev board. PCBWay caught footprint and BOM issues before fab; bringup turned up the schematic mistakes I missed.
 project: open-servo-core
 aliases:
   - /projects/open-servo-core/logs/2026-04-03-ch32v006-dev-board-first-spin/
@@ -9,6 +10,8 @@ tags:
 ---
 
 As hinted at the end of my previous log, I sent the design of the CH32V006 OpenServoCore dev board to [PCBWay](https://www.pcbway.com/) for fabrication, since they were kind enough to sponsor the PCB and assembly for the OpenServoCore project.
+
+<!--more-->
 
 ## The Ordering Process
 

@@ -1,6 +1,7 @@
 ---
 date: "2026-03-25T00:00:00.000Z"
 title: "Version 0.2.1 Released"
+description: tinyboot 0.2.1 fixes user-flash boot issues — broken interrupt vector tables, peripheral cleanup, and version reads.
 project: tinyboot
 aliases:
   - /projects/tinyboot/logs/2026-03-25-version-21-released/
@@ -10,6 +11,8 @@ tags:
 ---
 
 After the initial release, I spent most of the following week hunting down bugs that only show up when you actually try to boot real firmware through the bootloader. I had been testing the system-flash version pretty heavily, but did not give the user-flash version nearly enough attention. Turns out the application was not booting properly in that configuration, and it took a few different fixes to get it working end to end.
+
+<!--more-->
 
 ## User-Flash Fixes
 
