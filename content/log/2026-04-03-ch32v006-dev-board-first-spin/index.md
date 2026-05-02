@@ -9,7 +9,11 @@ tags:
   - hardware
 ---
 
-As hinted at the end of my previous log, I sent the design of the CH32V006 OpenServoCore dev board to [PCBWay](https://www.pcbway.com/) for fabrication, since they were kind enough to sponsor the PCB and assembly for the OpenServoCore project.
+Three embarrassing mistakes, two failed surgeries, one working board. The 3.3V rail sat at 0.84V, I fed reverse voltage into a $0.22 MCU across multiple power-on cycles, and somehow it still came back to life.
+
+If you're new here, [OpenServoCore](https://github.com/OpenServoCore) is my effort to turn cheap MG90S-class servos into networked smart actuators with sensor feedback, cascade control, and a DYNAMIXEL-style TTL bus. The CH32V006 dev board is the firmware development platform for this project. This is the first-spin bringup of Rev A, generously sponsored by [PCBWay](https://www.pcbway.com/) for both PCB and assembly.
+
+What's inside: PCBWay catching footprint and BOM mistakes I missed (and KiCad's DRC missed), a wrong house number that sent the boards to my neighbor, mislabeled test points that fed 3.3V into the EN pin, the moment I realized I'd swapped VDD and VCC on the schematic, and an hour of magnet-wire surgery under a magnifier to bring one board back. The CH32V006 is, it turns out, surprisingly tough.
 
 <!--more-->
 

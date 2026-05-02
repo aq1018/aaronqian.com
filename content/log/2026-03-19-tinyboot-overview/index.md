@@ -10,7 +10,11 @@ tags:
   - announcement
 ---
 
-_Fits in the CH32V003's 1920-byte system flash!_
+A Rust bootloader that squeezes into the CH32V003's 1920-byte system flash, with CRC16 validation and trial boot, and still leaves the entire 16KB user flash free for your application.
+
+tinyboot is the bootloader half of [OpenServoCore](https://github.com/OpenServoCore), my effort to turn cheap MG90S-class servos into networked smart actuators. Servos need field updates over the same TTL bus they take commands on, and they have very little flash to spare. So tinyboot has to be tiny, robust enough to never brick the part, and portable across the CH32 family.
+
+This post is the project overview: what tinyboot is, the feature set, the chips it targets (V003 working today, V103 in progress, the rest of the V0/V2/V3/X line planned), and the transports it speaks (UART and RS485 working, USB planned). If "Rust in 1920 bytes" sounds like a typo, that's fair, it surprised me too.
 
 <!--more-->
 
